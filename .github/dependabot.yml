@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    labels:
+      - "dependencies"
+    schedule:
+      interval: "weekly"

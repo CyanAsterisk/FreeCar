@@ -23,7 +23,6 @@ func InitLogger() {
 	if _, err := os.Stat(fileName); err != nil {
 		if _, err := os.Create(fileName); err != nil {
 			panic(err)
-			return
 		}
 	}
 

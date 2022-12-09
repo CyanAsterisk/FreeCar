@@ -7,9 +7,8 @@ import (
 )
 
 type User struct {
-	ID        int64 `gorm:"primarykey"`
-	DeletedAt gorm.DeletedAt
-	OpenID    string `gorm:"column:openid;type:varchar(100);not null"`
+	ID     int64  `gorm:"primarykey"`
+	OpenID string `gorm:"column:openid;type:varchar(100);not null"`
 }
 
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {

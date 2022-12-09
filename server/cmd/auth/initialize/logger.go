@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"log"
 	"os"
 	"path"
 	"time"
@@ -23,7 +22,7 @@ func InitLogger() {
 	fileName := path.Join(logFilePath, logFileName)
 	if _, err := os.Stat(fileName); err != nil {
 		if _, err := os.Create(fileName); err != nil {
-			log.Println(err.Error())
+			panic(err)
 			return
 		}
 	}

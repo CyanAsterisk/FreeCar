@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/bwmarrin/snowflake"
 	"time"
 
+	"github.com/bwmarrin/snowflake"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +23,7 @@ type User struct {
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	sf, err := snowflake.NewNode(1)
 	if err != nil {
-		panic(err)
+		klog.Fatalf("generate id failed: %s", err.Error())
 	}
 	u.ID = sf.Generate().Int64()
 	return nil

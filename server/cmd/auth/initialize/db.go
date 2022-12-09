@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -35,6 +36,6 @@ func InitDB() {
 		Logger: newLogger,
 	})
 	if err != nil {
-		panic(err)
+		klog.Fatalf("init gorm failed: %s", err.Error())
 	}
 }

@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"flag"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"github.com/cloudwego/kitex/pkg/klog"
 )

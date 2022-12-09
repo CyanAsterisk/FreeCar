@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -21,13 +22,13 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 			DeregisterCriticalServiceAfter: "15s",
 		}))
 	if err != nil {
-		klog.Fatal(err)
+		klog.Fatalf("new consul register failed: %s", err.Error())
 	}
 
 	// Using snowflake to generate service name.
 	sf, err := snowflake.NewNode(2)
 	if err != nil {
-		klog.Fatal(err)
+		klog.Fatalf("generate service name failed: %s", err.Error())
 	}
 	info := &registry.Info{
 		ServiceName: global.ServerConfig.Name,

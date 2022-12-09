@@ -16,10 +16,10 @@ func InitConfig() {
 	v := viper.New()
 	v.SetConfigFile(configFileName)
 	if err := v.ReadInConfig(); err != nil {
-		panic(err)
+		klog.Fatalf("read viper config failed: %s", err.Error())
 	}
 	if err := v.Unmarshal(&global.NacosConfig); err != nil {
-		panic(err)
+		klog.Fatalf("unmarshal err failed: %s", err.Error())
 	}
 	klog.Infof("Config Info: %v", global.NacosConfig)
 
@@ -45,15 +45,15 @@ func InitConfig() {
 		"clientConfig":  cc,
 	})
 	if err != nil {
-		panic(err)
+		klog.Fatalf("create config client failed: %s", err.Error())
 	}
 
 	content, err := configClient.GetConfig(vo.ConfigParam{
 		DataId: global.NacosConfig.DataId,
-		Group:  global.NacosConfig.Group})
-
+		Group:  global.NacosConfig.Group,
+	})
 	if err != nil {
-		panic(err)
+		klog.Fatalf("get config failed: %s", err.Error())
 	}
 
 	err = sonic.Unmarshal([]byte(content), &global.ServerConfig)

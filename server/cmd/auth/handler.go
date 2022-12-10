@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
@@ -24,12 +23,16 @@ type OpenIDResolver interface {
 // Login implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
 	openID := s.OpenIDResolver.Resolve(req.Code)
-
 	var user model.User
 	result := global.DB.Where(&model.User{OpenID: openID}).First(&user)
 
 	if result.RowsAffected == 0 {
-		return nil, status.Errorf(codes.NotFound, "User doesn't exist.")
+		user.OpenID = openID
+		result = global.DB.Create(&user)
+		if result.Error != nil {
+			return nil, status.Errorf(codes.Internal, result.Error.Error())
+		}
+		return &auth.LoginResponse{AccountID: user.ID}, nil
 	}
 	if result.Error != nil {
 		return nil, result.Error

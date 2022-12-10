@@ -5,13 +5,14 @@ import (
 	"path"
 	"time"
 
-	"github.com/cloudwego/kitex/pkg/klog"
-	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	hertzzap "github.com/hertz-contrib/logger/zap"
 )
 
 func InitLogger() {
+	// Customizable output directory.
 	var logFilePath string
-	dir := "./tmp/klog"
+	dir := "./tmp/hlog"
 	logFilePath = dir + "/logs/"
 	if err := os.MkdirAll(logFilePath, 0o777); err != nil {
 		panic(err)
@@ -26,8 +27,8 @@ func InitLogger() {
 		}
 	}
 
-	logger := kitexzap.NewLogger()
-	logger.SetLevel(klog.LevelDebug)
+	logger := hertzzap.NewLogger()
+	logger.SetLevel(hlog.LevelDebug)
 
-	klog.SetLogger(logger)
+	hlog.SetLogger(logger)
 }

@@ -11,6 +11,7 @@ type User struct {
 	OpenID string `gorm:"column:openid;type:varchar(100);not null"`
 }
 
+// BeforeCreate uses snowflake to generate an ID.
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	sf, err := snowflake.NewNode(1)
 	if err != nil {

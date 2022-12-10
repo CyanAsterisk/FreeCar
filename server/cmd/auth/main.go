@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,7 +28,9 @@ func main() {
 	tracerSuite, closer := initialize.InitTracer()
 	defer closer.Close()
 
-	svr := auth.NewServer(new(AuthServiceImpl),
+	impl := new(AuthServiceImpl)
+	impl.OpenIDResolver = &tool.AuthServiceImpl{}
+	srv := auth.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
@@ -39,7 +42,7 @@ func main() {
 	)
 
 	go func() {
-		err := svr.Run()
+		err := srv.Run()
 		if err != nil {
 			klog.Fatal(err)
 		}

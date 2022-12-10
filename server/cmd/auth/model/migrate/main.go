@@ -1,14 +1,12 @@
 package main
 
 import (
-	"crypto/sha512"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
-	"github.com/anaskhan96/go-password-encoder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -41,13 +39,9 @@ func main() {
 
 	_ = db.AutoMigrate(&model.User{})
 
-	options := &password.Options{SaltLen: 16, Iterations: 100, KeyLen: 32, HashFunction: sha512.New}
-
 	for i := 0; i < 10; i++ {
-		salt, encodedOpenID := password.Encode(fmt.Sprintf("openid%d", i), options)
-		newOpenID := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedOpenID)
 		user := model.User{
-			OpenID: newOpenID,
+			OpenID: fmt.Sprintf("openid%d", i),
 		}
 		db.Save(&user)
 	}

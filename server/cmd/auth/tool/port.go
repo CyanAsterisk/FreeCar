@@ -2,6 +2,7 @@ package tool
 
 import "net"
 
+// GetFreePort get a free port.
 func GetFreePort() (int, error) {
 	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
 	if err != nil {

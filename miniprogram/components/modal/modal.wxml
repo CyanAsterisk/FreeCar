@@ -1,0 +1,16 @@
+<view class="cu-modal {{showModal?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">{{title}}</view>
+    </view>
+    <view class="padding-xl">
+      {{contents}}
+    </view>
+    <view class="cu-bar bg-white">
+      <view class="action">
+        <button wx:if="{{showCancel}}" class="cu-btn line-green text-green" style="width:200rpx" bindtap="onCancel">取消</button>
+        <button class="cu-btn bg-green margin-left" style="width:200rpx" bindtap="onOK">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

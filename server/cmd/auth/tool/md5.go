@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Md5Crypt uses MD5 encryption algorithm to add salt encryption.
 func Md5Crypt(str string, salt ...interface{}) (CryptStr string) {
 	if l := len(salt); l > 0 {
 		slice := make([]string, l+1)

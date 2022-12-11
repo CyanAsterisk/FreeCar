@@ -25,7 +25,7 @@ func main() {
 	tracer, closer := initialize.InitTracer()
 	defer closer.Close()
 	rpc.Init()
-
+	// create a new server
 	h := server.New(
 		server.WithHostPorts(fmt.Sprintf(":%d", global.ServerConfig.Port)),
 		server.WithTracer(hertztracer.NewTracer(tracer, func(c *app.RequestContext) string {
@@ -36,7 +36,7 @@ func main() {
 
 	h.Use(hertztracer.ServerCtx())
 	register(h)
-
+	// Use goroutine to listen for signal.
 	go func() {
 		if err := h.Run(); err != nil {
 			hlog.Fatalf("start error:", err.Error())

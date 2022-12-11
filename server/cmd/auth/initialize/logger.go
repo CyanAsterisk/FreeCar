@@ -10,6 +10,7 @@ import (
 )
 
 func InitLogger() {
+	// Customizable output directory.
 	var logFilePath string
 	dir := "./tmp/klog"
 	logFilePath = dir + "/logs/"

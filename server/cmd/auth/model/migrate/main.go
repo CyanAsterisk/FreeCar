@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"log"
 	"os"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

@@ -3,16 +3,13 @@ module github.com/CyanAsterisk/FreeCar
 go 1.18
 
 require (
-	github.com/anaskhan96/go-password-encoder v0.0.0-20201010210601-c765b799fd72
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.5.0
 	github.com/cloudwego/hertz v0.4.2
 	github.com/cloudwego/kitex v0.4.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/hashicorp/consul/api v1.15.3
-	github.com/hertz-contrib/jwt v1.0.1
 	github.com/hertz-contrib/logger/zap v0.0.0-20221206155315-4315a5ae6b90
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
 	github.com/hertz-contrib/tracer v0.0.0-20220601062646-788b1565bdab
@@ -91,7 +88,6 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/arch v0.0.0-20220722155209-00200b7164a7 // indirect
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect

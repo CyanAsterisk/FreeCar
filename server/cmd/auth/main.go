@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/CyanAsterisk/FreeCar/pkg/middleware"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
 	auth "github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -28,9 +27,8 @@ func main() {
 	tracerSuite, closer := initialize.InitTracer()
 	defer closer.Close()
 
-	impl := new(AuthServiceImpl)
-	impl.OpenIDResolver = &tool.AuthServiceImpl{}
-	srv := auth.NewServer(impl,
+	// Create new server.
+	srv := auth.NewServer(new(AuthServiceImpl),
 		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
@@ -41,6 +39,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
+	// Use goroutine to listen for signal.
 	go func() {
 		err := srv.Run()
 		if err != nil {

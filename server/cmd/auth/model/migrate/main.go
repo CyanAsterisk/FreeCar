@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"log"
 	"os"
 	"time"
@@ -40,8 +41,9 @@ func main() {
 	_ = db.AutoMigrate(&model.User{})
 
 	for i := 0; i < 10; i++ {
+		cryOpenID := tool.Md5Crypt(fmt.Sprintf("openid%d", i), "FreeCar")
 		user := model.User{
-			OpenID: fmt.Sprintf("openid%d", i),
+			OpenID: cryOpenID,
 		}
 		db.Save(&user)
 	}

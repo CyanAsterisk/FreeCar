@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/pkg/middleware"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -25,13 +25,14 @@ import (
 var authClient authservice.Client
 
 func initAuth() {
+	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,
 		global.ServerConfig.ConsulInfo.Port))
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
-
+	// init tracer
 	reporterCfg := &jaegerCfg.ReporterConfig{
 		LocalAgentHostPort: fmt.Sprintf("%s:%d", global.ServerConfig.JaegerInfo.Host,
 			global.ServerConfig.JaegerInfo.Port),
@@ -51,6 +52,7 @@ func initAuth() {
 	}
 	opentracing.InitGlobalTracer(tracer)
 	defer closer.Close()
+	// create a new client
 	c, err := authservice.NewClient(
 		global.ServerConfig.AuthSrvInfo.Name,
 		client.WithResolver(r),

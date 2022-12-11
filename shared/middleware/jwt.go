@@ -15,7 +15,7 @@ import (
 
 func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		token := c.Request.Header.Get("x-token")
+		token := c.Request.Header.Get("authorization")
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, map[string]string{
 				"msg": "please sign in",

@@ -4,15 +4,16 @@ package auth
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/pkg/middleware"
+	"net/http"
+	"time"
+
 	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/rpc"
-	auth "github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/dgrijalva/jwt-go"
-	"net/http"
-	"time"
 )
 
 // Login .
@@ -27,6 +28,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
+	// rpc to get accountID
 	accountID, err := rpc.Login(ctx, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, utils.H{
@@ -34,7 +36,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-
+	// create a JWT
 	j := middleware.NewJWT()
 	claims := models.CustomClaims{
 		ID: accountID,
@@ -51,7 +53,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-
+	// return token
 	c.JSON(200, utils.H{
 		"token":      token,
 		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,

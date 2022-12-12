@@ -16,6 +16,7 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a
 	github.com/kitex-contrib/tracer-opentracing v0.0.2
+	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/nacos-group/nacos-sdk-go v1.1.3
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.14.0

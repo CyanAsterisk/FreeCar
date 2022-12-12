@@ -29,10 +29,16 @@ type JaegerConfig struct {
 	Port int    `mapstructure:"port" json:"port"`
 }
 
+type WXConfig struct {
+	AppId     string `mapstructure:"app_id" json:"app_id"`
+	AppSecret string `mapstructure:"app_secret" json:"app_secret"`
+}
+
 type ServerConfig struct {
 	Name       string       `mapstructure:"name" json:"name"`
 	Host       string       `mapstructure:"host" json:"host"`
 	MysqlInfo  MysqlConfig  `mapstructure:"mysql" json:"mysql"`
 	ConsulInfo ConsulConfig `mapstructure:"consul" json:"consul"`
 	JaegerInfo JaegerConfig `mapstructure:"jaeger" json:"jaeger"`
+	WXInfo     WXConfig     `mapstructure:"wx_config" json:"wx_config"`
 }

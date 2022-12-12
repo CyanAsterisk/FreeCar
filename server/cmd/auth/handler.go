@@ -18,6 +18,9 @@ type AuthServiceImpl struct{}
 func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
 	// Resolve code to openID.
 	openID := tool.Resolve(req.Code)
+	if openID == "" {
+		return nil, status.Errorf(codes.Unavailable, "cannot resolve code{%s} to opened", req.Code)
+	}
 	var user model.User
 	// Encrypt with md5.
 	cryOpenID := tool.Md5Crypt(openID, global.ServerConfig.MysqlInfo.Salt)

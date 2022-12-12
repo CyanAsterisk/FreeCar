@@ -1,0 +1,70 @@
+<view id="heading" class="padding-bottom-xs">
+    <swiper indicator-dots circular>
+        <swiper-item wx:for="{{promotionItems}}" wx:key="promotionID" 
+            bindtap="onPromotionItemTap"
+            data-promotion-id="{{item.promotionID}}">
+            <image class="swiper-image" src="{{item.img}}" />
+        </swiper-item>
+    </swiper>
+    <view class="avatar-container margin-top margin-right-xl">
+        <view class="text-xl mytrips-heading">我的行程</view>
+        <view class="avatar margin-right">
+            <button wx:if="{{!avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
+                open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+                <text class="cuIcon-people"></text>
+            </button>
+            <image wx:if="{{avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
+                src="{{avatarURL}}"/>
+        </view>
+        <view class="text-blue" bindtap="onRegisterTap">驾驶资格{{licStatus}}</view>
+    </view>
+</view>
+<view class="nav-container">
+    <swiper duration="500" display-multiple-items="{{navCount}}"
+        vertical style="height:{{tripsHeight}}px"
+        class="bg-white nav" current-item-id="{{navScroll}}">
+        <swiper-item wx:for="{{navItems}}" wx:key="id"
+            id="{{item.id}}" item-id="{{item.id}}" data-main-id="{{item.mainId}}"
+            class="cu-item {{navSel===item.id?'text-green':''}}" 
+            bindtap="onNavItemTap">
+            <view>{{item.label}}</view>
+            <view wx:if="{{navSel===item.id}}" class="cur"></view>
+        </swiper-item>
+    </swiper>
+    <scroll-view scroll-y scroll-with-animation enable-back-to-top
+        style="height:{{tripsHeight}}px"
+        scroll-into-view="{{mainScroll}}"
+        bindscroll="onMainScroll" >
+        <view wx:for="{{mainItems}}" wx:key="id" class="bg-white margin-bottom margin-lr padding-bottom trip main-item"
+            id="{{item.id}}" data-nav-id="{{item.navId}}" data-nav-scroll-id="{{item.navScrollId}}">
+            <view class='cu-bar solid-bottom padding-right'>
+                <view class='action'>
+                <text class='cuIcon-title text-green'></text> {{item.data.id}} </view>
+                <view>{{item.data.status}}</view>
+            </view>
+            <view class="trip-detail padding-right">
+                <view class="detail-l">
+                    <view class="detail-row">
+                        <view class="field padding-lr">起</view>
+                        <view class="value text-black text-bold">{{item.data.start}}</view>                
+                    </view>
+                    <view class="detail-row">
+                        <view class="field padding-lr">终</view>
+                        <view class="value text-black text-bold">{{item.data.end}}</view>                
+                    </view>
+                    <view class="detail-row">
+                        <view class="field padding-lr">距</view>
+                        <view class="value text-black text-bold">{{item.data.distance}}</view>                
+                    </view>
+                    <view class="detail-row">
+                        <view class="field padding-lr">时</view>
+                        <view class="value text-black text-bold">{{item.data.duration}}</view>                
+                    </view>
+                </view>
+                <view class="detail-r">
+                    <view class="fee text-xxl text-price text-bold">{{item.data.fee}}</view>
+                </view>
+            </view>
+        </view>
+    </scroll-view>
+</view>

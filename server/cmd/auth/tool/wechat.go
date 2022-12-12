@@ -6,11 +6,8 @@ import (
 	"github.com/medivhzhan/weapp/v2"
 )
 
-type AuthServiceImpl struct {
-}
-
 // Resolve resolves authorization code to WeChat open id,return empty string if an Error occurs.
-func (s *AuthServiceImpl) Resolve(code string) string {
+func Resolve(code string) string {
 	resp, err := weapp.Login(global.ServerConfig.WXInfo.AppId, global.ServerConfig.WXInfo.AppSecret, code)
 
 	if err != nil {

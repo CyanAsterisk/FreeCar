@@ -348,8 +348,9 @@ github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a43
 github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972/go.mod h1:a/Ui0T3Gp68UxkShcgT6KHV/IuO3Xuva0keie4w2eg4=
 github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a h1:Vd1vq1DgFm06zib4K4plwEfeFKD8koWveNm+A7CWBNc=
 github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a/go.mod h1:GqITpPtXtfZySbfJT+Ed0hKGB4G91k8zoa1qNG8Hl00=
-github.com/kitex-contrib/tracer-opentracing v0.0.2 h1:O2+Rbs36jS9uQAmNWz6+nJSKuKjSmEatSfiFj22Za3g=
 github.com/kitex-contrib/tracer-opentracing v0.0.2/go.mod h1:mprt5pxqywFQxlHb7ugfiMdKbABTLI9YrBYs9WmlK5Q=
+github.com/kitex-contrib/tracer-opentracing v0.0.3 h1:8SI0OrHTQ8u6eWpemnuaecMBSEVEvWKCWxg2HnnONQU=
+github.com/kitex-contrib/tracer-opentracing v0.0.3/go.mod h1:mprt5pxqywFQxlHb7ugfiMdKbABTLI9YrBYs9WmlK5Q=
 github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/klauspost/cpuid/v2 v2.1.0 h1:eyi1Ad2aNJMW95zcSbmGg7Cg6cq3ADwLpMAP96d8rF0=
 github.com/klauspost/cpuid/v2 v2.1.0/go.mod h1:RVVoqg1df56z8g3pUjL/3lE5UfnlrJX8tyFgg4nqhuY=

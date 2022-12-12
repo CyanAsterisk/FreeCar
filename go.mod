@@ -9,7 +9,7 @@ require (
 	github.com/cloudwego/hertz v0.4.2
 	github.com/cloudwego/kitex v0.4.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/hashicorp/consul/api v1.15.3
+	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/logger/zap v0.0.0-20221206155315-4315a5ae6b90
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
 	github.com/hertz-contrib/tracer v0.0.0-20220601062646-788b1565bdab
@@ -50,7 +50,7 @@ require (
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/serf v0.9.8 // indirect
+	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/henrylee2cn/ameda v1.4.10 // indirect
 	github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8 // indirect
 	github.com/jhump/protoreflect v1.8.2 // indirect

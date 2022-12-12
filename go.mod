@@ -19,7 +19,7 @@ require (
 	github.com/nacos-group/nacos-sdk-go v1.1.3
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.14.0
-	github.com/uber/jaeger-client-go v2.29.1+incompatible
+	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.2
 )

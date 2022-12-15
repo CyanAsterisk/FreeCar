@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	profile "github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 )
 

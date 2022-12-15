@@ -1,4 +1,3 @@
 package model
 
-type Trip struct {
-}
+type Trip struct{}

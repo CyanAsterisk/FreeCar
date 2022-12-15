@@ -9,7 +9,6 @@ import (
 // Resolve resolves authorization code to WeChat open id,return empty string if an Error occurs.
 func Resolve(code string) string {
 	resp, err := weapp.Login(global.ServerConfig.WXInfo.AppId, global.ServerConfig.WXInfo.AppSecret, code)
-
 	if err != nil {
 		klog.Errorf("WeApp.Login Err: %v code:%s", err, code)
 		return ""

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/CyanAsterisk/FreeCar/Server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
 	internalOpentracing "github.com/kitex-contrib/tracer-opentracing"

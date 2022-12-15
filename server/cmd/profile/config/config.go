@@ -10,13 +10,13 @@ type NacosConfig struct {
 	Group     string `mapstructure:"group"`
 }
 
-type MysqlConfig struct {
-	Host     string `mapstructure:"host" json:"host"`
-	Port     int    `mapstructure:"port" json:"port"`
-	Name     string `mapstructure:"db" json:"db"`
-	User     string `mapstructure:"user" json:"user"`
-	Password string `mapstructure:"password" json:"password"`
-	Salt     string `mapstructure:"salt" json:"salt"`
+type MongoDBConfig struct {
+	Host       string `mapstructure:"host" json:"host"`
+	Port       int    `mapstructure:"port" json:"port"`
+	Name       string `mapstructure:"db" json:"db"`
+	User       string `mapstructure:"user" json:"user"`
+	Password   string `mapstructure:"password" json:"password"`
+	Collection string `mapstructure:"collection" json:"collection"`
 }
 
 type ConsulConfig struct {
@@ -30,9 +30,9 @@ type JaegerConfig struct {
 }
 
 type ServerConfig struct {
-	Name       string       `mapstructure:"name" json:"name"`
-	Host       string       `mapstructure:"host" json:"host"`
-	MysqlInfo  MysqlConfig  `mapstructure:"mysql" json:"mysql"`
-	ConsulInfo ConsulConfig `mapstructure:"consul" json:"consul"`
-	JaegerInfo JaegerConfig `mapstructure:"jaeger" json:"jaeger"`
+	Name        string        `mapstructure:"name" json:"name"`
+	Host        string        `mapstructure:"host" json:"host"`
+	MongoDBInfo MongoDBConfig `mapstructure:"mongodb" json:"mongodb"`
+	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
+	JaegerInfo  JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
 }

@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/Server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/registry"

@@ -1,12 +1,12 @@
 package global
 
 import (
-	"github.com/CyanAsterisk/FreeCar/Server/cmd/profile/config"
-	"gorm.io/gorm"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var (
-	DB           *gorm.DB
+	DB           *mongo.Collection
 	ServerConfig config.ServerConfig
 	NacosConfig  config.NacosConfig
 )

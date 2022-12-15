@@ -1,41 +1,20 @@
 package initialize
 
 import (
+	"context"
 	"fmt"
-	"log"
-	"os"
-	"time"
-
-	"github.com/CyanAsterisk/FreeCar/Server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func InitDB() {
-	c := global.ServerConfig.MysqlInfo
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.User, c.Password, c.Host, c.Port, c.Name)
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold: time.Second,   // Slow SQL Threshold
-			LogLevel:      logger.Silent, // Log level
-			Colorful:      true,          // Disable color printing
-		},
-	)
-
-	// global mode
-	var err error
-	global.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true,
-		},
-		Logger: newLogger,
-	})
+	c := global.ServerConfig.MongoDBInfo
+	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(
+		fmt.Sprintf("mongodb://%s:%s@%s:%d", c.User, c.Password, c.Host, c.Port)))
 	if err != nil {
-		klog.Fatalf("init gorm failed: %s", err.Error())
+		klog.Fatal("cannot connect mongodb", err)
 	}
+	global.DB = mongoClient.Database(c.Name).Collection(c.Collection)
 }

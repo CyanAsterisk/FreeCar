@@ -2,8 +2,7 @@ package main
 
 import (
 	"context"
-
-	profile "github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 )
 
 // ProfileServiceImpl implements the last service interface defined in the IDL.

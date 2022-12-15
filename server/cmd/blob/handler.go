@@ -19,7 +19,6 @@ type BlobServiceImpl struct{}
 
 // CreateBlob implements the BlobServiceImpl interface.
 func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest) (*blob.CreateBlobResponse, error) {
-
 	var br model.BlobRecord
 	result := global.DB.Where(&model.BlobRecord{AccountId: req.AccountId}).First(&br)
 
@@ -45,7 +44,6 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 
 // GetBlob implements the BlobServiceImpl interface.
 func (s *BlobServiceImpl) GetBlob(ctx context.Context, req *blob.GetBlobRequest) (*blob.GetBlobResponse, error) {
-
 	var br model.BlobRecord
 	result := global.DB.Where(&model.BlobRecord{ID: req.Id}).First(&br)
 

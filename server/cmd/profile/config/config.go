@@ -35,4 +35,9 @@ type ServerConfig struct {
 	MongoDBInfo MongoDBConfig `mapstructure:"mongodb" json:"mongodb"`
 	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 	JaegerInfo  JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
+	BlobSrvInfo BlobSrvConfig `mapstructure:"blob_srv" json:"blob_srv"`
+}
+
+type BlobSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
 }

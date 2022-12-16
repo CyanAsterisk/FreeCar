@@ -670,17 +670,17 @@ func (p *Identity) Field4DeepEqual(src int64) bool {
 }
 
 type GetProfileRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewGetProfileRequest() *GetProfileRequest {
 	return &GetProfileRequest{}
 }
 
-func (p *GetProfileRequest) GetAccountId() (v string) {
+func (p *GetProfileRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *GetProfileRequest) SetAccountId(val string) {
+func (p *GetProfileRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -708,7 +708,7 @@ func (p *GetProfileRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -748,7 +748,7 @@ ReadStructEndError:
 }
 
 func (p *GetProfileRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -786,10 +786,10 @@ WriteStructEndError:
 }
 
 func (p *GetProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -821,16 +821,16 @@ func (p *GetProfileRequest) DeepEqual(ano *GetProfileRequest) bool {
 	return true
 }
 
-func (p *GetProfileRequest) Field1DeepEqual(src string) bool {
+func (p *GetProfileRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
 }
 
 type SubmitProfileRequest struct {
-	AccountId string    `thrift:"account_id,1" json:"account_id"`
+	AccountId int64     `thrift:"account_id,1" json:"account_id"`
 	Identity  *Identity `thrift:"identity,2" json:"identity"`
 }
 
@@ -838,7 +838,7 @@ func NewSubmitProfileRequest() *SubmitProfileRequest {
 	return &SubmitProfileRequest{}
 }
 
-func (p *SubmitProfileRequest) GetAccountId() (v string) {
+func (p *SubmitProfileRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 
@@ -850,7 +850,7 @@ func (p *SubmitProfileRequest) GetIdentity() (v *Identity) {
 	}
 	return p.Identity
 }
-func (p *SubmitProfileRequest) SetAccountId(val string) {
+func (p *SubmitProfileRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 func (p *SubmitProfileRequest) SetIdentity(val *Identity) {
@@ -886,7 +886,7 @@ func (p *SubmitProfileRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -936,7 +936,7 @@ ReadStructEndError:
 }
 
 func (p *SubmitProfileRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -986,10 +986,10 @@ WriteStructEndError:
 }
 
 func (p *SubmitProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1041,9 +1041,9 @@ func (p *SubmitProfileRequest) DeepEqual(ano *SubmitProfileRequest) bool {
 	return true
 }
 
-func (p *SubmitProfileRequest) Field1DeepEqual(src string) bool {
+func (p *SubmitProfileRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -1057,17 +1057,17 @@ func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
 }
 
 type ClearProfileRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewClearProfileRequest() *ClearProfileRequest {
 	return &ClearProfileRequest{}
 }
 
-func (p *ClearProfileRequest) GetAccountId() (v string) {
+func (p *ClearProfileRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *ClearProfileRequest) SetAccountId(val string) {
+func (p *ClearProfileRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1095,7 +1095,7 @@ func (p *ClearProfileRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1135,7 +1135,7 @@ ReadStructEndError:
 }
 
 func (p *ClearProfileRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1173,10 +1173,10 @@ WriteStructEndError:
 }
 
 func (p *ClearProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1208,26 +1208,26 @@ func (p *ClearProfileRequest) DeepEqual(ano *ClearProfileRequest) bool {
 	return true
 }
 
-func (p *ClearProfileRequest) Field1DeepEqual(src string) bool {
+func (p *ClearProfileRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
 }
 
 type GetProfilePhotoRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewGetProfilePhotoRequest() *GetProfilePhotoRequest {
 	return &GetProfilePhotoRequest{}
 }
 
-func (p *GetProfilePhotoRequest) GetAccountId() (v string) {
+func (p *GetProfilePhotoRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *GetProfilePhotoRequest) SetAccountId(val string) {
+func (p *GetProfilePhotoRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1255,7 +1255,7 @@ func (p *GetProfilePhotoRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1295,7 +1295,7 @@ ReadStructEndError:
 }
 
 func (p *GetProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1333,10 +1333,10 @@ WriteStructEndError:
 }
 
 func (p *GetProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1368,9 +1368,9 @@ func (p *GetProfilePhotoRequest) DeepEqual(ano *GetProfilePhotoRequest) bool {
 	return true
 }
 
-func (p *GetProfilePhotoRequest) Field1DeepEqual(src string) bool {
+func (p *GetProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -1537,17 +1537,17 @@ func (p *GetProfilePhotoResponse) Field1DeepEqual(src string) bool {
 }
 
 type CreateProfilePhotoRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewCreateProfilePhotoRequest() *CreateProfilePhotoRequest {
 	return &CreateProfilePhotoRequest{}
 }
 
-func (p *CreateProfilePhotoRequest) GetAccountId() (v string) {
+func (p *CreateProfilePhotoRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *CreateProfilePhotoRequest) SetAccountId(val string) {
+func (p *CreateProfilePhotoRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1575,7 +1575,7 @@ func (p *CreateProfilePhotoRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1615,7 +1615,7 @@ ReadStructEndError:
 }
 
 func (p *CreateProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1653,10 +1653,10 @@ WriteStructEndError:
 }
 
 func (p *CreateProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1688,9 +1688,9 @@ func (p *CreateProfilePhotoRequest) DeepEqual(ano *CreateProfilePhotoRequest) bo
 	return true
 }
 
-func (p *CreateProfilePhotoRequest) Field1DeepEqual(src string) bool {
+func (p *CreateProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -1857,17 +1857,17 @@ func (p *CreateProfilePhotoResponse) Field1DeepEqual(src string) bool {
 }
 
 type CompleteProfilePhotoRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewCompleteProfilePhotoRequest() *CompleteProfilePhotoRequest {
 	return &CompleteProfilePhotoRequest{}
 }
 
-func (p *CompleteProfilePhotoRequest) GetAccountId() (v string) {
+func (p *CompleteProfilePhotoRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *CompleteProfilePhotoRequest) SetAccountId(val string) {
+func (p *CompleteProfilePhotoRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1895,7 +1895,7 @@ func (p *CompleteProfilePhotoRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1935,7 +1935,7 @@ ReadStructEndError:
 }
 
 func (p *CompleteProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1973,10 +1973,10 @@ WriteStructEndError:
 }
 
 func (p *CompleteProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2008,26 +2008,26 @@ func (p *CompleteProfilePhotoRequest) DeepEqual(ano *CompleteProfilePhotoRequest
 	return true
 }
 
-func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src string) bool {
+func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
 }
 
 type ClearProfilePhotoRequest struct {
-	AccountId string `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" json:"account_id"`
 }
 
 func NewClearProfilePhotoRequest() *ClearProfilePhotoRequest {
 	return &ClearProfilePhotoRequest{}
 }
 
-func (p *ClearProfilePhotoRequest) GetAccountId() (v string) {
+func (p *ClearProfilePhotoRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
-func (p *ClearProfilePhotoRequest) SetAccountId(val string) {
+func (p *ClearProfilePhotoRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -2055,7 +2055,7 @@ func (p *ClearProfilePhotoRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2095,7 +2095,7 @@ ReadStructEndError:
 }
 
 func (p *ClearProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -2133,10 +2133,10 @@ WriteStructEndError:
 }
 
 func (p *ClearProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2168,9 +2168,9 @@ func (p *ClearProfilePhotoRequest) DeepEqual(ano *ClearProfilePhotoRequest) bool
 	return true
 }
 
-func (p *ClearProfilePhotoRequest) Field1DeepEqual(src string) bool {
+func (p *ClearProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true

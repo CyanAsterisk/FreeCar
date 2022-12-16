@@ -12,12 +12,20 @@ import (
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.
-type AuthServiceImpl struct{}
+type AuthServiceImpl struct {
+	OpenIDResolver OpenIDResolver
+}
+
+// OpenIDResolver resolves an authorization code
+// to an open id.
+type OpenIDResolver interface {
+	Resolve(code string) string
+}
 
 // Login implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
 	// Resolve code to openID.
-	openID := tool.Resolve(req.Code)
+	openID := s.OpenIDResolver.Resolve(req.Code)
 	if openID == "" {
 		return nil, status.Errorf(codes.Unavailable, "cannot resolve code{%s} to opened", req.Code)
 	}

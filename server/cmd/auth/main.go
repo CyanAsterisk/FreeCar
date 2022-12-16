@@ -34,7 +34,7 @@ func main() {
 		AppSecret: global.ServerConfig.WXInfo.AppSecret,
 	}
 	// Create new server.
-	srv := auth.NewServer(new(AuthServiceImpl),
+	srv := auth.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

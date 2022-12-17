@@ -58,5 +58,3 @@ func main() {
 		klog.Info("sign out success")
 	}
 }
-
-//hz new -idl ./../../idl/car.thrift -mod github.com/CyanAsterisk/FreeCar/server/cmd/api

@@ -45,7 +45,7 @@ func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarReques
 }
 
 // UpdateCar implements the CarServiceImpl interface.
-func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarRequest) (resp *car.UnlockCarResponse, err error) {
+func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarRequest) (resp *car.UpdateCarResponse, err error) {
 	// TODO: Your code here...
 	klog.Info("UpdateCar")
 	return

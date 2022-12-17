@@ -3562,7 +3562,7 @@ ReadStructEndError:
 func (p *CarServiceUpdateCarResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewUnlockCarResponse()
+	tmp := NewUpdateCarResponse()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {

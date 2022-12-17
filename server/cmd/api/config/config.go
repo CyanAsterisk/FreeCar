@@ -32,8 +32,13 @@ type ServerConfig struct {
 	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 	JaegerInfo  JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
 	AuthSrvInfo AuthSrvConfig `mapstructure:"auth_srv" json:"auth_srv"`
+	CarSrvInfo  CarSrvConfig  `mapstructure:"car_srv" json:"car_srv"`
 }
 
 type AuthSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
+}
+
+type CarSrvConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }

@@ -2680,7 +2680,7 @@ type CarService interface {
 
 	UnlockCar(ctx context.Context, req *UnlockCarRequest) (r *UnlockCarResponse, err error)
 
-	UpdateCar(ctx context.Context, req *UpdateCarRequest) (r *UnlockCarResponse, err error)
+	UpdateCar(ctx context.Context, req *UpdateCarRequest) (r *UpdateCarResponse, err error)
 }
 
 type CarServiceClient struct {
@@ -2754,7 +2754,7 @@ func (p *CarServiceClient) UnlockCar(ctx context.Context, req *UnlockCarRequest)
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *CarServiceClient) UpdateCar(ctx context.Context, req *UpdateCarRequest) (r *UnlockCarResponse, err error) {
+func (p *CarServiceClient) UpdateCar(ctx context.Context, req *UpdateCarRequest) (r *UpdateCarResponse, err error) {
 	var _args CarServiceUpdateCarArgs
 	_args.Req = req
 	var _result CarServiceUpdateCarResult
@@ -3069,7 +3069,7 @@ func (p *carServiceProcessorUpdateCar) Process(ctx context.Context, seqId int32,
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := CarServiceUpdateCarResult{}
-	var retval *UnlockCarResponse
+	var retval *UpdateCarResponse
 	if retval, err2 = p.handler.UpdateCar(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateCar: "+err2.Error())
 		oprot.WriteMessageBegin("UpdateCar", thrift.EXCEPTION, seqId)
@@ -5001,7 +5001,7 @@ func (p *CarServiceUpdateCarArgs) Field1DeepEqual(src *UpdateCarRequest) bool {
 }
 
 type CarServiceUpdateCarResult struct {
-	Success *UnlockCarResponse `thrift:"success,0,optional" frugal:"0,optional,UnlockCarResponse" json:"success,omitempty"`
+	Success *UpdateCarResponse `thrift:"success,0,optional" frugal:"0,optional,UpdateCarResponse" json:"success,omitempty"`
 }
 
 func NewCarServiceUpdateCarResult() *CarServiceUpdateCarResult {
@@ -5012,16 +5012,16 @@ func (p *CarServiceUpdateCarResult) InitDefault() {
 	*p = CarServiceUpdateCarResult{}
 }
 
-var CarServiceUpdateCarResult_Success_DEFAULT *UnlockCarResponse
+var CarServiceUpdateCarResult_Success_DEFAULT *UpdateCarResponse
 
-func (p *CarServiceUpdateCarResult) GetSuccess() (v *UnlockCarResponse) {
+func (p *CarServiceUpdateCarResult) GetSuccess() (v *UpdateCarResponse) {
 	if !p.IsSetSuccess() {
 		return CarServiceUpdateCarResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *CarServiceUpdateCarResult) SetSuccess(x interface{}) {
-	p.Success = x.(*UnlockCarResponse)
+	p.Success = x.(*UpdateCarResponse)
 }
 
 var fieldIDToName_CarServiceUpdateCarResult = map[int16]string{
@@ -5092,7 +5092,7 @@ ReadStructEndError:
 }
 
 func (p *CarServiceUpdateCarResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewUnlockCarResponse()
+	p.Success = NewUpdateCarResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -5166,7 +5166,7 @@ func (p *CarServiceUpdateCarResult) DeepEqual(ano *CarServiceUpdateCarResult) bo
 	return true
 }
 
-func (p *CarServiceUpdateCarResult) Field0DeepEqual(src *UnlockCarResponse) bool {
+func (p *CarServiceUpdateCarResult) Field0DeepEqual(src *UpdateCarResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

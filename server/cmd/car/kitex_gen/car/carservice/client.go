@@ -16,7 +16,7 @@ type Client interface {
 	GetCars(ctx context.Context, req *car.GetCarsRequest, callOptions ...callopt.Option) (r *car.GetCarsResponse, err error)
 	LockCar(ctx context.Context, req *car.LockCarRequest, callOptions ...callopt.Option) (r *car.LockCarResponse, err error)
 	UnlockCar(ctx context.Context, req *car.UnlockCarRequest, callOptions ...callopt.Option) (r *car.UnlockCarResponse, err error)
-	UpdateCar(ctx context.Context, req *car.UpdateCarRequest, callOptions ...callopt.Option) (r *car.UnlockCarResponse, err error)
+	UpdateCar(ctx context.Context, req *car.UpdateCarRequest, callOptions ...callopt.Option) (r *car.UpdateCarResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -73,7 +73,7 @@ func (p *kCarServiceClient) UnlockCar(ctx context.Context, req *car.UnlockCarReq
 	return p.kClient.UnlockCar(ctx, req)
 }
 
-func (p *kCarServiceClient) UpdateCar(ctx context.Context, req *car.UpdateCarRequest, callOptions ...callopt.Option) (r *car.UnlockCarResponse, err error) {
+func (p *kCarServiceClient) UpdateCar(ctx context.Context, req *car.UpdateCarRequest, callOptions ...callopt.Option) (r *car.UpdateCarResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UpdateCar(ctx, req)
 }

@@ -208,7 +208,7 @@ func (p *kClient) UnlockCar(ctx context.Context, req *car.UnlockCarRequest) (r *
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UpdateCar(ctx context.Context, req *car.UpdateCarRequest) (r *car.UnlockCarResponse, err error) {
+func (p *kClient) UpdateCar(ctx context.Context, req *car.UpdateCarRequest) (r *car.UpdateCarResponse, err error) {
 	var _args car.CarServiceUpdateCarArgs
 	_args.Req = req
 	var _result car.CarServiceUpdateCarResult

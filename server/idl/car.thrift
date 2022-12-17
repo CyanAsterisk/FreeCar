@@ -74,5 +74,5 @@ service CarService {
     GetCarsResponse GetCars(1: GetCarsRequest req)
     LockCarResponse LockCar (1:LockCarRequest req)
     UnlockCarResponse UnlockCar(1:UnlockCarRequest req)
-    UnlockCarResponse UpdateCar(1: UpdateCarRequest req)
+    UpdateCarResponse UpdateCar(1: UpdateCarRequest req)
 }

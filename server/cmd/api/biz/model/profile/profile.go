@@ -8,9 +8,9 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
-	"strings"
 )
 
+// Profile Service
 type Gender int64
 
 const (
@@ -106,8 +106,8 @@ func (p *IdentityStatus) Value() (driver.Value, error) {
 }
 
 type Profile struct {
-	Identity       *Identity      `thrift:"identity,1" json:"identity"`
-	IdentityStatus IdentityStatus `thrift:"identity_status,2" json:"identity_status"`
+	Identity       *Identity      `thrift:"identity,1" json:"identity" form:"identity" query:"identity"`
+	IdentityStatus IdentityStatus `thrift:"identity_status,2" json:"identity_status" form:"identity_status" query:"identity_status"`
 }
 
 func NewProfile() *Profile {
@@ -125,12 +125,6 @@ func (p *Profile) GetIdentity() (v *Identity) {
 
 func (p *Profile) GetIdentityStatus() (v IdentityStatus) {
 	return p.IdentityStatus
-}
-func (p *Profile) SetIdentity(val *Identity) {
-	p.Identity = val
-}
-func (p *Profile) SetIdentityStatus(val IdentityStatus) {
-	p.IdentityStatus = val
 }
 
 var fieldIDToName_Profile = map[int16]string{
@@ -302,41 +296,11 @@ func (p *Profile) String() string {
 	return fmt.Sprintf("Profile(%+v)", *p)
 }
 
-func (p *Profile) DeepEqual(ano *Profile) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Identity) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.IdentityStatus) {
-		return false
-	}
-	return true
-}
-
-func (p *Profile) Field1DeepEqual(src *Identity) bool {
-
-	if !p.Identity.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-func (p *Profile) Field2DeepEqual(src IdentityStatus) bool {
-
-	if p.IdentityStatus != src {
-		return false
-	}
-	return true
-}
-
 type Identity struct {
-	LicNumber       string `thrift:"lic_number,1" json:"lic_number"`
-	Name            string `thrift:"name,2" json:"name"`
-	Gender          Gender `thrift:"gender,3" json:"gender"`
-	BirthDateMillis int64  `thrift:"birth_date_millis,4" json:"birth_date_millis"`
+	LicNumber       string `thrift:"lic_number,1" json:"lic_number" form:"lic_number" query:"lic_number"`
+	Name            string `thrift:"name,2" json:"name" form:"name" query:"name"`
+	Gender          Gender `thrift:"gender,3" json:"gender" form:"gender" query:"gender"`
+	BirthDateMillis int64  `thrift:"birth_date_millis,4" json:"birth_date_millis" form:"birth_date_millis" query:"birth_date_millis"`
 }
 
 func NewIdentity() *Identity {
@@ -357,18 +321,6 @@ func (p *Identity) GetGender() (v Gender) {
 
 func (p *Identity) GetBirthDateMillis() (v int64) {
 	return p.BirthDateMillis
-}
-func (p *Identity) SetLicNumber(val string) {
-	p.LicNumber = val
-}
-func (p *Identity) SetName(val string) {
-	p.Name = val
-}
-func (p *Identity) SetGender(val Gender) {
-	p.Gender = val
-}
-func (p *Identity) SetBirthDateMillis(val int64) {
-	p.BirthDateMillis = val
 }
 
 var fieldIDToName_Identity = map[int16]string{
@@ -619,69 +571,16 @@ func (p *Identity) String() string {
 	return fmt.Sprintf("Identity(%+v)", *p)
 }
 
-func (p *Identity) DeepEqual(ano *Identity) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.LicNumber) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Name) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.Gender) {
-		return false
-	}
-	if !p.Field4DeepEqual(ano.BirthDateMillis) {
-		return false
-	}
-	return true
-}
-
-func (p *Identity) Field1DeepEqual(src string) bool {
-
-	if strings.Compare(p.LicNumber, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field2DeepEqual(src string) bool {
-
-	if strings.Compare(p.Name, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field3DeepEqual(src Gender) bool {
-
-	if p.Gender != src {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field4DeepEqual(src int64) bool {
-
-	if p.BirthDateMillis != src {
-		return false
-	}
-	return true
-}
-
 type GetProfileRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewGetProfileRequest() *GetProfileRequest {
 	return &GetProfileRequest{}
 }
 
-func (p *GetProfileRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *GetProfileRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *GetProfileRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_GetProfileRequest = map[int16]string{
@@ -751,7 +650,7 @@ func (p *GetProfileRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -789,7 +688,7 @@ func (p *GetProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -809,37 +708,17 @@ func (p *GetProfileRequest) String() string {
 	return fmt.Sprintf("GetProfileRequest(%+v)", *p)
 }
 
-func (p *GetProfileRequest) DeepEqual(ano *GetProfileRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *GetProfileRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-
 type SubmitProfileRequest struct {
-	AccountId int64     `thrift:"account_id,1" json:"account_id"`
-	Identity  *Identity `thrift:"identity,2" json:"identity"`
+	AccountID int64     `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
+	Identity  *Identity `thrift:"identity,2" json:"identity" form:"identity" query:"identity"`
 }
 
 func NewSubmitProfileRequest() *SubmitProfileRequest {
 	return &SubmitProfileRequest{}
 }
 
-func (p *SubmitProfileRequest) GetAccountId() (v int64) {
-	return p.AccountId
+func (p *SubmitProfileRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var SubmitProfileRequest_Identity_DEFAULT *Identity
@@ -849,12 +728,6 @@ func (p *SubmitProfileRequest) GetIdentity() (v *Identity) {
 		return SubmitProfileRequest_Identity_DEFAULT
 	}
 	return p.Identity
-}
-func (p *SubmitProfileRequest) SetAccountId(val int64) {
-	p.AccountId = val
-}
-func (p *SubmitProfileRequest) SetIdentity(val *Identity) {
-	p.Identity = val
 }
 
 var fieldIDToName_SubmitProfileRequest = map[int16]string{
@@ -939,7 +812,7 @@ func (p *SubmitProfileRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -989,7 +862,7 @@ func (p *SubmitProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1026,49 +899,16 @@ func (p *SubmitProfileRequest) String() string {
 	return fmt.Sprintf("SubmitProfileRequest(%+v)", *p)
 }
 
-func (p *SubmitProfileRequest) DeepEqual(ano *SubmitProfileRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Identity) {
-		return false
-	}
-	return true
-}
-
-func (p *SubmitProfileRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
-
-	if !p.Identity.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ClearProfileRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewClearProfileRequest() *ClearProfileRequest {
 	return &ClearProfileRequest{}
 }
 
-func (p *ClearProfileRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *ClearProfileRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *ClearProfileRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_ClearProfileRequest = map[int16]string{
@@ -1138,7 +978,7 @@ func (p *ClearProfileRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -1176,7 +1016,7 @@ func (p *ClearProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1196,39 +1036,16 @@ func (p *ClearProfileRequest) String() string {
 	return fmt.Sprintf("ClearProfileRequest(%+v)", *p)
 }
 
-func (p *ClearProfileRequest) DeepEqual(ano *ClearProfileRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *ClearProfileRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-
 type GetProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewGetProfilePhotoRequest() *GetProfilePhotoRequest {
 	return &GetProfilePhotoRequest{}
 }
 
-func (p *GetProfilePhotoRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *GetProfilePhotoRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *GetProfilePhotoRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_GetProfilePhotoRequest = map[int16]string{
@@ -1298,7 +1115,7 @@ func (p *GetProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -1336,7 +1153,7 @@ func (p *GetProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err error)
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1356,39 +1173,16 @@ func (p *GetProfilePhotoRequest) String() string {
 	return fmt.Sprintf("GetProfilePhotoRequest(%+v)", *p)
 }
 
-func (p *GetProfilePhotoRequest) DeepEqual(ano *GetProfilePhotoRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *GetProfilePhotoRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-
 type GetProfilePhotoResponse struct {
-	Url string `thrift:"url,1" json:"url"`
+	URL string `thrift:"url,1" json:"url" form:"url" query:"url"`
 }
 
 func NewGetProfilePhotoResponse() *GetProfilePhotoResponse {
 	return &GetProfilePhotoResponse{}
 }
 
-func (p *GetProfilePhotoResponse) GetUrl() (v string) {
-	return p.Url
-}
-func (p *GetProfilePhotoResponse) SetUrl(val string) {
-	p.Url = val
+func (p *GetProfilePhotoResponse) GetURL() (v string) {
+	return p.URL
 }
 
 var fieldIDToName_GetProfilePhotoResponse = map[int16]string{
@@ -1458,7 +1252,7 @@ func (p *GetProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Url = v
+		p.URL = v
 	}
 	return nil
 }
@@ -1496,7 +1290,7 @@ func (p *GetProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err error
 	if err = oprot.WriteFieldBegin("url", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Url); err != nil {
+	if err := oprot.WriteString(p.URL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1516,39 +1310,16 @@ func (p *GetProfilePhotoResponse) String() string {
 	return fmt.Sprintf("GetProfilePhotoResponse(%+v)", *p)
 }
 
-func (p *GetProfilePhotoResponse) DeepEqual(ano *GetProfilePhotoResponse) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Url) {
-		return false
-	}
-	return true
-}
-
-func (p *GetProfilePhotoResponse) Field1DeepEqual(src string) bool {
-
-	if strings.Compare(p.Url, src) != 0 {
-		return false
-	}
-	return true
-}
-
 type CreateProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewCreateProfilePhotoRequest() *CreateProfilePhotoRequest {
 	return &CreateProfilePhotoRequest{}
 }
 
-func (p *CreateProfilePhotoRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *CreateProfilePhotoRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *CreateProfilePhotoRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_CreateProfilePhotoRequest = map[int16]string{
@@ -1618,7 +1389,7 @@ func (p *CreateProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -1656,7 +1427,7 @@ func (p *CreateProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err err
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1676,39 +1447,16 @@ func (p *CreateProfilePhotoRequest) String() string {
 	return fmt.Sprintf("CreateProfilePhotoRequest(%+v)", *p)
 }
 
-func (p *CreateProfilePhotoRequest) DeepEqual(ano *CreateProfilePhotoRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *CreateProfilePhotoRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-
 type CreateProfilePhotoResponse struct {
-	UploadUrl string `thrift:"upload_url,1" json:"upload_url"`
+	UploadURL string `thrift:"upload_url,1" json:"upload_url" form:"upload_url" query:"upload_url"`
 }
 
 func NewCreateProfilePhotoResponse() *CreateProfilePhotoResponse {
 	return &CreateProfilePhotoResponse{}
 }
 
-func (p *CreateProfilePhotoResponse) GetUploadUrl() (v string) {
-	return p.UploadUrl
-}
-func (p *CreateProfilePhotoResponse) SetUploadUrl(val string) {
-	p.UploadUrl = val
+func (p *CreateProfilePhotoResponse) GetUploadURL() (v string) {
+	return p.UploadURL
 }
 
 var fieldIDToName_CreateProfilePhotoResponse = map[int16]string{
@@ -1778,7 +1526,7 @@ func (p *CreateProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.UploadUrl = v
+		p.UploadURL = v
 	}
 	return nil
 }
@@ -1816,7 +1564,7 @@ func (p *CreateProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err er
 	if err = oprot.WriteFieldBegin("upload_url", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UploadUrl); err != nil {
+	if err := oprot.WriteString(p.UploadURL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1836,39 +1584,16 @@ func (p *CreateProfilePhotoResponse) String() string {
 	return fmt.Sprintf("CreateProfilePhotoResponse(%+v)", *p)
 }
 
-func (p *CreateProfilePhotoResponse) DeepEqual(ano *CreateProfilePhotoResponse) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.UploadUrl) {
-		return false
-	}
-	return true
-}
-
-func (p *CreateProfilePhotoResponse) Field1DeepEqual(src string) bool {
-
-	if strings.Compare(p.UploadUrl, src) != 0 {
-		return false
-	}
-	return true
-}
-
 type CompleteProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewCompleteProfilePhotoRequest() *CompleteProfilePhotoRequest {
 	return &CompleteProfilePhotoRequest{}
 }
 
-func (p *CompleteProfilePhotoRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *CompleteProfilePhotoRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *CompleteProfilePhotoRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_CompleteProfilePhotoRequest = map[int16]string{
@@ -1938,7 +1663,7 @@ func (p *CompleteProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -1976,7 +1701,7 @@ func (p *CompleteProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err e
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1996,39 +1721,16 @@ func (p *CompleteProfilePhotoRequest) String() string {
 	return fmt.Sprintf("CompleteProfilePhotoRequest(%+v)", *p)
 }
 
-func (p *CompleteProfilePhotoRequest) DeepEqual(ano *CompleteProfilePhotoRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-
 type ClearProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountID int64 `thrift:"account_id,1" json:"account_id" form:"account_id" query:"account_id"`
 }
 
 func NewClearProfilePhotoRequest() *ClearProfilePhotoRequest {
 	return &ClearProfilePhotoRequest{}
 }
 
-func (p *ClearProfilePhotoRequest) GetAccountId() (v int64) {
-	return p.AccountId
-}
-func (p *ClearProfilePhotoRequest) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *ClearProfilePhotoRequest) GetAccountID() (v int64) {
+	return p.AccountID
 }
 
 var fieldIDToName_ClearProfilePhotoRequest = map[int16]string{
@@ -2098,7 +1800,7 @@ func (p *ClearProfilePhotoRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.AccountID = v
 	}
 	return nil
 }
@@ -2136,7 +1838,7 @@ func (p *ClearProfilePhotoRequest) writeField1(oprot thrift.TProtocol) (err erro
 	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2154,26 +1856,6 @@ func (p *ClearProfilePhotoRequest) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ClearProfilePhotoRequest(%+v)", *p)
-}
-
-func (p *ClearProfilePhotoRequest) DeepEqual(ano *ClearProfilePhotoRequest) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	return true
-}
-
-func (p *ClearProfilePhotoRequest) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
 }
 
 type ClearProfilePhotoResponse struct {
@@ -2255,15 +1937,6 @@ func (p *ClearProfilePhotoResponse) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ClearProfilePhotoResponse(%+v)", *p)
-}
-
-func (p *ClearProfilePhotoResponse) DeepEqual(ano *ClearProfilePhotoResponse) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	return true
 }
 
 type ProfileService interface {
@@ -2771,9 +2444,6 @@ func (p *ProfileServiceGetProfileArgs) GetReq() (v *GetProfileRequest) {
 	}
 	return p.Req
 }
-func (p *ProfileServiceGetProfileArgs) SetReq(val *GetProfileRequest) {
-	p.Req = val
-}
 
 var fieldIDToName_ProfileServiceGetProfileArgs = map[int16]string{
 	1: "req",
@@ -2903,26 +2573,6 @@ func (p *ProfileServiceGetProfileArgs) String() string {
 	return fmt.Sprintf("ProfileServiceGetProfileArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceGetProfileArgs) DeepEqual(ano *ProfileServiceGetProfileArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceGetProfileArgs) Field1DeepEqual(src *GetProfileRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceGetProfileResult struct {
 	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -2938,9 +2588,6 @@ func (p *ProfileServiceGetProfileResult) GetSuccess() (v *Profile) {
 		return ProfileServiceGetProfileResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceGetProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
 }
 
 var fieldIDToName_ProfileServiceGetProfileResult = map[int16]string{
@@ -3073,26 +2720,6 @@ func (p *ProfileServiceGetProfileResult) String() string {
 	return fmt.Sprintf("ProfileServiceGetProfileResult(%+v)", *p)
 }
 
-func (p *ProfileServiceGetProfileResult) DeepEqual(ano *ProfileServiceGetProfileResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceGetProfileResult) Field0DeepEqual(src *Profile) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceSubmitProfileArgs struct {
 	Req *SubmitProfileRequest `thrift:"req,1" json:"req"`
 }
@@ -3108,9 +2735,6 @@ func (p *ProfileServiceSubmitProfileArgs) GetReq() (v *SubmitProfileRequest) {
 		return ProfileServiceSubmitProfileArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceSubmitProfileArgs) SetReq(val *SubmitProfileRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceSubmitProfileArgs = map[int16]string{
@@ -3241,26 +2865,6 @@ func (p *ProfileServiceSubmitProfileArgs) String() string {
 	return fmt.Sprintf("ProfileServiceSubmitProfileArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceSubmitProfileArgs) DeepEqual(ano *ProfileServiceSubmitProfileArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceSubmitProfileArgs) Field1DeepEqual(src *SubmitProfileRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceSubmitProfileResult struct {
 	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -3276,9 +2880,6 @@ func (p *ProfileServiceSubmitProfileResult) GetSuccess() (v *Profile) {
 		return ProfileServiceSubmitProfileResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceSubmitProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
 }
 
 var fieldIDToName_ProfileServiceSubmitProfileResult = map[int16]string{
@@ -3411,26 +3012,6 @@ func (p *ProfileServiceSubmitProfileResult) String() string {
 	return fmt.Sprintf("ProfileServiceSubmitProfileResult(%+v)", *p)
 }
 
-func (p *ProfileServiceSubmitProfileResult) DeepEqual(ano *ProfileServiceSubmitProfileResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceSubmitProfileResult) Field0DeepEqual(src *Profile) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceClearProfileArgs struct {
 	Req *ClearProfileRequest `thrift:"req,1" json:"req"`
 }
@@ -3446,9 +3027,6 @@ func (p *ProfileServiceClearProfileArgs) GetReq() (v *ClearProfileRequest) {
 		return ProfileServiceClearProfileArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceClearProfileArgs) SetReq(val *ClearProfileRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceClearProfileArgs = map[int16]string{
@@ -3579,26 +3157,6 @@ func (p *ProfileServiceClearProfileArgs) String() string {
 	return fmt.Sprintf("ProfileServiceClearProfileArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceClearProfileArgs) DeepEqual(ano *ProfileServiceClearProfileArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceClearProfileArgs) Field1DeepEqual(src *ClearProfileRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceClearProfileResult struct {
 	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -3614,9 +3172,6 @@ func (p *ProfileServiceClearProfileResult) GetSuccess() (v *Profile) {
 		return ProfileServiceClearProfileResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceClearProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
 }
 
 var fieldIDToName_ProfileServiceClearProfileResult = map[int16]string{
@@ -3749,26 +3304,6 @@ func (p *ProfileServiceClearProfileResult) String() string {
 	return fmt.Sprintf("ProfileServiceClearProfileResult(%+v)", *p)
 }
 
-func (p *ProfileServiceClearProfileResult) DeepEqual(ano *ProfileServiceClearProfileResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceClearProfileResult) Field0DeepEqual(src *Profile) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceGetProfilePhotoArgs struct {
 	Req *GetProfilePhotoRequest `thrift:"req,1" json:"req"`
 }
@@ -3784,9 +3319,6 @@ func (p *ProfileServiceGetProfilePhotoArgs) GetReq() (v *GetProfilePhotoRequest)
 		return ProfileServiceGetProfilePhotoArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceGetProfilePhotoArgs) SetReq(val *GetProfilePhotoRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceGetProfilePhotoArgs = map[int16]string{
@@ -3917,26 +3449,6 @@ func (p *ProfileServiceGetProfilePhotoArgs) String() string {
 	return fmt.Sprintf("ProfileServiceGetProfilePhotoArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceGetProfilePhotoArgs) DeepEqual(ano *ProfileServiceGetProfilePhotoArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceGetProfilePhotoArgs) Field1DeepEqual(src *GetProfilePhotoRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceGetProfilePhotoResult struct {
 	Success *GetProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -3952,9 +3464,6 @@ func (p *ProfileServiceGetProfilePhotoResult) GetSuccess() (v *GetProfilePhotoRe
 		return ProfileServiceGetProfilePhotoResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceGetProfilePhotoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*GetProfilePhotoResponse)
 }
 
 var fieldIDToName_ProfileServiceGetProfilePhotoResult = map[int16]string{
@@ -4087,26 +3596,6 @@ func (p *ProfileServiceGetProfilePhotoResult) String() string {
 	return fmt.Sprintf("ProfileServiceGetProfilePhotoResult(%+v)", *p)
 }
 
-func (p *ProfileServiceGetProfilePhotoResult) DeepEqual(ano *ProfileServiceGetProfilePhotoResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceGetProfilePhotoResult) Field0DeepEqual(src *GetProfilePhotoResponse) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceCreateProfilePhotoArgs struct {
 	Req *CreateProfilePhotoRequest `thrift:"req,1" json:"req"`
 }
@@ -4122,9 +3611,6 @@ func (p *ProfileServiceCreateProfilePhotoArgs) GetReq() (v *CreateProfilePhotoRe
 		return ProfileServiceCreateProfilePhotoArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceCreateProfilePhotoArgs) SetReq(val *CreateProfilePhotoRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceCreateProfilePhotoArgs = map[int16]string{
@@ -4255,26 +3741,6 @@ func (p *ProfileServiceCreateProfilePhotoArgs) String() string {
 	return fmt.Sprintf("ProfileServiceCreateProfilePhotoArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceCreateProfilePhotoArgs) DeepEqual(ano *ProfileServiceCreateProfilePhotoArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceCreateProfilePhotoArgs) Field1DeepEqual(src *CreateProfilePhotoRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceCreateProfilePhotoResult struct {
 	Success *CreateProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -4290,9 +3756,6 @@ func (p *ProfileServiceCreateProfilePhotoResult) GetSuccess() (v *CreateProfileP
 		return ProfileServiceCreateProfilePhotoResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceCreateProfilePhotoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*CreateProfilePhotoResponse)
 }
 
 var fieldIDToName_ProfileServiceCreateProfilePhotoResult = map[int16]string{
@@ -4425,26 +3888,6 @@ func (p *ProfileServiceCreateProfilePhotoResult) String() string {
 	return fmt.Sprintf("ProfileServiceCreateProfilePhotoResult(%+v)", *p)
 }
 
-func (p *ProfileServiceCreateProfilePhotoResult) DeepEqual(ano *ProfileServiceCreateProfilePhotoResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceCreateProfilePhotoResult) Field0DeepEqual(src *CreateProfilePhotoResponse) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceCompleteProfilePhotoArgs struct {
 	Req *CompleteProfilePhotoRequest `thrift:"req,1" json:"req"`
 }
@@ -4460,9 +3903,6 @@ func (p *ProfileServiceCompleteProfilePhotoArgs) GetReq() (v *CompleteProfilePho
 		return ProfileServiceCompleteProfilePhotoArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceCompleteProfilePhotoArgs) SetReq(val *CompleteProfilePhotoRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceCompleteProfilePhotoArgs = map[int16]string{
@@ -4593,26 +4033,6 @@ func (p *ProfileServiceCompleteProfilePhotoArgs) String() string {
 	return fmt.Sprintf("ProfileServiceCompleteProfilePhotoArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceCompleteProfilePhotoArgs) DeepEqual(ano *ProfileServiceCompleteProfilePhotoArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceCompleteProfilePhotoArgs) Field1DeepEqual(src *CompleteProfilePhotoRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceCompleteProfilePhotoResult struct {
 	Success *Identity `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -4628,9 +4048,6 @@ func (p *ProfileServiceCompleteProfilePhotoResult) GetSuccess() (v *Identity) {
 		return ProfileServiceCompleteProfilePhotoResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceCompleteProfilePhotoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Identity)
 }
 
 var fieldIDToName_ProfileServiceCompleteProfilePhotoResult = map[int16]string{
@@ -4763,26 +4180,6 @@ func (p *ProfileServiceCompleteProfilePhotoResult) String() string {
 	return fmt.Sprintf("ProfileServiceCompleteProfilePhotoResult(%+v)", *p)
 }
 
-func (p *ProfileServiceCompleteProfilePhotoResult) DeepEqual(ano *ProfileServiceCompleteProfilePhotoResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceCompleteProfilePhotoResult) Field0DeepEqual(src *Identity) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceClearProfilePhotoArgs struct {
 	Req *ClearProfilePhotoRequest `thrift:"req,1" json:"req"`
 }
@@ -4798,9 +4195,6 @@ func (p *ProfileServiceClearProfilePhotoArgs) GetReq() (v *ClearProfilePhotoRequ
 		return ProfileServiceClearProfilePhotoArgs_Req_DEFAULT
 	}
 	return p.Req
-}
-func (p *ProfileServiceClearProfilePhotoArgs) SetReq(val *ClearProfilePhotoRequest) {
-	p.Req = val
 }
 
 var fieldIDToName_ProfileServiceClearProfilePhotoArgs = map[int16]string{
@@ -4931,26 +4325,6 @@ func (p *ProfileServiceClearProfilePhotoArgs) String() string {
 	return fmt.Sprintf("ProfileServiceClearProfilePhotoArgs(%+v)", *p)
 }
 
-func (p *ProfileServiceClearProfilePhotoArgs) DeepEqual(ano *ProfileServiceClearProfilePhotoArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Req) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceClearProfilePhotoArgs) Field1DeepEqual(src *ClearProfilePhotoRequest) bool {
-
-	if !p.Req.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
 type ProfileServiceClearProfilePhotoResult struct {
 	Success *ClearProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
 }
@@ -4966,9 +4340,6 @@ func (p *ProfileServiceClearProfilePhotoResult) GetSuccess() (v *ClearProfilePho
 		return ProfileServiceClearProfilePhotoResult_Success_DEFAULT
 	}
 	return p.Success
-}
-func (p *ProfileServiceClearProfilePhotoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*ClearProfilePhotoResponse)
 }
 
 var fieldIDToName_ProfileServiceClearProfilePhotoResult = map[int16]string{
@@ -5099,24 +4470,4 @@ func (p *ProfileServiceClearProfilePhotoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ProfileServiceClearProfilePhotoResult(%+v)", *p)
-}
-
-func (p *ProfileServiceClearProfilePhotoResult) DeepEqual(ano *ProfileServiceClearProfilePhotoResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileServiceClearProfilePhotoResult) Field0DeepEqual(src *ClearProfilePhotoResponse) bool {
-
-	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
 }

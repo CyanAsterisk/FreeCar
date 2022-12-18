@@ -9,6 +9,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
 	auth "github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -27,8 +28,13 @@ func main() {
 	tracerSuite, closer := initialize.InitTracer()
 	defer closer.Close()
 
+	impl := new(AuthServiceImpl)
+	impl.OpenIDResolver = &tool.AuthServiceImpl{
+		AppID:     global.ServerConfig.WXInfo.AppId,
+		AppSecret: global.ServerConfig.WXInfo.AppSecret,
+	}
 	// Create new server.
-	srv := auth.NewServer(new(AuthServiceImpl),
+	srv := auth.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

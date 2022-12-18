@@ -26,6 +26,7 @@ func main() {
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()
 	defer closer.Close()
+	initialize.InitBlob()
 
 	// Create new server.
 	srv := profile.NewServer(new(ProfileServiceImpl),

@@ -26,37 +26,37 @@ struct Identity {
 }
 
 struct GetProfileRequest {
-  1: string account_id
+  1: i64 account_id
 }
 
 struct SubmitProfileRequest {
-  1: string account_id
+  1: i64 account_id
   2: Identity identity
 }
 
 struct ClearProfileRequest {
-  1: string account_id
+  1: i64 account_id
 }
 
 struct GetProfilePhotoRequest {
-  1: string account_id
+  1: i64 account_id
 }
 struct GetProfilePhotoResponse {
   1: string url
 }
 
 struct CreateProfilePhotoRequest {
-  1: string account_id
+  1: i64 account_id
 }
 struct CreateProfilePhotoResponse {
   1: string upload_url
 }
 
 struct CompleteProfilePhotoRequest {
-  1: string account_id
+  1: i64 account_id
 }
 struct ClearProfilePhotoRequest {
-  1: string account_id
+  1: i64 account_id
 }
 struct ClearProfilePhotoResponse {}
 

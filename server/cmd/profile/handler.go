@@ -6,8 +6,8 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/rpc"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
@@ -85,7 +85,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 		return nil, status.Err(codes.NotFound, "")
 	}
 
-	br, err := rpc.GetBlobURL(ctx, &blob.GetBlobURLRequest{
+	br, err := global.BlobClient.GetBlobURL(ctx, &blob.GetBlobURLRequest{
 		Id:         pr.PhotoBlobID,
 		TimeoutSec: int32(5 * time.Second.Seconds()),
 	})
@@ -102,7 +102,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 // CreateProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profile.CreateProfilePhotoRequest) (resp *profile.CreateProfilePhotoResponse, err error) {
 	aid := req.AccountId
-	br, err := rpc.CreateBlob(ctx, &blob.CreateBlobRequest{
+	br, err := global.BlobClient.CreateBlob(ctx, &blob.CreateBlobRequest{
 		AccountId:           aid,
 		UploadUrlTimeoutSec: int32(10 * time.Second.Seconds()),
 	})
@@ -134,7 +134,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return nil, status.Err(codes.NotFound, "")
 	}
 
-	br, err := rpc.GetBlob(ctx, &blob.GetBlobRequest{
+	br, err := global.BlobClient.GetBlob(ctx, &blob.GetBlobRequest{
 		Id: pr.PhotoBlobID,
 	})
 	if err != nil {

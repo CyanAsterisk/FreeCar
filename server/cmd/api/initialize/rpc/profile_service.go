@@ -1,15 +1,11 @@
 package rpc
 
 import (
-	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob"
-	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -18,17 +14,16 @@ import (
 	internalOpentracing "github.com/kitex-contrib/tracer-opentracing"
 	"github.com/opentracing/opentracing-go"
 	jaegerCfg "github.com/uber/jaeger-client-go/config"
+	"time"
 )
 
-var blobClient blobservice.Client
-
-func initBlob() {
+func initProfile() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,
 		global.ServerConfig.ConsulInfo.Port))
 	if err != nil {
-		hlog.Fatalf("new consul client failed: %s", err.Error())
+		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
 	// init tracer
 	reporterCfg := &jaegerCfg.ReporterConfig{
@@ -40,7 +35,7 @@ func initBlob() {
 		Param: 1,
 	}
 	cfg := jaegerCfg.Configuration{
-		ServiceName: global.ServerConfig.BlobSrvInfo.Name,
+		ServiceName: global.ServerConfig.ProfileSrvInfo.Name,
 		Sampler:     samplerCfg,
 		Reporter:    reporterCfg,
 	}
@@ -51,8 +46,8 @@ func initBlob() {
 	opentracing.InitGlobalTracer(tracer)
 	defer closer.Close()
 	// create a new client
-	c, err := blobservice.NewClient(
-		global.ServerConfig.BlobSrvInfo.Name,
+	c, err := profileservice.NewClient(
+		global.ServerConfig.ProfileSrvInfo.Name,
 		client.WithResolver(r),
 		client.WithMuxConnection(1),
 		client.WithRPCTimeout(3*time.Second),
@@ -61,34 +56,10 @@ func initBlob() {
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(internalOpentracing.NewDefaultClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.BlobSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.ProfileSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	blobClient = c
-}
-
-func CreateBlob(ctx context.Context, req *blob.CreateBlobRequest) (resp *blob.CreateBlobResponse, err error) {
-	resp, err = blobClient.CreateBlob(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func GetBlob(ctx context.Context, req *blob.GetBlobRequest) (resp *blob.GetBlobResponse, err error) {
-	resp, err = blobClient.GetBlob(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest) (resp *blob.GetBlobURLResponse, err error) {
-	resp, err = blobClient.GetBlobURL(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	global.ProfileClient = c
 }

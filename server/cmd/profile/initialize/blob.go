@@ -1,28 +1,24 @@
-package rpc
+package initialize
 
 import (
-	"context"
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/kitex-contrib/registry-consul"
+	consul "github.com/kitex-contrib/registry-consul"
 	internalOpentracing "github.com/kitex-contrib/tracer-opentracing"
 	"github.com/opentracing/opentracing-go"
 	jaegerCfg "github.com/uber/jaeger-client-go/config"
 )
 
-var authClient authservice.Client
-
-func initAuth() {
+func InitBlob() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,
@@ -40,7 +36,7 @@ func initAuth() {
 		Param: 1,
 	}
 	cfg := jaegerCfg.Configuration{
-		ServiceName: global.ServerConfig.AuthSrvInfo.Name,
+		ServiceName: global.ServerConfig.BlobSrvInfo.Name,
 		Sampler:     samplerCfg,
 		Reporter:    reporterCfg,
 	}
@@ -51,8 +47,8 @@ func initAuth() {
 	opentracing.InitGlobalTracer(tracer)
 	defer closer.Close()
 	// create a new client
-	c, err := authservice.NewClient(
-		global.ServerConfig.AuthSrvInfo.Name,
+	c, err := blobservice.NewClient(
+		global.ServerConfig.BlobSrvInfo.Name,
 		client.WithResolver(r),
 		client.WithMuxConnection(1),
 		client.WithRPCTimeout(3*time.Second),
@@ -61,19 +57,10 @@ func initAuth() {
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(internalOpentracing.NewDefaultClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.AuthSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.BlobSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	authClient = c
-}
-
-// Login to pass accountID
-func Login(ctx context.Context, req *auth.LoginRequest) (accountID int64, err error) {
-	resp, err := authClient.Login(ctx, req)
-	if err != nil {
-		return 0, err
-	}
-	return resp.AccountID, nil
+	global.BlobClient = c
 }

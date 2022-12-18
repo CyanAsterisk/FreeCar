@@ -9,7 +9,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/initialize"
 	profile "github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/rpc"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -27,7 +26,7 @@ func main() {
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()
 	defer closer.Close()
-	rpc.Init()
+	initialize.InitBlob()
 
 	// Create new server.
 	srv := profile.NewServer(new(ProfileServiceImpl),

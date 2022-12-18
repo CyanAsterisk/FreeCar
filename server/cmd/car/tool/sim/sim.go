@@ -41,7 +41,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		return
 	}
 
-	carChans := make(map[int64]chan *car.Car)
+	carChans := make(map[string]chan *car.Car)
 	for _, _car := range cars {
 		ch := make(chan *car.Car)
 		carChans[_car.Id] = ch

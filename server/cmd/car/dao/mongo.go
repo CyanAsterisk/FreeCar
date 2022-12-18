@@ -122,7 +122,6 @@ func (m *Mongo) UpdateCar(c context.Context, CarId int64, status car.CarStatus, 
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)
-
 }
 
 func convertSingleResult(res *mongo.SingleResult) (*CarRecord, error) {
@@ -131,7 +130,6 @@ func convertSingleResult(res *mongo.SingleResult) (*CarRecord, error) {
 	}
 	var cr CarRecord
 	err := res.Decode(&cr)
-
 	if err != nil {
 		return nil, fmt.Errorf("cannot decode: %v", err)
 	}

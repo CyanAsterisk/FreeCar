@@ -2,12 +2,11 @@ package amqpclt
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/cloudwego/kitex/pkg/klog"
-
 	"encoding/json"
 	"fmt"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/streadway/amqp"
 )
 
@@ -32,10 +31,9 @@ func NewPublisher(conn *amqp.Connection, exchange string) (*Publisher, error) {
 		ch:       ch,
 		exchange: exchange,
 	}, nil
-
 }
 
-//Publish publishes a message.
+// Publish publishes a message.
 func (p *Publisher) Publish(c context.Context, car *car.CarEntity) error {
 	b, err := json.Marshal(car)
 	if err != nil {
@@ -44,9 +42,9 @@ func (p *Publisher) Publish(c context.Context, car *car.CarEntity) error {
 
 	return p.ch.Publish(
 		p.exchange,
-		"",    //Key
-		false, //mandatory
-		false, //immedaiiote
+		"",    // Key
+		false, // mandatory
+		false, // immedaiiote
 		amqp.Publishing{
 			Body: b,
 		},

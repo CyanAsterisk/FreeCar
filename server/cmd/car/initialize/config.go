@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"

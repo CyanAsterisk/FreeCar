@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/shared/id"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
@@ -20,7 +21,7 @@ type ProfileServiceImpl struct{}
 
 // GetProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetProfileRequest) (resp *profile.Profile, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	pr, err := dao.GetProfile(ctx, aid)
 	if err != nil {
 		code := s.logAndConvertProfileErr(err)
@@ -37,7 +38,7 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 
 // SubmitProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest) (resp *profile.Profile, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	p := &profile.Profile{
 		Identity:       req.Identity,
 		IdentityStatus: profile.IdentityStatus_PENDING,
@@ -63,7 +64,7 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 
 // ClearProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (resp *profile.Profile, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	p := &profile.Profile{}
 	err = dao.UpdateProfile(ctx, aid, profile.IdentityStatus_VERIFIED, p)
 	if err != nil {
@@ -75,7 +76,7 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 
 // GetProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.GetProfilePhotoRequest) (resp *profile.GetProfilePhotoResponse, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	pr, err := dao.GetProfile(ctx, aid)
 	if err != nil {
 		return nil, status.Err(s.logAndConvertProfileErr(err), "")
@@ -111,7 +112,7 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 		return nil, status.Err(codes.Aborted, "")
 	}
 
-	err = dao.UpdateProfilePhoto(ctx, aid, br.Id)
+	err = dao.UpdateProfilePhoto(ctx, id.AccountID(req.AccountId), id.BlobID(br.Id))
 	if err != nil {
 		klog.Error("cannot update profile photo", err)
 		return nil, status.Err(codes.Aborted, "")
@@ -124,7 +125,7 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 
 // CompleteProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (resp *profile.Identity, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	pr, err := dao.GetProfile(ctx, aid)
 	if err != nil {
 		return nil, status.Err(s.logAndConvertProfileErr(err), "")
@@ -153,7 +154,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 
 // ClearProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile.ClearProfilePhotoRequest) (resp *profile.ClearProfilePhotoResponse, err error) {
-	aid := req.AccountId
+	aid := id.AccountID(req.AccountId)
 	err = dao.UpdateProfilePhoto(ctx, aid, 0)
 	if err != nil {
 		klog.Error("cannot clear profile photo", err)

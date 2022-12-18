@@ -6,6 +6,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -26,7 +27,7 @@ type ProfileRecord struct {
 }
 
 // GetProfile gets profile for an account.
-func GetProfile(c context.Context, aid int64) (*ProfileRecord, error) {
+func GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
 	res := global.DB.FindOne(c, byAccountID(aid))
 	if err := res.Err(); err != nil {
 		return nil, err
@@ -40,34 +41,34 @@ func GetProfile(c context.Context, aid int64) (*ProfileRecord, error) {
 }
 
 // UpdateProfile updates profile for an account.
-func UpdateProfile(c context.Context, aid int64, prevState profile.IdentityStatus, p *profile.Profile) error {
+func UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
 	filter := bson.M{
 		identityStatusField: prevState,
 	}
 	if prevState == profile.IdentityStatus_UNSUBMITTED {
 		filter = mgutil.ZeroOrDoesNotExist(identityStatusField, prevState)
 	}
-	filter[accountIDField] = aid
+	filter[accountIDField] = aid.Int64()
 	_, err := global.DB.UpdateOne(c, filter, mgutil.Set(bson.M{
-		accountIDField: aid,
+		accountIDField: aid.Int64(),
 		profileField:   p,
 	}), options.Update().SetUpsert(true))
 	return err
 }
 
 // UpdateProfilePhoto updates profile photo blob id.
-func UpdateProfilePhoto(c context.Context, aid int64, bid int64) error {
+func UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
 	_, err := global.DB.UpdateOne(c, bson.M{
-		accountIDField: aid,
+		accountIDField: aid.Int64(),
 	}, mgutil.Set(bson.M{
-		accountIDField:   aid,
-		photoBlobIDField: bid,
+		accountIDField:   aid.Int64(),
+		photoBlobIDField: bid.Int64(),
 	}), options.Update().SetUpsert(true))
 	return err
 }
 
-func byAccountID(aid int64) bson.M {
+func byAccountID(aid id.AccountID) bson.M {
 	return bson.M{
-		accountIDField: aid,
+		accountIDField: aid.Int64(),
 	}
 }

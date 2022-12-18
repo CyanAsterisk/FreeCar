@@ -2,6 +2,7 @@ package mq
 
 import (
 	"context"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 )
 

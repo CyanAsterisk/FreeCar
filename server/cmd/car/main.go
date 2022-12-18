@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,12 +10,14 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
 	car "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
+	"github.com/gorilla/websocket"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	initialize.InitConfig()
 	initialize.InitDB()
 	initialize.InitMq()
-	//rpc.Init() //TODO:initRPC
+	// rpc.Init() //TODO:initRPC
 
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()

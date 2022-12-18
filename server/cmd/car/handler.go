@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
@@ -10,12 +11,10 @@ import (
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 	"go.mongodb.org/mongo-driver/mongo"
-	"strconv"
 )
 
 // CarServiceImpl implements the last service interface defined in the IDL.
-type CarServiceImpl struct {
-}
+type CarServiceImpl struct{}
 
 // CreateCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) CreateCar(ctx context.Context, _ *car.CreateCarRequest) (res *car.CarEntity, err error) {
@@ -120,7 +119,6 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 }
 
 func (s *CarServiceImpl) publish(c context.Context, cr *dao.CarRecord) {
-
 	id, err := strconv.ParseInt(cr.ID.Hex(), 16, 64)
 	if err != nil {
 		klog.Warn("cannot pare carID", err.Error())

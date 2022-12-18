@@ -20,7 +20,7 @@ type Controller struct {
 func (c *Controller) RunSimulations(ctx context.Context) {
 	var cars []*car.CarEntity
 	for {
-		//防止由于服务没起来而没取到车辆信息
+		// Prevent vehicle information not being retrieved due to service failure
 		time.Sleep(3 * time.Second)
 		res, err := c.CarService.GetCars(ctx, &car.GetCarsRequest{})
 		if err != nil {

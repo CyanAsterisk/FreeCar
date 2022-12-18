@@ -3,7 +3,7 @@ package id
 // AccountID defines account id object.
 type AccountID int64
 
-func (a AccountID) int64() int64 {
+func (a AccountID) Int64() int64 {
 	return int64(a)
 }
 

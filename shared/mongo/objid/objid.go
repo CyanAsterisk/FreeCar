@@ -21,11 +21,6 @@ func MustFromID(id fmt.Stringer) primitive.ObjectID {
 	return oid
 }
 
-// ToAccountID converts object id to account id.
-func ToAccountID(oid int64) id.AccountID {
-	return id.AccountID(oid)
-}
-
 // ToTripID converts object id to trip id.
 func ToTripID(oid primitive.ObjectID) id.TripID {
 	return id.TripID(oid.Hex())
@@ -39,9 +34,4 @@ func ToCarID(oid primitive.ObjectID) id.CarID {
 // ToIdentityID converts object id to identity id.
 func ToIdentityID(oid primitive.ObjectID) id.IdentityID {
 	return id.IdentityID(oid.Hex())
-}
-
-// ToBlobID converts object id to blob id.
-func ToBlobID(oid int64) id.BlobID {
-	return id.BlobID(oid)
 }

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/rpc"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -29,7 +29,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	// rpc to get accountID
-	accountID, err := rpc.Login(ctx, &req)
+	resp, err := global.AuthClient.Login(ctx, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, utils.H{
 			"msg": "rpc login error",
@@ -39,7 +39,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	// create a JWT
 	j := middleware.NewJWT()
 	claims := models.CustomClaims{
-		ID: accountID,
+		ID: resp.AccountID,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
 			ExpiresAt: time.Now().Unix() + 60*60*24*30,

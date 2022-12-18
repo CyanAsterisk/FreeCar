@@ -2,7 +2,7 @@ namespace go car
 
 
 struct CarEntity{
-    1: string id;
+    1: i64 id;
     2: Car car
 
 }
@@ -17,7 +17,7 @@ enum CarStatus{
 
 
 struct Driver{
-    1: string id;
+    1: i64 id;
     2: string avatar_url;
 }
 
@@ -29,14 +29,14 @@ struct Location{
 struct Car{
     1: CarStatus status;
     2: Driver drivar;
-    3:Location position;
-    4: string trip_id;
+    3: Location position;
+    4: i64 trip_id;
 }
 
 struct CreateCarRequest{}
 
 struct GetCarRequest{
-    1: string id;
+    1: i64 id;
 }
 
 struct GetCarsRequest{}
@@ -46,21 +46,21 @@ struct GetCarsResponse{
 }
 
 struct LockCarRequest{
-    1: string id;
+    1: i64 id;
 }
 
 struct LockCarResponse{}
 
 struct UnlockCarRequest{
-    1: string id;
+    1: i64 id;
     2: Driver driver;
-    3: string trip_id;
+    3: i64 trip_id;
 }
 
 struct UnlockCarResponse{}
 
 struct UpdateCarRequest{
-    1: string id
+    1: i64 id
     2: CarStatus status
     3: Location position
 }

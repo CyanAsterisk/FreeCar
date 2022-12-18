@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
+	"github.com/gorilla/websocket"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -23,6 +26,8 @@ func main() {
 	IP, Port := initialize.InitFlag()
 	initialize.InitConfig()
 	initialize.InitDB()
+	initialize.InitMq()
+	//rpc.Init() //TODO:initRPC
 
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()
@@ -39,6 +44,18 @@ func main() {
 		server.WithSuite(tracerSuite),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
+
+	// Start websocket handler.
+	u := &websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+	http.HandleFunc("/ws", ws.Handler(u, global.Subscriber))
+	go func() {
+		klog.Infof("HTTP server started. addr: %s", global.ServerConfig.WsAddr)
+		klog.Fatal(http.ListenAndServe(global.ServerConfig.WsAddr, nil))
+	}()
 
 	// Use goroutine to listen for signal.
 	go func() {

@@ -2,11 +2,14 @@ package global
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
 )
 
 var (
-	DB           *mongo.Collection
+	DB           *dao.Mongo
 	ServerConfig config.ServerConfig
 	NacosConfig  config.NacosConfig
+	Publisher    mq.Publisher
+	Subscriber   mq.Subscriber
 )

@@ -11,6 +11,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/docker v20.10.21+incompatible
 	github.com/docker/go-connections v0.4.0
+	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/logger/zap v0.0.0-20221206155315-4315a5ae6b90
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
@@ -22,9 +23,11 @@ require (
 	github.com/nacos-group/nacos-sdk-go v1.1.3
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.14.0
+	github.com/streadway/amqp v1.0.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	go.mongodb.org/mongo-driver v1.11.1
+	go.uber.org/zap v1.23.0
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.2
 )
@@ -110,7 +113,6 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/goleak v1.1.12 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/arch v0.0.0-20220722155209-00200b7164a7 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect

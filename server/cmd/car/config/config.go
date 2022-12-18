@@ -19,6 +19,14 @@ type MongoDBConfig struct {
 	Collection string `mapstructure:"collection" json:"collection"`
 }
 
+type RabbitMqConfig struct {
+	Host     string `mapstructure:"host" json:"host"`
+	Port     int    `mapstructure:"port" json:"port"`
+	Exchange string `mapstructure:"exchange" json:"exchange"`
+	User     string `mapstructure:"user" json:"user"`
+	Password string `mapstructure:"password" json:"password"`
+}
+
 type ConsulConfig struct {
 	Host string `mapstructure:"host" json:"host"`
 	Port int    `mapstructure:"port" json:"port"`
@@ -30,9 +38,11 @@ type JaegerConfig struct {
 }
 
 type ServerConfig struct {
-	Name        string        `mapstructure:"name" json:"name"`
-	Host        string        `mapstructure:"host" json:"host"`
-	MongoDBInfo MongoDBConfig `mapstructure:"mongodb" json:"mongodb"`
-	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
-	JaegerInfo  JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
+	Name         string         `mapstructure:"name" json:"name"`
+	Host         string         `mapstructure:"host" json:"host"`
+	WsAddr       string         `mapstructure:"wsAddr" json:"wsAddr"`
+	MongoDBInfo  MongoDBConfig  `mapstructure:"mongodb" json:"mongodb"`
+	RabbitMqInfo RabbitMqConfig `mapstructure:"rabbitmq" json:"rabbitmq"`
+	ConsulInfo   ConsulConfig   `mapstructure:"consul" json:"consul"`
+	JaegerInfo   JaegerConfig   `mapstructure:"jaeger" json:"jaeger"`
 }

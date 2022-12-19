@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
@@ -37,10 +38,10 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*c
 }
 
 // GetCars implements the CarServiceImpl interface.
-func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (resp *car.GetCarsResponse, err error) {
+func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (*car.GetCarsResponse, error) {
 	cars, err := global.DB.GetCars(ctx)
 	if err != nil {
-		klog.Errorf("cannot get cars", err.Error())
+		klog.Errorf("cannot get cars: %s", err.Error())
 		return nil, status.Errorf(codes.Internal, "")
 	}
 
@@ -72,7 +73,7 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 
 // UnlockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarRequest) (resp *car.UnlockCarResponse, err error) {
-	car_, err := global.DB.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_LOCKED, &dao.CarUpdate{
+	_car, err := global.DB.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_LOCKED, &dao.CarUpdate{
 		Status:       car.CarStatus_UNLOCKING,
 		Driver:       req.Driver,
 		UpdateTripID: true,
@@ -83,9 +84,9 @@ func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarReques
 		if err == mongo.ErrNoDocuments {
 			code = codes.NotFound
 		}
-		return nil, status.Errorf(code, "cannot update: %v", err)
+		return nil, status.Errorf(code, "cannot update: %s", err.Error())
 	}
-	s.publish(ctx, car_)
+	s.publish(ctx, _car)
 	return
 }
 

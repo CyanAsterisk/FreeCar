@@ -4,15 +4,15 @@ import (
 	"context"
 	"time"
 
-	"github.com/cloudwego/kitex/pkg/klog"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 // Controller defines a car simulation controller.
 type Controller struct {
-	CarService car.CarServiceClient
+	CarService carservice.Client
 	Subscriber mq.Subscriber
 }
 

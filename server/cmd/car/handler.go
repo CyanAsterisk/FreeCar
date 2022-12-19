@@ -110,12 +110,10 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 }
 
 func (s *CarServiceImpl) publish(c context.Context, cr *dao.CarRecord) {
-
 	err := global.Publisher.Publish(c, &car.CarEntity{
 		Id:  cr.ID.Hex(),
 		Car: cr.Car,
 	})
-
 	if err != nil {
 		klog.Warn("cannot publish", err.Error())
 	}

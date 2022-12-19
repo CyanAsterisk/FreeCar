@@ -1,8 +1,8 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,6 +11,8 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
 	car "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/sim"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -29,6 +31,7 @@ func main() {
 	initialize.InitDB()
 	initialize.InitMq()
 	initialize.InitTrip()
+	initialize.InitCar()
 
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()
@@ -46,6 +49,14 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
+	// Use goroutine to listen for signal.
+	go func() {
+		err := srv.Run()
+		if err != nil {
+			klog.Fatal(err)
+		}
+	}()
+
 	// Start websocket handler.
 	u := &websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
@@ -60,13 +71,11 @@ func main() {
 
 	go trip.RunUpdater(global.Subscriber, global.TripClient)
 
-	// Use goroutine to listen for signal.
-	go func() {
-		err := srv.Run()
-		if err != nil {
-			klog.Fatal(err)
-		}
-	}()
+	simController := sim.Controller{
+		CarService: global.CarClient,
+		Subscriber: global.Subscriber,
+	}
+	go simController.RunSimulations(context.Background())
 
 	// receive termination signal
 	quit := make(chan os.Signal)

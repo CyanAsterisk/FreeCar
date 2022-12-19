@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"net/http"
 	"os"
 	"os/signal"
@@ -27,7 +28,7 @@ func main() {
 	initialize.InitConfig()
 	initialize.InitDB()
 	initialize.InitMq()
-	// rpc.Init() //TODO:initRPC
+	initialize.InitTrip()
 
 	r, info := initialize.InitRegistry(Port)
 	tracerSuite, closer := initialize.InitTracer()
@@ -56,6 +57,8 @@ func main() {
 		klog.Infof("HTTP server started. addr: %s", global.ServerConfig.WsAddr)
 		klog.Fatal(http.ListenAndServe(global.ServerConfig.WsAddr, nil))
 	}()
+
+	go trip.RunUpdater(global.Subscriber, global.TripClient)
 
 	// Use goroutine to listen for signal.
 	go func() {

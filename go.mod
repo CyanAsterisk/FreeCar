@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/bytedance/sonic v1.5.0
+	github.com/bytedance/sonic v1.6.0
 	github.com/cloudwego/hertz v0.4.2
 	github.com/cloudwego/kitex v0.4.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -40,7 +40,7 @@ require (
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20220531084716-665b4f21126f // indirect
-	github.com/chenzhuoyu/base64x v0.0.0-20211019084208-fb5309c8db06 // indirect
+	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/chenzhuoyu/iasm v0.0.0-20220818063314-28c361dae733 // indirect
 	github.com/choleraehyq/pid v0.0.15 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect

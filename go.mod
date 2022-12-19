@@ -9,7 +9,7 @@ require (
 	github.com/cloudwego/hertz v0.4.2
 	github.com/cloudwego/kitex v0.4.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/docker/docker v20.10.21+incompatible
+	github.com/docker/docker v20.10.22+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/consul/api v1.18.0

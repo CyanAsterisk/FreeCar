@@ -53,7 +53,6 @@ func Handler(sub mq.Subscriber) app.HandlerFunc {
 				}
 			}
 		})
-
 		if err != nil {
 			klog.Warnf("Upgrade err: %s", err.Error())
 		}

@@ -909,7 +909,7 @@ func (p *TripEntity) Field2DeepEqual(src *Trip) bool {
 }
 
 type Trip struct {
-	AccountId  string          `thrift:"account_id,1" json:"account_id"`
+	AccountId  int64           `thrift:"account_id,1" json:"account_id"`
 	CarId      string          `thrift:"car_id,2" json:"car_id"`
 	Start      *LocationStatus `thrift:"start,3" json:"start"`
 	Current    *LocationStatus `thrift:"current,4" json:"current"`
@@ -922,7 +922,7 @@ func NewTrip() *Trip {
 	return &Trip{}
 }
 
-func (p *Trip) GetAccountId() (v string) {
+func (p *Trip) GetAccountId() (v int64) {
 	return p.AccountId
 }
 
@@ -964,7 +964,7 @@ func (p *Trip) GetStatus() (v TripStatus) {
 func (p *Trip) GetIdentityId() (v string) {
 	return p.IdentityId
 }
-func (p *Trip) SetAccountId(val string) {
+func (p *Trip) SetAccountId(val int64) {
 	p.AccountId = val
 }
 func (p *Trip) SetCarId(val string) {
@@ -1028,7 +1028,7 @@ func (p *Trip) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1128,7 +1128,7 @@ ReadStructEndError:
 }
 
 func (p *Trip) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1241,10 +1241,10 @@ WriteStructEndError:
 }
 
 func (p *Trip) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1396,9 +1396,9 @@ func (p *Trip) DeepEqual(ano *Trip) bool {
 	return true
 }
 
-func (p *Trip) Field1DeepEqual(src string) bool {
+func (p *Trip) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -1450,7 +1450,7 @@ type CreateTripRequest struct {
 	Start     *Location `thrift:"start,1" json:"start"`
 	CarId     string    `thrift:"car_id,2" json:"car_id"`
 	AvatarUrl string    `thrift:"avatar_url,3" json:"avatar_url"`
-	AccountId string    `thrift:"account_id,4" json:"account_id"`
+	AccountId int64     `thrift:"account_id,4" json:"account_id"`
 }
 
 func NewCreateTripRequest() *CreateTripRequest {
@@ -1474,7 +1474,7 @@ func (p *CreateTripRequest) GetAvatarUrl() (v string) {
 	return p.AvatarUrl
 }
 
-func (p *CreateTripRequest) GetAccountId() (v string) {
+func (p *CreateTripRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 func (p *CreateTripRequest) SetStart(val *Location) {
@@ -1486,7 +1486,7 @@ func (p *CreateTripRequest) SetCarId(val string) {
 func (p *CreateTripRequest) SetAvatarUrl(val string) {
 	p.AvatarUrl = val
 }
-func (p *CreateTripRequest) SetAccountId(val string) {
+func (p *CreateTripRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1551,7 +1551,7 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1617,7 +1617,7 @@ func (p *CreateTripRequest) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *CreateTripRequest) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1718,10 +1718,10 @@ WriteFieldEndError:
 }
 
 func (p *CreateTripRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1783,9 +1783,9 @@ func (p *CreateTripRequest) Field3DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *CreateTripRequest) Field4DeepEqual(src string) bool {
+func (p *CreateTripRequest) Field4DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -1793,7 +1793,7 @@ func (p *CreateTripRequest) Field4DeepEqual(src string) bool {
 
 type GetTripRequest struct {
 	Id        string `thrift:"id,1" json:"id"`
-	AccountId string `thrift:"account_id,2" json:"account_id"`
+	AccountId int64  `thrift:"account_id,2" json:"account_id"`
 }
 
 func NewGetTripRequest() *GetTripRequest {
@@ -1804,13 +1804,13 @@ func (p *GetTripRequest) GetId() (v string) {
 	return p.Id
 }
 
-func (p *GetTripRequest) GetAccountId() (v string) {
+func (p *GetTripRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 func (p *GetTripRequest) SetId(val string) {
 	p.Id = val
 }
-func (p *GetTripRequest) SetAccountId(val string) {
+func (p *GetTripRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -1849,7 +1849,7 @@ func (p *GetTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1898,7 +1898,7 @@ func (p *GetTripRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *GetTripRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1957,10 +1957,10 @@ WriteFieldEndError:
 }
 
 func (p *GetTripRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2002,9 +2002,9 @@ func (p *GetTripRequest) Field1DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *GetTripRequest) Field2DeepEqual(src string) bool {
+func (p *GetTripRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -2012,7 +2012,7 @@ func (p *GetTripRequest) Field2DeepEqual(src string) bool {
 
 type GetTripsRequest struct {
 	Status    TripStatus `thrift:"status,1" json:"status"`
-	AccountId string     `thrift:"account_id,2" json:"account_id"`
+	AccountId int64      `thrift:"account_id,2" json:"account_id"`
 }
 
 func NewGetTripsRequest() *GetTripsRequest {
@@ -2023,13 +2023,13 @@ func (p *GetTripsRequest) GetStatus() (v TripStatus) {
 	return p.Status
 }
 
-func (p *GetTripsRequest) GetAccountId() (v string) {
+func (p *GetTripsRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 func (p *GetTripsRequest) SetStatus(val TripStatus) {
 	p.Status = val
 }
-func (p *GetTripsRequest) SetAccountId(val string) {
+func (p *GetTripsRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -2068,7 +2068,7 @@ func (p *GetTripsRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2117,7 +2117,7 @@ func (p *GetTripsRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *GetTripsRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -2176,10 +2176,10 @@ WriteFieldEndError:
 }
 
 func (p *GetTripsRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2221,9 +2221,9 @@ func (p *GetTripsRequest) Field1DeepEqual(src TripStatus) bool {
 	}
 	return true
 }
-func (p *GetTripsRequest) Field2DeepEqual(src string) bool {
+func (p *GetTripsRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true
@@ -2418,7 +2418,7 @@ type UpdateTripRequest struct {
 	Id        string    `thrift:"id,1" json:"id"`
 	Current   *Location `thrift:"current,2" json:"current"`
 	EndTrip   bool      `thrift:"end_trip,3" json:"end_trip"`
-	AccountId string    `thrift:"account_id,4" json:"account_id"`
+	AccountId int64     `thrift:"account_id,4" json:"account_id"`
 }
 
 func NewUpdateTripRequest() *UpdateTripRequest {
@@ -2442,7 +2442,7 @@ func (p *UpdateTripRequest) GetEndTrip() (v bool) {
 	return p.EndTrip
 }
 
-func (p *UpdateTripRequest) GetAccountId() (v string) {
+func (p *UpdateTripRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 func (p *UpdateTripRequest) SetId(val string) {
@@ -2454,7 +2454,7 @@ func (p *UpdateTripRequest) SetCurrent(val *Location) {
 func (p *UpdateTripRequest) SetEndTrip(val bool) {
 	p.EndTrip = val
 }
-func (p *UpdateTripRequest) SetAccountId(val string) {
+func (p *UpdateTripRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
 
@@ -2519,7 +2519,7 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 4:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2585,7 +2585,7 @@ func (p *UpdateTripRequest) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *UpdateTripRequest) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -2686,10 +2686,10 @@ WriteFieldEndError:
 }
 
 func (p *UpdateTripRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.AccountId); err != nil {
+	if err := oprot.WriteI64(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2751,9 +2751,9 @@ func (p *UpdateTripRequest) Field3DeepEqual(src bool) bool {
 	}
 	return true
 }
-func (p *UpdateTripRequest) Field4DeepEqual(src string) bool {
+func (p *UpdateTripRequest) Field4DeepEqual(src int64) bool {
 
-	if strings.Compare(p.AccountId, src) != 0 {
+	if p.AccountId != src {
 		return false
 	}
 	return true

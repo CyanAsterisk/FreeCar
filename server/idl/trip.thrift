@@ -26,7 +26,7 @@ struct TripEntity {
 }
 
 struct Trip {
-  1: string account_id
+  1: i64 account_id
   2: string car_id
   3: LocationStatus start
   4: LocationStatus current
@@ -39,17 +39,17 @@ struct CreateTripRequest {
   1: Location start
   2: string car_id
   3: string avatar_url
-  4: string account_id
+  4: i64 account_id
 }
 
 struct GetTripRequest {
   1: string id
-  2: string account_id
+  2: i64 account_id
 }
 
 struct GetTripsRequest {
   1: TripStatus status
-  2: string account_id
+  2: i64 account_id
 }
 
 struct GetTripsResponse {
@@ -60,7 +60,7 @@ struct UpdateTripRequest {
   1: string id
   2: Location current
   3: bool end_trip
-  4: string account_id
+  4: i64 account_id
 }
 
 service TripService {

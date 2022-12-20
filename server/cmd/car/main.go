@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,12 +14,12 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	hzserver "github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
-	"github.com/gorilla/websocket"
 )
 
 func main() {
@@ -57,16 +56,12 @@ func main() {
 		}
 	}()
 
-	// Start websocket handler.
-	u := &websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
-	http.HandleFunc("/ws", ws.Handler(u, global.Subscriber))
+	h := hzserver.Default(hzserver.WithHostPorts(global.ServerConfig.WsAddr))
+	h.GET("/ws", ws.Handler(global.Subscriber))
+	h.NoHijackConnPool = true
 	go func() {
 		klog.Infof("HTTP server started. addr: %s", global.ServerConfig.WsAddr)
-		klog.Fatal(http.ListenAndServe(global.ServerConfig.WsAddr, nil))
+		h.Spin()
 	}()
 
 	go trip.RunUpdater(global.Subscriber, global.TripClient)

@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
@@ -14,7 +15,6 @@ import (
 	internalOpentracing "github.com/kitex-contrib/tracer-opentracing"
 	"github.com/opentracing/opentracing-go"
 	jaegerCfg "github.com/uber/jaeger-client-go/config"
-	"time"
 )
 
 func initProfile() {

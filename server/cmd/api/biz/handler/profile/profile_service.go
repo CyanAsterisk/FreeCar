@@ -4,9 +4,12 @@ package profile
 
 import (
 	"context"
+	"net/http"
 
-	profile "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/profile"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/utils"
 )
 
 // GetProfile .
@@ -16,13 +19,21 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var req profile.GetProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.Profile)
+	resp, err := global.ProfileClient.GetProfile(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // SubmitProfile .
@@ -32,13 +43,21 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var req profile.SubmitProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.Profile)
+	resp, err := global.ProfileClient.SubmitProfile(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // ClearProfile .
@@ -48,13 +67,21 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var req profile.ClearProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.Profile)
+	resp, err := global.ProfileClient.ClearProfile(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetProfilePhoto .
@@ -64,13 +91,21 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.GetProfilePhotoRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.GetProfilePhotoResponse)
+	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // CreateProfilePhoto .
@@ -80,13 +115,21 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.CreateProfilePhotoRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.CreateProfilePhotoResponse)
+	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // CompleteProfilePhoto .
@@ -96,13 +139,21 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.CompleteProfilePhotoRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.Identity)
+	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // ClearProfilePhoto .
@@ -112,11 +163,19 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.ClearProfilePhotoRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(profile.ClearProfilePhotoResponse)
+	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+		return
+	}
 
-	c.JSON(200, resp)
+	c.JSON(http.StatusOK, resp)
 }

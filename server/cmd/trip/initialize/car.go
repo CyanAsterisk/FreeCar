@@ -1,12 +1,13 @@
-package rpc
+package initialize
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -17,13 +18,13 @@ import (
 	jaegerCfg "github.com/uber/jaeger-client-go/config"
 )
 
-func initProfile() {
+func InitCar() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,
 		global.ServerConfig.ConsulInfo.Port))
 	if err != nil {
-		klog.Fatalf("new consul client failed: %s", err.Error())
+		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
 	// init tracer
 	reporterCfg := &jaegerCfg.ReporterConfig{
@@ -35,7 +36,7 @@ func initProfile() {
 		Param: 1,
 	}
 	cfg := jaegerCfg.Configuration{
-		ServiceName: global.ServerConfig.ProfileSrvInfo.Name,
+		ServiceName: global.ServerConfig.CarSrvInfo.Name,
 		Sampler:     samplerCfg,
 		Reporter:    reporterCfg,
 	}
@@ -46,8 +47,8 @@ func initProfile() {
 	opentracing.InitGlobalTracer(tracer)
 	defer closer.Close()
 	// create a new client
-	c, err := profileservice.NewClient(
-		global.ServerConfig.ProfileSrvInfo.Name,
+	c, err := carservice.NewClient(
+		global.ServerConfig.CarSrvInfo.Name,
 		client.WithResolver(r),
 		client.WithMuxConnection(1),
 		client.WithRPCTimeout(3*time.Second),
@@ -56,10 +57,10 @@ func initProfile() {
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(internalOpentracing.NewDefaultClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.ProfileSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.CarSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	global.ProfileClient = c
+	global.CarClient = c
 }

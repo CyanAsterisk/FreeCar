@@ -21,7 +21,7 @@ func RunUpdater(sub mq.Subscriber, ts tripservice.Client) {
 
 	for car := range ch {
 		if car.Car.Status == cartr.CarStatus_UNLOCKED &&
-			car.Car.TripId != "" && car.Car.Drivar.Id != "" {
+			car.Car.TripId != "" && car.Car.Drivar.Id != 0 {
 			_, err := ts.UpdateTrip(context.Background(), &trip.UpdateTripRequest{
 				Id: car.Car.TripId,
 				Current: &trip.Location{

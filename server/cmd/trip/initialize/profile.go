@@ -1,12 +1,13 @@
-package rpc
+package initialize
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/retry"
@@ -17,13 +18,13 @@ import (
 	jaegerCfg "github.com/uber/jaeger-client-go/config"
 )
 
-func initProfile() {
+func InitProfile() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,
 		global.ServerConfig.ConsulInfo.Port))
 	if err != nil {
-		klog.Fatalf("new consul client failed: %s", err.Error())
+		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
 	// init tracer
 	reporterCfg := &jaegerCfg.ReporterConfig{

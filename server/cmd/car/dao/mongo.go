@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
@@ -21,18 +22,6 @@ const (
 	tripIDField   = carField + ".tripid"
 )
 
-// Mongo defines a mongo dao.
-type Mongo struct {
-	col *mongo.Collection
-}
-
-// NewMongo creates a mongo dao.
-func NewMongo(db *mongo.Database) *Mongo {
-	return &Mongo{
-		col: db.Collection("car"),
-	}
-}
-
 // CarRecord defines a car record in mongo db.
 type CarRecord struct {
 	mgutil.IDField `bson:"inline"`
@@ -40,7 +29,7 @@ type CarRecord struct {
 }
 
 // CreateCar creates a car.
-func (m *Mongo) CreateCar(c context.Context) (*CarRecord, error) {
+func CreateCar(c context.Context) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
@@ -51,7 +40,7 @@ func (m *Mongo) CreateCar(c context.Context) (*CarRecord, error) {
 		},
 	}
 	cr.ID = mgutil.NewObjID()
-	_, err := m.col.InsertOne(c, cr)
+	_, err := global.Col.InsertOne(c, cr)
 	if err != nil {
 		return nil, err
 	}
@@ -59,21 +48,21 @@ func (m *Mongo) CreateCar(c context.Context) (*CarRecord, error) {
 }
 
 // GetCar gets a car.
-func (m *Mongo) GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
+func GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
 	}
 
-	return convertSingleResult(m.col.FindOne(c, bson.M{
+	return convertSingleResult(global.Col.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
 	}))
 }
 
 // GetCars gets cars.
-func (m *Mongo) GetCars(c context.Context) ([]*CarRecord, error) {
+func GetCars(c context.Context) ([]*CarRecord, error) {
 	filter := bson.M{}
-	res, err := m.col.Find(c, filter, options.Find())
+	res, err := global.Col.Find(c, filter, options.Find())
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +92,7 @@ type CarUpdate struct {
 // UpdateCar updates a car. If status is specified,
 // it updates the car only when existing record matches the
 // status specified.
-func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
+func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
@@ -130,7 +119,7 @@ func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carthrf.CarStat
 		u[tripIDField] = update.TripID.String()
 	}
 
-	res := m.col.FindOneAndUpdate(c, filter, mgutil.Set(u),
+	res := global.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)

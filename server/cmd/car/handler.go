@@ -18,7 +18,7 @@ type CarServiceImpl struct{}
 
 // CreateCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarRequest) (*car.CarEntity, error) {
-	cr, err := global.DB.CreateCar(ctx)
+	cr, err := dao.CreateCar(ctx)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
@@ -30,7 +30,7 @@ func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarReques
 
 // GetCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*car.Car, error) {
-	cr, err := global.DB.GetCar(ctx, id.CarID(req.Id))
+	cr, err := dao.GetCar(ctx, id.CarID(req.Id))
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "")
 	}
@@ -39,7 +39,7 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*c
 
 // GetCars implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (*car.GetCarsResponse, error) {
-	cars, err := global.DB.GetCars(ctx)
+	cars, err := dao.GetCars(ctx)
 	if err != nil {
 		klog.Errorf("cannot get cars: %s", err.Error())
 		return nil, status.Errorf(codes.Internal, "")
@@ -57,7 +57,7 @@ func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (*c
 
 // LockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (resp *car.LockCarResponse, err error) {
-	c, err := global.DB.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_UNLOCKED, &dao.CarUpdate{
+	c, err := dao.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_UNLOCKED, &dao.CarUpdate{
 		Status: car.CarStatus_LOCKING,
 	})
 	if err != nil {
@@ -73,7 +73,7 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 
 // UnlockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarRequest) (resp *car.UnlockCarResponse, err error) {
-	_car, err := global.DB.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_LOCKED, &dao.CarUpdate{
+	_car, err := dao.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_LOCKED, &dao.CarUpdate{
 		Status:       car.CarStatus_UNLOCKING,
 		Driver:       req.Driver,
 		UpdateTripID: true,
@@ -101,7 +101,7 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 		update.UpdateTripID = true
 		update.TripID = ""
 	}
-	cr, err := global.DB.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_CS_NOT_SPECIFIED, update)
+	cr, err := dao.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_CS_NOT_SPECIFIED, update)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}

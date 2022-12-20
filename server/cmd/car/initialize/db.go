@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,5 +17,5 @@ func InitDB() {
 	if err != nil {
 		klog.Fatal("cannot connect mongodb", err)
 	}
-	global.DB = dao.NewMongo(mongoClient.Database(c.Name))
+	global.Col = mongoClient.Database(c.Name).Collection(c.Collection)
 }

@@ -2,10 +2,10 @@ package amqpclt
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/streadway/amqp"
 )
@@ -22,9 +22,7 @@ func NewPublisher(conn *amqp.Connection, exchange string) (*Publisher, error) {
 		return nil, fmt.Errorf("cannot allocate channel: %v", err)
 	}
 
-	err = declareExchange(ch, exchange)
-
-	if err != nil {
+	if err = declareExchange(ch, exchange); err != nil {
 		return nil, fmt.Errorf("cannot declare exchange: %v", err)
 	}
 	return &Publisher{
@@ -34,19 +32,19 @@ func NewPublisher(conn *amqp.Connection, exchange string) (*Publisher, error) {
 }
 
 // Publish publishes a message.
-func (p *Publisher) Publish(c context.Context, car *car.CarEntity) error {
-	b, err := json.Marshal(car)
+func (p *Publisher) Publish(_ context.Context, car *car.CarEntity) error {
+	body, err := sonic.Marshal(car)
 	if err != nil {
 		return fmt.Errorf("cannot marshal: %v", err)
 	}
 
 	return p.ch.Publish(
 		p.exchange,
-		"",    // Key
-		false, // mandatory
-		false, // immedaiiote
+		"",
+		false,
+		false,
 		amqp.Publishing{
-			Body: b,
+			Body: body,
 		},
 	)
 }
@@ -65,8 +63,7 @@ func NewSubscriber(conn *amqp.Connection, exchange string) (*Subscriber, error) 
 	}
 	defer ch.Close()
 
-	err = declareExchange(ch, exchange)
-	if err != nil {
+	if err = declareExchange(ch, exchange); err != nil {
 		return nil, fmt.Errorf("cannot declare exchange: %v", err)
 	}
 
@@ -77,7 +74,7 @@ func NewSubscriber(conn *amqp.Connection, exchange string) (*Subscriber, error) 
 }
 
 // SubscribeRaw subscribes and returns a channel with raw amqp delivery.
-func (s *Subscriber) SubscribeRaw(context.Context) (<-chan amqp.Delivery, func(), error) {
+func (s *Subscriber) SubscribeRaw(_ context.Context) (<-chan amqp.Delivery, func(), error) {
 	ch, err := s.conn.Channel()
 	if err != nil {
 		return nil, func() {}, fmt.Errorf("cannot allocate channel: %v", err)
@@ -90,12 +87,12 @@ func (s *Subscriber) SubscribeRaw(context.Context) (<-chan amqp.Delivery, func()
 	}
 
 	q, err := ch.QueueDeclare(
-		"",    // name
-		false, // durable
-		true,  // autoDelete
-		false, // exlusive
-		false, // noWait
-		nil,   // args
+		"",
+		false,
+		true,
+		false,
+		false,
+		nil,
 	)
 	if err != nil {
 		return nil, closeCh, fmt.Errorf("cannot declare queue: %v", err)
@@ -104,9 +101,9 @@ func (s *Subscriber) SubscribeRaw(context.Context) (<-chan amqp.Delivery, func()
 	cleanUp := func() {
 		_, err := ch.QueueDelete(
 			q.Name,
-			false, // ifUnused
-			false, // ifEmpty
-			false, // noWait
+			false,
+			false,
+			false,
 		)
 		if err != nil {
 			klog.Errorf("cannot delete queue %s : %s", q.Name, err.Error())
@@ -116,10 +113,10 @@ func (s *Subscriber) SubscribeRaw(context.Context) (<-chan amqp.Delivery, func()
 
 	err = ch.QueueBind(
 		q.Name,
-		"", // key
+		"",
 		s.exchange,
-		false, // noWait
-		nil,   // args
+		false,
+		nil,
 	)
 	if err != nil {
 		return nil, cleanUp, fmt.Errorf("cannot bind: %v", err)
@@ -127,12 +124,12 @@ func (s *Subscriber) SubscribeRaw(context.Context) (<-chan amqp.Delivery, func()
 
 	msgs, err := ch.Consume(
 		q.Name,
-		"",    // consumer
-		true,  // autoAck
-		false, // exclusive
-		false, // noLocal
-		false, // noWait
-		nil,   // args
+		"",
+		true,
+		false,
+		false,
+		false,
+		nil,
 	)
 	if err != nil {
 		return nil, cleanUp, fmt.Errorf("cannot consume queue: %v", err)
@@ -150,12 +147,12 @@ func (s *Subscriber) Subscribe(c context.Context) (chan *car.CarEntity, func(), 
 	carCh := make(chan *car.CarEntity)
 	go func() {
 		for msg := range msgCh {
-			var car car.CarEntity
-			err := json.Unmarshal(msg.Body, &car)
+			var carEn car.CarEntity
+			err := sonic.Unmarshal(msg.Body, &carEn)
 			if err != nil {
 				klog.Errorf("cannot unmarshal %s", err.Error())
 			}
-			carCh <- &car
+			carCh <- &carEn
 		}
 		close(carCh)
 	}()
@@ -166,10 +163,10 @@ func declareExchange(ch *amqp.Channel, exchange string) error {
 	return ch.ExchangeDeclare(
 		exchange,
 		"fanout",
-		true,  // durable
-		false, // autoDelete
-		false, // internal
-		false, // noWait
-		nil,   // args
+		true,
+		false,
+		false,
+		false,
+		nil,
 	)
 }

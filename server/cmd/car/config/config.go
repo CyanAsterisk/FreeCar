@@ -45,4 +45,9 @@ type ServerConfig struct {
 	RabbitMqInfo RabbitMqConfig `mapstructure:"rabbitmq" json:"rabbitmq"`
 	ConsulInfo   ConsulConfig   `mapstructure:"consul" json:"consul"`
 	JaegerInfo   JaegerConfig   `mapstructure:"jaeger" json:"jaeger"`
+	TripSrvInfo  TripSrvConfig  `mapstructure:"trip_srv" json:"trip_srv"`
+}
+
+type TripSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
 }

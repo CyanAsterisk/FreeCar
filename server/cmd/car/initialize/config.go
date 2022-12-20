@@ -1,8 +1,6 @@
 package initialize
 
 import (
-	"fmt"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -62,5 +60,4 @@ func InitConfig() {
 	if err != nil {
 		klog.Fatalf("nacos config failed: %s", err.Error())
 	}
-	fmt.Printf("%+v", global.ServerConfig)
 }

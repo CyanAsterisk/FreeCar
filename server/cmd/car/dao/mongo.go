@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	carthrf "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
+	"github.com/CyanAsterisk/FreeCar/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -19,37 +22,25 @@ const (
 	tripIDField   = carField + ".tripid"
 )
 
-// Mongo defines a mongo dao.
-type Mongo struct {
-	col *mongo.Collection
-}
-
-// NewMongo creates a mongo dao.
-func NewMongo(db *mongo.Database) *Mongo {
-	return &Mongo{
-		col: db.Collection("car"),
-	}
-}
-
 // CarRecord defines a car record in mongo db.
 type CarRecord struct {
 	mgutil.IDField `bson:"inline"`
-	Car            *car.Car `bson:"car"`
+	Car            *carthrf.Car `bson:"car"`
 }
 
 // CreateCar creates a car.
-func (m *Mongo) CreateCar(c context.Context) (*CarRecord, error) {
+func CreateCar(c context.Context) (*CarRecord, error) {
 	cr := &CarRecord{
-		Car: &car.Car{
-			Position: &car.Location{
+		Car: &carthrf.Car{
+			Position: &carthrf.Location{
 				Latitude:   30,
 				Longtitude: 120,
 			},
-			Status: car.CarStatus_LOCKED,
+			Status: carthrf.CarStatus_LOCKED,
 		},
 	}
 	cr.ID = mgutil.NewObjID()
-	_, err := m.col.InsertOne(c, cr)
+	_, err := global.Col.InsertOne(c, cr)
 	if err != nil {
 		return nil, err
 	}
@@ -57,16 +48,21 @@ func (m *Mongo) CreateCar(c context.Context) (*CarRecord, error) {
 }
 
 // GetCar gets a car.
-func (m *Mongo) GetCar(c context.Context, id int64) (*CarRecord, error) {
-	return convertSingleResult(m.col.FindOne(c, bson.M{
-		mgutil.IDFieldName: id,
+func GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
+	objID, err := objid.FromID(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid id: %v", err)
+	}
+
+	return convertSingleResult(global.Col.FindOne(c, bson.M{
+		mgutil.IDFieldName: objID,
 	}))
 }
 
 // GetCars gets cars.
-func (m *Mongo) GetCars(c context.Context) ([]*CarRecord, error) {
+func GetCars(c context.Context) ([]*CarRecord, error) {
 	filter := bson.M{}
-	res, err := m.col.Find(c, filter, options.Find())
+	res, err := global.Col.Find(c, filter, options.Find())
 	if err != nil {
 		return nil, err
 	}
@@ -86,26 +82,31 @@ func (m *Mongo) GetCars(c context.Context) ([]*CarRecord, error) {
 // CarUpdate defines updates to a car.
 // Only specified fields will be updated.
 type CarUpdate struct {
-	Status       car.CarStatus
-	Position     *car.Location
-	Driver       *car.Driver
+	Status       carthrf.CarStatus
+	Position     *carthrf.Location
+	Driver       *carthrf.Driver
 	UpdateTripID bool
-	TripID       int64
+	TripID       id.TripID
 }
 
 // UpdateCar updates a car. If status is specified,
 // it updates the car only when existing record matches the
 // status specified.
-func (m *Mongo) UpdateCar(c context.Context, CarId int64, status car.CarStatus, update *CarUpdate) (*CarRecord, error) {
-	filter := bson.M{
-		mgutil.IDFieldName: CarId,
+func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
+	objID, err := objid.FromID(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid id: %v", err)
 	}
-	if status != car.CarStatus_CS_NOT_SPECIFIED {
+
+	filter := bson.M{
+		mgutil.IDFieldName: objID,
+	}
+	if status != carthrf.CarStatus_CS_NOT_SPECIFIED {
 		filter[statusField] = status
 	}
 
 	u := bson.M{}
-	if update.Status != car.CarStatus_CS_NOT_SPECIFIED {
+	if update.Status != carthrf.CarStatus_CS_NOT_SPECIFIED {
 		u[statusField] = update.Status
 	}
 	if update.Driver != nil {
@@ -115,10 +116,10 @@ func (m *Mongo) UpdateCar(c context.Context, CarId int64, status car.CarStatus, 
 		u[positionField] = update.Position
 	}
 	if update.UpdateTripID {
-		u[tripIDField] = update.TripID
+		u[tripIDField] = update.TripID.String()
 	}
 
-	res := m.col.FindOneAndUpdate(c, filter, mgutil.Set(u),
+	res := global.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)

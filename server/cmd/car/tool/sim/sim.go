@@ -4,15 +4,15 @@ import (
 	"context"
 	"time"
 
-	"github.com/cloudwego/kitex/pkg/klog"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 // Controller defines a car simulation controller.
 type Controller struct {
-	CarService car.CarServiceClient
+	CarService carservice.Client
 	Subscriber mq.Subscriber
 }
 
@@ -21,7 +21,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	var cars []*car.CarEntity
 	for {
 		// Prevent vehicle information not being retrieved due to service failure
-		time.Sleep(3 * time.Second)
+		time.Sleep(2 * time.Second)
 		res, err := c.CarService.GetCars(ctx, &car.GetCarsRequest{})
 		if err != nil {
 			klog.Error("cannot get cars: %s", err.Error())
@@ -39,6 +39,16 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	if err != nil {
 		klog.Errorf("cannot subscribe %s", err.Error())
 		return
+	}
+
+	for i := 0; i < len(cars)-2; i++ {
+		_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+			Id:     cars[i].Id,
+			Status: car.CarStatus_UNLOCKED,
+		})
+		if err != nil {
+			klog.Errorf("cannot unlock car: %s", err.Error())
+		}
 	}
 
 	carChans := make(map[string]chan *car.Car)
@@ -59,9 +69,12 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 // SimulateCar simulates a single car.
 func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch chan *car.Car) {
 	carID := initial.Id
-	klog.Infof("Simulating car. %d", carID)
+	klog.Infof("Simulating car: %s", carID)
+
+	begin := time.Now()
 
 	for update := range ch {
+		time.Sleep(time.Millisecond * 500)
 		if update.Status == car.CarStatus_UNLOCKING {
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id:     carID,
@@ -77,6 +90,17 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			})
 			if err != nil {
 				klog.Errorf("cannot lock car: %s", err.Error())
+			}
+		} else if update.Status == car.CarStatus_UNLOCKED {
+			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+				Id: carID,
+				Position: &car.Location{
+					Latitude:   30.0 + time.Since(begin).Seconds()*0.0001,
+					Longtitude: 120.0 + time.Since(begin).Seconds()*0.0001,
+				},
+			})
+			if err != nil {
+				klog.Errorf("cannot update car position: %s", err.Error())
 			}
 		}
 	}

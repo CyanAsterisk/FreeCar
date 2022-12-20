@@ -16,6 +16,7 @@ require (
 	github.com/hertz-contrib/logger/zap v0.0.0-20221206155315-4315a5ae6b90
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
 	github.com/hertz-contrib/tracer v0.0.0-20220601062646-788b1565bdab
+	github.com/hertz-contrib/websocket v0.0.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a
 	github.com/kitex-contrib/tracer-opentracing v0.0.3
@@ -93,6 +94,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect

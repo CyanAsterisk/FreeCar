@@ -21,7 +21,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	var cars []*car.CarEntity
 	for {
 		// Prevent vehicle information not being retrieved due to service failure
-		time.Sleep(3 * time.Second)
+		time.Sleep(2 * time.Second)
 		res, err := c.CarService.GetCars(ctx, &car.GetCarsRequest{})
 		if err != nil {
 			klog.Error("cannot get cars: %s", err.Error())
@@ -59,9 +59,12 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 // SimulateCar simulates a single car.
 func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch chan *car.Car) {
 	carID := initial.Id
-	klog.Infof("Simulating car. %d", carID)
+	klog.Infof("Simulating car: %s", carID)
+
+	begin := time.Now()
 
 	for update := range ch {
+		time.Sleep(time.Millisecond * 500)
 		if update.Status == car.CarStatus_UNLOCKING {
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id:     carID,
@@ -77,6 +80,17 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			})
 			if err != nil {
 				klog.Errorf("cannot lock car: %s", err.Error())
+			}
+		} else if update.Status == car.CarStatus_UNLOCKED {
+			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+				Id: carID,
+				Position: &car.Location{
+					Latitude:   initial.Car.Position.Latitude * time.Since(begin).Seconds() * 0.0001,
+					Longtitude: initial.Car.Position.Longtitude * time.Since(begin).Seconds() * 0.0001,
+				},
+			})
+			if err != nil {
+				klog.Errorf("cannot update car position: %s", err.Error())
 			}
 		}
 	}

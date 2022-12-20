@@ -41,6 +41,16 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		return
 	}
 
+	for i := 0; i < len(cars)-2; i++ {
+		_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+			Id:     cars[i].Id,
+			Status: car.CarStatus_UNLOCKED,
+		})
+		if err != nil {
+			klog.Errorf("cannot unlock car: %s", err.Error())
+		}
+	}
+
 	carChans := make(map[string]chan *car.Car)
 	for _, _car := range cars {
 		ch := make(chan *car.Car)
@@ -85,8 +95,8 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id: carID,
 				Position: &car.Location{
-					Latitude:   initial.Car.Position.Latitude * time.Since(begin).Seconds() * 0.0001,
-					Longtitude: initial.Car.Position.Longtitude * time.Since(begin).Seconds() * 0.0001,
+					Latitude:   30.0 + time.Since(begin).Seconds()*0.0001,
+					Longtitude: 120.0 + time.Since(begin).Seconds()*0.0001,
 				},
 			})
 			if err != nil {

@@ -17,14 +17,13 @@ import (
 func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.GetProfileRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
-
+	req.AccountId = aid.(int64)
 	resp, err := global.ProfileClient.GetProfile(ctx, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, utils.H{
@@ -48,6 +47,13 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
+	aid, flag := c.Get("accountID")
+	if !flag {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "jwt error",
+		})
+	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.SubmitProfile(ctx, &req)
 	if err != nil {
@@ -66,12 +72,13 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.ClearProfileRequest
 	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.ClearProfile(ctx, &req)
 	if err != nil {
@@ -89,13 +96,13 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.GetProfilePhotoRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &req)
 	if err != nil {
@@ -113,13 +120,13 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.CreateProfilePhotoRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &req)
 	if err != nil {
@@ -137,13 +144,13 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.CompleteProfilePhotoRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &req)
 	if err != nil {
@@ -161,13 +168,13 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.ClearProfilePhotoRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &req)
 	if err != nil {

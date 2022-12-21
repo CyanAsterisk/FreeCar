@@ -5,8 +5,11 @@ package car
 import (
 	"context"
 
-	car "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/utils"
+	"net/http"
 )
 
 // CreateCar .
@@ -16,27 +19,38 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var req car.CreateCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
 
-	resp := new(car.CarEntity)
-
-	c.JSON(200, resp)
+	resp, err := global.CarClient.CreateCar(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetCar .
-// @router /v1/car/{id} [GET]
+// @router /v1/car [GET]
 func GetCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req car.GetCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "bind and validate error",
+		})
 		return
 	}
-
-	resp := new(car.Car)
-
-	c.JSON(200, resp)
+	resp, err := global.CarClient.GetCar(ctx, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "client error",
+		})
+	}
+	c.JSON(http.StatusOK, resp)
 }

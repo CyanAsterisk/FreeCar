@@ -3,12 +3,14 @@
 package Profile
 
 import (
+	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	var mw []app.HandlerFunc
+	mw = append(mw, middleware.JWTAuth())
+	return mw
 }
 
 func _v1Mw() []app.HandlerFunc {

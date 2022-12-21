@@ -30,9 +30,9 @@ type ProfileManager interface {
 
 //CarManager defines the ACL for car management.
 type CarManager interface {
-	Verify(c context.Context, cid id.CarID, loc *trip.Location) error
+	Verify(c context.Context, cid id.CarID, aid id.AccountID, loc *trip.Location) error
 	Unlock(c context.Context, cid id.CarID, aid id.AccountID, tid id.TripID, avatarURL string) error
-	Lock(c context.Context, cid id.CarID) error
+	Lock(c context.Context, cid id.CarID, aid id.AccountID) error
 }
 
 // POIManager resolves POI(Point Of Interest).
@@ -54,7 +54,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 
 	// Check vehicle status.
 	carID := id.CarID(req.CarId)
-	err = s.CarManager.Verify(ctx, carID, req.Start)
+	err = s.CarManager.Verify(ctx, carID, aid, req.Start)
 	if err != nil {
 		return nil, status.Err(codes.FailedPrecondition, err.Error())
 	}
@@ -148,7 +148,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 	if req.EndTrip {
 		tr.Trip.End = tr.Trip.Current
 		tr.Trip.Status = trip.TripStatus_FINISHED
-		err = s.CarManager.Lock(ctx, id.CarID(tr.Trip.CarId))
+		err = s.CarManager.Lock(ctx, id.CarID(tr.Trip.CarId), aid)
 		if err != nil {
 			return nil, status.Errorf(codes.FailedPrecondition, "cannot lock car: %v", err)
 		}

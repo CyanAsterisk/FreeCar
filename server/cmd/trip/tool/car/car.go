@@ -16,9 +16,10 @@ type Manager struct {
 }
 
 // Verify verifies car status.
-func (m *Manager) Verify(c context.Context, cid id.CarID, _ *trip.Location) error {
+func (m *Manager) Verify(c context.Context, cid id.CarID, aid id.AccountID, _ *trip.Location) error {
 	carClient, err := m.CarService.GetCar(c, &car.GetCarRequest{
-		Id: cid.String(),
+		Id:        cid.String(),
+		AccountId: int64(aid),
 	})
 	if err != nil {
 		return fmt.Errorf("cannot get car: %v", err)
@@ -47,9 +48,10 @@ func (m *Manager) Unlock(c context.Context, cid id.CarID, aid id.AccountID, tid 
 }
 
 // Lock locks a car.
-func (m *Manager) Lock(c context.Context, cid id.CarID) error {
+func (m *Manager) Lock(c context.Context, cid id.CarID, aid id.AccountID) error {
 	_, err := m.CarService.LockCar(c, &car.LockCarRequest{
-		Id: cid.String(),
+		AccountId: int64(aid),
+		Id:        cid.String(),
 	})
 
 	if err != nil {

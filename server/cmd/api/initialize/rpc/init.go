@@ -4,4 +4,5 @@ func Init() {
 	initAuth()
 	initCar()
 	initProfile()
+	initTrip()
 }

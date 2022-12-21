@@ -25,15 +25,16 @@ type JaegerConfig struct {
 }
 
 type ServerConfig struct {
-	Name           string        `mapstructure:"name" json:"name"`
-	Host           string        `mapstructure:"host" json:"host"`
-	Port           int           `mapstructure:"port" json:"port"`
-	JWTInfo        JWTConfig     `mapstructure:"jwt" json:"jwt"`
-	ConsulInfo     ConsulConfig  `mapstructure:"consul" json:"consul"`
-	JaegerInfo     JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
-	AuthSrvInfo    AuthSrvConfig `mapstructure:"auth_srv" json:"auth_srv"`
-	CarSrvInfo     CarSrvConfig  `mapstructure:"car_srv" json:"car_srv"`
-	ProfileSrvInfo CarSrvConfig  `mapstructure:"profile_srv" json:"profile_srv"`
+	Name           string           `mapstructure:"name" json:"name"`
+	Host           string           `mapstructure:"host" json:"host"`
+	Port           int              `mapstructure:"port" json:"port"`
+	JWTInfo        JWTConfig        `mapstructure:"jwt" json:"jwt"`
+	ConsulInfo     ConsulConfig     `mapstructure:"consul" json:"consul"`
+	JaegerInfo     JaegerConfig     `mapstructure:"jaeger" json:"jaeger"`
+	AuthSrvInfo    AuthSrvConfig    `mapstructure:"auth_srv" json:"auth_srv"`
+	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
+	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`
+	TripSrvInfo    TripSrvConfig    `mapstructure:"trip_srv" json:"trip_srv"`
 }
 
 type AuthSrvConfig struct {
@@ -45,5 +46,9 @@ type CarSrvConfig struct {
 }
 
 type ProfileSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
+}
+
+type TripSrvConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }

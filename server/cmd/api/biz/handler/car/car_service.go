@@ -17,13 +17,13 @@ import (
 func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req car.CreateCarRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	aid, flag := c.Get("accountID")
+	if !flag {
 		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
+			"msg": "jwt error",
 		})
-		return
 	}
+	req.AccountId = aid.(int64)
 
 	resp, err := global.CarClient.CreateCar(ctx, &req)
 	if err != nil {
@@ -46,6 +46,14 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
+	aid, flag := c.Get("accountID")
+	if !flag {
+		c.JSON(http.StatusInternalServerError, utils.H{
+			"msg": "jwt error",
+		})
+	}
+	req.AccountId = aid.(int64)
+
 	resp, err := global.CarClient.GetCar(ctx, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, utils.H{

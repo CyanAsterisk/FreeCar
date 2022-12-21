@@ -259,7 +259,7 @@ func (p *CarEntity) String() string {
 }
 
 type Driver struct {
-	ID        string `thrift:"id,1" form:"id" json:"id" query:"id"`
+	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	AvatarURL string `thrift:"avatar_url,2" form:"avatar_url" json:"avatar_url" query:"avatar_url"`
 }
 
@@ -267,7 +267,7 @@ func NewDriver() *Driver {
 	return &Driver{}
 }
 
-func (p *Driver) GetID() (v string) {
+func (p *Driver) GetID() (v int64) {
 	return p.ID
 }
 
@@ -300,7 +300,7 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -350,7 +350,7 @@ ReadStructEndError:
 }
 
 func (p *Driver) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ID = v
@@ -401,10 +401,10 @@ WriteStructEndError:
 }
 
 func (p *Driver) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ID); err != nil {
+	if err := oprot.WriteI64(p.ID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

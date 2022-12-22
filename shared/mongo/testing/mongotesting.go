@@ -43,7 +43,7 @@ func RunWithMongoInDocker(m *testing.M) int {
 			"27017/tcp": []nat.PortBinding{
 				{
 					HostIP:   "127.0.0.1",
-					HostPort: "0", //随意找一个空的端口
+					HostPort: "0",
 				},
 			},
 		},

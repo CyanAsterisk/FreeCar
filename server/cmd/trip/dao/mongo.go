@@ -19,14 +19,14 @@ const (
 	statusField    = tripField + ".status"
 )
 
-//TripRecord  defines a trip record in mongo db.
+// TripRecord  defines a trip record in mongo db.
 type TripRecord struct {
 	mgutil.IDField        `bson:"inline"`
 	mgutil.UpdatedAtField `bson:"inline"`
 	Trip                  *trip.Trip `bson:"trip"`
 }
 
-//CreateTrip creates a trip.
+// CreateTrip creates a trip.
 func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 	r := &TripRecord{
 		Trip: trip,
@@ -84,7 +84,6 @@ func GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus)
 	for res.Next(c) {
 		var tripRc TripRecord
 		err := res.Decode(&tripRc)
-
 		if err != nil {
 			return nil, err
 		}

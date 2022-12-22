@@ -22,13 +22,13 @@ type TripServiceImpl struct {
 	POIManager     POIManager
 }
 
-//ProfileManager defines the ACL(Anti Corruption Layer)
-//for profile verification logic.
+// ProfileManager defines the ACL(Anti Corruption Layer)
+// for profile verification logic.
 type ProfileManager interface {
 	Verify(context.Context, id.AccountID) (id.IdentityID, error)
 }
 
-//CarManager defines the ACL for car management.
+// CarManager defines the ACL for car management.
 type CarManager interface {
 	Verify(c context.Context, cid id.CarID, aid id.AccountID, loc *trip.Location) error
 	Unlock(c context.Context, cid id.CarID, aid id.AccountID, tid id.TripID, avatarURL string) error

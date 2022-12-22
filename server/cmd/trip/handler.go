@@ -51,7 +51,6 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	if err != nil {
 		return nil, status.Err(codes.FailedPrecondition, err.Error())
 	}
-
 	// Check vehicle status.
 	carID := id.CarID(req.CarId)
 	err = s.CarManager.Verify(ctx, carID, aid, req.Start)
@@ -109,7 +108,6 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 		klog.Error("cannot get trips", zap.Error(err))
 		return nil, status.Err(codes.Internal, "")
 	}
-
 	res := &trip.GetTripsResponse{}
 	for _, tr := range trips {
 		res.Trips = append(res.Trips, &trip.TripEntity{

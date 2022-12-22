@@ -4,10 +4,10 @@ package trip
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
 	"net/http"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 )

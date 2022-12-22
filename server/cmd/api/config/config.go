@@ -19,9 +19,8 @@ type ConsulConfig struct {
 	Port int    `mapstructure:"port" json:"port"`
 }
 
-type JaegerConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Port int    `mapstructure:"port" json:"port"`
+type OtelConfig struct {
+	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
 
 type ServerConfig struct {
@@ -30,7 +29,7 @@ type ServerConfig struct {
 	Port           int              `mapstructure:"port" json:"port"`
 	JWTInfo        JWTConfig        `mapstructure:"jwt" json:"jwt"`
 	ConsulInfo     ConsulConfig     `mapstructure:"consul" json:"consul"`
-	JaegerInfo     JaegerConfig     `mapstructure:"jaeger" json:"jaeger"`
+	OtelInfo       OtelConfig       `mapstructure:"otel" json:"otel"`
 	AuthSrvInfo    AuthSrvConfig    `mapstructure:"auth_srv" json:"auth_srv"`
 	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`

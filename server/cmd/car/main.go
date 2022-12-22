@@ -3,9 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
@@ -20,6 +17,8 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 )
 
 func main() {
@@ -33,8 +32,12 @@ func main() {
 	initialize.InitCar()
 
 	r, info := initialize.InitRegistry(Port)
-	tracerSuite, closer := initialize.InitTracer()
-	defer closer.Close()
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(global.ServerConfig.Name),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
 
 	// Create new server.
 	srv := car.NewServer(new(CarServiceImpl),
@@ -44,7 +47,7 @@ func main() {
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithSuite(tracerSuite),
+		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
@@ -71,14 +74,4 @@ func main() {
 		Subscriber: global.Subscriber,
 	}
 	go simController.RunSimulations(context.Background())
-
-	// receive termination signal
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	if err := r.Deregister(info); err != nil {
-		klog.Info("sign out failed")
-	} else {
-		klog.Info("sign out success")
-	}
 }

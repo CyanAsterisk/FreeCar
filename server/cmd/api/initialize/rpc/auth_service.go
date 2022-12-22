@@ -11,10 +11,9 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	"github.com/kitex-contrib/registry-consul"
-	internalOpentracing "github.com/kitex-contrib/tracer-opentracing"
-	"github.com/opentracing/opentracing-go"
-	jaegerCfg "github.com/uber/jaeger-client-go/config"
 )
 
 func initAuth() {
@@ -25,26 +24,13 @@ func initAuth() {
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
-	// init tracer
-	reporterCfg := &jaegerCfg.ReporterConfig{
-		LocalAgentHostPort: fmt.Sprintf("%s:%d", global.ServerConfig.JaegerInfo.Host,
-			global.ServerConfig.JaegerInfo.Port),
-	}
-	samplerCfg := &jaegerCfg.SamplerConfig{
-		Type:  "const",
-		Param: 1,
-	}
-	cfg := jaegerCfg.Configuration{
-		ServiceName: global.ServerConfig.AuthSrvInfo.Name,
-		Sampler:     samplerCfg,
-		Reporter:    reporterCfg,
-	}
-	tracer, closer, err := cfg.NewTracer()
-	if err != nil {
-		klog.Fatalf("ERROR: cannot init Jaeger: %v\n", err)
-	}
-	opentracing.InitGlobalTracer(tracer)
-	defer closer.Close()
+	// init OpenTelemetry
+	provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(global.ServerConfig.AuthSrvInfo.Name),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+
 	// create a new client
 	c, err := authservice.NewClient(
 		global.ServerConfig.AuthSrvInfo.Name,
@@ -55,7 +41,7 @@ func initAuth() {
 		client.WithFailureRetry(retry.NewFailurePolicy()),
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
-		client.WithSuite(internalOpentracing.NewDefaultClientSuite()),
+		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.AuthSrvInfo.Name}),
 	)
 	if err != nil {

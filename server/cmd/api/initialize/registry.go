@@ -45,6 +45,7 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},
+		Weight: registry.DefaultWeight,
 	}
 	return r, info
 }

@@ -1,10 +1,8 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
@@ -16,6 +14,8 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/utils"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 )
 
 func main() {
@@ -25,8 +25,12 @@ func main() {
 	initialize.InitConfig()
 	initialize.InitDB()
 	r, info := initialize.InitRegistry(Port)
-	tracerSuite, closer := initialize.InitTracer()
-	defer closer.Close()
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(global.ServerConfig.Name),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
 
 	impl := new(AuthServiceImpl)
 	impl.OpenIDResolver = &tool.AuthServiceImpl{
@@ -41,25 +45,12 @@ func main() {
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithSuite(tracerSuite),
+		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
-	// Use goroutine to listen for signal.
-	go func() {
-		err := srv.Run()
-		if err != nil {
-			klog.Fatal(err)
-		}
-	}()
-
-	// receive termination signal
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	if err := r.Deregister(info); err != nil {
-		klog.Info("sign out failed")
-	} else {
-		klog.Info("sign out success")
+	err := srv.Run()
+	if err != nil {
+		klog.Fatal(err)
 	}
 }

@@ -26,8 +26,6 @@ type TripRecord struct {
 	Trip                  *trip.Trip `bson:"trip"`
 }
 
-//TODO: 同一个account最多只能有一个进行中的Trip
-
 //CreateTrip creates a trip.
 func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 	r := &TripRecord{

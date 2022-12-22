@@ -40,7 +40,6 @@ func (m *Manager) Unlock(c context.Context, cid id.CarID, aid id.AccountID, tid 
 		},
 		TripId: tid.String(),
 	})
-
 	if err != nil {
 		return fmt.Errorf("cannot unlock: %v", err)
 	}
@@ -53,7 +52,6 @@ func (m *Manager) Lock(c context.Context, cid id.CarID, aid id.AccountID) error 
 		AccountId: int64(aid),
 		Id:        cid.String(),
 	})
-
 	if err != nil {
 		return fmt.Errorf("cannot lock: %v", err)
 	}

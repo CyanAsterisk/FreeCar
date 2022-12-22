@@ -2,12 +2,20 @@ package sim
 
 import (
 	"context"
+	"math/rand"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
 	"github.com/cloudwego/kitex/pkg/klog"
+)
+
+const (
+	minCarNum      = 8
+	AccountId      = 1024
+	CQUPTLatitude  = 29.53832
+	CQUPTLongitude = 106.613922
 )
 
 // Controller defines a car simulation controller.
@@ -31,6 +39,15 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		break
 	}
 
+	if len(cars) < minCarNum {
+		for i := minCarNum - len(cars); i > 0; i-- {
+			res, err := c.CarService.CreateCar(ctx, &car.CreateCarRequest{})
+			if err != nil {
+				klog.Fatalf("create cars error: %s", err.Error())
+			}
+			cars = append(cars, res)
+		}
+	}
 	klog.Infof("Running car simulations. car_count = %d", len(cars))
 
 	msgCh, cleanUp, err := c.Subscriber.Subscribe(ctx)
@@ -41,13 +58,23 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		return
 	}
 
-	for i := 0; i < len(cars)-2; i++ {
-		_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-			Id:     cars[i].Id,
-			Status: car.CarStatus_UNLOCKED,
-		})
+	for idx, _car := range cars {
+		req := &car.UpdateCarRequest{
+			Id: _car.Id,
+			Position: &car.Location{
+				Latitude:   CQUPTLatitude,
+				Longtitude: CQUPTLongitude,
+			},
+			AccountId: AccountId,
+		}
+		if idx < minCarNum-2 {
+			req.Status = car.CarStatus_UNLOCKED
+		} else {
+			req.Status = car.CarStatus_LOCKED
+		}
+		_, err := c.CarService.UpdateCar(ctx, req)
 		if err != nil {
-			klog.Errorf("cannot unlock car: %s", err.Error())
+			klog.Errorf("updateCar error: %s", err.Error())
 		}
 	}
 
@@ -59,8 +86,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	}
 
 	for carUpdate := range msgCh {
-		ch := carChans[carUpdate.Id]
-		if ch != nil {
+		if ch := carChans[carUpdate.Id]; ch != nil {
 			ch <- carUpdate.Car
 		}
 	}
@@ -70,8 +96,6 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch chan *car.Car) {
 	carID := initial.Id
 	klog.Infof("Simulating car: %s", carID)
-
-	begin := time.Now()
 
 	for update := range ch {
 		time.Sleep(time.Millisecond * 500)
@@ -95,8 +119,8 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id: carID,
 				Position: &car.Location{
-					Latitude:   30.0 + time.Since(begin).Seconds()*0.0001,
-					Longtitude: 120.0 + time.Since(begin).Seconds()*0.0001,
+					Latitude:   update.Position.Latitude + (rand.Float64()-0.5)*0.001,
+					Longtitude: update.Position.Longtitude + (rand.Float64()-0.5)*0.001,
 				},
 			})
 			if err != nil {

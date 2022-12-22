@@ -96,9 +96,7 @@ func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 
 	} else {
 		return nil, TokenInvalid
-
 	}
-
 }
 
 // RefreshToken to refresh a token

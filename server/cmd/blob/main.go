@@ -3,9 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/initialize"
@@ -47,21 +44,8 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
-	// Use goroutine to listen for signal.
-	go func() {
-		err := srv.Run()
-		if err != nil {
-			klog.Fatal(err)
-		}
-	}()
-
-	// receive termination signal
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	if err := r.Deregister(info); err != nil {
-		klog.Info("sign out failed")
-	} else {
-		klog.Info("sign out success")
+	err := srv.Run()
+	if err != nil {
+		klog.Fatal(err)
 	}
 }

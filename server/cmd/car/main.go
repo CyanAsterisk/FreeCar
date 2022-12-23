@@ -51,14 +51,6 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)
 
-	// Use goroutine to listen for signal.
-	go func() {
-		err := srv.Run()
-		if err != nil {
-			klog.Fatal(err)
-		}
-	}()
-
 	h := hzserver.Default(hzserver.WithHostPorts(global.ServerConfig.WsAddr))
 	h.GET("/ws", ws.Handler(global.Subscriber))
 	h.NoHijackConnPool = true
@@ -74,4 +66,9 @@ func main() {
 		Subscriber: global.Subscriber,
 	}
 	go simController.RunSimulations(context.Background())
+
+	err := srv.Run()
+	if err != nil {
+		klog.Fatal(err)
+	}
 }

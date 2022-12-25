@@ -4,9 +4,9 @@ package auth
 
 import (
 	"context"
-	"net/http"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
@@ -23,17 +23,13 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	var req auth.LoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	// rpc to get accountID
 	resp, err := global.AuthClient.Login(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "rpc login error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 	// create a JWT
@@ -48,13 +44,11 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "Generate token failed",
-		})
+		errno.SendResponse(c, errno.GenerateTokenFail, nil)
 		return
 	}
 	// return token
-	c.JSON(200, utils.H{
+	errno.SendResponse(c, errno.Success, utils.H{
 		"token":      token,
 		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,
 	})

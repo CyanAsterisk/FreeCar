@@ -15,13 +15,12 @@ import (
 )
 
 const (
-	image         = "mongo:latest"
-	containerPort = "27017/tcp"
+	image           = "mongo:latest"
+	containerPort   = "27017/tcp"
+	defaultMongoURI = "mongodb://localhost:27017"
 )
 
 var mongoURI string
-
-const defaultMongoURI = "mongodb://localhost:27017"
 
 // RunWithMongoInDocker runs the tests with
 // a mongodb instance in a docker container.

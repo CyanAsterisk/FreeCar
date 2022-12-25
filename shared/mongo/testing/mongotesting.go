@@ -15,13 +15,12 @@ import (
 )
 
 const (
-	image         = "mongo:latest"
-	containerPort = "27017/tcp"
+	image           = "mongo:latest"
+	containerPort   = "27017/tcp"
+	defaultMongoURI = "mongodb://localhost:27017"
 )
 
 var mongoURI string
-
-const defaultMongoURI = "mongodb://localhost:27017"
 
 // RunWithMongoInDocker runs the tests with
 // a mongodb instance in a docker container.
@@ -91,17 +90,7 @@ func NewDefaultClient(c context.Context) (*mongo.Client, error) {
 
 // SetupIndexes sets up indexes for the given database.
 func SetupIndexes(c context.Context, d *mongo.Database) error {
-	_, err := d.Collection("account").Indexes().CreateOne(c, mongo.IndexModel{
-		Keys: bson.D{
-			{Key: "open_id", Value: 1},
-		},
-		Options: options.Index().SetUnique(true),
-	})
-	if err != nil {
-		return err
-	}
-
-	_, err = d.Collection("trip").Indexes().CreateOne(c, mongo.IndexModel{
+	_, err := d.Collection("trip").Indexes().CreateOne(c, mongo.IndexModel{
 		Keys: bson.D{
 			{Key: "trip.accountid", Value: 1},
 			{Key: "trip.status", Value: 1},

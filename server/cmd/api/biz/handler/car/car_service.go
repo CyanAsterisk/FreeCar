@@ -4,12 +4,11 @@ package car
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 )
 
 // CreateCar .
@@ -19,19 +18,15 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var req car.CreateCarRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.CarClient.CreateCar(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 	}
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // GetCar .
@@ -41,24 +36,18 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	var req car.GetCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.CarClient.GetCar(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 	}
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }

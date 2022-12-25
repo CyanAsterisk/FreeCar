@@ -4,12 +4,11 @@ package trip
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 )
 
 // CreateTrip .
@@ -19,28 +18,22 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 	var req trip.CreateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.TripClient.CreateTrip(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // GetTrip .
@@ -50,22 +43,18 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 	var req trip.GetTripRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 	req.Id = c.Param("id")
 
 	resp, err := global.TripClient.GetTrip(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // GetTrips .
@@ -74,28 +63,22 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req trip.GetTripsRequest
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.TripClient.GetTrips(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // UpdateTrip .
@@ -105,27 +88,21 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	var req trip.UpdateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 	req.Id = c.Param("id")
 
 	resp, err := global.TripClient.UpdateTrip(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }

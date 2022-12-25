@@ -4,12 +4,11 @@ package profile
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 )
 
 // GetProfile .
@@ -19,20 +18,16 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var req profile.GetProfileRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 	resp, err := global.ProfileClient.GetProfile(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // SubmitProfile .
@@ -42,28 +37,22 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var req profile.SubmitProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "bind and validate error",
-		})
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.SubmitProfile(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // ClearProfile .
@@ -74,21 +63,17 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.ClearProfile(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // GetProfilePhoto .
@@ -98,21 +83,17 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.GetProfilePhotoRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // CreateProfilePhoto .
@@ -122,21 +103,17 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.CreateProfilePhotoRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // CompleteProfilePhoto .
@@ -146,21 +123,17 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.CompleteProfilePhotoRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }
 
 // ClearProfilePhoto .
@@ -170,19 +143,15 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var req profile.ClearProfilePhotoRequest
 	aid, flag := c.Get("accountID")
 	if !flag {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "jwt error",
-		})
+		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, utils.H{
-			"msg": "client error",
-		})
+		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	errno.SendResponse(c, errno.Success, resp)
 }

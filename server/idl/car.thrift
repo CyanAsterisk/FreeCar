@@ -28,7 +28,7 @@ struct Location{
 
 struct Car{
     1: CarStatus status;
-    2: Driver drivar;
+    2: Driver driver;
     3: Location position;
     4: string trip_id;
 }

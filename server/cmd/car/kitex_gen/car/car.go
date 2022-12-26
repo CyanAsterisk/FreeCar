@@ -747,7 +747,7 @@ func (p *Location) Field2DeepEqual(src float64) bool {
 
 type Car struct {
 	Status   CarStatus `thrift:"status,1" frugal:"1,default,CarStatus" json:"status"`
-	Drivar   *Driver   `thrift:"drivar,2" frugal:"2,default,Driver" json:"drivar"`
+	Driver   *Driver   `thrift:"driver,2" frugal:"2,default,Driver" json:"driver"`
 	Position *Location `thrift:"position,3" frugal:"3,default,Location" json:"position"`
 	TripId   string    `thrift:"trip_id,4" frugal:"4,default,string" json:"trip_id"`
 }
@@ -764,13 +764,13 @@ func (p *Car) GetStatus() (v CarStatus) {
 	return p.Status
 }
 
-var Car_Drivar_DEFAULT *Driver
+var Car_Driver_DEFAULT *Driver
 
-func (p *Car) GetDrivar() (v *Driver) {
-	if !p.IsSetDrivar() {
-		return Car_Drivar_DEFAULT
+func (p *Car) GetDriver() (v *Driver) {
+	if !p.IsSetDriver() {
+		return Car_Driver_DEFAULT
 	}
-	return p.Drivar
+	return p.Driver
 }
 
 var Car_Position_DEFAULT *Location
@@ -788,8 +788,8 @@ func (p *Car) GetTripId() (v string) {
 func (p *Car) SetStatus(val CarStatus) {
 	p.Status = val
 }
-func (p *Car) SetDrivar(val *Driver) {
-	p.Drivar = val
+func (p *Car) SetDriver(val *Driver) {
+	p.Driver = val
 }
 func (p *Car) SetPosition(val *Location) {
 	p.Position = val
@@ -800,13 +800,13 @@ func (p *Car) SetTripId(val string) {
 
 var fieldIDToName_Car = map[int16]string{
 	1: "status",
-	2: "drivar",
+	2: "driver",
 	3: "position",
 	4: "trip_id",
 }
 
-func (p *Car) IsSetDrivar() bool {
-	return p.Drivar != nil
+func (p *Car) IsSetDriver() bool {
+	return p.Driver != nil
 }
 
 func (p *Car) IsSetPosition() bool {
@@ -912,8 +912,8 @@ func (p *Car) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *Car) ReadField2(iprot thrift.TProtocol) error {
-	p.Drivar = NewDriver()
-	if err := p.Drivar.Read(iprot); err != nil {
+	p.Driver = NewDriver()
+	if err := p.Driver.Read(iprot); err != nil {
 		return err
 	}
 	return nil
@@ -995,10 +995,10 @@ WriteFieldEndError:
 }
 
 func (p *Car) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("drivar", thrift.STRUCT, 2); err != nil {
+	if err = oprot.WriteFieldBegin("driver", thrift.STRUCT, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := p.Drivar.Write(oprot); err != nil {
+	if err := p.Driver.Write(oprot); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1061,7 +1061,7 @@ func (p *Car) DeepEqual(ano *Car) bool {
 	if !p.Field1DeepEqual(ano.Status) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.Drivar) {
+	if !p.Field2DeepEqual(ano.Driver) {
 		return false
 	}
 	if !p.Field3DeepEqual(ano.Position) {
@@ -1082,7 +1082,7 @@ func (p *Car) Field1DeepEqual(src CarStatus) bool {
 }
 func (p *Car) Field2DeepEqual(src *Driver) bool {
 
-	if !p.Drivar.DeepEqual(src) {
+	if !p.Driver.DeepEqual(src) {
 		return false
 	}
 	return true

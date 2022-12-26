@@ -690,7 +690,7 @@ func (p *Car) FastReadField2(buf []byte) (int, error) {
 	} else {
 		offset += l
 	}
-	p.Drivar = tmp
+	p.Driver = tmp
 	return offset, nil
 }
 
@@ -765,8 +765,8 @@ func (p *Car) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int
 
 func (p *Car) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "drivar", thrift.STRUCT, 2)
-	offset += p.Drivar.FastWriteNocopy(buf[offset:], binaryWriter)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "driver", thrift.STRUCT, 2)
+	offset += p.Driver.FastWriteNocopy(buf[offset:], binaryWriter)
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
 }
@@ -799,8 +799,8 @@ func (p *Car) field1Length() int {
 
 func (p *Car) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("drivar", thrift.STRUCT, 2)
-	l += p.Drivar.BLength()
+	l += bthrift.Binary.FieldBeginLength("driver", thrift.STRUCT, 2)
+	l += p.Driver.BLength()
 	l += bthrift.Binary.FieldEndLength()
 	return l
 }

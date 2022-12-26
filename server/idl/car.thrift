@@ -23,12 +23,12 @@ struct Driver{
 
 struct Location{
     1: double latitude;
-    2: double longtitude;
+    2: double longitude;
 }
 
 struct Car{
     1: CarStatus status;
-    2: Driver drivar;
+    2: Driver driver;
     3: Location position;
     4: string trip_id;
 }

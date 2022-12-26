@@ -61,8 +61,8 @@ func TestCarUpdate(t *testing.T) {
 				_, err = s.UpdateCar(c, &car.UpdateCarRequest{
 					Id: carID.String(),
 					Position: &car.Location{
-						Latitude:   31,
-						Longtitude: 121,
+						Latitude:  31,
+						Longitude: 121,
 					},
 					Status: car.CarStatus_UNLOCKED,
 				})

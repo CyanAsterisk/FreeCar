@@ -23,7 +23,7 @@ struct Driver{
 
 struct Location{
     1: double latitude;
-    2: double longtitude;
+    2: double longitude;
 }
 
 struct Car{

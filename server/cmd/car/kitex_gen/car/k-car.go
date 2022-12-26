@@ -483,7 +483,7 @@ func (p *Location) FastReadField2(buf []byte) (int, error) {
 	} else {
 		offset += l
 
-		p.Longtitude = v
+		p.Longitude = v
 
 	}
 	return offset, nil
@@ -529,8 +529,8 @@ func (p *Location) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter
 
 func (p *Location) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "longtitude", thrift.DOUBLE, 2)
-	offset += bthrift.Binary.WriteDouble(buf[offset:], p.Longtitude)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "longitude", thrift.DOUBLE, 2)
+	offset += bthrift.Binary.WriteDouble(buf[offset:], p.Longitude)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -547,8 +547,8 @@ func (p *Location) field1Length() int {
 
 func (p *Location) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("longtitude", thrift.DOUBLE, 2)
-	l += bthrift.Binary.DoubleLength(p.Longtitude)
+	l += bthrift.Binary.FieldBeginLength("longitude", thrift.DOUBLE, 2)
+	l += bthrift.Binary.DoubleLength(p.Longitude)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

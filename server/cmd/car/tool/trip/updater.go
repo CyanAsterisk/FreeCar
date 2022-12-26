@@ -26,7 +26,7 @@ func RunUpdater(sub mq.Subscriber, ts tripservice.Client) {
 				Id: car.Car.TripId,
 				Current: &trip.Location{
 					Latitude:  car.Car.Position.Latitude,
-					Longitude: car.Car.Position.Longtitude,
+					Longitude: car.Car.Position.Longitude,
 				},
 			})
 			if err != nil {

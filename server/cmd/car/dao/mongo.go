@@ -33,8 +33,8 @@ func CreateCar(c context.Context) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
-				Latitude:   30,
-				Longtitude: 120,
+				Latitude:  30,
+				Longitude: 120,
 			},
 			Status: carthrf.CarStatus_LOCKED,
 		},

@@ -523,8 +523,8 @@ func (p *Driver) Field2DeepEqual(src string) bool {
 }
 
 type Location struct {
-	Latitude   float64 `thrift:"latitude,1" frugal:"1,default,double" json:"latitude"`
-	Longtitude float64 `thrift:"longtitude,2" frugal:"2,default,double" json:"longtitude"`
+	Latitude  float64 `thrift:"latitude,1" frugal:"1,default,double" json:"latitude"`
+	Longitude float64 `thrift:"longitude,2" frugal:"2,default,double" json:"longitude"`
 }
 
 func NewLocation() *Location {
@@ -539,19 +539,19 @@ func (p *Location) GetLatitude() (v float64) {
 	return p.Latitude
 }
 
-func (p *Location) GetLongtitude() (v float64) {
-	return p.Longtitude
+func (p *Location) GetLongitude() (v float64) {
+	return p.Longitude
 }
 func (p *Location) SetLatitude(val float64) {
 	p.Latitude = val
 }
-func (p *Location) SetLongtitude(val float64) {
-	p.Longtitude = val
+func (p *Location) SetLongitude(val float64) {
+	p.Longitude = val
 }
 
 var fieldIDToName_Location = map[int16]string{
 	1: "latitude",
-	2: "longtitude",
+	2: "longitude",
 }
 
 func (p *Location) Read(iprot thrift.TProtocol) (err error) {
@@ -636,7 +636,7 @@ func (p *Location) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadDouble(); err != nil {
 		return err
 	} else {
-		p.Longtitude = v
+		p.Longitude = v
 	}
 	return nil
 }
@@ -692,10 +692,10 @@ WriteFieldEndError:
 }
 
 func (p *Location) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("longtitude", thrift.DOUBLE, 2); err != nil {
+	if err = oprot.WriteFieldBegin("longitude", thrift.DOUBLE, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteDouble(p.Longtitude); err != nil {
+	if err := oprot.WriteDouble(p.Longitude); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -724,7 +724,7 @@ func (p *Location) DeepEqual(ano *Location) bool {
 	if !p.Field1DeepEqual(ano.Latitude) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.Longtitude) {
+	if !p.Field2DeepEqual(ano.Longitude) {
 		return false
 	}
 	return true
@@ -739,7 +739,7 @@ func (p *Location) Field1DeepEqual(src float64) bool {
 }
 func (p *Location) Field2DeepEqual(src float64) bool {
 
-	if p.Longtitude != src {
+	if p.Longitude != src {
 		return false
 	}
 	return true

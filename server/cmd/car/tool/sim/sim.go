@@ -62,8 +62,8 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		req := &car.UpdateCarRequest{
 			Id: _car.Id,
 			Position: &car.Location{
-				Latitude:   CQUPTLatitude,
-				Longtitude: CQUPTLongitude,
+				Latitude:  CQUPTLatitude,
+				Longitude: CQUPTLongitude,
 			},
 			AccountId: AccountId,
 		}
@@ -119,8 +119,8 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id: carID,
 				Position: &car.Location{
-					Latitude:   update.Position.Latitude + (rand.Float64()-0.5)*0.001,
-					Longtitude: update.Position.Longtitude + (rand.Float64()-0.5)*0.001,
+					Latitude:  update.Position.Latitude + (rand.Float64()-0.5)*0.001,
+					Longitude: update.Position.Longitude + (rand.Float64()-0.5)*0.001,
 				},
 			})
 			if err != nil {

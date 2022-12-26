@@ -23,7 +23,6 @@ func TestProfileLifeCycle(t *testing.T) {
 	newDB(c, t)
 
 	aid := id.AccountID(123)
-	c = context.WithValue(c, accountIDKey{}, aid)
 	cases := []struct {
 		name       string
 		op         func() (*profile.Profile, error)
@@ -120,7 +119,6 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 	newDB(c, t)
 
 	aid := id.AccountID(123)
-	c = context.WithValue(c, accountIDKey{}, aid)
 	global.BlobClient = &blobClient{
 		idForCreate: 123,
 	}
@@ -220,8 +218,6 @@ func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest
 		Url: "get_url for " + strconv.FormatInt(req.Id, 10),
 	}, nil
 }
-
-type accountIDKey struct{}
 
 func newDB(c context.Context, t *testing.T) {
 	mc, err := mongotesting.NewClient(c)

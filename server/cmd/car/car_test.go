@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"os"
+	"testing"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
-	"os"
-	"testing"
-
 	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"
 )
 

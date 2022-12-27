@@ -3,6 +3,7 @@ package initialize
 import (
 	"context"
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"

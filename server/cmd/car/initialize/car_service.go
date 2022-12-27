@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"

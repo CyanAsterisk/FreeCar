@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"

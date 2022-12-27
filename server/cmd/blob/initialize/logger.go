@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // InitLogger to init zap
@@ -29,6 +30,16 @@ func InitLogger() {
 	}
 
 	logger := kitexzap.NewLogger()
+	// Provides compression and deletion
+	lumberjackLogger := &lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    20,   // A file can be up to 20M.
+		MaxBackups: 5,    // Save up to 5 files at the same time.
+		MaxAge:     10,   // A file can exist for a maximum of 10 days.
+		Compress:   true, // Compress with gzip.
+	}
+
+	logger.SetOutput(lumberjackLogger)
 	logger.SetLevel(klog.LevelDebug)
 
 	klog.SetLogger(logger)

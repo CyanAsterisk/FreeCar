@@ -26,6 +26,7 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
 	go.mongodb.org/mongo-driver v1.11.1
 	go.uber.org/zap v1.24.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.2
 	gorm.io/plugin/opentelemetry v0.1.0
@@ -138,7 +139,6 @@ require (
 	google.golang.org/grpc v1.50.1 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.4.0 // indirect

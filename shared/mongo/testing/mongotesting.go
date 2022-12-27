@@ -15,9 +15,10 @@ import (
 )
 
 const (
-	image           = "mongo:latest"
-	containerPort   = "27017/tcp"
-	defaultMongoURI = "mongodb://localhost:27017"
+	image         = "mongo:latest"
+	containerPort = "27017/tcp"
+	ip            = "127.0.0.1"
+	port          = "0"
 )
 
 var mongoURI string
@@ -35,14 +36,14 @@ func RunWithMongoInDocker(m *testing.M) int {
 	resp, err := c.ContainerCreate(ctx, &container.Config{
 		Image: image,
 		ExposedPorts: nat.PortSet{
-			"27017/tcp": {},
+			containerPort: {},
 		},
 	}, &container.HostConfig{
 		PortBindings: nat.PortMap{
-			"27017/tcp": []nat.PortBinding{
+			containerPort: []nat.PortBinding{
 				{
-					HostIP:   "127.0.0.1",
-					HostPort: "0",
+					HostIP:   ip,
+					HostPort: port,
 				},
 			},
 		},
@@ -78,14 +79,9 @@ func RunWithMongoInDocker(m *testing.M) int {
 // NewClient creates a client connected to the mongo instance in docker.
 func NewClient(c context.Context) (*mongo.Client, error) {
 	if mongoURI == "" {
-		return nil, fmt.Errorf("mong uri not set. Please run RunWithMongoInDocker in TestMain")
+		return nil, fmt.Errorf("mongoDB uri not set. Please run RunWithMongoInDocker in TestMain")
 	}
 	return mongo.Connect(c, options.Client().ApplyURI(mongoURI))
-}
-
-// NewDefaultClient creates a client connected to localhost:27017
-func NewDefaultClient(c context.Context) (*mongo.Client, error) {
-	return mongo.Connect(c, options.Client().ApplyURI(defaultMongoURI))
 }
 
 // SetupIndexes sets up indexes for the given database.

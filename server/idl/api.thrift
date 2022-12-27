@@ -1,7 +1,7 @@
 namespace go api
 
 struct LoginRequest {
-    1: string code
+    1: string code (api.vd="len($) > 0")
 }
 
 struct LoginResponse {
@@ -10,7 +10,7 @@ struct LoginResponse {
 }
 
 struct CarEntity{
-    1: string id;
+    1: string id
     2: Car car
 }
 
@@ -23,29 +23,29 @@ enum CarStatus{
 }
 
 struct Driver{
-    1: i64 id;
-    2: string avatar_url;
+    1: i64 id
+    2: string avatar_url
 }
 
 struct Location{
-    1: double latitude;
-    2: double longitude;
+    1: double latitude
+    2: double longitude
 }
 
 struct Car{
-    1: CarStatus status;
-    2: Driver driver;
-    3: Location position;
-    4: string trip_id;
+    1: CarStatus status
+    2: Driver driver
+    3: Location position
+    4: string trip_id
 }
 
 struct CreateCarRequest{
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 
 struct GetCarRequest{
-    1: i64 account_id
-    2: string id;
+    1: i64 account_id (api.vd="len($) > 0")
+    2: string id (api.vd="len($) > 0")
 }
 
 enum Gender {
@@ -73,43 +73,41 @@ struct Identity {
 }
 
 struct GetProfileRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 
 struct SubmitProfileRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
     2: Identity identity
 }
 
 struct ClearProfileRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 
 struct GetProfilePhotoRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 struct GetProfilePhotoResponse {
     1: string url
 }
 
 struct CreateProfilePhotoRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 struct CreateProfilePhotoResponse {
     1: string upload_url
 }
 
 struct CompleteProfilePhotoRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 
 struct ClearProfilePhotoRequest {
-    1: i64 account_id
+    1: i64 account_id (api.vd="len($) > 0")
 }
 
 struct ClearProfilePhotoResponse {}
-
-service ProfileService {}
 
 struct LocationStatus {
   1: Location location
@@ -142,19 +140,19 @@ struct Trip {
 
 struct CreateTripRequest {
   1: Location start
-  2: string car_id
+  2: string car_id (api.vd="len($) > 0")
   3: string avatar_url
-  4: i64 account_id
+  4: i64 account_id (api.vd="len($) > 0")
 }
 
 struct GetTripRequest {
-  1: string id
-  2: i64 account_id
+  1: string id (api.vd="len($) > 0")
+  2: i64 account_id (api.vd="len($) > 0")
 }
 
 struct GetTripsRequest {
   1: TripStatus status
-  2: i64 account_id
+  2: i64 account_id (api.vd="len($) > 0")
 }
 
 struct GetTripsResponse {
@@ -162,14 +160,14 @@ struct GetTripsResponse {
 }
 
 struct UpdateTripRequest {
-  1: string id
+  1: string id (api.vd="len($) > 0")
   2: Location current
   3: bool end_trip
-  4: i64 account_id
+  4: i64 account_id (api.vd="len($) > 0")
 }
 
 service ApiService {
-    LoginResponse Login(1: LoginRequest req)
+    LoginResponse Login(1: LoginRequest req) (api.post="/v1/auth/login")
 
     CarEntity CreateCar (1:CreateCarRequest req) (api.post="/v1/car")
     Car GetCar(1: GetCarRequest req) (api.get="/v1/car")

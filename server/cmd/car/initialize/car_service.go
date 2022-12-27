@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
@@ -35,8 +36,9 @@ func InitCar() {
 	// create a new client
 	c, err := carservice.NewClient(
 		global.ServerConfig.Name,
-		client.WithResolver(r),
-		client.WithMuxConnection(1),
+		client.WithResolver(r), // service discovery
+		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
+		client.WithMuxConnection(1),                                // multiplexing
 		client.WithRPCTimeout(3*time.Second),
 		client.WithConnectTimeout(50*time.Millisecond),
 		client.WithFailureRetry(retry.NewFailurePolicy()),

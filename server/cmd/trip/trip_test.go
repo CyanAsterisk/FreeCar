@@ -192,7 +192,8 @@ func TestTripLifecycle(t *testing.T) {
 					AccountId: int64(aid1),
 				})
 			},
-			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"end":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"status":2,"identity_id":""}`},
+			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"end":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"status":2,"identity_id":""}`,
+		},
 	}
 	rand.Seed(1345)
 	for _, cc := range cases {

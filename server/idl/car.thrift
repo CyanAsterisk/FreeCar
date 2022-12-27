@@ -77,8 +77,8 @@ struct UpdateCarResponse{}
 
 
 service CarService {
-    CarEntity CreateCar (1:CreateCarRequest req) (api.post="/v1/car")
-    Car GetCar(1: GetCarRequest req) (api.get="/v1/car")
+    CarEntity CreateCar (1:CreateCarRequest req)
+    Car GetCar(1: GetCarRequest req)
     GetCarsResponse GetCars(1: GetCarsRequest req)
     LockCarResponse LockCar (1:LockCarRequest req)
     UnlockCarResponse UnlockCar(1:UnlockCarRequest req)

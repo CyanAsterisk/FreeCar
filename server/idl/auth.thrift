@@ -9,5 +9,5 @@ struct LoginResponse {
 }
 
 service AuthService {
-    LoginResponse Login(1: LoginRequest req) (api.post="/v1/auth/login")
+    LoginResponse Login(1: LoginRequest req)
 }

@@ -25,13 +25,3 @@ func MustFromID(id fmt.Stringer) primitive.ObjectID {
 func ToTripID(oid primitive.ObjectID) id.TripID {
 	return id.TripID(oid.Hex())
 }
-
-// ToCarID converts object id to car id.
-func ToCarID(oid primitive.ObjectID) id.CarID {
-	return id.CarID(oid.Hex())
-}
-
-// ToIdentityID converts object id to identity id.
-func ToIdentityID(oid primitive.ObjectID) id.IdentityID {
-	return id.IdentityID(oid.Hex())
-}

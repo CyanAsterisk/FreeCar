@@ -7,8 +7,10 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzzap "github.com/hertz-contrib/logger/zap"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+// InitLogger to init zap
 func InitLogger() {
 	// Customizable output directory.
 	var logFilePath string
@@ -28,6 +30,16 @@ func InitLogger() {
 	}
 
 	logger := hertzzap.NewLogger()
+	// Provides compression and deletion
+	lumberjackLogger := &lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    20,   // A file can be up to 20M.
+		MaxBackups: 5,    // Save up to 5 files at the same time.
+		MaxAge:     10,   // A file can exist for a maximum of 10 days.
+		Compress:   true, // Compress with gzip.
+	}
+
+	logger.SetOutput(lumberjackLogger)
 	logger.SetLevel(hlog.LevelDebug)
 
 	hlog.SetLogger(logger)

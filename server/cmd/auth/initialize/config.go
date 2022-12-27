@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// InitConfig to init viper
 func InitConfig() {
 	configFileName := "./server/cmd/auth/config.yaml"
 

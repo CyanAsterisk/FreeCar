@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// InitDB to init database
 func InitDB() {
 	c := global.ServerConfig.MongoDBInfo
 	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(

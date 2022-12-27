@@ -51,13 +51,6 @@ func Set(v interface{}) bson.M {
 	}
 }
 
-// SetOnInsert returns a $setOnInsert update document.
-func SetOnInsert(v interface{}) bson.M {
-	return bson.M{
-		"$setOnInsert": v,
-	}
-}
-
 // ZeroOrDoesNotExist generates a filter expression with
 // field equal to zero or field does not exist.
 func ZeroOrDoesNotExist(field string, zero interface{}) bson.M {

@@ -2,7 +2,6 @@ package initialize
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
@@ -10,13 +9,14 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/retry"
+	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitProfile to init profile service
 func InitProfile() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
@@ -34,11 +34,9 @@ func InitProfile() {
 	// create a new client
 	c, err := profileservice.NewClient(
 		global.ServerConfig.ProfileSrvInfo.Name,
-		client.WithResolver(r),
-		client.WithMuxConnection(1),
-		client.WithRPCTimeout(3*time.Second),
-		client.WithConnectTimeout(50*time.Millisecond),
-		client.WithFailureRetry(retry.NewFailurePolicy()),
+		client.WithResolver(r),                                     // service discovery
+		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
+		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),

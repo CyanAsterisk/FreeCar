@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
+// InitFlag to init flag
 func InitFlag() (string, int) {
 	IP := flag.String("ip", "0.0.0.0", "address")
 	Port := flag.Int("port", 0, "post")

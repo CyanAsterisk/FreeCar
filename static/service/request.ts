@@ -1,5 +1,5 @@
 import camelcaseKeys = require("camelcase-keys")
-import { auth } from "./proto_gen/auth/auth_pb"
+import { auth } from "./api/codegen/auth/auth_pb"
 
 export namespace FreeCar {
     export const serverAddr = 'http://localhost:9900'
@@ -8,7 +8,7 @@ export namespace FreeCar {
 
     const authData = {
         token: '',
-        expiryMs: 0,
+        expiresAt: 0
     }
 
     export interface RequestOption<REQ, RES> {
@@ -34,7 +34,7 @@ export namespace FreeCar {
         } catch(err) {
             if (err === AUTH_ERR && authOpt.retryOnAuthError) {
                 authData.token = ''
-                authData.expiryMs = 0
+                authData.expiresAt = 0
                 return sendRequestWithAuthRetry(o, {
                     attachAuthHeader: authOpt.attachAuthHeader,
                     retryOnAuthError: false,
@@ -46,11 +46,10 @@ export namespace FreeCar {
     }
 
     export async function login() {
-        if (authData.token && authData.expiryMs >= Date.now()) {
+        if (authData.token && authData.expiresAt >= Date.now()) {
             return
         }
         const wxResp = await wxLogin()
-        const reqTimeMs = Date.now()
         const resp = await sendRequest<auth.v1.ILoginRequest, auth.v1.ILoginResponse> ({
             method: 'POST',
             path: '/v1/auth/login',
@@ -62,15 +61,18 @@ export namespace FreeCar {
             attachAuthHeader: false,
             retryOnAuthError: false,
         })
-        authData.token = resp.accessToken!
-        authData.expiryMs = reqTimeMs + resp.expiresIn! * 1000
+
+        if (resp.data){
+            authData.token = resp.data.token!
+            authData.expiresAt = resp.data.expiredAt!
+        }
     }
 
     function sendRequest<REQ, RES>(o: RequestOption<REQ, RES>, a: AuthOption): Promise<RES> {
         return new Promise((resolve, reject) => {
             const header: Record<string, any> = {}
             if (a.attachAuthHeader) {
-                if (authData.token && authData.expiryMs >= Date.now()) {
+                if (authData.token && authData.expiresAt >= Date.now()) {
                     header.authorization = 'Bearer ' + authData.token
                 } else {
                     reject(AUTH_ERR)

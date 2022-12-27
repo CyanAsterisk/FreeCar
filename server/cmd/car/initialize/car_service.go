@@ -18,6 +18,7 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitCar to init car service
 func InitCar() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",

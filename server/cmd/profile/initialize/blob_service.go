@@ -19,6 +19,7 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitBlob to init blob service
 func InitBlob() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",

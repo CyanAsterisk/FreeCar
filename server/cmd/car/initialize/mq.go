@@ -10,6 +10,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
+// InitMq to init rabbitMQ
 func InitMq() {
 	c := global.ServerConfig.RabbitMqInfo
 	amqpConn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%d/", c.User, c.Password, c.Host, c.Port))

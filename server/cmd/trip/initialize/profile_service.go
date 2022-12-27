@@ -18,6 +18,7 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitProfile to init profile service
 func InitProfile() {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",

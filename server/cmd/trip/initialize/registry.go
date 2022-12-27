@@ -12,6 +12,7 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
+// InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 	r, err := consul.NewConsulRegister(fmt.Sprintf("%s:%d",
 		global.ServerConfig.ConsulInfo.Host,

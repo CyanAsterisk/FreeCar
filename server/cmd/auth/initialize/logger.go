@@ -9,6 +9,7 @@ import (
 	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
 )
 
+// InitLogger to init zap
 func InitLogger() {
 	// Customizable output directory.
 	var logFilePath string

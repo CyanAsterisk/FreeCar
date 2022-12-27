@@ -14,6 +14,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+// InitDB to init database
 func InitDB() {
 	c := global.ServerConfig.MysqlInfo
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",

@@ -9,6 +9,7 @@ import (
 	hertzzap "github.com/hertz-contrib/logger/zap"
 )
 
+// InitLogger to init zap
 func InitLogger() {
 	// Customizable output directory.
 	var logFilePath string

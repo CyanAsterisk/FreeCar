@@ -9,6 +9,7 @@ import (
 	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
+// InitCos to init TencentCloud COS
 func InitCos() {
 	u, err := url.Parse(global.ServerConfig.CosConfig.Addr)
 	if err != nil {

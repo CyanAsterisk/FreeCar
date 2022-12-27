@@ -12,6 +12,7 @@ import (
 	"github.com/hertz-contrib/registry/consul"
 )
 
+// InitRegistry to init consul
 func InitRegistry() (registry.Registry, *registry.Info) {
 	// build a consul client
 	config := api.DefaultConfig()

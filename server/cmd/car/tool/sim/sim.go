@@ -32,7 +32,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		time.Sleep(2 * time.Second)
 		res, err := c.CarService.GetCars(ctx, &car.GetCarsRequest{})
 		if err != nil {
-			klog.Error("cannot get cars: %s", err.Error())
+			klog.Errorf("cannot get cars: %s", err.Error())
 			continue
 		}
 		cars = res.Cars

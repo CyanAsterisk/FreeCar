@@ -18,7 +18,9 @@ const (
 	ConsulCheckTimeout                        = "5s"
 	ConsulCheckDeregisterCriticalServiceAfter = "15s"
 
-	MySqlDSN = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+	MySqlDSN    = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+	MongoURI    = "mongodb://%s:%s@%s:%d"
+	RabbitMqURI = "amqp://%s:%s@%s:%d/"
 
 	IPFlagName  = "ip"
 	IPFlagValue = "0.0.0.0"
@@ -28,4 +30,6 @@ const (
 	PortFlagUsage = "port"
 
 	TCP = "tcp"
+
+	FreePortAddress = "localhost:0"
 )

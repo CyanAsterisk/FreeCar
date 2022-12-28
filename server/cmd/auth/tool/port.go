@@ -8,7 +8,7 @@ import (
 
 // GetFreePort get a free port.
 func GetFreePort() (int, error) {
-	addr, err := net.ResolveTCPAddr(consts.TCP, "localhost:0")
+	addr, err := net.ResolveTCPAddr(consts.TCP, consts.FreePortAddress)
 	if err != nil {
 		return 0, err
 	}

@@ -16,6 +16,82 @@ import (
 )
 
 func rootMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _v1Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createcarMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _getcarMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _submitprofileMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _clearprofileMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _tripMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _updatetripMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _gettripMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _gettripsMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _authMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _loginMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _profileMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		// use recovery mw
 		recovery.Recovery(recovery.WithRecoveryHandler(
@@ -31,66 +107,6 @@ func rootMw() []app.HandlerFunc {
 	}
 }
 
-func _v1Mw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _createcarMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _getcarMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _submitprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _clearprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _tripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _updatetripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _gettripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _gettripsMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _authMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _loginMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _profileMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _createprofilephotoMw() []app.HandlerFunc {
 	// your code...
 	return nil
@@ -102,8 +118,19 @@ func _clearprofilephotoMw() []app.HandlerFunc {
 }
 
 func _photoMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		// use recovery mw
+		recovery.Recovery(recovery.WithRecoveryHandler(
+			func(ctx context.Context, c *app.RequestContext, err interface{}, stack []byte) {
+				hlog.SystemLogger().CtxErrorf(ctx, "[Recovery] err=%v\nstack=%s", err, stack)
+				c.JSON(consts.StatusInternalServerError, utils.H{
+					"code":    errno.BadRequest,
+					"message": fmt.Sprintf("[Recovery] err=%v\nstack=%s", err, stack),
+				})
+			},
+		)),
+		middleware.JWTAuth(),
+	}
 }
 
 func _completeprofilephotoMw() []app.HandlerFunc {

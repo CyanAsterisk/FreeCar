@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "server/cmd/api";
+
+import "hz.proto";
+
+message LoginRequest {
+  string code = 1[(api.vd) = "len($) > 0"];
+}
+
+message LoginResponse {
+  string token = 1;
+  int64 expired_at = 2;
+}
+
+message CarEntity {
+  string id = 1;
+  Car car = 2;
+}
+
+enum CarStatus {
+  CS_NOT_SPECIFIED = 0;
+  LOCKED = 1;
+  UNLOCKING = 2;
+  UNLOCKED = 3;
+  LOCKING = 4;
+}
+
+message Driver {
+  string id = 1;
+  string avatar_url = 2;
+}
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message Car {
+  CarStatus status = 1;
+  Driver driver = 2;
+  Location position = 3;
+  string trip_id = 4;
+}
+
+message CreateCarRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message GetCarRequest {
+  string id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 2[(api.vd) = "len($) > 0"];
+}
+
+message LocationStatus{
+  Location location = 1;
+  int32 fee_cent = 2;
+  double km_driven = 3;
+  string poi_name = 4;
+  int64 timestamp_sec = 5;
+}
+
+enum TripStatus {
+  TS_NOT_SPECIFIED = 0;
+  IN_PROGRESS = 1;
+  FINISHED = 2;
+}
+
+message TripEntity{
+  string id = 1;
+  Trip trip = 2;
+}
+
+message Trip{
+  int64 account_id = 1;
+  string car_id = 2;
+  LocationStatus start = 3;
+  LocationStatus current = 4;
+  LocationStatus end = 5;
+  TripStatus status = 6;
+  string identity_id = 7;
+}
+
+message CreateTripRequest {
+  Location start = 1;
+  string car_id = 2;
+  string avatar_url = 3;
+  int64 account_id = 4[(api.vd) = "len($) > 0"];
+}
+
+
+message GetTripRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 2[(api.vd) = "len($) > 0"];
+}
+
+
+message GetTripsRequest{
+  TripStatus status = 1;
+  int64 account_id = 2[(api.vd) = "len($) > 0"];
+}
+
+message GetTripsResponse{
+  repeated TripEntity trips = 1;
+}
+
+message UpdateTripRequest{
+  string id = 1;
+  Location current = 2;
+  bool end_trip = 3;
+  int64 account_id = 4[(api.vd) = "len($) > 0"];
+}
+
+enum Gender {
+  G_NOT_SPECIFIED = 0;
+  MALE = 1;
+  FEMALE = 2;
+}
+
+enum IdentityStatus {
+  UNSUBMITTED = 0;
+  PENDING = 1;
+  VERIFIED = 2;
+}
+
+message Profile {
+  Identity identity = 1;
+  IdentityStatus identity_status = 2;
+}
+
+message Identity {
+  string lic_number = 1;
+  string name = 2;
+  Gender gender = 3;
+  int64 birth_date_millis = 4;
+}
+
+message GetProfileRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message SubmitProfileRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  Identity identity = 2;
+}
+
+message ClearProfileRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message GetProfilePhotoRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message GetProfilePhotoResponse {
+  string url = 1;
+}
+
+message CreateProfilePhotoRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message CreateProfilePhotoResponse {
+  string upload_url = 1;
+}
+
+message CompleteProfilePhotoRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message ClearProfilePhotoRequest {
+  int64 account_id = 1[(api.vd) = "len($) > 0"];
+}
+
+message ClearProfilePhotoResponse {}
+
+service apiService {
+  rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/v1/auth/login";}
+
+  rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/v1/car";}
+  rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/v1/car";}
+
+  rpc GetProfile (GetProfileRequest) returns (Profile) {option (api.get) = "/v1/profile";}
+  rpc SubmitProfile (SubmitProfileRequest) returns (Profile) {option (api.post) = "/v1/profile";}
+  rpc ClearProfile (ClearProfileRequest) returns (Profile) {option (api.delete) = "/v1/profile";}
+
+  rpc GetProfilePhoto (GetProfilePhotoRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/v1/profile/photo";}
+  rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/v1/profile/photo";}
+  rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (Identity) {option (api.post) = "/v1/profile/photo/complete";}
+  rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/v1/profile/photo";}
+
+  rpc CreateTrip (CreateTripRequest) returns (TripEntity) {option (api.post) = "/v1/trip";}
+  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/v1/trip:id";}
+  rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/v1/trips";}
+  rpc UpdateTrip (UpdateTripRequest) returns (Trip) {option (api.put) = "/v1/trip/:id";}
+}

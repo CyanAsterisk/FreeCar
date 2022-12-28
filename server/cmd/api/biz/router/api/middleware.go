@@ -56,7 +56,32 @@ func _clearprofileMw() []app.HandlerFunc {
 	return nil
 }
 
+func _tripMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatetripMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _gettripMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
 func _gettripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _authMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _loginMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
@@ -82,31 +107,6 @@ func _photoMw() []app.HandlerFunc {
 }
 
 func _completeprofilephotoMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _tripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _gettripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _updatetripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _authMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _loginMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

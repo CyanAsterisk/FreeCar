@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"errors"
+	"github.com/cloudwego/hertz/pkg/common/utils"
 	"net/http"
 	"strings"
 	"time"
@@ -17,7 +18,7 @@ func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		token := c.Request.Header.Get("authorization")
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, map[string]string{
+			c.JSON(http.StatusUnauthorized, utils.H{
 				"msg": "please sign in",
 			})
 			c.Abort()
@@ -29,14 +30,16 @@ func JWTAuth() app.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				c.JSON(http.StatusUnauthorized, map[string]string{
+				c.JSON(http.StatusUnauthorized, utils.H{
 					"msg": "Authorization has expired",
 				})
 				c.Abort()
 				return
 			}
 
-			c.JSON(http.StatusUnauthorized, "not logged in")
+			c.JSON(http.StatusUnauthorized, utils.H{
+				"msg": "not logged in",
+			})
 			c.Abort()
 			return
 		}

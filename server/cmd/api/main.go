@@ -27,7 +27,7 @@ func main() {
 		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
 	)
-	// use pprof mw
+	// use pprof & tracer mw
 	pprof.Register(h)
 	h.Use(hertztracing.ServerMiddleware(cfg))
 	register(h)

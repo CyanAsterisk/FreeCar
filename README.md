@@ -2,16 +2,16 @@
 
 FreeCar is a A full-stack WeChat applet based on Kitex and Hertz.
 
-**This project is pending**
+This project is pending, looking forward to it.
 
-## Call Relastions
+## Call Relations
 
 ```
-┌────────────────┐    http call    ┌───────────────────────────┐    rpc call     ┌───────────────┐
-│                ├────────────────►│                           ├────────────────►│               │
-│  Hertz-Client  │                 │       Kitex-Client        │                 │  Kitex-Server │
-│                │◄────────────────┤                           │◄────────────────┤               │
-└────────────────┘                 └───────────────────────────┘                 └───────────────┘
+┌────────────────┐    HTTP CALL    ┌──────────────────────────┐    RPC CALL     ┌────────────────┐
+│                ├────────────────►│                          ├────────────────►│                │
+│  Hertz-Client  │                 │       Kitex-Client       │                 │  Kitex-Server  │
+│                │◄────────────────┤                          │◄────────────────┤                │
+└────────────────┘                 └──────────────────────────┘                 └────────────────┘
 ```
 
 ## License

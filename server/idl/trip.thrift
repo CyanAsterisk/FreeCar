@@ -64,8 +64,8 @@ struct UpdateTripRequest {
 }
 
 service TripService {
-  TripEntity CreateTrip(1: CreateTripRequest req) (api.post="/v1/trip")
-  Trip GetTrip(1: GetTripRequest req) (api.get="/v1/trip/:id")
-  GetTripsResponse GetTrips (1: GetTripsRequest req) (api.get="/v1/trips")
-  Trip UpdateTrip(1: UpdateTripRequest req) (api.put="/v1/trip/:id")
+  TripEntity CreateTrip(1: CreateTripRequest req)
+  Trip GetTrip(1: GetTripRequest req)
+  GetTripsResponse GetTrips (1: GetTripsRequest req)
+  Trip UpdateTrip(1: UpdateTripRequest req)
 }

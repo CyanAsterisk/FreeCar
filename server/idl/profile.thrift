@@ -61,12 +61,12 @@ struct ClearProfilePhotoRequest {
 struct ClearProfilePhotoResponse {}
 
 service ProfileService {
-  Profile GetProfile(1: GetProfileRequest req) (api.get="/v1/profile")
-  Profile SubmitProfile(1: SubmitProfileRequest req) (api.post="/v1/profile")
-  Profile ClearProfile(1: ClearProfileRequest req) (api.delete="/v1/profile")
+  Profile GetProfile(1: GetProfileRequest req)
+  Profile SubmitProfile(1: SubmitProfileRequest req)
+  Profile ClearProfile(1: ClearProfileRequest req)
 
-  GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req) (api.get="/v1/profile/photo")
-  CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req) (api.post="/v1/profile/photo")
-  Identity CompleteProfilePhoto(1: CompleteProfilePhotoRequest req) (api.post="/v1/profile/photo/complete")
-  ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req) (api.delete="/v1/profile/photo")
+  GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req)
+  CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req)
+  Identity CompleteProfilePhoto(1: CompleteProfilePhotoRequest req)
+  ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req)
 }

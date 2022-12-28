@@ -14,6 +14,7 @@ require (
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
+	github.com/hertz-contrib/pprof v0.1.0
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
 	github.com/hertz-contrib/websocket v0.0.1
 	github.com/kitex-contrib/obs-opentelemetry v0.1.0

@@ -24,6 +24,7 @@ func main() {
 		tracer,
 		server.WithHostPorts(fmt.Sprintf(":%d", global.ServerConfig.Port)),
 		server.WithRegistry(r, info),
+		server.WithHandleMethodNotAllowed(true),
 	)
 	h.Use(hertztracing.ServerMiddleware(cfg))
 	register(h)

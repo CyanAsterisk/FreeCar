@@ -43,6 +43,7 @@ var (
 	RequestServerFail   = NewErrNo(int64(errno.Err_RequestServerFail), "Request server failed")
 	BindAndValidateFail = NewErrNo(int64(errno.Err_BindAndValidateFail), "Bind and validate failed")
 	ParamErr            = NewErrNo(int64(errno.Err_ParamErr), "Param error")
+	AuthorizeFail       = NewErrNo(int64(errno.Err_AuthorizeFail), "Authorize failed")
 )
 
 // SendResponse pack response

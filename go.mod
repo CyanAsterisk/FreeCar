@@ -12,12 +12,13 @@ require (
 	github.com/docker/docker v20.10.22+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.18.0
-	github.com/hertz-contrib/logger/zap v0.0.0-20221206155315-4315a5ae6b90
+	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
+	github.com/hertz-contrib/pprof v0.1.0
 	github.com/hertz-contrib/registry/consul v0.0.0-20221111034347-1885e5d5c1c9
 	github.com/hertz-contrib/websocket v0.0.1
 	github.com/kitex-contrib/obs-opentelemetry v0.1.0
-	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20221109071748-a433b0b57972
+	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a
 	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/nacos-group/nacos-sdk-go v1.1.3
@@ -25,7 +26,6 @@ require (
 	github.com/streadway/amqp v1.0.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
 	go.mongodb.org/mongo-driver v1.11.1
-	go.uber.org/zap v1.24.0
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.4.4
@@ -121,13 +121,15 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.31.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.9.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.9.0 // indirect
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.9.0 // indirect
 	go.opentelemetry.io/otel/metric v0.31.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.9.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.31.0 // indirect
 	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	go.opentelemetry.io/proto/otlp v0.18.0 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/arch v0.0.0-20220722155209-00200b7164a7 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect

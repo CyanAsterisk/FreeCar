@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/nacos-group/nacos-sdk-go/clients"
@@ -12,10 +13,8 @@ import (
 
 // InitConfig to init viper
 func InitConfig() {
-	configFileName := "./server/cmd/api/config.yaml"
-
 	v := viper.New()
-	v.SetConfigFile(configFileName)
+	v.SetConfigFile(consts.ApiConfigPath)
 	if err := v.ReadInConfig(); err != nil {
 		hlog.Fatalf("read viper config failed: %s", err.Error())
 	}
@@ -36,9 +35,9 @@ func InitConfig() {
 		NamespaceId:         global.NacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "tmp/nacos/log",
-		CacheDir:            "tmp/nacos/cache",
-		LogLevel:            "debug",
+		LogDir:              consts.NacosLogDir,
+		CacheDir:            consts.NacosCacheDir,
+		LogLevel:            consts.NacosLogLevel,
 	}
 
 	configClient, err := clients.CreateConfigClient(map[string]interface{}{

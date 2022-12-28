@@ -46,12 +46,12 @@ message Car {
 }
 
 message CreateCarRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
-  int64 account_id = 2[(api.vd) = "len($) > 0"];
+  int64 account_id = 2;
 }
 
 message LocationStatus{
@@ -87,19 +87,19 @@ message CreateTripRequest {
   Location start = 1;
   string car_id = 2;
   string avatar_url = 3;
-  int64 account_id = 4[(api.vd) = "len($) > 0"];
+  int64 account_id = 4;
 }
 
 
 message GetTripRequest{
   string id = 1[(api.vd) = "len($) > 0"];
-  int64 account_id = 2[(api.vd) = "len($) > 0"];
+  int64 account_id = 2;
 }
 
 
 message GetTripsRequest{
   TripStatus status = 1;
-  int64 account_id = 2[(api.vd) = "len($) > 0"];
+  int64 account_id = 2;
 }
 
 message GetTripsResponse{
@@ -110,7 +110,7 @@ message UpdateTripRequest{
   string id = 1;
   Location current = 2;
   bool end_trip = 3;
-  int64 account_id = 4[(api.vd) = "len($) > 0"];
+  int64 account_id = 4;
 }
 
 enum Gender {
@@ -138,20 +138,20 @@ message Identity {
 }
 
 message GetProfileRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message SubmitProfileRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
   Identity identity = 2;
 }
 
 message ClearProfileRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message GetProfilePhotoRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message GetProfilePhotoResponse {
@@ -159,7 +159,7 @@ message GetProfilePhotoResponse {
 }
 
 message CreateProfilePhotoRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message CreateProfilePhotoResponse {
@@ -167,11 +167,11 @@ message CreateProfilePhotoResponse {
 }
 
 message CompleteProfilePhotoRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message ClearProfilePhotoRequest {
-  int64 account_id = 1[(api.vd) = "len($) > 0"];
+  int64 account_id = 1;
 }
 
 message ClearProfilePhotoResponse {}

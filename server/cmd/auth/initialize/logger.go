@@ -5,17 +5,17 @@ import (
 	"path"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+
 	"github.com/cloudwego/kitex/pkg/klog"
-	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
+	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// InitLogger to init zap
+// InitLogger to init logrus
 func InitLogger() {
 	// Customizable output directory.
-	var logFilePath string
-	dir := "./tmp/klog"
-	logFilePath = dir + "/logs/"
+	logFilePath := consts.KlogFilePath
 	if err := os.MkdirAll(logFilePath, 0o777); err != nil {
 		panic(err)
 	}
@@ -29,7 +29,7 @@ func InitLogger() {
 		}
 	}
 
-	logger := kitexzap.NewLogger()
+	logger := kitexlogrus.NewLogger()
 	// Provides compression and deletion
 	lumberjackLogger := &lumberjack.Logger{
 		Filename:   fileName,

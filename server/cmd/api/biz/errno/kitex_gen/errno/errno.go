@@ -17,6 +17,7 @@ const (
 	Err_RequestServerFail   Err = 10003
 	Err_BindAndValidateFail Err = 10004
 	Err_ParamErr            Err = 10005
+	Err_AuthorizeFail       Err = 10006
 )
 
 func (p Err) String() string {
@@ -33,6 +34,8 @@ func (p Err) String() string {
 		return "BindAndValidateFail"
 	case Err_ParamErr:
 		return "ParamErr"
+	case Err_AuthorizeFail:
+		return "AuthorizeFail"
 	}
 	return "<UNSET>"
 }
@@ -51,6 +54,8 @@ func ErrFromString(s string) (Err, error) {
 		return Err_BindAndValidateFail, nil
 	case "ParamErr":
 		return Err_ParamErr, nil
+	case "AuthorizeFail":
+		return Err_AuthorizeFail, nil
 	}
 	return Err(0), fmt.Errorf("not a valid Err string")
 }

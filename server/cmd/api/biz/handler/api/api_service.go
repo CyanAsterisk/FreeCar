@@ -14,6 +14,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgrijalva/jwt-go"
@@ -23,14 +24,14 @@ import (
 // @router /v1/auth/login [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req auth.LoginRequest
+	var req api.LoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
 	// rpc to get accountID
-	resp, err := global.AuthClient.Login(ctx, &req)
+	resp, err := global.AuthClient.Login(ctx, &auth.LoginRequest{Code: req.Code})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -41,8 +42,8 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		ID: resp.AccountID,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
-			ExpiresAt: time.Now().Unix() + 60*60*24*30,
-			Issuer:    "FreeCar",
+			ExpiresAt: time.Now().Unix() + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
 		},
 	}
 	token, err := j.CreateToken(claims)
@@ -53,7 +54,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	// return token
 	errno.SendResponse(c, errno.Success, api.LoginResponse{
 		Token:     token,
-		ExpiredAt: (time.Now().Unix() + 60*60*24*30) * 1000,
+		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
 	})
 }
 
@@ -61,14 +62,14 @@ func Login(ctx context.Context, c *app.RequestContext) {
 // @router /v1/car [POST]
 func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req car.CreateCarRequest
-	aid, flag := c.Get("accountID")
+	var req api.CreateCarRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.CarClient.CreateCar(ctx, &req)
+	resp, err := global.CarClient.CreateCar(ctx, &car.CreateCarRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 	}
@@ -79,19 +80,22 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 // @router /v1/car [GET]
 func GetCar(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req car.GetCarRequest
+	var req api.GetCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.CarClient.GetCar(ctx, &req)
+	resp, err := global.CarClient.GetCar(ctx, &car.GetCarRequest{
+		AccountId: req.AccountId,
+		Id:        req.Id,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 	}
@@ -102,13 +106,13 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile [GET]
 func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.GetProfileRequest
-	aid, flag := c.Get("accountID")
+	var req api.GetProfileRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
-	resp, err := global.ProfileClient.GetProfile(ctx, &req)
+	resp, err := global.ProfileClient.GetProfile(ctx, &profile.GetProfileRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -121,19 +125,27 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile [POST]
 func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.SubmitProfileRequest
+	var req api.SubmitProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.SubmitProfile(ctx, &req)
+	resp, err := global.ProfileClient.SubmitProfile(ctx, &profile.SubmitProfileRequest{
+		AccountId: req.AccountId,
+		Identity: &profile.Identity{
+			LicNumber:       req.Identity.LicNumber,
+			Name:            req.Identity.Name,
+			Gender:          profile.Gender(req.Identity.Gender),
+			BirthDateMillis: req.Identity.BirthDateMillis,
+		},
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -146,15 +158,15 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile [DELETE]
 func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.ClearProfileRequest
+	var req api.ClearProfileRequest
 	err = c.BindAndValidate(&req)
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.ClearProfile(ctx, &req)
+	resp, err := global.ProfileClient.ClearProfile(ctx, &profile.ClearProfileRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -167,14 +179,14 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile/photo [GET]
 func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.GetProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	var req api.GetProfilePhotoRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &req)
+	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &profile.GetProfilePhotoRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -187,14 +199,14 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile/photo [POST]
 func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.CreateProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	var req api.CreateProfilePhotoRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &req)
+	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &profile.CreateProfilePhotoRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -207,14 +219,14 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile/photo/complete [POST]
 func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.CompleteProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	var req api.CompleteProfilePhotoRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &req)
+	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &profile.CompleteProfilePhotoRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -227,14 +239,14 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 // @router /v1/profile/photo [DELETE]
 func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req profile.ClearProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	var req api.ClearProfilePhotoRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &req)
+	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &profile.ClearProfilePhotoRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -247,19 +259,27 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 // @router /v1/trip [POST]
 func CreateTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req trip.CreateTripRequest
+	var req api.CreateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.TripClient.CreateTrip(ctx, &req)
+	resp, err := global.TripClient.CreateTrip(ctx, &trip.CreateTripRequest{
+		Start: &trip.Location{
+			Latitude:  req.Start.Latitude,
+			Longitude: req.Start.Longitude,
+		},
+		CarId:     req.CarId,
+		AvatarUrl: req.AvatarUrl,
+		AccountId: req.AccountId,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -272,15 +292,18 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 // @router /v1/trip/:id [GET]
 func GetTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req trip.GetTripRequest
-	aid, flag := c.Get("accountID")
+	var req api.GetTripRequest
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 	req.Id = c.Param("id")
 
-	resp, err := global.TripClient.GetTrip(ctx, &req)
+	resp, err := global.TripClient.GetTrip(ctx, &trip.GetTripRequest{
+		Id:        req.Id,
+		AccountId: req.AccountId,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -293,18 +316,21 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 // @router /v1/trips [GET]
 func GetTrips(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req trip.GetTripsRequest
+	var req api.GetTripsRequest
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
 
-	resp, err := global.TripClient.GetTrips(ctx, &req)
+	resp, err := global.TripClient.GetTrips(ctx, &trip.GetTripsRequest{
+		Status:    trip.TripStatus(req.Status),
+		AccountId: req.AccountId,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -317,20 +343,28 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 // @router /v1/trip/:id [PUT]
 func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req trip.UpdateTripRequest
+	var req api.UpdateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
-	req.Id = c.Param("id")
+	req.Id = c.Param(consts.ID)
 
-	resp, err := global.TripClient.UpdateTrip(ctx, &req)
+	resp, err := global.TripClient.UpdateTrip(ctx, &trip.UpdateTripRequest{
+		Id: req.Id,
+		Current: &trip.Location{
+			Latitude:  req.Current.Latitude,
+			Longitude: req.Current.Longitude,
+		},
+		EndTrip:   req.EndTrip,
+		AccountId: req.AccountId,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return

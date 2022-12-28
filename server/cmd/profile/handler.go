@@ -13,7 +13,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.uber.org/zap"
 )
 
 // ProfileServiceImpl implements the last service interface defined in the IDL.
@@ -143,7 +142,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return nil, status.Err(codes.Aborted, "")
 	}
 	// TODO: Auto get license info
-	klog.Info("got profile photo", zap.Int("size", len(br.Data)))
+	klog.Info("got profile photo", "size", len(br.Data))
 	return &profile.Identity{
 		LicNumber:       pr.Profile.Identity.LicNumber,
 		Name:            pr.Profile.Identity.Name,

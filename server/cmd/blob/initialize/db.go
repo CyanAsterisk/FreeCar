@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
+
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -12,16 +12,16 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"gorm.io/plugin/opentelemetry/logging/logrus"
 	"gorm.io/plugin/opentelemetry/tracing"
 )
 
 // InitDB to init database
 func InitDB() {
 	c := global.ServerConfig.MysqlInfo
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.User, c.Password, c.Host, c.Port, c.Name)
+	dsn := fmt.Sprintf(consts.MySqlDSN, c.User, c.Password, c.Host, c.Port, c.Name)
 	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logrus.NewWriter(), // io writer
 		logger.Config{
 			SlowThreshold: time.Second,   // Slow SQL Threshold
 			LogLevel:      logger.Silent, // Log level

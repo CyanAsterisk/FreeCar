@@ -3,17 +3,17 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/cloudwego/kitex/pkg/klog"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq/amqpclt"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/streadway/amqp"
 )
 
 // InitMq to init rabbitMQ
 func InitMq() {
 	c := global.ServerConfig.RabbitMqInfo
-	amqpConn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%d/", c.User, c.Password, c.Host, c.Port))
+	amqpConn, err := amqp.Dial(fmt.Sprintf(consts.RabbitMqURI, c.User, c.Password, c.Host, c.Port))
 	if err != nil {
 		klog.Fatal("cannot dial amqp", err)
 	}

@@ -3,32 +3,13 @@
 package Api
 
 import (
-	"context"
-	"fmt"
-
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/hertz/pkg/common/utils"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 func rootMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		// use recovery mw
-		recovery.Recovery(recovery.WithRecoveryHandler(
-			func(ctx context.Context, c *app.RequestContext, err interface{}, stack []byte) {
-				hlog.SystemLogger().CtxErrorf(ctx, "[Recovery] err=%v\nstack=%s", err, stack)
-				c.JSON(consts.StatusInternalServerError, utils.H{
-					"code":    errno.BadRequest,
-					"message": fmt.Sprintf("[Recovery] err=%v\nstack=%s", err, stack),
-				})
-			},
-		)),
-		middleware.JWTAuth(),
-	}
+	// your code...
+	return nil
 }
 
 func _v1Mw() []app.HandlerFunc {
@@ -37,43 +18,59 @@ func _v1Mw() []app.HandlerFunc {
 }
 
 func _createcarMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _getcarMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _submitprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _clearprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _tripMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _updatetripMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _gettripMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _gettripsMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _authMw() []app.HandlerFunc {
@@ -87,8 +84,10 @@ func _loginMw() []app.HandlerFunc {
 }
 
 func _profileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _createprofilephotoMw() []app.HandlerFunc {
@@ -102,8 +101,10 @@ func _clearprofilephotoMw() []app.HandlerFunc {
 }
 
 func _photoMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
 }
 
 func _completeprofilephotoMw() []app.HandlerFunc {

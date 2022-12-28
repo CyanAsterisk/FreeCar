@@ -3,6 +3,8 @@ package initialize
 import (
 	"fmt"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -18,9 +20,9 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 		global.ServerConfig.ConsulInfo.Host,
 		global.ServerConfig.ConsulInfo.Port),
 		consul.WithCheck(&api.AgentServiceCheck{
-			Interval:                       "7s",
-			Timeout:                        "5s",
-			DeregisterCriticalServiceAfter: "15s",
+			Interval:                       consts.ConsulCheckInterval,
+			Timeout:                        consts.ConsulCheckTimeout,
+			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
 		}))
 	if err != nil {
 		klog.Fatalf("new consul register failed: %s", err.Error())
@@ -33,7 +35,7 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 	}
 	info := &registry.Info{
 		ServiceName: global.ServerConfig.Name,
-		Addr:        utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", global.ServerConfig.Host, Port)),
+		Addr:        utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", global.ServerConfig.Host, Port)),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},

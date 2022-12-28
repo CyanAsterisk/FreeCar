@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	hertzzap "github.com/hertz-contrib/logger/zap"
+	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// InitLogger to init zap
+// InitLogger to init logrus
 func InitLogger() {
 	// Customizable output directory.
 	var logFilePath string
@@ -29,7 +29,7 @@ func InitLogger() {
 		}
 	}
 
-	logger := hertzzap.NewLogger()
+	logger := hertzlogrus.NewLogger()
 	// Provides compression and deletion
 	lumberjackLogger := &lumberjack.Logger{
 		Filename:   fileName,

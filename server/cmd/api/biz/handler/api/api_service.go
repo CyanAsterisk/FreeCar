@@ -4,6 +4,7 @@ package api
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
@@ -42,7 +43,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
 			ExpiresAt: time.Now().Unix() + 60*60*24*30,
-			Issuer:    "FreeCar",
+			Issuer:    consts.JWTIssuer,
 		},
 	}
 	token, err := j.CreateToken(claims)

@@ -3,23 +3,28 @@ package middleware
 import (
 	"context"
 	"errors"
-	"net/http"
 	"strings"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgrijalva/jwt-go"
 )
 
+var (
+	TokenExpired     = errors.New("token is expired")
+	TokenNotValidYet = errors.New("token not active yet")
+	TokenMalformed   = errors.New("that's not even a token")
+	TokenInvalid     = errors.New("couldn't handle this token")
+)
+
 func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		token := c.Request.Header.Get("authorization")
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, map[string]string{
-				"msg": "please sign in",
-			})
+			errno.SendResponse(c, errno.AuthorizeFail, nil)
 			c.Abort()
 			return
 		}
@@ -29,14 +34,11 @@ func JWTAuth() app.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				c.JSON(http.StatusUnauthorized, map[string]string{
-					"msg": "Authorization has expired",
-				})
+				errno.SendResponse(c, errno.AuthorizeFail, nil)
 				c.Abort()
 				return
 			}
-
-			c.JSON(http.StatusUnauthorized, "not logged in")
+			errno.SendResponse(c, errno.AuthorizeFail, nil)
 			c.Abort()
 			return
 		}
@@ -49,13 +51,6 @@ func JWTAuth() app.HandlerFunc {
 type JWT struct {
 	SigningKey []byte
 }
-
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that's not even a token")
-	TokenInvalid     = errors.New("couldn't handle this token")
-)
 
 func NewJWT() *JWT {
 	return &JWT{

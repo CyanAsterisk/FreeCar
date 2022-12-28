@@ -3,7 +3,11 @@
 package main
 
 import (
+	"context"
+
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	handler "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/handler"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -12,4 +16,10 @@ func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
 
 	// your code ...
+	r.NoRoute(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 404
+		errno.SendResponse(c, errno.BadRequest, nil)
+	})
+	r.NoMethod(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 405
+		errno.SendResponse(c, errno.BadRequest, nil)
+	})
 }

@@ -2,8 +2,6 @@ package initialize
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
@@ -12,6 +10,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"gorm.io/plugin/opentelemetry/logging/logrus"
 	"gorm.io/plugin/opentelemetry/tracing"
 )
 
@@ -21,7 +20,7 @@ func InitDB() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
 	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logrus.NewWriter(), // io writer
 		logger.Config{
 			SlowThreshold: time.Second,   // Slow SQL Threshold
 			LogLevel:      logger.Silent, // Log level

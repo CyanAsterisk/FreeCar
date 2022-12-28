@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
+	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// InitLogger to init zap
+// InitLogger to init logrus
 func InitLogger() {
 	// Customizable output directory.
 	var logFilePath string
@@ -29,7 +29,7 @@ func InitLogger() {
 		}
 	}
 
-	logger := kitexzap.NewLogger()
+	logger := kitexlogrus.NewLogger()
 	// Provides compression and deletion
 	lumberjackLogger := &lumberjack.Logger{
 		Filename:   fileName,

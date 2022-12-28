@@ -12,7 +12,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
-	"go.uber.org/zap"
 )
 
 // TripServiceImpl implements the last service interface defined in the IDL.
@@ -72,7 +71,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 		Current:    ls,
 	})
 	if err != nil {
-		klog.Warn("cannot create trip", zap.Error(err))
+		klog.Warn("cannot create trip", err)
 		return nil, status.Err(codes.AlreadyExists, "")
 	}
 
@@ -80,7 +79,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	go func() {
 		err := s.CarManager.Unlock(context.Background(), carID, aid, objid.ToTripID(tr.ID), req.AvatarUrl)
 		if err != nil {
-			klog.Error("cannot unlock car", zap.Error(err))
+			klog.Error("cannot unlock car", err)
 		}
 	}()
 
@@ -105,7 +104,7 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 	aid := id.AccountID(req.AccountId)
 	trips, err := dao.GetTrips(ctx, aid, req.Status)
 	if err != nil {
-		klog.Error("cannot get trips", zap.Error(err))
+		klog.Error("cannot get trips", err)
 		return nil, status.Err(codes.Internal, "")
 	}
 	res := &trip.GetTripsResponse{}
@@ -132,7 +131,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 	}
 
 	if tr.Trip.Current == nil {
-		klog.Error("trip without current set", zap.String("id", tid.String()))
+		klog.Error("trip without current set", "id", tid.String())
 		return nil, status.Err(codes.Internal, "")
 	}
 
@@ -174,7 +173,7 @@ func (s *TripServiceImpl) calcCurrentStatus(c context.Context, last *trip.Locati
 	// get start position
 	poi, err := s.POIManager.Resolve(c, cur)
 	if err != nil {
-		klog.Info("cannot resolve poi", zap.Stringer("location", cur), zap.Error(err))
+		klog.Info("cannot resolve poi", "location", cur, err)
 	}
 	return &trip.LocationStatus{
 		Location:     cur,

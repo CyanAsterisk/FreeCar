@@ -8,7 +8,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/websocket"
-	"go.uber.org/zap"
 )
 
 var upgrader = websocket.HertzUpgrader{}
@@ -20,7 +19,7 @@ func Handler(sub mq.Subscriber) app.HandlerFunc {
 			msgs, cleanUp, err := sub.Subscribe(context.Background())
 			defer cleanUp()
 			if err != nil {
-				klog.Error("cannot subscribe", zap.Error(err))
+				klog.Error("cannot subscribe", err)
 				ctx.String(http.StatusInternalServerError, "")
 				return
 			}
@@ -33,7 +32,7 @@ func Handler(sub mq.Subscriber) app.HandlerFunc {
 						if !websocket.IsCloseError(err,
 							websocket.CloseGoingAway,
 							websocket.CloseNormalClosure) {
-							klog.Warn("unexpected read error", zap.Error(err))
+							klog.Warn("unexpected read error", err)
 						}
 						done <- struct{}{}
 						break

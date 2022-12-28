@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/mysql"
@@ -17,8 +19,7 @@ import (
 // InitDB to init database
 func InitDB() {
 	c := global.ServerConfig.MysqlInfo
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.User, c.Password, c.Host, c.Port, c.Name)
+	dsn := fmt.Sprintf(consts.MySqlDSN, c.User, c.Password, c.Host, c.Port, c.Name)
 	newLogger := logger.New(
 		logrus.NewWriter(), // io writer
 		logger.Config{

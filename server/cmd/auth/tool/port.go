@@ -1,15 +1,19 @@
 package tool
 
-import "net"
+import (
+	"net"
+
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+)
 
 // GetFreePort get a free port.
 func GetFreePort() (int, error) {
-	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	addr, err := net.ResolveTCPAddr(consts.TCP, "localhost:0")
 	if err != nil {
 		return 0, err
 	}
 
-	l, err := net.ListenTCP("tcp", addr)
+	l, err := net.ListenTCP(consts.TCP, addr)
 	if err != nil {
 		return 0, err
 	}

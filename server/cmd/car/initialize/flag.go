@@ -3,14 +3,16 @@ package initialize
 import (
 	"flag"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 // InitFlag to init flag
 func InitFlag() (string, int) {
-	IP := flag.String("ip", "0.0.0.0", "address")
-	Port := flag.Int("port", 0, "post")
+	IP := flag.String(consts.IPFlagName, consts.IPFlagValue, consts.IPFlagUsage)
+	Port := flag.Int(consts.PortFlagName, 0, consts.PortFlagUsage)
 	// Parsing flags and if Port is 0 , then will automatically get an empty Port.
 	flag.Parse()
 	if *Port == 0 {

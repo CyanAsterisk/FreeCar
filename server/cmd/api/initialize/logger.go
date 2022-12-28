@@ -5,6 +5,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -13,9 +14,7 @@ import (
 // InitLogger to init logrus
 func InitLogger() {
 	// Customizable output directory.
-	var logFilePath string
-	dir := "./tmp/hlog"
-	logFilePath = dir + "/logs/"
+	logFilePath := consts.HlogFilePath
 	if err := os.MkdirAll(logFilePath, 0o777); err != nil {
 		panic(err)
 	}

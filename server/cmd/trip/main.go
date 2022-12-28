@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/profile"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -46,7 +47,7 @@ func main() {
 	impl.POIManager = &poi.Manager{}
 	// Create new server.
 	srv := trip.NewServer(impl,
-		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf(" %s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

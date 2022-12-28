@@ -4,7 +4,6 @@ package api
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
@@ -15,6 +14,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/dgrijalva/jwt-go"
@@ -42,7 +42,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		ID: resp.AccountID,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
-			ExpiresAt: time.Now().Unix() + 60*60*24*30,
+			ExpiresAt: time.Now().Unix() + consts.ThirtyDays,
 			Issuer:    consts.JWTIssuer,
 		},
 	}
@@ -54,7 +54,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	// return token
 	errno.SendResponse(c, errno.Success, api.LoginResponse{
 		Token:     token,
-		ExpiredAt: (time.Now().Unix() + 60*60*24*30) * 1000,
+		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
 	})
 }
 
@@ -63,7 +63,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req car.CreateCarRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -86,7 +86,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -104,7 +104,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.GetProfileRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -128,7 +128,7 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -149,7 +149,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.ClearProfileRequest
 	err = c.BindAndValidate(&req)
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -169,7 +169,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.GetProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -189,7 +189,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.CreateProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -209,7 +209,7 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.CompleteProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -229,7 +229,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req profile.ClearProfilePhotoRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -254,7 +254,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -274,7 +274,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 func GetTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req trip.GetTripRequest
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -299,7 +299,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
@@ -324,12 +324,12 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return
 	}
-	aid, flag := c.Get("accountID")
+	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 	}
 	req.AccountId = aid.(int64)
-	req.Id = c.Param("id")
+	req.Id = c.Param(consts.ID)
 
 	resp, err := global.TripClient.UpdateTrip(ctx, &req)
 	if err != nil {

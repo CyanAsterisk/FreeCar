@@ -7,6 +7,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/initialize"
 	profile "github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -34,7 +35,7 @@ func main() {
 
 	// Create new server.
 	srv := profile.NewServer(new(ProfileServiceImpl),
-		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf(" %s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

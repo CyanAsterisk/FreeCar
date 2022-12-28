@@ -267,7 +267,7 @@ func (p *LoginResponse) BLength() int {
 
 func (p *LoginResponse) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "accountID", thrift.I64, 1)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], consts.AccountID, thrift.I64, 1)
 	offset += bthrift.Binary.WriteI64(buf[offset:], p.AccountID)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
@@ -276,7 +276,7 @@ func (p *LoginResponse) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryW
 
 func (p *LoginResponse) field1Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("accountID", thrift.I64, 1)
+	l += bthrift.Binary.FieldBeginLength(consts.AccountID, thrift.I64, 1)
 	l += bthrift.Binary.I64Length(p.AccountID)
 
 	l += bthrift.Binary.FieldEndLength()

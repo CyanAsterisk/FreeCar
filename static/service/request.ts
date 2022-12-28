@@ -1,4 +1,5 @@
 import camelcaseKeys = require("camelcase-keys")
+const decamelizeKeysDeep = require('decamelize-keys-deep');
 import { api } from "./codegen/api_pb"
 
 export namespace FreeCar {
@@ -81,7 +82,7 @@ export namespace FreeCar {
             wx.request({
                 url: serverAddr + o.path,
                 method: o.method,
-                data: o.data,
+                data:decamelizeKeysDeep(o.data),
                 header,
                 success: res => {
                     if (res.statusCode === 401) {

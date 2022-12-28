@@ -56,13 +56,19 @@ Page({
                     console.error('no carID specified')
                     return
                 }
-                let trip: api.ITripEntity
+                let trip: api.IETripEntity
                 try {
+                   
                     trip =  await TripService.createTrip({
-                        start: loc,
-                        carId: this.carID
+                        start: {
+                            latitude : loc.latitude,
+                            longitude : loc.longitude
+                        },
+                        carId: this.carID,
+                        accountId: 1024,
+                        avatarUrl: "/testavar"
                     })
-                    if (!trip.id) {
+                    if (!trip.data!.id) {
                         console.error('no tripID in response', trip)
                         return
                     }
@@ -81,7 +87,7 @@ Page({
                 setTimeout(() => {
                     wx.redirectTo({
                         url: routing.driving({
-                            trip_id: trip.id!,
+                            trip_id: trip.data!.id!,
                         }),
                         complete: () => {
                             wx.hideLoading()

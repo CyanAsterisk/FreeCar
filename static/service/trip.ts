@@ -2,12 +2,12 @@ import { api } from "./codegen/api_pb"
 import { FreeCar } from "./request";
 
 export namespace TripService{
-    export function createTrip(req:api.ICreateTripRequest):Promise<api.ITripEntity>{
+    export function createTrip(req:api.ICreateTripRequest):Promise<api.IETripEntity>{
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/trip',
             data: req,
-            respMarshaller: api.TripEntity.fromObject,
+            respMarshaller: api.ETripEntity.fromObject,
         })
     }
 

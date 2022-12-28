@@ -1,5 +1,5 @@
 import { IAppOption } from "../../appoption"
-import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { api } from "../../service/codegen/api_pb"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -56,7 +56,7 @@ Page({
                     console.error('no carID specified')
                     return
                 }
-                let trip: rental.v1.ITripEntity
+                let trip: api.ITripEntity
                 try {
                     trip =  await TripService.createTrip({
                         start: loc,

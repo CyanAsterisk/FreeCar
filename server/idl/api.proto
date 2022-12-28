@@ -15,9 +15,21 @@ message LoginResponse {
   int64 expired_at = 2[(api.body)="expired_at"];
 }
 
+message ELoginResponse{
+  int32 code = 1;
+  LoginResponse data = 2;
+  string message = 3;
+}
+
 message CarEntity {
   string id = 1;
   Car car = 2;
+}
+
+message ECarEntity{
+  int32 code = 1;
+  CarEntity data = 2;
+  string message = 3;
 }
 
 enum CarStatus {
@@ -43,6 +55,11 @@ message Car {
   Driver driver = 2;
   Location position = 3;
   string trip_id = 4[(api.body)="trip_id"];
+}
+message ECar{
+  int32 code = 1;
+  Car data = 2;
+  string message = 3;
 }
 
 message CreateCarRequest {
@@ -73,6 +90,12 @@ message TripEntity{
   Trip trip = 2;
 }
 
+message ETripEntity{
+  int32 code = 1;
+  TripEntity data = 2;
+  string message = 3;
+}
+
 message Trip{
   int64 account_id = 1;
   string car_id = 2[(api.body)="car_id"];
@@ -81,6 +104,12 @@ message Trip{
   LocationStatus end = 5;
   TripStatus status = 6;
   string identity_id = 7[(api.body)="identity_id"];
+}
+
+message ETrip{
+  int32 code = 1;
+  Trip data = 2;
+  string message = 3;
 }
 
 message CreateTripRequest {
@@ -104,6 +133,13 @@ message GetTripsRequest{
 
 message GetTripsResponse{
   repeated TripEntity trips = 1;
+}
+
+
+message EGetTripsResponse{
+  int32 code = 1;
+  GetTripsResponse data = 2;
+  string message = 3;
 }
 
 message UpdateTripRequest{
@@ -130,6 +166,12 @@ message Profile {
   IdentityStatus identity_status = 2[(api.body)="identity_status"];
 }
 
+message EProfile{
+  int32 code = 1;
+  Profile data = 2;
+  string message = 3;
+}
+
 message Identity {
   string lic_number = 1[(api.body)="lic_number"];
   string name = 2;
@@ -137,9 +179,16 @@ message Identity {
   int64 birth_date_millis = 4[(api.body)="birth_date_millis"];
 }
 
+message EIdentity {
+  int32 code = 1;
+  Identity data = 2;
+  string message = 3;
+}
+
 message GetProfileRequest {
   int64 account_id = 1;
 }
+
 
 message SubmitProfileRequest {
   int64 account_id = 1;
@@ -158,12 +207,25 @@ message GetProfilePhotoResponse {
   string url = 1;
 }
 
+message EGetProfilePhotoResponse {
+  int32 code = 1;
+  GetProfilePhotoResponse data = 2;
+  string message = 3;
+}
+
+
 message CreateProfilePhotoRequest {
   int64 account_id = 1;
 }
 
 message CreateProfilePhotoResponse {
   string upload_url = 1[(api.body)="upload_url"];
+}
+
+message ECreateProfilePhotoResponse {
+  int32 code = 1;
+  CreateProfilePhotoResponse data = 2;
+  string message = 3;
 }
 
 message CompleteProfilePhotoRequest {
@@ -175,6 +237,12 @@ message ClearProfilePhotoRequest {
 }
 
 message ClearProfilePhotoResponse {}
+
+message EClearProfilePhotoResponse {
+  int32 code = 1;
+  ClearProfilePhotoResponse data = 2;
+  string message = 3;
+}
 
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/v1/auth/login";}

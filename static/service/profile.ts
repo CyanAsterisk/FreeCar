@@ -1,61 +1,61 @@
-import { rental } from "./proto_gen/rental/rental_pb";
+import { api } from "./codegen/api_pb";
 import { FreeCar } from "./request";
 
 export namespace ProfileService {
-    export function getProfile(): Promise<rental.v1.IProfile> {
+    export function getProfile(): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path: '/v1/profile',
-            respMarshaller: rental.v1.Profile.fromObject,
+            respMarshaller: api.EProfile.fromObject,
         })
     }
 
-    export function submitProfile(req: rental.v1.IIdentity): Promise<rental.v1.IProfile> {
+    export function submitProfile(req: api.IIdentity): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/profile',
             data: req,
-            respMarshaller: rental.v1.Profile.fromObject,
+            respMarshaller: api.EProfile.fromObject,
         })
     }
 
-    export function clearProfile(): Promise<rental.v1.IProfile> {
+    export function clearProfile(): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'DELETE',
             path: '/v1/profile',
-            respMarshaller: rental.v1.Profile.fromObject,
+            respMarshaller: api.EProfile.fromObject,
         })
     }
 
-    export function getProfilePhoto(): Promise<rental.v1.IGetProfilePhotoResponse> {
+    export function getProfilePhoto(): Promise<api.IEGetProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path: '/v1/profile/photo',
-            respMarshaller: rental.v1.GetProfilePhotoResponse.fromObject,
+            respMarshaller: api.EGetProfilePhotoResponse.fromObject,
         })
     }
 
-    export function createProfilePhoto(): Promise<rental.v1.ICreateProfilePhotoResponse> {
+    export function createProfilePhoto(): Promise<api.IECreateProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/profile/photo',
-            respMarshaller: rental.v1.CreateProfilePhotoResponse.fromObject,
+            respMarshaller: api.ECreateProfilePhotoResponse.fromObject,
         })
     }
 
-    export function completeProfilePhoto(): Promise<rental.v1.IIdentity> {
+    export function completeProfilePhoto(): Promise<api.IEIdentity> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/profile/photo/complete',
-            respMarshaller: rental.v1.Identity.fromObject,
+            respMarshaller: api.EIdentity.fromObject,
         })
     }
 
-    export function clearProfilePhoto(): Promise<rental.v1.IClearProfilePhotoResponse> {
+    export function clearProfilePhoto(): Promise<api.IEClearProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'DELETE',
             path: '/v1/profile/photo',
-            respMarshaller: rental.v1.ClearProfilePhotoResponse.fromObject,
+            respMarshaller: api.EClearProfilePhotoResponse.fromObject,
         })
     }
 }

@@ -1,7 +1,7 @@
 import { IAppOption } from "../../appoption"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
-import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { api } from "../../service/codegen/api_pb"
 import { ProfileService } from "../../service/profile"
 import { CarService } from "../../service/car"
 
@@ -78,7 +78,7 @@ Page({
     },
 
     async onScanTap(){
-      const trips = await TripService.getTrips(rental.v1.TripStatus.IN_PROGRESS)
+      const trips = await TripService.getTrips(api.TripStatus.IN_PROGRESS)
       if ((trips.trips?.length || 0) > 0) {
         await this.selectComponent('#tripModal').showModal()
         wx.navigateTo({
@@ -91,12 +91,12 @@ Page({
       wx.scanCode({
         success: async()=>{
            //TODO: get car if from scan result
-           const carID = '62eb5eb6dda865d680c11577'
+           const carID = '63a450251f0255674d3c35bd'
            const lockURL = routing.lock({
              car_id:carID
            })
           const prof = await ProfileService.getProfile()
-          if (prof.identityStatus === rental.v1.IdentityStatus.VERIFIED){
+          if (prof.data!.identityStatus === api.IdentityStatus.VERIFIED){
             wx.navigateTo({
               url:lockURL,
             })

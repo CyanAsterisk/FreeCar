@@ -1,5 +1,5 @@
 import camelcaseKeys = require("camelcase-keys")
-import { auth } from "./api/codegen/auth/auth_pb"
+import { api } from "./codegen/api_pb"
 
 export namespace FreeCar {
     export const serverAddr = 'http://localhost:9900'
@@ -50,19 +50,18 @@ export namespace FreeCar {
             return
         }
         const wxResp = await wxLogin()
-        const resp = await sendRequest<auth.v1.ILoginRequest, auth.v1.ILoginResponse> ({
+        const resp = await sendRequest<api.ILoginRequest, api.IELoginResponse> ({
             method: 'POST',
             path: '/v1/auth/login',
             data: {
                 code: wxResp.code,
             },
-            respMarshaller: auth.v1.LoginResponse.fromObject,
+            respMarshaller: api.ELoginResponse.fromObject
         }, {
             attachAuthHeader: false,
             retryOnAuthError: false,
         })
-
-        if (resp.data){
+        if(resp.data){
             authData.token = resp.data.token!
             authData.expiresAt = resp.data.expiredAt!
         }

@@ -1,4 +1,4 @@
-import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { api } from "../../service/codegen/api_pb"
 import { TripService } from "../../service/trip"
 import { formatDuration, formatFee } from "../../utils/format"
 import { routing } from "../../utils/routing"
@@ -66,13 +66,13 @@ Page({
 
     async setupTimer(tripID: string) {
         const trip = await TripService.getTrip(tripID)
-        if (trip.status !== rental.v1.TripStatus.IN_PROGRESS) {
+        if (trip.status !== api.TripStatus.IN_PROGRESS) {
             console.error('trip not in progress')
             return
         }
         let secSinceLastUpdate = 0
         let lastUpdateDurationSec = trip.current!.timestampSec! - trip.start!.timestampSec!
-        const toLocation = (trip: rental.v1.ITrip) => ({
+        const toLocation = (trip: api.ITrip) => ({
             latitude: trip.current?.location?.latitude || initialLat,
             longitude: trip.current?.location?.longitude || initialLng,
         })

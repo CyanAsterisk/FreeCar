@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/nacos-group/nacos-sdk-go/clients"
@@ -36,9 +37,9 @@ func InitConfig() {
 		NamespaceId:         global.NacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "tmp/nacos/log",
-		CacheDir:            "tmp/nacos/cache",
-		LogLevel:            "debug",
+		LogDir:              consts.NacosLogDir,
+		CacheDir:            consts.NacosCacheDir,
+		LogLevel:            consts.NacosLogLevel,
 	}
 
 	configClient, err := clients.CreateConfigClient(map[string]interface{}{

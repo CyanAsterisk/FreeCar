@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/sim"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	hzserver "github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -41,7 +42,7 @@ func main() {
 
 	// Create new server.
 	srv := car.NewServer(new(CarServiceImpl),
-		server.WithServiceAddr(utils.NewNetAddr("tcp", fmt.Sprintf("%s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf(" %s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

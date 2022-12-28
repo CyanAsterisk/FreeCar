@@ -8,4 +8,5 @@ enum Err
 	RequestServerFail     = 10003,
 	BindAndValidateFail   = 10004,
 	ParamErr              = 10005,
+	AuthorizeFail         = 10006,
 }

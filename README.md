@@ -9,7 +9,7 @@ This project is pending, looking forward to it.
 ```
 ┌────────────────┐    HTTP CALL    ┌──────────────────────────┐    RPC CALL     ┌────────────────┐
 │                ├────────────────►│                          ├────────────────►│                │
-│  Hertz-Client  │                 │       Kitex-Client       │                 │  Kitex-Server  │
+│  Hertz-Server  │                 │       Kitex-Client       │                 │  Kitex-Server  │
 │                │◄────────────────┤                          │◄────────────────┤                │
 └────────────────┘                 └──────────────────────────┘                 └────────────────┘
 ```

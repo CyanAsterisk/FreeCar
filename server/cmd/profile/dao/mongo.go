@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
@@ -15,7 +13,7 @@ import (
 )
 
 const (
-	accountIDField      = consts.AccountID
+	accountIDField      = "accountid"
 	profileField        = "profile"
 	identityStatusField = profileField + ".identitystatus"
 	photoBlobIDField    = "photoblobid"
@@ -23,7 +21,7 @@ const (
 
 // ProfileRecord defines the profile record in db.
 type ProfileRecord struct {
-	AccountID   int64            `bson:"accountID"`
+	AccountID   int64            `bson:"accountid"`
 	Profile     *profile.Profile `bson:"profile"`
 	PhotoBlobID int64            `bson:"photoblobid"`
 }

@@ -170,7 +170,7 @@ func (p *LoginRequest) Field1DeepEqual(src string) bool {
 }
 
 type LoginResponse struct {
-	AccountID int64 `thrift:"accountID,1" json:consts.AccountID`
+	AccountID int64 `thrift:"accountID,1" json:"accountID"`
 }
 
 func NewLoginResponse() *LoginResponse {
@@ -185,7 +185,7 @@ func (p *LoginResponse) SetAccountID(val int64) {
 }
 
 var fieldIDToName_LoginResponse = map[int16]string{
-	1: consts.AccountID,
+	1: "accountID",
 }
 
 func (p *LoginResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -286,7 +286,7 @@ WriteStructEndError:
 }
 
 func (p *LoginResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin(consts.AccountID, thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("accountID", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteI64(p.AccountID); err != nil {

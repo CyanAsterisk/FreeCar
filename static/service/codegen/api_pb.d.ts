@@ -504,9 +504,6 @@ export namespace api {
 
         /** GetCarRequest id */
         id?: (string|null);
-
-        /** GetCarRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a GetCarRequest. */
@@ -520,9 +517,6 @@ export namespace api {
 
         /** GetCarRequest id. */
         public id: string;
-
-        /** GetCarRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a GetCarRequest message from a plain object. Also converts values to their respective internal types.
@@ -859,9 +853,6 @@ export namespace api {
 
         /** CreateTripRequest avatarUrl */
         avatarUrl?: (string|null);
-
-        /** CreateTripRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a CreateTripRequest. */
@@ -881,9 +872,6 @@ export namespace api {
 
         /** CreateTripRequest avatarUrl. */
         public avatarUrl: string;
-
-        /** CreateTripRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a CreateTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -912,9 +900,6 @@ export namespace api {
 
         /** GetTripRequest id */
         id?: (string|null);
-
-        /** GetTripRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a GetTripRequest. */
@@ -928,9 +913,6 @@ export namespace api {
 
         /** GetTripRequest id. */
         public id: string;
-
-        /** GetTripRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a GetTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -959,9 +941,6 @@ export namespace api {
 
         /** GetTripsRequest status */
         status?: (api.TripStatus|null);
-
-        /** GetTripsRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a GetTripsRequest. */
@@ -975,9 +954,6 @@ export namespace api {
 
         /** GetTripsRequest status. */
         public status: api.TripStatus;
-
-        /** GetTripsRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a GetTripsRequest message from a plain object. Also converts values to their respective internal types.
@@ -1106,9 +1082,6 @@ export namespace api {
 
         /** UpdateTripRequest endTrip */
         endTrip?: (boolean|null);
-
-        /** UpdateTripRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents an UpdateTripRequest. */
@@ -1128,9 +1101,6 @@ export namespace api {
 
         /** UpdateTripRequest endTrip. */
         public endTrip: boolean;
-
-        /** UpdateTripRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates an UpdateTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -1382,9 +1352,6 @@ export namespace api {
 
     /** Properties of a GetProfileRequest. */
     interface IGetProfileRequest {
-
-        /** GetProfileRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a GetProfileRequest. */
@@ -1395,9 +1362,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.IGetProfileRequest);
-
-        /** GetProfileRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a GetProfileRequest message from a plain object. Also converts values to their respective internal types.
@@ -1424,9 +1388,6 @@ export namespace api {
     /** Properties of a SubmitProfileRequest. */
     interface ISubmitProfileRequest {
 
-        /** SubmitProfileRequest accountId */
-        accountId?: (number|null);
-
         /** SubmitProfileRequest identity */
         identity?: (api.IIdentity|null);
     }
@@ -1439,9 +1400,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.ISubmitProfileRequest);
-
-        /** SubmitProfileRequest accountId. */
-        public accountId: number;
 
         /** SubmitProfileRequest identity. */
         public identity?: (api.IIdentity|null);
@@ -1470,9 +1428,6 @@ export namespace api {
 
     /** Properties of a ClearProfileRequest. */
     interface IClearProfileRequest {
-
-        /** ClearProfileRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a ClearProfileRequest. */
@@ -1483,9 +1438,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.IClearProfileRequest);
-
-        /** ClearProfileRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a ClearProfileRequest message from a plain object. Also converts values to their respective internal types.
@@ -1511,9 +1463,6 @@ export namespace api {
 
     /** Properties of a GetProfilePhotoRequest. */
     interface IGetProfilePhotoRequest {
-
-        /** GetProfilePhotoRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a GetProfilePhotoRequest. */
@@ -1524,9 +1473,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.IGetProfilePhotoRequest);
-
-        /** GetProfilePhotoRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a GetProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
@@ -1646,9 +1592,6 @@ export namespace api {
 
     /** Properties of a CreateProfilePhotoRequest. */
     interface ICreateProfilePhotoRequest {
-
-        /** CreateProfilePhotoRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a CreateProfilePhotoRequest. */
@@ -1659,9 +1602,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.ICreateProfilePhotoRequest);
-
-        /** CreateProfilePhotoRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a CreateProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
@@ -1781,9 +1721,6 @@ export namespace api {
 
     /** Properties of a CompleteProfilePhotoRequest. */
     interface ICompleteProfilePhotoRequest {
-
-        /** CompleteProfilePhotoRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a CompleteProfilePhotoRequest. */
@@ -1794,9 +1731,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.ICompleteProfilePhotoRequest);
-
-        /** CompleteProfilePhotoRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a CompleteProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
@@ -1822,9 +1756,6 @@ export namespace api {
 
     /** Properties of a ClearProfilePhotoRequest. */
     interface IClearProfilePhotoRequest {
-
-        /** ClearProfilePhotoRequest accountId */
-        accountId?: (number|null);
     }
 
     /** Represents a ClearProfilePhotoRequest. */
@@ -1835,9 +1766,6 @@ export namespace api {
          * @param [properties] Properties to set
          */
         constructor(properties?: api.IClearProfilePhotoRequest);
-
-        /** ClearProfilePhotoRequest accountId. */
-        public accountId: number;
 
         /**
          * Creates a ClearProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.

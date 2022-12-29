@@ -92,7 +92,7 @@ Page({
             this.layoutResolver = resolve
         })
         Promise.all([TripService.getTrips(), layoutReady]).then(([trips]) => {
-            this.populateTrips(trips.trips!)
+            this.populateTrips(trips.data!.trips!)
         })
         getApp<IAppOption>().globalData.userInfo.then(userInfo => {
             this.setData({

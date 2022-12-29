@@ -10,7 +10,7 @@ export namespace ProfileService {
         })
     }
 
-    export function submitProfile(req: api.IIdentity): Promise<api.IEProfile> {
+    export function submitProfile(req: api.ISubmitProfileRequest): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/profile',

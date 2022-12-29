@@ -110,7 +110,7 @@ Page({
     },
 
     onEndTripTap() {
-        TripService.finishTrip(this.tripID).then(() => {
+        TripService.finishTrip(this.tripID,this.data.location).then(() => {
             wx.redirectTo({
                 url: routing.mytrips(),
             })

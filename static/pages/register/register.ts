@@ -92,11 +92,14 @@ Page({
 
     onSubmit() {
         ProfileService.submitProfile({
-            licNumber: this.data.licNo,
-            name: this.data.name,
-            gender: this.data.genderIndex,
-            birthDateMillis: Date.parse(this.data.birthDate),
-        }).then(p => {
+                identity : {
+                    licNumber: this.data.licNo,
+                    name: this.data.name,
+                    gender: this.data.genderIndex,
+                    birthDateMillis: Date.parse(this.data.birthDate),
+                }
+            }
+        ).then(p => {
             this.renderProfile(p.data!)
             this.scheduleProfileRefresher()
         })

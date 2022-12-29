@@ -64,7 +64,7 @@ export namespace FreeCar {
         })
         if(resp.data){
             authData.token = resp.data.token!
-            authData.expiresAt = resp.data.expiredAt!
+            authData.expiresAt = resp.data.expiredAt!*1000
         }
     }
 

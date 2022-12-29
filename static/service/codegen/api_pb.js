@@ -1127,7 +1127,6 @@ export const api = $root.api = (() => {
          * @memberof api
          * @interface IGetCarRequest
          * @property {string|null} [id] GetCarRequest id
-         * @property {number|null} [accountId] GetCarRequest accountId
          */
 
         /**
@@ -1154,14 +1153,6 @@ export const api = $root.api = (() => {
         GetCarRequest.prototype.id = "";
 
         /**
-         * GetCarRequest accountId.
-         * @member {number} accountId
-         * @memberof api.GetCarRequest
-         * @instance
-         */
-        GetCarRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a GetCarRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.GetCarRequest
@@ -1175,15 +1166,6 @@ export const api = $root.api = (() => {
             let message = new $root.api.GetCarRequest();
             if (object.id != null)
                 message.id = String(object.id);
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             return message;
         };
 
@@ -1200,21 +1182,10 @@ export const api = $root.api = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults) {
+            if (options.defaults)
                 object.id = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            }
             if (message.id != null && message.hasOwnProperty("id"))
                 object.id = message.id;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             return object;
         };
 
@@ -1948,7 +1919,6 @@ export const api = $root.api = (() => {
          * @property {api.ILocation|null} [start] CreateTripRequest start
          * @property {string|null} [carId] CreateTripRequest carId
          * @property {string|null} [avatarUrl] CreateTripRequest avatarUrl
-         * @property {number|null} [accountId] CreateTripRequest accountId
          */
 
         /**
@@ -1991,14 +1961,6 @@ export const api = $root.api = (() => {
         CreateTripRequest.prototype.avatarUrl = "";
 
         /**
-         * CreateTripRequest accountId.
-         * @member {number} accountId
-         * @memberof api.CreateTripRequest
-         * @instance
-         */
-        CreateTripRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a CreateTripRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.CreateTripRequest
@@ -2019,15 +1981,6 @@ export const api = $root.api = (() => {
                 message.carId = String(object.carId);
             if (object.avatarUrl != null)
                 message.avatarUrl = String(object.avatarUrl);
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             return message;
         };
 
@@ -2048,11 +2001,6 @@ export const api = $root.api = (() => {
                 object.start = null;
                 object.carId = "";
                 object.avatarUrl = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
             }
             if (message.start != null && message.hasOwnProperty("start"))
                 object.start = $root.api.Location.toObject(message.start, options);
@@ -2060,11 +2008,6 @@ export const api = $root.api = (() => {
                 object.carId = message.carId;
             if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
                 object.avatarUrl = message.avatarUrl;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             return object;
         };
 
@@ -2089,7 +2032,6 @@ export const api = $root.api = (() => {
          * @memberof api
          * @interface IGetTripRequest
          * @property {string|null} [id] GetTripRequest id
-         * @property {number|null} [accountId] GetTripRequest accountId
          */
 
         /**
@@ -2116,14 +2058,6 @@ export const api = $root.api = (() => {
         GetTripRequest.prototype.id = "";
 
         /**
-         * GetTripRequest accountId.
-         * @member {number} accountId
-         * @memberof api.GetTripRequest
-         * @instance
-         */
-        GetTripRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a GetTripRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.GetTripRequest
@@ -2137,15 +2071,6 @@ export const api = $root.api = (() => {
             let message = new $root.api.GetTripRequest();
             if (object.id != null)
                 message.id = String(object.id);
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             return message;
         };
 
@@ -2162,21 +2087,10 @@ export const api = $root.api = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults) {
+            if (options.defaults)
                 object.id = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            }
             if (message.id != null && message.hasOwnProperty("id"))
                 object.id = message.id;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             return object;
         };
 
@@ -2201,7 +2115,6 @@ export const api = $root.api = (() => {
          * @memberof api
          * @interface IGetTripsRequest
          * @property {api.TripStatus|null} [status] GetTripsRequest status
-         * @property {number|null} [accountId] GetTripsRequest accountId
          */
 
         /**
@@ -2226,14 +2139,6 @@ export const api = $root.api = (() => {
          * @instance
          */
         GetTripsRequest.prototype.status = 0;
-
-        /**
-         * GetTripsRequest accountId.
-         * @member {number} accountId
-         * @memberof api.GetTripsRequest
-         * @instance
-         */
-        GetTripsRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
          * Creates a GetTripsRequest message from a plain object. Also converts values to their respective internal types.
@@ -2261,15 +2166,6 @@ export const api = $root.api = (() => {
                 message.status = 2;
                 break;
             }
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             return message;
         };
 
@@ -2286,21 +2182,10 @@ export const api = $root.api = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults) {
+            if (options.defaults)
                 object.status = options.enums === String ? "TS_NOT_SPECIFIED" : 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            }
             if (message.status != null && message.hasOwnProperty("status"))
                 object.status = options.enums === String ? $root.api.TripStatus[message.status] : message.status;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             return object;
         };
 
@@ -2537,7 +2422,6 @@ export const api = $root.api = (() => {
          * @property {string|null} [id] UpdateTripRequest id
          * @property {api.ILocation|null} [current] UpdateTripRequest current
          * @property {boolean|null} [endTrip] UpdateTripRequest endTrip
-         * @property {number|null} [accountId] UpdateTripRequest accountId
          */
 
         /**
@@ -2580,14 +2464,6 @@ export const api = $root.api = (() => {
         UpdateTripRequest.prototype.endTrip = false;
 
         /**
-         * UpdateTripRequest accountId.
-         * @member {number} accountId
-         * @memberof api.UpdateTripRequest
-         * @instance
-         */
-        UpdateTripRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates an UpdateTripRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.UpdateTripRequest
@@ -2608,15 +2484,6 @@ export const api = $root.api = (() => {
             }
             if (object.endTrip != null)
                 message.endTrip = Boolean(object.endTrip);
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             return message;
         };
 
@@ -2637,11 +2504,6 @@ export const api = $root.api = (() => {
                 object.id = "";
                 object.current = null;
                 object.endTrip = false;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
             }
             if (message.id != null && message.hasOwnProperty("id"))
                 object.id = message.id;
@@ -2649,11 +2511,6 @@ export const api = $root.api = (() => {
                 object.current = $root.api.Location.toObject(message.current, options);
             if (message.endTrip != null && message.hasOwnProperty("endTrip"))
                 object.endTrip = message.endTrip;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             return object;
         };
 
@@ -3204,7 +3061,6 @@ export const api = $root.api = (() => {
          * Properties of a GetProfileRequest.
          * @memberof api
          * @interface IGetProfileRequest
-         * @property {number|null} [accountId] GetProfileRequest accountId
          */
 
         /**
@@ -3223,14 +3079,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * GetProfileRequest accountId.
-         * @member {number} accountId
-         * @memberof api.GetProfileRequest
-         * @instance
-         */
-        GetProfileRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a GetProfileRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.GetProfileRequest
@@ -3241,17 +3089,7 @@ export const api = $root.api = (() => {
         GetProfileRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.GetProfileRequest)
                 return object;
-            let message = new $root.api.GetProfileRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.GetProfileRequest();
         };
 
         /**
@@ -3263,22 +3101,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        GetProfileRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        GetProfileRequest.toObject = function toObject() {
+            return {};
         };
 
         /**
@@ -3301,7 +3125,6 @@ export const api = $root.api = (() => {
          * Properties of a SubmitProfileRequest.
          * @memberof api
          * @interface ISubmitProfileRequest
-         * @property {number|null} [accountId] SubmitProfileRequest accountId
          * @property {api.IIdentity|null} [identity] SubmitProfileRequest identity
          */
 
@@ -3319,14 +3142,6 @@ export const api = $root.api = (() => {
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
-
-        /**
-         * SubmitProfileRequest accountId.
-         * @member {number} accountId
-         * @memberof api.SubmitProfileRequest
-         * @instance
-         */
-        SubmitProfileRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
          * SubmitProfileRequest identity.
@@ -3348,15 +3163,6 @@ export const api = $root.api = (() => {
             if (object instanceof $root.api.SubmitProfileRequest)
                 return object;
             let message = new $root.api.SubmitProfileRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
             if (object.identity != null) {
                 if (typeof object.identity !== "object")
                     throw TypeError(".api.SubmitProfileRequest.identity: object expected");
@@ -3378,19 +3184,8 @@ export const api = $root.api = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults) {
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
+            if (options.defaults)
                 object.identity = null;
-            }
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
             if (message.identity != null && message.hasOwnProperty("identity"))
                 object.identity = $root.api.Identity.toObject(message.identity, options);
             return object;
@@ -3416,7 +3211,6 @@ export const api = $root.api = (() => {
          * Properties of a ClearProfileRequest.
          * @memberof api
          * @interface IClearProfileRequest
-         * @property {number|null} [accountId] ClearProfileRequest accountId
          */
 
         /**
@@ -3435,14 +3229,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * ClearProfileRequest accountId.
-         * @member {number} accountId
-         * @memberof api.ClearProfileRequest
-         * @instance
-         */
-        ClearProfileRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a ClearProfileRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.ClearProfileRequest
@@ -3453,17 +3239,7 @@ export const api = $root.api = (() => {
         ClearProfileRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.ClearProfileRequest)
                 return object;
-            let message = new $root.api.ClearProfileRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.ClearProfileRequest();
         };
 
         /**
@@ -3475,22 +3251,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        ClearProfileRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        ClearProfileRequest.toObject = function toObject() {
+            return {};
         };
 
         /**
@@ -3513,7 +3275,6 @@ export const api = $root.api = (() => {
          * Properties of a GetProfilePhotoRequest.
          * @memberof api
          * @interface IGetProfilePhotoRequest
-         * @property {number|null} [accountId] GetProfilePhotoRequest accountId
          */
 
         /**
@@ -3532,14 +3293,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * GetProfilePhotoRequest accountId.
-         * @member {number} accountId
-         * @memberof api.GetProfilePhotoRequest
-         * @instance
-         */
-        GetProfilePhotoRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a GetProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.GetProfilePhotoRequest
@@ -3550,17 +3303,7 @@ export const api = $root.api = (() => {
         GetProfilePhotoRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.GetProfilePhotoRequest)
                 return object;
-            let message = new $root.api.GetProfilePhotoRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.GetProfilePhotoRequest();
         };
 
         /**
@@ -3572,22 +3315,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        GetProfilePhotoRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        GetProfilePhotoRequest.toObject = function toObject() {
+            return {};
         };
 
         /**
@@ -3808,7 +3537,6 @@ export const api = $root.api = (() => {
          * Properties of a CreateProfilePhotoRequest.
          * @memberof api
          * @interface ICreateProfilePhotoRequest
-         * @property {number|null} [accountId] CreateProfilePhotoRequest accountId
          */
 
         /**
@@ -3827,14 +3555,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * CreateProfilePhotoRequest accountId.
-         * @member {number} accountId
-         * @memberof api.CreateProfilePhotoRequest
-         * @instance
-         */
-        CreateProfilePhotoRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a CreateProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.CreateProfilePhotoRequest
@@ -3845,17 +3565,7 @@ export const api = $root.api = (() => {
         CreateProfilePhotoRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.CreateProfilePhotoRequest)
                 return object;
-            let message = new $root.api.CreateProfilePhotoRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.CreateProfilePhotoRequest();
         };
 
         /**
@@ -3867,22 +3577,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        CreateProfilePhotoRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        CreateProfilePhotoRequest.toObject = function toObject() {
+            return {};
         };
 
         /**
@@ -4103,7 +3799,6 @@ export const api = $root.api = (() => {
          * Properties of a CompleteProfilePhotoRequest.
          * @memberof api
          * @interface ICompleteProfilePhotoRequest
-         * @property {number|null} [accountId] CompleteProfilePhotoRequest accountId
          */
 
         /**
@@ -4122,14 +3817,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * CompleteProfilePhotoRequest accountId.
-         * @member {number} accountId
-         * @memberof api.CompleteProfilePhotoRequest
-         * @instance
-         */
-        CompleteProfilePhotoRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a CompleteProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.CompleteProfilePhotoRequest
@@ -4140,17 +3827,7 @@ export const api = $root.api = (() => {
         CompleteProfilePhotoRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.CompleteProfilePhotoRequest)
                 return object;
-            let message = new $root.api.CompleteProfilePhotoRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.CompleteProfilePhotoRequest();
         };
 
         /**
@@ -4162,22 +3839,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        CompleteProfilePhotoRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        CompleteProfilePhotoRequest.toObject = function toObject() {
+            return {};
         };
 
         /**
@@ -4200,7 +3863,6 @@ export const api = $root.api = (() => {
          * Properties of a ClearProfilePhotoRequest.
          * @memberof api
          * @interface IClearProfilePhotoRequest
-         * @property {number|null} [accountId] ClearProfilePhotoRequest accountId
          */
 
         /**
@@ -4219,14 +3881,6 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * ClearProfilePhotoRequest accountId.
-         * @member {number} accountId
-         * @memberof api.ClearProfilePhotoRequest
-         * @instance
-         */
-        ClearProfilePhotoRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a ClearProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.ClearProfilePhotoRequest
@@ -4237,17 +3891,7 @@ export const api = $root.api = (() => {
         ClearProfilePhotoRequest.fromObject = function fromObject(object) {
             if (object instanceof $root.api.ClearProfilePhotoRequest)
                 return object;
-            let message = new $root.api.ClearProfilePhotoRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
-            return message;
+            return new $root.api.ClearProfilePhotoRequest();
         };
 
         /**
@@ -4259,22 +3903,8 @@ export const api = $root.api = (() => {
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        ClearProfilePhotoRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
-            return object;
+        ClearProfilePhotoRequest.toObject = function toObject() {
+            return {};
         };
 
         /**

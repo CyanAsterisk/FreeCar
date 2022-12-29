@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
@@ -26,12 +25,11 @@ func InitBlob() {
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
-	p := provider.NewOpenTelemetryProvider(
+	provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(global.ServerConfig.BlobSrvInfo.Name),
 		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
-	defer p.Shutdown(context.Background())
 
 	// create a new client
 	c, err := blobservice.NewClient(

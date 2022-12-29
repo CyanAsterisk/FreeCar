@@ -24,10 +24,6 @@ func Register(r *server.Hertz) {
 		_v1.GET("/car", append(_getcarMw(), api.GetCar)...)
 		_v1.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 		_v1.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
-		_v1.POST("/trip", append(_tripMw(), api.CreateTrip)...)
-		_trip := _v1.Group("/trip", _tripMw()...)
-		_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
-		_v1.GET("/trip:id", append(_gettripMw(), api.GetTrip)...)
 		_v1.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 		{
 			_auth := _v1.Group("/auth", _authMw()...)
@@ -40,5 +36,9 @@ func Register(r *server.Hertz) {
 		_profile.GET("/photo", append(_photoMw(), api.GetProfilePhoto)...)
 		_photo := _profile.Group("/photo", _photoMw()...)
 		_photo.POST("/complete", append(_completeprofilephotoMw(), api.CompleteProfilePhoto)...)
+		_v1.POST("/trip", append(_tripMw(), api.CreateTrip)...)
+		_trip := _v1.Group("/trip", _tripMw()...)
+		_trip.GET("/:id", append(_gettripMw(), api.GetTrip)...)
+		_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
 	}
 }

@@ -192,7 +192,7 @@ service apiService {
   rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/v1/profile/photo";}
 
   rpc CreateTrip (CreateTripRequest) returns (TripEntity) {option (api.post) = "/v1/trip";}
-  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/v1/trip:id";}
+  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/v1/trip/:id";}
   rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/v1/trips";}
   rpc UpdateTrip (UpdateTripRequest) returns (Trip) {option (api.put) = "/v1/trip/:id";}
 }

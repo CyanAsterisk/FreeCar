@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob"
@@ -144,10 +145,10 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 	// TODO: Auto get license info
 	klog.Info("got profile photo", "size", len(br.Data))
 	return &profile.Identity{
-		LicNumber:       pr.Profile.Identity.LicNumber,
-		Name:            pr.Profile.Identity.Name,
-		Gender:          pr.Profile.Identity.Gender,
-		BirthDateMillis: pr.Profile.Identity.BirthDateMillis,
+		LicNumber:       consts.DefaultLicNumber,
+		Name:            consts.DefaultName,
+		Gender:          consts.DefaultGender,
+		BirthDateMillis: consts.DefaultBirth,
 	}, nil
 }
 

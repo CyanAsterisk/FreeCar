@@ -32,4 +32,9 @@ const (
 	TCP = "tcp"
 
 	FreePortAddress = "localhost:0"
+
+	DefaultLicNumber = "100000000001"
+	DefaultName      = "FreeCar"
+	DefaultGender    = 1
+	DefaultBirth     = 631152000000
 )

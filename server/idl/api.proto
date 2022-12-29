@@ -12,7 +12,7 @@ message LoginRequest {
 
 message LoginResponse {
   string token = 1;
-  int64 expired_at = 2;
+  int64 expired_at = 2[(api.body)="expired_at"];
 }
 
 message CarEntity {

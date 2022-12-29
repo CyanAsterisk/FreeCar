@@ -4,7 +4,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
@@ -141,7 +140,6 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamErr, nil)
 		return
 	}
-	fmt.Printf("\n%+v\n", req)
 
 	resp, err := global.ProfileClient.SubmitProfile(ctx, &profile.SubmitProfileRequest{
 		AccountId: aid.(int64),

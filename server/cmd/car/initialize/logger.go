@@ -40,7 +40,7 @@ func InitLogger() {
 	}
 
 	logger.SetOutput(lumberjackLogger)
-	logger.SetLevel(klog.LevelDebug)
+	logger.SetLevel(klog.LevelNotice)
 
 	klog.SetLogger(logger)
 }

@@ -1,8 +1,6 @@
-![FreeCar](https://picture.lanlance.cn/i/2022/12/07/639050f2c7b76.png)
+![FreeCar](static/resources/FreeCar.png)
 
 FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
-
-This project is pending, looking forward to it.
 
 ## Call Relations
 
@@ -13,6 +11,24 @@ This project is pending, looking forward to it.
 │                │◄────────────────┤                          │◄────────────────┤                │
 └────────────────┘                 └──────────────────────────┘                 └────────────────┘
 ```
+
+## Architecture
+
+### Internal
+
+```
+// TODO
+```
+
+## Catalog Introduce
+
+## Quick Start
+
+## API Requests
+
+## CookBook
+
+
 
 ## License
 

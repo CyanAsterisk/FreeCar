@@ -1,5 +1,5 @@
 import { ProfileService } from "../../service/profile"
-import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { api } from "../../service/codegen/api_pb"
 import { FreeCar } from "../../service/request"
 import { padString } from "../../utils/format"
 import { routing } from "../../utils/routing"
@@ -17,23 +17,23 @@ Page({
     profileRefresher: 0,
 
     data: {
-        licNo: '',
-        name: '',
+        licNo: '1024',
+        name: 'FreeCar',
         genderIndex: 0,
         genders: ['未知', '男', '女'],
         birthDate: '1990-01-01',
         licImgURL: '',
-        state: rental.v1.IdentityStatus[rental.v1.IdentityStatus.UNSUBMITTED],
+        state: api.IdentityStatus[api.IdentityStatus.UNSUBMITTED],
     },
 
-    renderProfile(p: rental.v1.IProfile) {
+    renderProfile(p: api.IProfile) {
         this.renderIdentity(p.identity!)
         this.setData({
-            state: rental.v1.IdentityStatus[p.identityStatus||0],
+            state: api.IdentityStatus[p.identityStatus||0],
         })
     },
 
-    renderIdentity(i?: rental.v1.IIdentity) {
+    renderIdentity(i?: api.IIdentity) {
         this.setData({
             licNo: i?.licNumber||'',
             name: i?.name||'',
@@ -47,10 +47,10 @@ Page({
         if(o.redirect) {
             this.redirectURL = decodeURIComponent(o.redirect)
         }
-        ProfileService.getProfile().then(p => this.renderProfile(p))
+        ProfileService.getProfile().then(p => this.renderProfile(p.data!))
         ProfileService.getProfilePhoto().then(p => {
             this.setData({
-                licImgURL: p.url||'',
+                licImgURL: p.data!.url||'',
             })
         })
     },
@@ -65,15 +65,15 @@ Page({
                     licImgURL:res.tempFiles[0].tempFilePath
                 })
                 const photoRes = await ProfileService.createProfilePhoto()
-                if (!photoRes.uploadUrl) {
+                if (!photoRes.data!.uploadUrl) {
                     return
                 }
                 await FreeCar.uploadfile({
                     localPath: res.tempFiles[0].tempFilePath,
-                    url: photoRes.uploadUrl,
+                    url: photoRes.data!.uploadUrl,
                 })
                 const identity = await ProfileService.completeProfilePhoto()
-                this.renderIdentity(identity)
+                this.renderIdentity(identity.data!)
             }
         })
     },
@@ -92,12 +92,15 @@ Page({
 
     onSubmit() {
         ProfileService.submitProfile({
-            licNumber: this.data.licNo,
-            name: this.data.name,
-            gender: this.data.genderIndex,
-            birthDateMillis: Date.parse(this.data.birthDate),
-        }).then(p => {
-            this.renderProfile(p)
+                identity : {
+                    licNumber: this.data.licNo,
+                    name: this.data.name,
+                    gender: this.data.genderIndex,
+                    birthDateMillis: Date.parse(this.data.birthDate),
+                }
+            }
+        ).then(p => {
+            this.renderProfile(p.data!)
             this.scheduleProfileRefresher()
         })
     },
@@ -109,11 +112,11 @@ Page({
     scheduleProfileRefresher() {
         this.profileRefresher = setInterval(() => {
             ProfileService.getProfile().then(p => {
-                this.renderProfile(p)
-                if (p.identityStatus !== rental.v1.IdentityStatus.PENDING) {
+                this.renderProfile(p.data!)
+                if (p.data!.identityStatus !== api.IdentityStatus.PENDING) {
                     this.clearProfileRefresher()
                 }
-                if (p.identityStatus === rental.v1.IdentityStatus.VERIFIED) {
+                if (p.data!.identityStatus === api.IdentityStatus.VERIFIED) {
                     this.onLicVerified()
                 }
             })
@@ -128,7 +131,7 @@ Page({
     },
 
     onResubmit() {
-        ProfileService.clearProfile().then(p => this.renderProfile(p))
+        ProfileService.clearProfile().then(p => this.renderProfile(p.data!))
         ProfileService.clearProfilePhoto().then(() => {
             this.setData({
                 licImgURL: '',

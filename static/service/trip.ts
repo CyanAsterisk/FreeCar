@@ -1,25 +1,25 @@
-import { rental } from "./proto_gen/rental/rental_pb";
+import { api } from "./codegen/api_pb"
 import { FreeCar } from "./request";
 
 export namespace TripService{
-    export function createTrip(req:rental.v1.ICreateTripRequest):Promise<rental.v1.ITripEntity>{
+    export function createTrip(req:api.ICreateTripRequest):Promise<api.IETripEntity>{
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/v1/trip',
             data: req,
-            respMarshaller: rental.v1.TripEntity.fromObject,
+            respMarshaller: api.ETripEntity.fromObject,
         })
     }
 
-    export function getTrip(id: string): Promise<rental.v1.ITrip> {
+    export function getTrip(id: string): Promise<api.ITrip> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path: `/v1/trip/${encodeURIComponent(id)}`,
-            respMarshaller: rental.v1.Trip.fromObject,
+            respMarshaller: api.Trip.fromObject,
         })
     }
 
-    export function getTrips(s?: rental.v1.TripStatus): Promise<rental.v1.IGetTripsResponse> {
+    export function getTrips(s?: api.TripStatus): Promise<api.IEGetTripsResponse> {
         let path = '/v1/trips'
         if (s) {
             path += `?status=${s}`
@@ -27,25 +27,26 @@ export namespace TripService{
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path,
-            respMarshaller: rental.v1.GetTripsResponse.fromObject,
+            respMarshaller: api.EGetTripsResponse.fromObject,
         })
     }
 
-    export function updateTripPos(id: string, loc?: rental.v1.ILocation) {
+    export function updateTripPos(id: string, loc?: api.ILocation) {
         return updateTrip({
             id,
             current: loc,
         })
     }
 
-    export function finishTrip(id: string) {
+    export function finishTrip(id: string,loc:api.ILocation) {
         return updateTrip({
             id,
             endTrip: true,
+            current: loc
         })
     }
 
-    function updateTrip(r: rental.v1.IUpdateTripRequest): Promise<rental.v1.ITrip> {
+    function updateTrip(r: api.IUpdateTripRequest): Promise<api.ITrip> {
         if (!r.id) {
             return Promise.reject("must specify id")
         }
@@ -53,7 +54,7 @@ export namespace TripService{
             method: 'PUT',
             path: `/v1/trip/${encodeURIComponent(r.id)}`,
             data: r,
-            respMarshaller: rental.v1.Trip.fromObject,
+            respMarshaller: api.Trip.fromObject,
         })
     } 
 }

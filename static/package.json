@@ -11,6 +11,7 @@
   "license": "",
   "dependencies": {
     "camelcase-keys": "^6.2.2",
+    "decamelize-keys-deep": "^0.1.1",
     "protobufjs": "^6.10.1"
   },
   "devDependencies": {

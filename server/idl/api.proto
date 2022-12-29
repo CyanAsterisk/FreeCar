@@ -15,9 +15,21 @@ message LoginResponse {
   int64 expired_at = 2[(api.body)="expired_at"];
 }
 
+message ELoginResponse{
+  int32 code = 1;
+  LoginResponse data = 2;
+  string message = 3;
+}
+
 message CarEntity {
   string id = 1;
   Car car = 2;
+}
+
+message ECarEntity{
+  int32 code = 1;
+  CarEntity data = 2;
+  string message = 3;
 }
 
 enum CarStatus {
@@ -44,14 +56,18 @@ message Car {
   Location position = 3;
   string trip_id = 4[(api.body)="trip_id"];
 }
+message ECar{
+  int32 code = 1;
+  Car data = 2;
+  string message = 3;
+}
 
 message CreateCarRequest {
-  int64 account_id = 1;
+  int64 account_id = 1[(api.body)="account_id"];
 }
 
 message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
-  int64 account_id = 2;
 }
 
 message LocationStatus{
@@ -73,8 +89,14 @@ message TripEntity{
   Trip trip = 2;
 }
 
+message ETripEntity{
+  int32 code = 1;
+  TripEntity data = 2;
+  string message = 3;
+}
+
 message Trip{
-  int64 account_id = 1;
+  int64 account_id = 1[(api.body)="account_id"];
   string car_id = 2[(api.body)="car_id"];
   LocationStatus start = 3;
   LocationStatus current = 4;
@@ -83,34 +105,43 @@ message Trip{
   string identity_id = 7[(api.body)="identity_id"];
 }
 
+message ETrip{
+  int32 code = 1;
+  Trip data = 2;
+  string message = 3;
+}
+
 message CreateTripRequest {
   Location start = 1;
   string car_id = 2[(api.body)="car_id"];
   string avatar_url = 3[(api.body)="avatar_url"];
-  int64 account_id = 4;
 }
 
 
 message GetTripRequest{
   string id = 1[(api.vd) = "len($) > 0"];
-  int64 account_id = 2;
 }
 
 
 message GetTripsRequest{
   TripStatus status = 1;
-  int64 account_id = 2;
 }
 
 message GetTripsResponse{
   repeated TripEntity trips = 1;
 }
 
+
+message EGetTripsResponse{
+  int32 code = 1;
+  GetTripsResponse data = 2;
+  string message = 3;
+}
+
 message UpdateTripRequest{
   string id = 1;
   Location current = 2;
   bool end_trip = 3[(api.body)="end_trip"];
-  int64 account_id = 4;
 }
 
 enum Gender {
@@ -130,6 +161,12 @@ message Profile {
   IdentityStatus identity_status = 2[(api.body)="identity_status"];
 }
 
+message EProfile{
+  int32 code = 1;
+  Profile data = 2;
+  string message = 3;
+}
+
 message Identity {
   string lic_number = 1[(api.body)="lic_number"];
   string name = 2;
@@ -137,44 +174,57 @@ message Identity {
   int64 birth_date_millis = 4[(api.body)="birth_date_millis"];
 }
 
-message GetProfileRequest {
-  int64 account_id = 1;
+message EIdentity {
+  int32 code = 1;
+  Identity data = 2;
+  string message = 3;
 }
 
+message GetProfileRequest {}
+
+
 message SubmitProfileRequest {
-  int64 account_id = 1;
   Identity identity = 2;
 }
 
-message ClearProfileRequest {
-  int64 account_id = 1;
-}
+message ClearProfileRequest {}
 
-message GetProfilePhotoRequest {
-  int64 account_id = 1;
-}
+message GetProfilePhotoRequest {}
 
 message GetProfilePhotoResponse {
   string url = 1;
 }
 
-message CreateProfilePhotoRequest {
-  int64 account_id = 1;
+message EGetProfilePhotoResponse {
+  int32 code = 1;
+  GetProfilePhotoResponse data = 2;
+  string message = 3;
 }
+
+
+message CreateProfilePhotoRequest {}
 
 message CreateProfilePhotoResponse {
   string upload_url = 1[(api.body)="upload_url"];
 }
 
-message CompleteProfilePhotoRequest {
-  int64 account_id = 1;
+message ECreateProfilePhotoResponse {
+  int32 code = 1;
+  CreateProfilePhotoResponse data = 2;
+  string message = 3;
 }
 
-message ClearProfilePhotoRequest {
-  int64 account_id = 1;
-}
+message CompleteProfilePhotoRequest {}
+
+message ClearProfilePhotoRequest {}
 
 message ClearProfilePhotoResponse {}
+
+message EClearProfilePhotoResponse {
+  int32 code = 1;
+  ClearProfilePhotoResponse data = 2;
+  string message = 3;
+}
 
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/v1/auth/login";}

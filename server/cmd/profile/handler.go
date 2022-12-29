@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"

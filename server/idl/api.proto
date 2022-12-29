@@ -30,7 +30,7 @@ enum CarStatus {
 
 message Driver {
   string id = 1;
-  string avatar_url = 2;
+  string avatar_url = 2[(api.body)="avatar_url"];
 }
 
 message Location {
@@ -42,7 +42,7 @@ message Car {
   CarStatus status = 1;
   Driver driver = 2;
   Location position = 3;
-  string trip_id = 4;
+  string trip_id = 4[(api.body)="trip_id"];
 }
 
 message CreateCarRequest {
@@ -56,10 +56,10 @@ message GetCarRequest {
 
 message LocationStatus{
   Location location = 1;
-  int32 fee_cent = 2;
-  double km_driven = 3;
-  string poi_name = 4;
-  int64 timestamp_sec = 5;
+  int32 fee_cent = 2[(api.body)="fee_cent"];
+  double km_driven = 3[(api.body)="km_driver"];
+  string poi_name = 4[(api.body)="poi_name"];
+  int64 timestamp_sec = 5[(api.body)="timestamp_sec"];
 }
 
 enum TripStatus {
@@ -75,18 +75,18 @@ message TripEntity{
 
 message Trip{
   int64 account_id = 1;
-  string car_id = 2;
+  string car_id = 2[(api.body)="car_id"];
   LocationStatus start = 3;
   LocationStatus current = 4;
   LocationStatus end = 5;
   TripStatus status = 6;
-  string identity_id = 7;
+  string identity_id = 7[(api.body)="identity_id"];
 }
 
 message CreateTripRequest {
   Location start = 1;
-  string car_id = 2;
-  string avatar_url = 3;
+  string car_id = 2[(api.body)="car_id"];
+  string avatar_url = 3[(api.body)="avatar_url"];
   int64 account_id = 4;
 }
 
@@ -109,7 +109,7 @@ message GetTripsResponse{
 message UpdateTripRequest{
   string id = 1;
   Location current = 2;
-  bool end_trip = 3;
+  bool end_trip = 3[(api.body)="end_trip"];
   int64 account_id = 4;
 }
 
@@ -127,14 +127,14 @@ enum IdentityStatus {
 
 message Profile {
   Identity identity = 1;
-  IdentityStatus identity_status = 2;
+  IdentityStatus identity_status = 2[(api.body)="identity_status"];
 }
 
 message Identity {
-  string lic_number = 1;
+  string lic_number = 1[(api.body)="lic_number"];
   string name = 2;
   Gender gender = 3;
-  int64 birth_date_millis = 4;
+  int64 birth_date_millis = 4[(api.body)="birth_date_millis"];
 }
 
 message GetProfileRequest {
@@ -163,7 +163,7 @@ message CreateProfilePhotoRequest {
 }
 
 message CreateProfilePhotoResponse {
-  string upload_url = 1;
+  string upload_url = 1[(api.body)="upload_url"];
 }
 
 message CompleteProfilePhotoRequest {

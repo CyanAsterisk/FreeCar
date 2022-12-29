@@ -66,12 +66,14 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
 	resp, err := global.CarClient.CreateCar(ctx, &car.CreateCarRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
 	}
 	errno.SendResponse(c, errno.Success, resp)
 }
@@ -89,6 +91,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -98,6 +101,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
 	}
 	errno.SendResponse(c, errno.Success, resp)
 }
@@ -163,6 +167,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -183,6 +188,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -203,6 +209,7 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -223,6 +230,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -243,6 +251,7 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -268,6 +277,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -296,6 +306,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 	req.Id = c.Param("id")
@@ -324,6 +335,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 
@@ -352,6 +364,7 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
+		return
 	}
 	req.AccountId = aid.(int64)
 	req.Id = c.Param(consts.ID)

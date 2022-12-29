@@ -35,7 +35,7 @@ func main() {
 
 	// Create new server.
 	srv := blob.NewServer(new(BlobServiceImpl),
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf(" %s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

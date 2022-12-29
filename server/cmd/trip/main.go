@@ -47,7 +47,7 @@ func main() {
 	impl.POIManager = &poi.Manager{}
 	// Create new server.
 	srv := trip.NewServer(impl,
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf(" %s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", IP, Port))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

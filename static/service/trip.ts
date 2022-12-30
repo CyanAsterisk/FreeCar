@@ -19,19 +19,16 @@ export namespace TripService{
         })
     }
 
-    export function getTrips(s?: api.TripStatus): Promise<api.IEGetTripsResponse> {
-        let path = '/v1/trips'
-        if (s) {
-            path += `?status=${s}`
-        }
+    export function getTrips(req: api.IGetTripsRequest): Promise<api.IEGetTripsResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path,
+            path:  '/v1/trips',
+            data: req,
             respMarshaller: api.EGetTripsResponse.fromObject,
         })
     }
 
-    export function updateTripPos(id: string, loc?: api.ILocation) {
+    export function updateTripPos(id: string, loc: api.ILocation) {
         return updateTrip({
             id,
             current: loc,

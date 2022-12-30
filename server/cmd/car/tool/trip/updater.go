@@ -28,6 +28,7 @@ func RunUpdater(sub mq.Subscriber, ts tripservice.Client) {
 					Latitude:  car.Car.Position.Latitude,
 					Longitude: car.Car.Position.Longitude,
 				},
+				AccountId: car.Car.Driver.Id,
 			})
 			if err != nil {
 				klog.Errorf("cannot update trip : tripId = %s  err: %s", car.Car.TripId, err.Error())

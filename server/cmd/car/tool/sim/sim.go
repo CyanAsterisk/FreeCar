@@ -103,6 +103,10 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
 				Id:     carID,
 				Status: car.CarStatus_UNLOCKED,
+				Position: &car.Location{
+					Latitude:  CQUPTLatitude,
+					Longitude: CQUPTLongitude,
+				},
 			})
 			if err != nil {
 				klog.Errorf("cannot unlock car: %s", err.Error())

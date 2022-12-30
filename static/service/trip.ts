@@ -11,11 +11,11 @@ export namespace TripService{
         })
     }
 
-    export function getTrip(id: string): Promise<api.ITrip> {
+    export function getTrip(id: string): Promise<api.IETrip> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path: `/v1/trip/${encodeURIComponent(id)}`,
-            respMarshaller: api.Trip.fromObject,
+            respMarshaller: api.ETrip.fromObject,
         })
     }
 
@@ -46,7 +46,7 @@ export namespace TripService{
         })
     }
 
-    function updateTrip(r: api.IUpdateTripRequest): Promise<api.ITrip> {
+    function updateTrip(r: api.IUpdateTripRequest): Promise<api.IETrip> {
         if (!r.id) {
             return Promise.reject("must specify id")
         }
@@ -54,7 +54,7 @@ export namespace TripService{
             method: 'PUT',
             path: `/v1/trip/${encodeURIComponent(r.id)}`,
             data: r,
-            respMarshaller: api.Trip.fromObject,
+            respMarshaller: api.ETrip.fromObject,
         })
     } 
 }

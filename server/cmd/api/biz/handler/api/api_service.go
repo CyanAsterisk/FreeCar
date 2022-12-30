@@ -317,6 +317,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 func GetTrips(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetTripsRequest
+	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.BindAndValidateFail, nil)
 		return

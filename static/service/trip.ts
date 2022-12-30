@@ -11,27 +11,24 @@ export namespace TripService{
         })
     }
 
-    export function getTrip(id: string): Promise<api.ITrip> {
+    export function getTrip(id: string): Promise<api.IETrip> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
             path: `/v1/trip/${encodeURIComponent(id)}`,
-            respMarshaller: api.Trip.fromObject,
+            respMarshaller: api.ETrip.fromObject,
         })
     }
 
-    export function getTrips(s?: api.TripStatus): Promise<api.IEGetTripsResponse> {
-        let path = '/v1/trips'
-        if (s) {
-            path += `?status=${s}`
-        }
+    export function getTrips(req: api.IGetTripsRequest): Promise<api.IEGetTripsResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path,
+            path:  '/v1/trips',
+            data: req,
             respMarshaller: api.EGetTripsResponse.fromObject,
         })
     }
 
-    export function updateTripPos(id: string, loc?: api.ILocation) {
+    export function updateTripPos(id: string, loc: api.ILocation) {
         return updateTrip({
             id,
             current: loc,
@@ -46,7 +43,7 @@ export namespace TripService{
         })
     }
 
-    function updateTrip(r: api.IUpdateTripRequest): Promise<api.ITrip> {
+    function updateTrip(r: api.IUpdateTripRequest): Promise<api.IETrip> {
         if (!r.id) {
             return Promise.reject("must specify id")
         }
@@ -54,7 +51,7 @@ export namespace TripService{
             method: 'PUT',
             path: `/v1/trip/${encodeURIComponent(r.id)}`,
             data: r,
-            respMarshaller: api.Trip.fromObject,
+            respMarshaller: api.ETrip.fromObject,
         })
     } 
 }

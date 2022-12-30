@@ -65,8 +65,7 @@ Page({
                             longitude : loc.longitude
                         },
                         carId: this.carID,
-                        accountId: 1024,
-                        avatarUrl: "/testavar"
+                        avatarUrl: "/resources/man.jpg"
                     })
                     if (!trip.data!.id) {
                         console.error('no tripID in response', trip)

@@ -78,12 +78,14 @@ Page({
     },
 
     async onScanTap(){
-      const trips = await TripService.getTrips(api.TripStatus.IN_PROGRESS)
-      if ((trips.trips?.length || 0) > 0) {
+      const trips = await TripService.getTrips({
+        status: api.TripStatus.IN_PROGRESS,
+      })
+      if ((trips.data!.trips?.length || 0) > 0) {
         await this.selectComponent('#tripModal').showModal()
         wx.navigateTo({
           url: routing.driving({
-            trip_id: trips.trips![0].id!,
+            trip_id: trips.data!.trips![0].id!,
           }),
         })
         return
@@ -91,7 +93,7 @@ Page({
       wx.scanCode({
         success: async()=>{
            //TODO: get car if from scan result
-           const carID = '63a450251f0255674d3c35bd'
+           const carID = '63ae8170b6ae3a5eddc7adc7'
            const lockURL = routing.lock({
              car_id:carID
            })

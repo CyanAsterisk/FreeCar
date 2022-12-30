@@ -66,22 +66,22 @@ Page({
 
     async setupTimer(tripID: string) {
         const trip = await TripService.getTrip(tripID)
-        if (trip.status !== api.TripStatus.IN_PROGRESS) {
+        if (trip.data!.status !== api.TripStatus.IN_PROGRESS) {
             console.error('trip not in progress')
             return
         }
         let secSinceLastUpdate = 0
-        let lastUpdateDurationSec = trip.current!.timestampSec! - trip.start!.timestampSec!
-        const toLocation = (trip: api.ITrip) => ({
-            latitude: trip.current?.location?.latitude || initialLat,
-            longitude: trip.current?.location?.longitude || initialLng,
+        let lastUpdateDurationSec = trip.data!.current!.timestampSec! - trip.data!.start!.timestampSec!
+        const toLocation = (trip: api.IETrip) => ({
+            latitude: trip.data!.current?.location?.latitude || initialLat,
+            longitude: trip.data!.current?.location?.longitude || initialLng,
         })
         const location = toLocation(trip)
         this.data.markers[0].latitude = location.latitude
         this.data.markers[0].longitude = location.longitude
         this.setData({
             elapsed: durationStr(lastUpdateDurationSec),
-            fee: formatFee(trip.current!.feeCent!),
+            fee: formatFee(trip.data!.current!.feeCent!),
             location,
             markers: this.data.markers,
         })
@@ -90,14 +90,14 @@ Page({
             secSinceLastUpdate++
             if (secSinceLastUpdate % updateIntervalSec === 0) {
                 TripService.getTrip(tripID).then(trip => {
-                    lastUpdateDurationSec = trip.current!.timestampSec! - trip.start!.timestampSec!
+                    lastUpdateDurationSec = trip.data!.current!.timestampSec! - trip.data!.start!.timestampSec!
                     secSinceLastUpdate = 0
                     const location = toLocation(trip)
                     console.log(location)
                     this.data.markers[0].latitude = location.latitude
                     this.data.markers[0].longitude = location.longitude
                     this.setData({
-                        fee: formatFee(trip.current!.feeCent!),
+                        fee: formatFee(trip.data!.current!.feeCent!),
                         location,
                         markers: this.data.markers,
                     })

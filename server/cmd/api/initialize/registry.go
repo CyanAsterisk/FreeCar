@@ -32,9 +32,6 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 			Timeout:                        consts.ConsulCheckTimeout,
 			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
 		}))
-	if err != nil {
-		hlog.Fatalf("new consul register failed: %s", err.Error())
-	}
 
 	// Using snowflake to generate service name.
 	sf, err := snowflake.NewNode(2)

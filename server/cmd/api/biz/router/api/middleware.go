@@ -5,11 +5,17 @@ package Api
 import (
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/hertz-contrib/gzip"
+	"github.com/hertz-contrib/limiter"
 )
 
 func rootMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		// use gzip mw
+		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
+		// use limiter mw
+		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
+	}
 }
 
 func _v1Mw() []app.HandlerFunc {

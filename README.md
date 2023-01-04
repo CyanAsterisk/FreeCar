@@ -1,5 +1,7 @@
 ![FreeCar](static/resources/FreeCar.png)
 
+English | [中文](README_zh.md)
+
 FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 ## Call Relations
@@ -14,21 +16,23 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 ## Architecture
 
-### Internal
-
 ```
 // TODO
 ```
 
 ## Catalog Introduce
 
+| Catalog | Introduce                    |
+|---------|------------------------------|
+| Server  | Core services of the project |
+| Shared  | Reusable code                |
+| Static  | Front-end static files       |
+
 ## Quick Start
 
 ## API Requests
 
 ## CookBook
-
-
 
 ## License
 

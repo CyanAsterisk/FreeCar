@@ -228,9 +228,9 @@ make api
 ```shell
 make auth
 make blobs
-make a car
+make car
 make profile
-make a trip
+make trip
 ```
 
 ## API Requests

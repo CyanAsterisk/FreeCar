@@ -227,7 +227,7 @@ make api
 - Start Kitex-based microservices
 ```shell
 make auth
-make blobs
+make blob
 make car
 make profile
 make trip

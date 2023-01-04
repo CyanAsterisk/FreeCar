@@ -16,9 +16,7 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
 ## 架构图
 
-```
-// TODO
-```
+TODO
 
 ## 目录介绍
 
@@ -37,6 +35,8 @@ make start
 
 - 配置 Nacos
 
+> 如何登录 Nacos？你可以通过这个[链接](http://127.0.0.1:8848/nacos/index.html#/login)进行登录。
+> 
 > 默认命名空间以及配置组等请参考各个 `config.yaml` 配置文件。
 
 **api => API_GROUP**
@@ -235,6 +235,8 @@ make trip
 
 ## API 请求
 
+TODO
+
 ## 开发指南
 
 通过直接阅读源码来了解此项目是非常困难的，在此提供开发指南方便开发者快速了解并上手此项目包括 Kitex、Hertz 等框架。
@@ -246,6 +248,8 @@ make trip
 ```shell
 make start
 ```
+
+TO BE CONTINUE
 
 ## 许可证
 

@@ -235,7 +235,487 @@ make trip
 
 ## API 请求
 
-TODO
+### Login
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/auth/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "code":"123456789"
+}'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk",
+    "expired_at": 1675596721
+  }
+}
+```
+
+### CreateCar
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/car' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "id": "63b808475e992cb7509b215a",
+    "car": {
+      "status": 1,
+      "driver": {
+        "id": 0,
+        "avatar_url": ""
+      },
+      "position": {
+        "latitude": 30,
+        "longitude": 120
+      },
+      "trip_id": ""
+    }
+  }
+}
+```
+
+### GetCar
+
+**Request**
+
+```shell
+curl --location --request GET '127.0.0.1:9900/car' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk' \
+  --data-raw '{
+    "id":"63b808475e992cb7509b215a"
+}'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "status": 1,
+    "driver": {
+      "id": 0,
+      "avatar_url": ""
+    },
+    "position": {
+      "latitude": 30,
+      "longitude": 120
+    },
+    "trip_id": ""
+  }
+}
+```
+
+### GetProfile
+
+**Request**
+
+```shell
+curl --location --request GET '127.0.0.1:9900/profile' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "identity": {
+      "lic_number": "",
+      "name": "",
+      "gender": 0,
+      "birth_date_millis": 0
+    },
+    "identity_status": 0
+  }
+}
+```
+
+### SubmitProfile
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/profile' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk' \
+  --data-raw '{
+    "identity": {
+        "lic_number": "123456789",
+        "name": "FreeCar",
+        "gender": 1,
+        "birth_date_millis": 1058190205
+    }
+}'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "identity": {
+      "lic_number": "123456789",
+      "name": "FreeCar",
+      "gender": 1,
+      "birth_date_millis": 1058190205
+    },
+    "identity_status": 1
+  }
+}
+```
+
+### ClearProfile
+
+**Request**
+
+```shell
+curl --location --request DELETE '127.0.0.1:9900/profile' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "identity": {
+      "lic_number": "",
+      "name": "",
+      "gender": 0,
+      "birth_date_millis": 0
+    },
+    "identity_status": 0
+  }
+}
+```
+
+### CreateProfilePhoto
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/profile/photo' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "url": "https://freecar-1234567.cos"
+  }
+}
+```
+
+### GetProfilePhoto
+
+**Request**
+
+```shell
+curl --location --request GET '127.0.0.1:9900/profile/photo' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "url": "https://freecar-1234567.cos"
+  }
+}
+```
+
+### ClearProfilePhoto
+
+**Request**
+
+```shell
+curl --location --request DELETE '127.0.0.1:9900/profile/photo' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {}
+}
+```
+
+### CreateTrip
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/trip' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk' \
+  --data-raw '{
+    "start": {
+        "latitude": 123.11,
+        "longitude": 122.78
+    },
+    "car_id": "63b813565e992cb7509b215d",
+    "avatar_url": "url"
+}'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "id": "63b81364ce0713e67dab8856",
+    "trip": {
+      "account_id": 1611324466103586816,
+      "car_id": "63b813565e992cb7509b215d",
+      "start": {
+        "location": {
+          "latitude": 123.11,
+          "longitude": 122.78
+        },
+        "fee_cent": 0,
+        "km_driven": 0,
+        "poi_name": "综合实验大楼",
+        "timestamp_sec": 1673007972
+      },
+      "current": {
+        "location": {
+          "latitude": 123.11,
+          "longitude": 122.78
+        },
+        "fee_cent": 0,
+        "km_driven": 0,
+        "poi_name": "综合实验大楼",
+        "timestamp_sec": 1673007972
+      },
+      "end": {
+        "location": null,
+        "fee_cent": 0,
+        "km_driven": 0,
+        "poi_name": "",
+        "timestamp_sec": 0
+      },
+      "status": 1,
+      "identity_id": "eyJsaWNfbnVtYmVyIjoiMTIzNDU2Nzg5IiwibmFtZSI6IkZyZWVDYXIiLCJnZW5kZXIiOjEsImJpcnRoX2RhdGVfbWlsbGlzIjoxMDU4MTkwMjA1fQ=="
+    }
+  }
+}
+```
+
+### GetTrip
+
+**Request**
+
+```shell
+curl --location --request GET '127.0.0.1:9900/trip/63b81364ce0713e67dab8856' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "account_id": 1611324466103586816,
+    "car_id": "63b813565e992cb7509b215d",
+    "start": {
+      "location": {
+        "latitude": 123.11,
+        "longitude": 122.78
+      },
+      "fee_cent": 0,
+      "km_driven": 0,
+      "poi_name": "综合实验大楼",
+      "timestamp_sec": 1673007972
+    },
+    "current": {
+      "location": {
+        "latitude": 123.11,
+        "longitude": 122.78
+      },
+      "fee_cent": 0,
+      "km_driven": 0,
+      "poi_name": "综合实验大楼",
+      "timestamp_sec": 1673007972
+    },
+    "end": {
+      "location": null,
+      "fee_cent": 0,
+      "km_driven": 0,
+      "poi_name": "",
+      "timestamp_sec": 0
+    },
+    "status": 1,
+    "identity_id": "eyJsaWNfbnVtYmVyIjoiMTIzNDU2Nzg5IiwibmFtZSI6IkZyZWVDYXIiLCJnZW5kZXIiOjEsImJpcnRoX2RhdGVfbWlsbGlzIjoxMDU4MTkwMjA1fQ=="
+  }
+}
+```
+
+### GetTrips
+
+**Request**
+
+```shell
+curl --location --request GET '127.0.0.1:9900/trips' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "trips": [
+      {
+        "id": "63b81364ce0713e67dab8856",
+        "trip": {
+          "account_id": 1611324466103586816,
+          "car_id": "63b813565e992cb7509b215d",
+          "start": {
+            "location": {
+              "latitude": 123.11,
+              "longitude": 122.78
+            },
+            "fee_cent": 0,
+            "km_driven": 0,
+            "poi_name": "综合实验大楼",
+            "timestamp_sec": 1673007972
+          },
+          "current": {
+            "location": {
+              "latitude": 123.11,
+              "longitude": 122.78
+            },
+            "fee_cent": 0,
+            "km_driven": 0,
+            "poi_name": "综合实验大楼",
+            "timestamp_sec": 1673007972
+          },
+          "end": {
+            "location": null,
+            "fee_cent": 0,
+            "km_driven": 0,
+            "poi_name": "",
+            "timestamp_sec": 0
+          },
+          "status": 1,
+          "identity_id": "eyJsaWNfbnVtYmVyIjoiMTIzNDU2Nzg5IiwibmFtZSI6IkZyZWVDYXIiLCJnZW5kZXIiOjEsImJpcnRoX2RhdGVfbWlsbGlzIjoxMDU4MTkwMjA1fQ=="
+        }
+      }
+    ]
+  }
+}
+```
+
+### UpdateTrip
+
+**Request**
+
+```shell
+curl --location --request POST '127.0.0.1:9900/trip/63b81364ce0713e67dab8856' \
+  --header 'Content-Type: application/json' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTYxMTMyNDQ2NjEwMzU4NjgxNiwiZXhwIjoxNjc1NTk2NzIxLCJpc3MiOiJGcmVlQ2FyIiwibmJmIjoxNjczMDA0NzIxfQ.THlMej2DgC3Lbt-TROkX55lMe9KZm9k2_VGvfKlW4Tk' \
+  --data-raw '{
+    "current": {
+        "latitude": 113.11,
+        "longitude": 112.78
+    },
+    "end_trip":false
+}'
+```
+
+**Response**
+
+```json
+{
+  "code": 10000,
+  "message": "Success",
+  "data": {
+    "account_id": 1611324466103586816,
+    "car_id": "63b813565e992cb7509b215d",
+    "start": {
+      "location": {
+        "latitude": 123.11,
+        "longitude": 122.78
+      },
+      "fee_cent": 0,
+      "km_driven": 0,
+      "poi_name": "综合实验大楼",
+      "timestamp_sec": 1673007972
+    },
+    "current": {
+      "location": {
+        "latitude": 113.11,
+        "longitude": 112.78
+      },
+      "fee_cent": 914,
+      "km_driven": 1.5129536144797615,
+      "poi_name": "中心食堂",
+      "timestamp_sec": 1673009357
+    },
+    "end": {
+      "location": null,
+      "fee_cent": 0,
+      "km_driven": 0,
+      "poi_name": "",
+      "timestamp_sec": 0
+    },
+    "status": 1,
+    "identity_id": "eyJsaWNfbnVtYmVyIjoiMTIzNDU2Nzg5IiwibmFtZSI6IkZyZWVDYXIiLCJnZW5kZXIiOjEsImJpcnRoX2RhdGVfbWlsbGlzIjoxMDU4MTkwMjA1fQ=="
+  }
+}
+```
 
 ## 开发指南
 
@@ -243,13 +723,77 @@ TODO
 
 ### 前置准备
 
-通过以下命令在本地快速搭建起项目所需的工具。
+通过快速开始中的命令快速启动所需的工具与环境，若需要特殊定制请修改 `docker-compose.yaml` 与 Nacos 配置中的内容。
 
-```shell
-make start
+### IDL
+
+在开发之前我们需要定义好 IDL 文件，其中 hz 为开发者提供了许多定制化的 [api 注解](https://www.cloudwego.io/zh/docs/hertz/tutorials/toolkit/toolkit/#%E6%94%AF%E6%8C%81%E7%9A%84-api-%E6%B3%A8%E8%A7%A3)。
+
+示例代码：
+```thrift
+namespace go auth
+
+struct LoginRequest {
+    1: string code
+}
+
+struct LoginResponse {
+    1: i64 accountID
+}
+
+service AuthService {
+    LoginResponse Login(1: LoginRequest req)
+}
 ```
 
-TO BE CONTINUE
+### 代码生成
+
+#### Kitex
+
+在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
+```shell
+kitex -service auth -module github.com/CyanAsterisk/FreeCar  ./../../idl/auth.thrift
+```
+
+注意项：
+- 用 `-module github.com/CyanAsterisk/FreeCar` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
+
+#### Hertz
+
+```shell
+hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
+```
+
+注意项：
+- 用 `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
+
+### 业务开发
+
+在代码生成完毕后需要先将一些必须组件添加到项目中。由于 api 层不必再次添加，因此以下主要讲解关于 Kitex-Server 部分，代码位于 `server/cmd` 下。
+
+#### Config
+
+参考 `server/cmd/auth/config`，为微服务的配置结构体。
+
+#### Global
+
+参考 `server/cmd/auth/global`，为微服务提供可全局调用的方法。
+
+#### Initialize
+
+参考 `server/cmd/auth/initialize`，提供必要组件的初始化功能，其中 `config.go` `flag.go` `logger.go` `registry.go` 为必须项。
+
+#### Tool
+
+参考 `server/cmd/auth/tool`，提供微服务的工具函数，其中 `port.go` 为必须项。
+
+#### API
+
+在写网关层的业务逻辑时，仅需要每次更新 IDL 与新的微服务客户端代码，若需要添加新的组件直接添加即可，项目高度可拔插，架构与微服务层相似。
+
+网关层的业务逻辑在 `server/cmd/api/biz` 下，大部分代码会自动生成。若需要单独新增路由需要到 `server/cmd/api/router.go` 中。
+
+关于中间件的使用，只需要在 `server/cmd/api/biz/router/api/middleware.go` 中添加中间件逻辑。
 
 ## 许可证
 

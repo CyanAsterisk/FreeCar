@@ -18,11 +18,6 @@ func rootMw() []app.HandlerFunc {
 	}
 }
 
-func _v1Mw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _createcarMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		middleware.Recovery(),

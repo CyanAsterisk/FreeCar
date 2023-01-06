@@ -21,7 +21,7 @@ import (
 )
 
 // Login .
-// @router /v1/auth/login [POST]
+// @router /auth/login [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.LoginRequest
@@ -59,7 +59,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateCar .
-// @router /v1/car [POST]
+// @router /car [POST]
 func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.CreateCarRequest
@@ -79,7 +79,7 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetCar .
-// @router /v1/car [GET]
+// @router /car [GET]
 func GetCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetCarRequest
@@ -106,7 +106,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetProfile .
-// @router /v1/profile [GET]
+// @router /profile [GET]
 func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 
@@ -126,7 +126,7 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 }
 
 // SubmitProfile .
-// @router /v1/profile [POST]
+// @router /profile [POST]
 func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.SubmitProfileRequest
@@ -159,7 +159,7 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 }
 
 // ClearProfile .
-// @router /v1/profile [DELETE]
+// @router /profile [DELETE]
 func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.ClearProfileRequest
@@ -180,7 +180,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetProfilePhoto .
-// @router /v1/profile/photo [GET]
+// @router /profile/photo [GET]
 func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
@@ -199,7 +199,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateProfilePhoto .
-// @router /v1/profile/photo [POST]
+// @router /profile/photo [POST]
 func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
@@ -218,7 +218,7 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 }
 
 // CompleteProfilePhoto .
-// @router /v1/profile/photo/complete [POST]
+// @router /profile/photo/complete [POST]
 func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
@@ -237,7 +237,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 }
 
 // ClearProfilePhoto .
-// @router /v1/profile/photo [DELETE]
+// @router /profile/photo [DELETE]
 func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
@@ -256,7 +256,7 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateTrip .
-// @router /v1/trip [POST]
+// @router /trip [POST]
 func CreateTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.CreateTripRequest
@@ -289,7 +289,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetTrip .
-// @router /v1/trip/:id [GET]
+// @router /trip/:id [GET]
 func GetTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetTripRequest
@@ -313,7 +313,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetTrips .
-// @router /v1/trips [GET]
+// @router /trips [GET]
 func GetTrips(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetTripsRequest
@@ -340,7 +340,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateTrip .
-// @router /v1/trip/:id [PUT]
+// @router /trip/:id [PUT]
 func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.UpdateTripRequest

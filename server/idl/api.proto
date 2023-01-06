@@ -12,7 +12,7 @@ message LoginRequest {
 
 message LoginResponse {
   string token = 1;
-  int64 expired_at = 2[(api.body)="expired_at"];
+  int64 expired_at = 2[(api.body) = "expired_at"];
 }
 
 message ELoginResponse{
@@ -42,7 +42,7 @@ enum CarStatus {
 
 message Driver {
   string id = 1;
-  string avatar_url = 2[(api.body)="avatar_url"];
+  string avatar_url = 2[(api.body) = "avatar_url"];
 }
 
 message Location {
@@ -54,7 +54,7 @@ message Car {
   CarStatus status = 1;
   Driver driver = 2;
   Location position = 3;
-  string trip_id = 4[(api.body)="trip_id"];
+  string trip_id = 4[(api.body) = "trip_id"];
 }
 message ECar{
   int32 code = 1;
@@ -63,7 +63,7 @@ message ECar{
 }
 
 message CreateCarRequest {
-  int64 account_id = 1[(api.body)="account_id"];
+  int64 account_id = 1[(api.body) = "account_id"];
 }
 
 message GetCarRequest {
@@ -72,10 +72,10 @@ message GetCarRequest {
 
 message LocationStatus{
   Location location = 1;
-  int32 fee_cent = 2[(api.body)="fee_cent"];
-  double km_driven = 3[(api.body)="km_driver"];
-  string poi_name = 4[(api.body)="poi_name"];
-  int64 timestamp_sec = 5[(api.body)="timestamp_sec"];
+  int32 fee_cent = 2[(api.body) = "fee_cent"];
+  double km_driven = 3[(api.body) = "km_driver"];
+  string poi_name = 4[(api.body) = "poi_name"];
+  int64 timestamp_sec = 5[(api.body) = "timestamp_sec"];
 }
 
 enum TripStatus {
@@ -96,13 +96,13 @@ message ETripEntity{
 }
 
 message Trip{
-  int64 account_id = 1[(api.body)="account_id"];
-  string car_id = 2[(api.body)="car_id"];
+  int64 account_id = 1[(api.body) = "account_id"];
+  string car_id = 2[(api.body) = "car_id"];
   LocationStatus start = 3;
   LocationStatus current = 4;
   LocationStatus end = 5;
   TripStatus status = 6;
-  string identity_id = 7[(api.body)="identity_id"];
+  string identity_id = 7[(api.body) = "identity_id"];
 }
 
 message ETrip{
@@ -113,8 +113,8 @@ message ETrip{
 
 message CreateTripRequest {
   Location start = 1;
-  string car_id = 2[(api.body)="car_id"];
-  string avatar_url = 3[(api.body)="avatar_url"];
+  string car_id = 2[(api.body) = "car_id"];
+  string avatar_url = 3[(api.body) = "avatar_url"];
 }
 
 
@@ -141,7 +141,7 @@ message EGetTripsResponse{
 message UpdateTripRequest{
   string id = 1;
   Location current = 2;
-  bool end_trip = 3[(api.body)="end_trip"];
+  bool end_trip = 3[(api.body) = "end_trip"];
 }
 
 enum Gender {
@@ -158,7 +158,7 @@ enum IdentityStatus {
 
 message Profile {
   Identity identity = 1;
-  IdentityStatus identity_status = 2[(api.body)="identity_status"];
+  IdentityStatus identity_status = 2[(api.body) = "identity_status"];
 }
 
 message EProfile{
@@ -168,10 +168,10 @@ message EProfile{
 }
 
 message Identity {
-  string lic_number = 1[(api.body)="lic_number"];
+  string lic_number = 1[(api.body) = "lic_number"];
   string name = 2;
   Gender gender = 3;
-  int64 birth_date_millis = 4[(api.body)="birth_date_millis"];
+  int64 birth_date_millis = 4[(api.body) = "birth_date_millis"];
 }
 
 message EIdentity {
@@ -205,7 +205,7 @@ message EGetProfilePhotoResponse {
 message CreateProfilePhotoRequest {}
 
 message CreateProfilePhotoResponse {
-  string upload_url = 1[(api.body)="upload_url"];
+  string upload_url = 1[(api.body) = "upload_url"];
 }
 
 message ECreateProfilePhotoResponse {
@@ -227,22 +227,22 @@ message EClearProfilePhotoResponse {
 }
 
 service apiService {
-  rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/v1/auth/login";}
+  rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/auth/login";}
 
-  rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/v1/car";}
-  rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/v1/car";}
+  rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/car";}
+  rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/car";}
 
-  rpc GetProfile (GetProfileRequest) returns (Profile) {option (api.get) = "/v1/profile";}
-  rpc SubmitProfile (SubmitProfileRequest) returns (Profile) {option (api.post) = "/v1/profile";}
-  rpc ClearProfile (ClearProfileRequest) returns (Profile) {option (api.delete) = "/v1/profile";}
+  rpc GetProfile (GetProfileRequest) returns (Profile) {option (api.get) = "/profile";}
+  rpc SubmitProfile (SubmitProfileRequest) returns (Profile) {option (api.post) = "/profile";}
+  rpc ClearProfile (ClearProfileRequest) returns (Profile) {option (api.delete) = "/profile";}
 
-  rpc GetProfilePhoto (GetProfilePhotoRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/v1/profile/photo";}
-  rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/v1/profile/photo";}
-  rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (Identity) {option (api.post) = "/v1/profile/photo/complete";}
-  rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/v1/profile/photo";}
+  rpc GetProfilePhoto (GetProfilePhotoRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/profile/photo";}
+  rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/profile/photo";}
+  rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (Identity) {option (api.post) = "/profile/photo/complete";}
+  rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/profile/photo";}
 
-  rpc CreateTrip (CreateTripRequest) returns (TripEntity) {option (api.post) = "/v1/trip";}
-  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/v1/trip/:id";}
-  rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/v1/trips";}
-  rpc UpdateTrip (UpdateTripRequest) returns (Trip) {option (api.put) = "/v1/trip/:id";}
+  rpc CreateTrip (CreateTripRequest) returns (TripEntity) {option (api.post) = "/trip";}
+  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/trip/:id";}
+  rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/trips";}
+  rpc UpdateTrip (UpdateTripRequest) returns (Trip) {option (api.put) = "/trip/:id";}
 }

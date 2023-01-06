@@ -29,17 +29,21 @@ TODO
 ## 快速开始
 
 - 通过 Docker 启动所需要的工具与环境
+
 ```shell
 make start
 ```
 
 - 配置 Nacos
 
-> 如何登录 Nacos？你可以通过这个[链接](http://127.0.0.1:8848/nacos/index.html#/login)进行登录。
-> 
+> 在浏览器上访问 `http://127.0.0.1:8848/nacos/index.html#/login` 进行登录。
+>
 > 默认命名空间以及配置组等请参考各个 `config.yaml` 配置文件。
 
-**api => API_GROUP**
+![nacos.png](static/resources/nacos.png)
+
+*api => API_GROUP*
+
 ```json
 {
   "name": "api",
@@ -55,22 +59,23 @@ make start
   "otel": {
     "endpoint": ":4317"
   },
-  "auth_srv":{
+  "auth_srv": {
     "name": "auth_srv"
   },
-  "car_srv":{
+  "car_srv": {
     "name": "car_srv"
   },
-  "profile_srv":{
+  "profile_srv": {
     "name": "profile_srv"
   },
-  "trip_srv":{
+  "trip_srv": {
     "name": "trip_srv"
   }
 }
 ```
 
-**auth_srv => AUTH_GROUP**
+*auth_srv => AUTH_GROUP*
+
 ```json
 {
   "name": "auth_srv",
@@ -90,14 +95,15 @@ make start
   "otel": {
     "endpoint": ":4317"
   },
-  "wx_config":{
+  "wx_config": {
     "app_id": "your app id",
     "app_secret": "your app secret"
   }
 }
 ```
 
-**blob_srv => BLOB_GROUP**
+*blob_srv => BLOB_GROUP*
+
 ```json
 {
   "name": "blob_srv",
@@ -117,20 +123,21 @@ make start
   "otel": {
     "endpoint": ":4317"
   },
-  "cos_config":{
-    "addr":"your cos addr",
-    "sec_id":"your sec id",
-    "sec_key":"your sec key"
+  "cos_config": {
+    "addr": "your cos addr",
+    "sec_id": "your sec id",
+    "sec_key": "your sec key"
   }
 }
 ```
 
-**car_srv => CAR_GROUP**
+*car_srv => CAR_GROUP*
+
 ```json
 {
   "name": "car_srv",
   "host": "your host",
-  "wsAddr":":9090",
+  "wsAddr": ":9090",
   "mongodb": {
     "host": "127.0.0.1",
     "port": 27017,
@@ -159,7 +166,8 @@ make start
 }
 ```
 
-**profile_srv => RENTAL_GROUP**
+*profile_srv => RENTAL_GROUP*
+
 ```json
 {
   "name": "profile_srv",
@@ -185,7 +193,8 @@ make start
 }
 ```
 
-**trip_srv => RENTAL_GROUP**
+*trip_srv => RENTAL_GROUP*
+
 ```json
 {
   "name": "trip_srv",
@@ -232,6 +241,24 @@ make car
 make profile
 make trip
 ```
+
+### Jaeger
+
+> 在浏览器上访问 `http://127.0.0.1:16686/`
+
+![jaeger.jpg](static/resources/jaeger.jpg)
+
+### Consul
+
+> 在浏览器上访问 `http://127.0.0.1:8500/`
+
+![consul.jpg](static/resources/consul.png)
+
+### Prometheus
+
+> 在浏览器上访问 `http://127.0.0.1:3000/`
+
+![prometheus.jpg](static/resources/prometheus.png)
 
 ## API 请求
 
@@ -727,9 +754,11 @@ curl --location --request POST '127.0.0.1:9900/trip/63b81364ce0713e67dab8856' \
 
 ### IDL
 
-在开发之前我们需要定义好 IDL 文件，其中 hz 为开发者提供了许多定制化的 [api 注解](https://www.cloudwego.io/zh/docs/hertz/tutorials/toolkit/toolkit/#%E6%94%AF%E6%8C%81%E7%9A%84-api-%E6%B3%A8%E8%A7%A3)。
+在开发之前我们需要定义好 IDL 文件，其中 hz
+为开发者提供了许多定制化的 [api 注解](https://www.cloudwego.io/zh/docs/hertz/tutorials/toolkit/toolkit/#%E6%94%AF%E6%8C%81%E7%9A%84-api-%E6%B3%A8%E8%A7%A3)。
 
 示例代码：
+
 ```thrift
 namespace go auth
 
@@ -751,11 +780,13 @@ service AuthService {
 #### Kitex
 
 在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
+
 ```shell
 kitex -service auth -module github.com/CyanAsterisk/FreeCar  ./../../idl/auth.thrift
 ```
 
 注意项：
+
 - 用 `-module github.com/CyanAsterisk/FreeCar` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
 
 #### Hertz
@@ -765,11 +796,13 @@ hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cm
 ```
 
 注意项：
+
 - 用 `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
 
 ### 业务开发
 
-在代码生成完毕后需要先将一些必须组件添加到项目中。由于 api 层不必再次添加，因此以下主要讲解关于 Kitex-Server 部分，代码位于 `server/cmd` 下。
+在代码生成完毕后需要先将一些必须组件添加到项目中。由于 api 层不必再次添加，因此以下主要讲解关于 Kitex-Server
+部分，代码位于 `server/cmd` 下。
 
 #### Config
 

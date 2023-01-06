@@ -28,19 +28,21 @@ TODO
 
 ## Quick Start
 
-- Start the required tools and environment through Docker
+### Start the Dependence
 
 ```shell
 make start
 ```
 
-- Configure Nacos
+### Nacos
 
-> How to log in to Nacos? You can log in through this [link](http://127.0.0.1:8848/nacos/index.html#/login).
+> Visit `http://127.0.0.1:8848/nacos/index.html#/login` on browser.
 >
 > For the default namespace and configuration groups, please refer to each `config.yaml` configuration file.
 
-**api => API_GROUP**
+![nacos.png](static/resources/nacos.png)
+
+*api => API_GROUP*
 
 ```json
 {
@@ -72,7 +74,7 @@ make start
 }
 ```
 
-**auth_srv => AUTH_GROUP**
+*auth_srv => AUTH_GROUP*
 
 ```json
 {
@@ -100,7 +102,7 @@ make start
 }
 ```
 
-**blob_srv => BLOB_GROUP**
+*blob_srv => BLOB_GROUP*
 
 ```json
 {
@@ -129,7 +131,7 @@ make start
 }
 ```
 
-**car_srv => CAR_GROUP**
+*car_srv => CAR_GROUP*
 
 ```json
 {
@@ -164,7 +166,7 @@ make start
 }
 ```
 
-**profile_srv => RENTAL_GROUP**
+*profile_srv => RENTAL_GROUP*
 
 ```json
 {
@@ -191,7 +193,7 @@ make start
 }
 ```
 
-**trip_srv => RENTAL_GROUP**
+*trip_srv => RENTAL_GROUP*
 
 ```json
 {
@@ -242,6 +244,24 @@ make car
 make profile
 make trip
 ```
+
+### Jaeger
+
+> Visit `http://127.0.0.1:16686/` on  browser.
+
+![jaeger.jpg](static/resources/jaeger.jpg)
+
+### Consul
+
+> Visit `http://127.0.0.1:8500/` on  browser.
+
+![consul.jpg](static/resources/consul.png)
+
+### Prometheus
+
+> Visit `http://127.0.0.1:3000/` on browser.
+
+![prometheus.jpg](static/resources/prometheus.png)
 
 ## API Requests
 

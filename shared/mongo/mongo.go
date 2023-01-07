@@ -9,10 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ObjID struct {
-	ID primitive.ObjectID `bson:"_id"`
-}
-
 // Common field names.
 const (
 	IDFieldName        = "_id"

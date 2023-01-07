@@ -1,7 +1,7 @@
 use FreeCar
 
 db.trip.createIndex({
-    "trip.account_id": 1,
+    "trip.accountid": 1,
     "trip.status": 1,
 }, {
     unique: true,
@@ -11,7 +11,7 @@ db.trip.createIndex({
 })
 
 db.profile.createIndex({
-    "account_id": 1,
+    "accountid": 1,
 }, {
     unique: true,
 })

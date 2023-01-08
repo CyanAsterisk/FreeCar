@@ -6,7 +6,6 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 )
 
@@ -16,7 +15,7 @@ type Manager struct {
 }
 
 // Verify verifies car status.
-func (m *Manager) Verify(c context.Context, cid id.CarID, aid id.AccountID, _ *trip.Location) error {
+func (m *Manager) Verify(c context.Context, cid id.CarID, aid id.AccountID) error {
 	carClient, err := m.CarService.GetCar(c, &car.GetCarRequest{
 		Id:        cid.String(),
 		AccountId: int64(aid),

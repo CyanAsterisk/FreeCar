@@ -29,7 +29,7 @@ type ProfileManager interface {
 
 // CarManager defines the ACL for car management.
 type CarManager interface {
-	Verify(c context.Context, cid id.CarID, aid id.AccountID, loc *trip.Location) error
+	Verify(c context.Context, cid id.CarID, aid id.AccountID) error
 	Unlock(c context.Context, cid id.CarID, aid id.AccountID, tid id.TripID, avatarURL string) error
 	Lock(c context.Context, cid id.CarID, aid id.AccountID) error
 }
@@ -52,7 +52,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	}
 	// Check vehicle status.
 	carID := id.CarID(req.CarId)
-	err = s.CarManager.Verify(ctx, carID, aid, req.Start)
+	err = s.CarManager.Verify(ctx, carID, aid)
 	if err != nil {
 		return nil, status.Err(codes.FailedPrecondition, err.Error())
 	}

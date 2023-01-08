@@ -149,7 +149,6 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 		if err != nil {
 			return nil, status.Errorf(codes.FailedPrecondition, "cannot lock car: %v", err)
 		}
-
 	}
 	err = dao.UpdateTrip(ctx, tid, aid, tr.UpdatedAt, tr.Trip)
 	if err != nil {

@@ -1,7 +1,6 @@
 package poi
 
 import (
-	"context"
 	"hash/fnv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
@@ -21,7 +20,7 @@ var poi = []string{
 type Manager struct{}
 
 // Resolve resolves the given location.
-func (*Manager) Resolve(_ context.Context, loc *trip.Location) (string, error) {
+func (*Manager) Resolve(loc *trip.Location) (string, error) {
 	b, err := sonic.Marshal(loc)
 	if err != nil {
 		return "", err

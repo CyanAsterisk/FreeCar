@@ -230,7 +230,7 @@ type carManager struct {
 	unlockErr error
 }
 
-func (m *carManager) Verify(c context.Context, cid id.CarID, aid id.AccountID, loc *trip.Location) error {
+func (m *carManager) Verify(c context.Context, cid id.CarID, aid id.AccountID) error {
 	return m.verifyErr
 }
 

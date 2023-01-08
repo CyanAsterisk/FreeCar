@@ -36,7 +36,7 @@ type CarManager interface {
 
 // POIManager resolves POI(Point Of Interest).
 type POIManager interface {
-	Resolve(context.Context, *trip.Location) (string, error)
+	Resolve(*trip.Location) (string, error)
 }
 
 // CreateTrip implements the TripServiceImpl interface.
@@ -57,7 +57,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 		return nil, status.Err(codes.FailedPrecondition, err.Error())
 	}
 
-	ls := s.calcCurrentStatus(ctx, &trip.LocationStatus{
+	ls := s.calcCurrentStatus(&trip.LocationStatus{
 		Location:     req.Start,
 		TimestampSec: nowFunc(),
 	}, req.Start)
@@ -140,7 +140,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 		cur = req.Current
 	}
 
-	tr.Trip.Current = s.calcCurrentStatus(ctx, tr.Trip.Current, cur)
+	tr.Trip.Current = s.calcCurrentStatus(tr.Trip.Current, cur)
 
 	if req.EndTrip {
 		tr.Trip.End = tr.Trip.Current
@@ -167,11 +167,11 @@ const (
 	kmPerSec    = 0.02
 )
 
-func (s *TripServiceImpl) calcCurrentStatus(c context.Context, last *trip.LocationStatus, cur *trip.Location) *trip.LocationStatus {
+func (s *TripServiceImpl) calcCurrentStatus(last *trip.LocationStatus, cur *trip.Location) *trip.LocationStatus {
 	now := nowFunc()
 	elapsedSec := float64(now - last.TimestampSec)
 	// get start position
-	poi, err := s.POIManager.Resolve(c, cur)
+	poi, err := s.POIManager.Resolve(cur)
 	if err != nil {
 		klog.Info("cannot resolve poi", "location", cur, err)
 	}

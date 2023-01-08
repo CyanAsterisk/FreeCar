@@ -5,7 +5,7 @@ export namespace TripService{
     export function createTrip(req:api.ICreateTripRequest):Promise<api.IETripEntity>{
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/v1/trip',
+            path: '/trip',
             data: req,
             respMarshaller: api.ETripEntity.fromObject,
         })
@@ -14,7 +14,7 @@ export namespace TripService{
     export function getTrip(id: string): Promise<api.IETrip> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: `/v1/trip/${encodeURIComponent(id)}`,
+            path: `/trip/${encodeURIComponent(id)}`,
             respMarshaller: api.ETrip.fromObject,
         })
     }
@@ -22,7 +22,7 @@ export namespace TripService{
     export function getTrips(req: api.IGetTripsRequest): Promise<api.IEGetTripsResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path:  '/v1/trips',
+            path:  '/trips',
             data: req,
             respMarshaller: api.EGetTripsResponse.fromObject,
         })
@@ -49,7 +49,7 @@ export namespace TripService{
         }
         return FreeCar.sendRequestWithAuthRetry({
             method: 'PUT',
-            path: `/v1/trip/${encodeURIComponent(r.id)}`,
+            path: `/trip/${encodeURIComponent(r.id)}`,
             data: r,
             respMarshaller: api.ETrip.fromObject,
         })

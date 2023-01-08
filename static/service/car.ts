@@ -20,7 +20,7 @@ export namespace CarService {
     export function getCar(id: string): Promise<api.ICar> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: `/v1/car/${encodeURIComponent(id)}`,
+            path: `/car/${encodeURIComponent(id)}`,
             respMarshaller: api.Car.fromObject,
         })
     }

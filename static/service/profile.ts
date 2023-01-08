@@ -5,7 +5,7 @@ export namespace ProfileService {
     export function getProfile(): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: '/v1/profile',
+            path: '/profile',
             respMarshaller: api.EProfile.fromObject,
         })
     }
@@ -13,7 +13,7 @@ export namespace ProfileService {
     export function submitProfile(req: api.ISubmitProfileRequest): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/v1/profile',
+            path: '/profile',
             data: req,
             respMarshaller: api.EProfile.fromObject,
         })
@@ -22,7 +22,7 @@ export namespace ProfileService {
     export function clearProfile(): Promise<api.IEProfile> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'DELETE',
-            path: '/v1/profile',
+            path: '/profile',
             respMarshaller: api.EProfile.fromObject,
         })
     }
@@ -30,7 +30,7 @@ export namespace ProfileService {
     export function getProfilePhoto(): Promise<api.IEGetProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: '/v1/profile/photo',
+            path: '/profile/photo',
             respMarshaller: api.EGetProfilePhotoResponse.fromObject,
         })
     }
@@ -38,7 +38,7 @@ export namespace ProfileService {
     export function createProfilePhoto(): Promise<api.IECreateProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/v1/profile/photo',
+            path: '/profile/photo',
             respMarshaller: api.ECreateProfilePhotoResponse.fromObject,
         })
     }
@@ -46,7 +46,7 @@ export namespace ProfileService {
     export function completeProfilePhoto(): Promise<api.IEIdentity> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/v1/profile/photo/complete',
+            path: '/profile/photo/complete',
             respMarshaller: api.EIdentity.fromObject,
         })
     }
@@ -54,7 +54,7 @@ export namespace ProfileService {
     export function clearProfilePhoto(): Promise<api.IEClearProfilePhotoResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'DELETE',
-            path: '/v1/profile/photo',
+            path: '/profile/photo',
             respMarshaller: api.EClearProfilePhotoResponse.fromObject,
         })
     }

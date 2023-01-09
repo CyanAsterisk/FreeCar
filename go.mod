@@ -13,7 +13,6 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/gzip v0.0.1
-	github.com/hertz-contrib/http2 v0.1.1
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
@@ -31,7 +30,7 @@ require (
 	go.mongodb.org/mongo-driver v1.11.1
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
-	gorm.io/driver/mysql v1.4.4
+	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.2
 	gorm.io/plugin/opentelemetry v0.1.0
 )
@@ -60,7 +59,7 @@ require (
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect

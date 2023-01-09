@@ -13,7 +13,6 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/gzip v0.0.1
-	github.com/hertz-contrib/http2 v0.1.1
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
@@ -32,7 +31,7 @@ require (
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.4.4
-	gorm.io/gorm v1.24.2
+	gorm.io/gorm v1.24.3
 	gorm.io/plugin/opentelemetry v0.1.0
 )
 

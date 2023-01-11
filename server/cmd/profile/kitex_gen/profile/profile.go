@@ -106,12 +106,16 @@ func (p *IdentityStatus) Value() (driver.Value, error) {
 }
 
 type Profile struct {
-	Identity       *Identity      `thrift:"identity,1" json:"identity"`
-	IdentityStatus IdentityStatus `thrift:"identity_status,2" json:"identity_status"`
+	Identity       *Identity      `thrift:"identity,1" frugal:"1,default,Identity" json:"identity"`
+	IdentityStatus IdentityStatus `thrift:"identity_status,2" frugal:"2,default,IdentityStatus" json:"identity_status"`
 }
 
 func NewProfile() *Profile {
 	return &Profile{}
+}
+
+func (p *Profile) InitDefault() {
+	*p = Profile{}
 }
 
 var Profile_Identity_DEFAULT *Identity
@@ -333,14 +337,18 @@ func (p *Profile) Field2DeepEqual(src IdentityStatus) bool {
 }
 
 type Identity struct {
-	LicNumber       string `thrift:"lic_number,1" json:"lic_number"`
-	Name            string `thrift:"name,2" json:"name"`
-	Gender          Gender `thrift:"gender,3" json:"gender"`
-	BirthDateMillis int64  `thrift:"birth_date_millis,4" json:"birth_date_millis"`
+	LicNumber       string `thrift:"lic_number,1" frugal:"1,default,string" json:"lic_number"`
+	Name            string `thrift:"name,2" frugal:"2,default,string" json:"name"`
+	Gender          Gender `thrift:"gender,3" frugal:"3,default,Gender" json:"gender"`
+	BirthDateMillis int64  `thrift:"birth_date_millis,4" frugal:"4,default,i64" json:"birth_date_millis"`
 }
 
 func NewIdentity() *Identity {
 	return &Identity{}
+}
+
+func (p *Identity) InitDefault() {
+	*p = Identity{}
 }
 
 func (p *Identity) GetLicNumber() (v string) {
@@ -670,11 +678,15 @@ func (p *Identity) Field4DeepEqual(src int64) bool {
 }
 
 type GetProfileRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewGetProfileRequest() *GetProfileRequest {
 	return &GetProfileRequest{}
+}
+
+func (p *GetProfileRequest) InitDefault() {
+	*p = GetProfileRequest{}
 }
 
 func (p *GetProfileRequest) GetAccountId() (v int64) {
@@ -830,12 +842,16 @@ func (p *GetProfileRequest) Field1DeepEqual(src int64) bool {
 }
 
 type SubmitProfileRequest struct {
-	AccountId int64     `thrift:"account_id,1" json:"account_id"`
-	Identity  *Identity `thrift:"identity,2" json:"identity"`
+	AccountId int64     `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	Identity  *Identity `thrift:"identity,2" frugal:"2,default,Identity" json:"identity"`
 }
 
 func NewSubmitProfileRequest() *SubmitProfileRequest {
 	return &SubmitProfileRequest{}
+}
+
+func (p *SubmitProfileRequest) InitDefault() {
+	*p = SubmitProfileRequest{}
 }
 
 func (p *SubmitProfileRequest) GetAccountId() (v int64) {
@@ -1057,11 +1073,15 @@ func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
 }
 
 type ClearProfileRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewClearProfileRequest() *ClearProfileRequest {
 	return &ClearProfileRequest{}
+}
+
+func (p *ClearProfileRequest) InitDefault() {
+	*p = ClearProfileRequest{}
 }
 
 func (p *ClearProfileRequest) GetAccountId() (v int64) {
@@ -1217,11 +1237,15 @@ func (p *ClearProfileRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewGetProfilePhotoRequest() *GetProfilePhotoRequest {
 	return &GetProfilePhotoRequest{}
+}
+
+func (p *GetProfilePhotoRequest) InitDefault() {
+	*p = GetProfilePhotoRequest{}
 }
 
 func (p *GetProfilePhotoRequest) GetAccountId() (v int64) {
@@ -1377,11 +1401,15 @@ func (p *GetProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetProfilePhotoResponse struct {
-	Url string `thrift:"url,1" json:"url"`
+	Url string `thrift:"url,1" frugal:"1,default,string" json:"url"`
 }
 
 func NewGetProfilePhotoResponse() *GetProfilePhotoResponse {
 	return &GetProfilePhotoResponse{}
+}
+
+func (p *GetProfilePhotoResponse) InitDefault() {
+	*p = GetProfilePhotoResponse{}
 }
 
 func (p *GetProfilePhotoResponse) GetUrl() (v string) {
@@ -1537,11 +1565,15 @@ func (p *GetProfilePhotoResponse) Field1DeepEqual(src string) bool {
 }
 
 type CreateProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewCreateProfilePhotoRequest() *CreateProfilePhotoRequest {
 	return &CreateProfilePhotoRequest{}
+}
+
+func (p *CreateProfilePhotoRequest) InitDefault() {
+	*p = CreateProfilePhotoRequest{}
 }
 
 func (p *CreateProfilePhotoRequest) GetAccountId() (v int64) {
@@ -1697,11 +1729,15 @@ func (p *CreateProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type CreateProfilePhotoResponse struct {
-	UploadUrl string `thrift:"upload_url,1" json:"upload_url"`
+	UploadUrl string `thrift:"upload_url,1" frugal:"1,default,string" json:"upload_url"`
 }
 
 func NewCreateProfilePhotoResponse() *CreateProfilePhotoResponse {
 	return &CreateProfilePhotoResponse{}
+}
+
+func (p *CreateProfilePhotoResponse) InitDefault() {
+	*p = CreateProfilePhotoResponse{}
 }
 
 func (p *CreateProfilePhotoResponse) GetUploadUrl() (v string) {
@@ -1857,11 +1893,15 @@ func (p *CreateProfilePhotoResponse) Field1DeepEqual(src string) bool {
 }
 
 type CompleteProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewCompleteProfilePhotoRequest() *CompleteProfilePhotoRequest {
 	return &CompleteProfilePhotoRequest{}
+}
+
+func (p *CompleteProfilePhotoRequest) InitDefault() {
+	*p = CompleteProfilePhotoRequest{}
 }
 
 func (p *CompleteProfilePhotoRequest) GetAccountId() (v int64) {
@@ -2017,11 +2057,15 @@ func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type ClearProfilePhotoRequest struct {
-	AccountId int64 `thrift:"account_id,1" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
 
 func NewClearProfilePhotoRequest() *ClearProfilePhotoRequest {
 	return &ClearProfilePhotoRequest{}
+}
+
+func (p *ClearProfilePhotoRequest) InitDefault() {
+	*p = ClearProfilePhotoRequest{}
 }
 
 func (p *ClearProfilePhotoRequest) GetAccountId() (v int64) {
@@ -2181,6 +2225,10 @@ type ClearProfilePhotoResponse struct {
 
 func NewClearProfilePhotoResponse() *ClearProfilePhotoResponse {
 	return &ClearProfilePhotoResponse{}
+}
+
+func (p *ClearProfilePhotoResponse) InitDefault() {
+	*p = ClearProfilePhotoResponse{}
 }
 
 var fieldIDToName_ClearProfilePhotoResponse = map[int16]string{}
@@ -2756,11 +2804,15 @@ func (p *profileServiceProcessorClearProfilePhoto) Process(ctx context.Context, 
 }
 
 type ProfileServiceGetProfileArgs struct {
-	Req *GetProfileRequest `thrift:"req,1" json:"req"`
+	Req *GetProfileRequest `thrift:"req,1" frugal:"1,default,GetProfileRequest" json:"req"`
 }
 
 func NewProfileServiceGetProfileArgs() *ProfileServiceGetProfileArgs {
 	return &ProfileServiceGetProfileArgs{}
+}
+
+func (p *ProfileServiceGetProfileArgs) InitDefault() {
+	*p = ProfileServiceGetProfileArgs{}
 }
 
 var ProfileServiceGetProfileArgs_Req_DEFAULT *GetProfileRequest
@@ -2924,11 +2976,15 @@ func (p *ProfileServiceGetProfileArgs) Field1DeepEqual(src *GetProfileRequest) b
 }
 
 type ProfileServiceGetProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
 }
 
 func NewProfileServiceGetProfileResult() *ProfileServiceGetProfileResult {
 	return &ProfileServiceGetProfileResult{}
+}
+
+func (p *ProfileServiceGetProfileResult) InitDefault() {
+	*p = ProfileServiceGetProfileResult{}
 }
 
 var ProfileServiceGetProfileResult_Success_DEFAULT *Profile
@@ -3094,11 +3150,15 @@ func (p *ProfileServiceGetProfileResult) Field0DeepEqual(src *Profile) bool {
 }
 
 type ProfileServiceSubmitProfileArgs struct {
-	Req *SubmitProfileRequest `thrift:"req,1" json:"req"`
+	Req *SubmitProfileRequest `thrift:"req,1" frugal:"1,default,SubmitProfileRequest" json:"req"`
 }
 
 func NewProfileServiceSubmitProfileArgs() *ProfileServiceSubmitProfileArgs {
 	return &ProfileServiceSubmitProfileArgs{}
+}
+
+func (p *ProfileServiceSubmitProfileArgs) InitDefault() {
+	*p = ProfileServiceSubmitProfileArgs{}
 }
 
 var ProfileServiceSubmitProfileArgs_Req_DEFAULT *SubmitProfileRequest
@@ -3262,11 +3322,15 @@ func (p *ProfileServiceSubmitProfileArgs) Field1DeepEqual(src *SubmitProfileRequ
 }
 
 type ProfileServiceSubmitProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
 }
 
 func NewProfileServiceSubmitProfileResult() *ProfileServiceSubmitProfileResult {
 	return &ProfileServiceSubmitProfileResult{}
+}
+
+func (p *ProfileServiceSubmitProfileResult) InitDefault() {
+	*p = ProfileServiceSubmitProfileResult{}
 }
 
 var ProfileServiceSubmitProfileResult_Success_DEFAULT *Profile
@@ -3432,11 +3496,15 @@ func (p *ProfileServiceSubmitProfileResult) Field0DeepEqual(src *Profile) bool {
 }
 
 type ProfileServiceClearProfileArgs struct {
-	Req *ClearProfileRequest `thrift:"req,1" json:"req"`
+	Req *ClearProfileRequest `thrift:"req,1" frugal:"1,default,ClearProfileRequest" json:"req"`
 }
 
 func NewProfileServiceClearProfileArgs() *ProfileServiceClearProfileArgs {
 	return &ProfileServiceClearProfileArgs{}
+}
+
+func (p *ProfileServiceClearProfileArgs) InitDefault() {
+	*p = ProfileServiceClearProfileArgs{}
 }
 
 var ProfileServiceClearProfileArgs_Req_DEFAULT *ClearProfileRequest
@@ -3600,11 +3668,15 @@ func (p *ProfileServiceClearProfileArgs) Field1DeepEqual(src *ClearProfileReques
 }
 
 type ProfileServiceClearProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
 }
 
 func NewProfileServiceClearProfileResult() *ProfileServiceClearProfileResult {
 	return &ProfileServiceClearProfileResult{}
+}
+
+func (p *ProfileServiceClearProfileResult) InitDefault() {
+	*p = ProfileServiceClearProfileResult{}
 }
 
 var ProfileServiceClearProfileResult_Success_DEFAULT *Profile
@@ -3770,11 +3842,15 @@ func (p *ProfileServiceClearProfileResult) Field0DeepEqual(src *Profile) bool {
 }
 
 type ProfileServiceGetProfilePhotoArgs struct {
-	Req *GetProfilePhotoRequest `thrift:"req,1" json:"req"`
+	Req *GetProfilePhotoRequest `thrift:"req,1" frugal:"1,default,GetProfilePhotoRequest" json:"req"`
 }
 
 func NewProfileServiceGetProfilePhotoArgs() *ProfileServiceGetProfilePhotoArgs {
 	return &ProfileServiceGetProfilePhotoArgs{}
+}
+
+func (p *ProfileServiceGetProfilePhotoArgs) InitDefault() {
+	*p = ProfileServiceGetProfilePhotoArgs{}
 }
 
 var ProfileServiceGetProfilePhotoArgs_Req_DEFAULT *GetProfilePhotoRequest
@@ -3938,11 +4014,15 @@ func (p *ProfileServiceGetProfilePhotoArgs) Field1DeepEqual(src *GetProfilePhoto
 }
 
 type ProfileServiceGetProfilePhotoResult struct {
-	Success *GetProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *GetProfilePhotoResponse `thrift:"success,0,optional" frugal:"0,optional,GetProfilePhotoResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceGetProfilePhotoResult() *ProfileServiceGetProfilePhotoResult {
 	return &ProfileServiceGetProfilePhotoResult{}
+}
+
+func (p *ProfileServiceGetProfilePhotoResult) InitDefault() {
+	*p = ProfileServiceGetProfilePhotoResult{}
 }
 
 var ProfileServiceGetProfilePhotoResult_Success_DEFAULT *GetProfilePhotoResponse
@@ -4108,11 +4188,15 @@ func (p *ProfileServiceGetProfilePhotoResult) Field0DeepEqual(src *GetProfilePho
 }
 
 type ProfileServiceCreateProfilePhotoArgs struct {
-	Req *CreateProfilePhotoRequest `thrift:"req,1" json:"req"`
+	Req *CreateProfilePhotoRequest `thrift:"req,1" frugal:"1,default,CreateProfilePhotoRequest" json:"req"`
 }
 
 func NewProfileServiceCreateProfilePhotoArgs() *ProfileServiceCreateProfilePhotoArgs {
 	return &ProfileServiceCreateProfilePhotoArgs{}
+}
+
+func (p *ProfileServiceCreateProfilePhotoArgs) InitDefault() {
+	*p = ProfileServiceCreateProfilePhotoArgs{}
 }
 
 var ProfileServiceCreateProfilePhotoArgs_Req_DEFAULT *CreateProfilePhotoRequest
@@ -4276,11 +4360,15 @@ func (p *ProfileServiceCreateProfilePhotoArgs) Field1DeepEqual(src *CreateProfil
 }
 
 type ProfileServiceCreateProfilePhotoResult struct {
-	Success *CreateProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *CreateProfilePhotoResponse `thrift:"success,0,optional" frugal:"0,optional,CreateProfilePhotoResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceCreateProfilePhotoResult() *ProfileServiceCreateProfilePhotoResult {
 	return &ProfileServiceCreateProfilePhotoResult{}
+}
+
+func (p *ProfileServiceCreateProfilePhotoResult) InitDefault() {
+	*p = ProfileServiceCreateProfilePhotoResult{}
 }
 
 var ProfileServiceCreateProfilePhotoResult_Success_DEFAULT *CreateProfilePhotoResponse
@@ -4446,11 +4534,15 @@ func (p *ProfileServiceCreateProfilePhotoResult) Field0DeepEqual(src *CreateProf
 }
 
 type ProfileServiceCompleteProfilePhotoArgs struct {
-	Req *CompleteProfilePhotoRequest `thrift:"req,1" json:"req"`
+	Req *CompleteProfilePhotoRequest `thrift:"req,1" frugal:"1,default,CompleteProfilePhotoRequest" json:"req"`
 }
 
 func NewProfileServiceCompleteProfilePhotoArgs() *ProfileServiceCompleteProfilePhotoArgs {
 	return &ProfileServiceCompleteProfilePhotoArgs{}
+}
+
+func (p *ProfileServiceCompleteProfilePhotoArgs) InitDefault() {
+	*p = ProfileServiceCompleteProfilePhotoArgs{}
 }
 
 var ProfileServiceCompleteProfilePhotoArgs_Req_DEFAULT *CompleteProfilePhotoRequest
@@ -4614,11 +4706,15 @@ func (p *ProfileServiceCompleteProfilePhotoArgs) Field1DeepEqual(src *CompletePr
 }
 
 type ProfileServiceCompleteProfilePhotoResult struct {
-	Success *Identity `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Identity `thrift:"success,0,optional" frugal:"0,optional,Identity" json:"success,omitempty"`
 }
 
 func NewProfileServiceCompleteProfilePhotoResult() *ProfileServiceCompleteProfilePhotoResult {
 	return &ProfileServiceCompleteProfilePhotoResult{}
+}
+
+func (p *ProfileServiceCompleteProfilePhotoResult) InitDefault() {
+	*p = ProfileServiceCompleteProfilePhotoResult{}
 }
 
 var ProfileServiceCompleteProfilePhotoResult_Success_DEFAULT *Identity
@@ -4784,11 +4880,15 @@ func (p *ProfileServiceCompleteProfilePhotoResult) Field0DeepEqual(src *Identity
 }
 
 type ProfileServiceClearProfilePhotoArgs struct {
-	Req *ClearProfilePhotoRequest `thrift:"req,1" json:"req"`
+	Req *ClearProfilePhotoRequest `thrift:"req,1" frugal:"1,default,ClearProfilePhotoRequest" json:"req"`
 }
 
 func NewProfileServiceClearProfilePhotoArgs() *ProfileServiceClearProfilePhotoArgs {
 	return &ProfileServiceClearProfilePhotoArgs{}
+}
+
+func (p *ProfileServiceClearProfilePhotoArgs) InitDefault() {
+	*p = ProfileServiceClearProfilePhotoArgs{}
 }
 
 var ProfileServiceClearProfilePhotoArgs_Req_DEFAULT *ClearProfilePhotoRequest
@@ -4952,11 +5052,15 @@ func (p *ProfileServiceClearProfilePhotoArgs) Field1DeepEqual(src *ClearProfileP
 }
 
 type ProfileServiceClearProfilePhotoResult struct {
-	Success *ClearProfilePhotoResponse `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *ClearProfilePhotoResponse `thrift:"success,0,optional" frugal:"0,optional,ClearProfilePhotoResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceClearProfilePhotoResult() *ProfileServiceClearProfilePhotoResult {
 	return &ProfileServiceClearProfilePhotoResult{}
+}
+
+func (p *ProfileServiceClearProfilePhotoResult) InitDefault() {
+	*p = ProfileServiceClearProfilePhotoResult{}
 }
 
 var ProfileServiceClearProfilePhotoResult_Success_DEFAULT *ClearProfilePhotoResponse

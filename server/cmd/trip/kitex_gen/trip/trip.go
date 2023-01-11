@@ -59,12 +59,16 @@ func (p *TripStatus) Value() (driver.Value, error) {
 }
 
 type Location struct {
-	Latitude  float64 `thrift:"latitude,1" json:"latitude"`
-	Longitude float64 `thrift:"longitude,2" json:"longitude"`
+	Latitude  float64 `thrift:"latitude,1" frugal:"1,default,double" json:"latitude"`
+	Longitude float64 `thrift:"longitude,2" frugal:"2,default,double" json:"longitude"`
 }
 
 func NewLocation() *Location {
 	return &Location{}
+}
+
+func (p *Location) InitDefault() {
+	*p = Location{}
 }
 
 func (p *Location) GetLatitude() (v float64) {
@@ -278,15 +282,19 @@ func (p *Location) Field2DeepEqual(src float64) bool {
 }
 
 type LocationStatus struct {
-	Location     *Location `thrift:"location,1" json:"location"`
-	FeeCent      int32     `thrift:"fee_cent,2" json:"fee_cent"`
-	KmDriven     float64   `thrift:"km_driven,3" json:"km_driven"`
-	PoiName      string    `thrift:"poi_name,4" json:"poi_name"`
-	TimestampSec int64     `thrift:"timestamp_sec,5" json:"timestamp_sec"`
+	Location     *Location `thrift:"location,1" frugal:"1,default,Location" json:"location"`
+	FeeCent      int32     `thrift:"fee_cent,2" frugal:"2,default,i32" json:"fee_cent"`
+	KmDriven     float64   `thrift:"km_driven,3" frugal:"3,default,double" json:"km_driven"`
+	PoiName      string    `thrift:"poi_name,4" frugal:"4,default,string" json:"poi_name"`
+	TimestampSec int64     `thrift:"timestamp_sec,5" frugal:"5,default,i64" json:"timestamp_sec"`
 }
 
 func NewLocationStatus() *LocationStatus {
 	return &LocationStatus{}
+}
+
+func (p *LocationStatus) InitDefault() {
+	*p = LocationStatus{}
 }
 
 var LocationStatus_Location_DEFAULT *Location
@@ -682,12 +690,16 @@ func (p *LocationStatus) Field5DeepEqual(src int64) bool {
 }
 
 type TripEntity struct {
-	Id   string `thrift:"id,1" json:"id"`
-	Trip *Trip  `thrift:"trip,2" json:"trip"`
+	Id   string `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	Trip *Trip  `thrift:"trip,2" frugal:"2,default,Trip" json:"trip"`
 }
 
 func NewTripEntity() *TripEntity {
 	return &TripEntity{}
+}
+
+func (p *TripEntity) InitDefault() {
+	*p = TripEntity{}
 }
 
 func (p *TripEntity) GetId() (v string) {
@@ -909,17 +921,21 @@ func (p *TripEntity) Field2DeepEqual(src *Trip) bool {
 }
 
 type Trip struct {
-	AccountId  int64           `thrift:"account_id,1" json:"account_id"`
-	CarId      string          `thrift:"car_id,2" json:"car_id"`
-	Start      *LocationStatus `thrift:"start,3" json:"start"`
-	Current    *LocationStatus `thrift:"current,4" json:"current"`
-	End        *LocationStatus `thrift:"end,5" json:"end"`
-	Status     TripStatus      `thrift:"status,6" json:"status"`
-	IdentityId string          `thrift:"identity_id,7" json:"identity_id"`
+	AccountId  int64           `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	CarId      string          `thrift:"car_id,2" frugal:"2,default,string" json:"car_id"`
+	Start      *LocationStatus `thrift:"start,3" frugal:"3,default,LocationStatus" json:"start"`
+	Current    *LocationStatus `thrift:"current,4" frugal:"4,default,LocationStatus" json:"current"`
+	End        *LocationStatus `thrift:"end,5" frugal:"5,default,LocationStatus" json:"end"`
+	Status     TripStatus      `thrift:"status,6" frugal:"6,default,TripStatus" json:"status"`
+	IdentityId string          `thrift:"identity_id,7" frugal:"7,default,string" json:"identity_id"`
 }
 
 func NewTrip() *Trip {
 	return &Trip{}
+}
+
+func (p *Trip) InitDefault() {
+	*p = Trip{}
 }
 
 func (p *Trip) GetAccountId() (v int64) {
@@ -1447,14 +1463,18 @@ func (p *Trip) Field7DeepEqual(src string) bool {
 }
 
 type CreateTripRequest struct {
-	Start     *Location `thrift:"start,1" json:"start"`
-	CarId     string    `thrift:"car_id,2" json:"car_id"`
-	AvatarUrl string    `thrift:"avatar_url,3" json:"avatar_url"`
-	AccountId int64     `thrift:"account_id,4" json:"account_id"`
+	Start     *Location `thrift:"start,1" frugal:"1,default,Location" json:"start"`
+	CarId     string    `thrift:"car_id,2" frugal:"2,default,string" json:"car_id"`
+	AvatarUrl string    `thrift:"avatar_url,3" frugal:"3,default,string" json:"avatar_url"`
+	AccountId int64     `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
 }
 
 func NewCreateTripRequest() *CreateTripRequest {
 	return &CreateTripRequest{}
+}
+
+func (p *CreateTripRequest) InitDefault() {
+	*p = CreateTripRequest{}
 }
 
 var CreateTripRequest_Start_DEFAULT *Location
@@ -1792,12 +1812,16 @@ func (p *CreateTripRequest) Field4DeepEqual(src int64) bool {
 }
 
 type GetTripRequest struct {
-	Id        string `thrift:"id,1" json:"id"`
-	AccountId int64  `thrift:"account_id,2" json:"account_id"`
+	Id        string `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	AccountId int64  `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
 }
 
 func NewGetTripRequest() *GetTripRequest {
 	return &GetTripRequest{}
+}
+
+func (p *GetTripRequest) InitDefault() {
+	*p = GetTripRequest{}
 }
 
 func (p *GetTripRequest) GetId() (v string) {
@@ -2011,12 +2035,16 @@ func (p *GetTripRequest) Field2DeepEqual(src int64) bool {
 }
 
 type GetTripsRequest struct {
-	Status    TripStatus `thrift:"status,1" json:"status"`
-	AccountId int64      `thrift:"account_id,2" json:"account_id"`
+	Status    TripStatus `thrift:"status,1" frugal:"1,default,TripStatus" json:"status"`
+	AccountId int64      `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
 }
 
 func NewGetTripsRequest() *GetTripsRequest {
 	return &GetTripsRequest{}
+}
+
+func (p *GetTripsRequest) InitDefault() {
+	*p = GetTripsRequest{}
 }
 
 func (p *GetTripsRequest) GetStatus() (v TripStatus) {
@@ -2230,11 +2258,15 @@ func (p *GetTripsRequest) Field2DeepEqual(src int64) bool {
 }
 
 type GetTripsResponse struct {
-	Trips []*TripEntity `thrift:"trips,1" json:"trips"`
+	Trips []*TripEntity `thrift:"trips,1" frugal:"1,default,list<TripEntity>" json:"trips"`
 }
 
 func NewGetTripsResponse() *GetTripsResponse {
 	return &GetTripsResponse{}
+}
+
+func (p *GetTripsResponse) InitDefault() {
+	*p = GetTripsResponse{}
 }
 
 func (p *GetTripsResponse) GetTrips() (v []*TripEntity) {
@@ -2415,14 +2447,18 @@ func (p *GetTripsResponse) Field1DeepEqual(src []*TripEntity) bool {
 }
 
 type UpdateTripRequest struct {
-	Id        string    `thrift:"id,1" json:"id"`
-	Current   *Location `thrift:"current,2" json:"current"`
-	EndTrip   bool      `thrift:"end_trip,3" json:"end_trip"`
-	AccountId int64     `thrift:"account_id,4" json:"account_id"`
+	Id        string    `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	Current   *Location `thrift:"current,2" frugal:"2,default,Location" json:"current"`
+	EndTrip   bool      `thrift:"end_trip,3" frugal:"3,default,bool" json:"end_trip"`
+	AccountId int64     `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
 }
 
 func NewUpdateTripRequest() *UpdateTripRequest {
 	return &UpdateTripRequest{}
+}
+
+func (p *UpdateTripRequest) InitDefault() {
+	*p = UpdateTripRequest{}
 }
 
 func (p *UpdateTripRequest) GetId() (v string) {
@@ -3069,11 +3105,15 @@ func (p *tripServiceProcessorUpdateTrip) Process(ctx context.Context, seqId int3
 }
 
 type TripServiceCreateTripArgs struct {
-	Req *CreateTripRequest `thrift:"req,1" json:"req"`
+	Req *CreateTripRequest `thrift:"req,1" frugal:"1,default,CreateTripRequest" json:"req"`
 }
 
 func NewTripServiceCreateTripArgs() *TripServiceCreateTripArgs {
 	return &TripServiceCreateTripArgs{}
+}
+
+func (p *TripServiceCreateTripArgs) InitDefault() {
+	*p = TripServiceCreateTripArgs{}
 }
 
 var TripServiceCreateTripArgs_Req_DEFAULT *CreateTripRequest
@@ -3237,11 +3277,15 @@ func (p *TripServiceCreateTripArgs) Field1DeepEqual(src *CreateTripRequest) bool
 }
 
 type TripServiceCreateTripResult struct {
-	Success *TripEntity `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *TripEntity `thrift:"success,0,optional" frugal:"0,optional,TripEntity" json:"success,omitempty"`
 }
 
 func NewTripServiceCreateTripResult() *TripServiceCreateTripResult {
 	return &TripServiceCreateTripResult{}
+}
+
+func (p *TripServiceCreateTripResult) InitDefault() {
+	*p = TripServiceCreateTripResult{}
 }
 
 var TripServiceCreateTripResult_Success_DEFAULT *TripEntity
@@ -3407,11 +3451,15 @@ func (p *TripServiceCreateTripResult) Field0DeepEqual(src *TripEntity) bool {
 }
 
 type TripServiceGetTripArgs struct {
-	Req *GetTripRequest `thrift:"req,1" json:"req"`
+	Req *GetTripRequest `thrift:"req,1" frugal:"1,default,GetTripRequest" json:"req"`
 }
 
 func NewTripServiceGetTripArgs() *TripServiceGetTripArgs {
 	return &TripServiceGetTripArgs{}
+}
+
+func (p *TripServiceGetTripArgs) InitDefault() {
+	*p = TripServiceGetTripArgs{}
 }
 
 var TripServiceGetTripArgs_Req_DEFAULT *GetTripRequest
@@ -3575,11 +3623,15 @@ func (p *TripServiceGetTripArgs) Field1DeepEqual(src *GetTripRequest) bool {
 }
 
 type TripServiceGetTripResult struct {
-	Success *Trip `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Trip `thrift:"success,0,optional" frugal:"0,optional,Trip" json:"success,omitempty"`
 }
 
 func NewTripServiceGetTripResult() *TripServiceGetTripResult {
 	return &TripServiceGetTripResult{}
+}
+
+func (p *TripServiceGetTripResult) InitDefault() {
+	*p = TripServiceGetTripResult{}
 }
 
 var TripServiceGetTripResult_Success_DEFAULT *Trip
@@ -3745,11 +3797,15 @@ func (p *TripServiceGetTripResult) Field0DeepEqual(src *Trip) bool {
 }
 
 type TripServiceGetTripsArgs struct {
-	Req *GetTripsRequest `thrift:"req,1" json:"req"`
+	Req *GetTripsRequest `thrift:"req,1" frugal:"1,default,GetTripsRequest" json:"req"`
 }
 
 func NewTripServiceGetTripsArgs() *TripServiceGetTripsArgs {
 	return &TripServiceGetTripsArgs{}
+}
+
+func (p *TripServiceGetTripsArgs) InitDefault() {
+	*p = TripServiceGetTripsArgs{}
 }
 
 var TripServiceGetTripsArgs_Req_DEFAULT *GetTripsRequest
@@ -3913,11 +3969,15 @@ func (p *TripServiceGetTripsArgs) Field1DeepEqual(src *GetTripsRequest) bool {
 }
 
 type TripServiceGetTripsResult struct {
-	Success *GetTripsResponse `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *GetTripsResponse `thrift:"success,0,optional" frugal:"0,optional,GetTripsResponse" json:"success,omitempty"`
 }
 
 func NewTripServiceGetTripsResult() *TripServiceGetTripsResult {
 	return &TripServiceGetTripsResult{}
+}
+
+func (p *TripServiceGetTripsResult) InitDefault() {
+	*p = TripServiceGetTripsResult{}
 }
 
 var TripServiceGetTripsResult_Success_DEFAULT *GetTripsResponse
@@ -4083,11 +4143,15 @@ func (p *TripServiceGetTripsResult) Field0DeepEqual(src *GetTripsResponse) bool 
 }
 
 type TripServiceUpdateTripArgs struct {
-	Req *UpdateTripRequest `thrift:"req,1" json:"req"`
+	Req *UpdateTripRequest `thrift:"req,1" frugal:"1,default,UpdateTripRequest" json:"req"`
 }
 
 func NewTripServiceUpdateTripArgs() *TripServiceUpdateTripArgs {
 	return &TripServiceUpdateTripArgs{}
+}
+
+func (p *TripServiceUpdateTripArgs) InitDefault() {
+	*p = TripServiceUpdateTripArgs{}
 }
 
 var TripServiceUpdateTripArgs_Req_DEFAULT *UpdateTripRequest
@@ -4251,11 +4315,15 @@ func (p *TripServiceUpdateTripArgs) Field1DeepEqual(src *UpdateTripRequest) bool
 }
 
 type TripServiceUpdateTripResult struct {
-	Success *Trip `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *Trip `thrift:"success,0,optional" frugal:"0,optional,Trip" json:"success,omitempty"`
 }
 
 func NewTripServiceUpdateTripResult() *TripServiceUpdateTripResult {
 	return &TripServiceUpdateTripResult{}
+}
+
+func (p *TripServiceUpdateTripResult) InitDefault() {
+	*p = TripServiceUpdateTripResult{}
 }
 
 var TripServiceUpdateTripResult_Success_DEFAULT *Trip

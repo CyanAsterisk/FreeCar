@@ -10,11 +10,15 @@ import (
 )
 
 type LoginRequest struct {
-	Code string `thrift:"code,1" json:"code"`
+	Code string `thrift:"code,1" frugal:"1,default,string" json:"code"`
 }
 
 func NewLoginRequest() *LoginRequest {
 	return &LoginRequest{}
+}
+
+func (p *LoginRequest) InitDefault() {
+	*p = LoginRequest{}
 }
 
 func (p *LoginRequest) GetCode() (v string) {
@@ -170,11 +174,15 @@ func (p *LoginRequest) Field1DeepEqual(src string) bool {
 }
 
 type LoginResponse struct {
-	AccountID int64 `thrift:"accountID,1" json:"accountID"`
+	AccountID int64 `thrift:"accountID,1" frugal:"1,default,i64" json:"accountID"`
 }
 
 func NewLoginResponse() *LoginResponse {
 	return &LoginResponse{}
+}
+
+func (p *LoginResponse) InitDefault() {
+	*p = LoginResponse{}
 }
 
 func (p *LoginResponse) GetAccountID() (v int64) {
@@ -459,11 +467,15 @@ func (p *authServiceProcessorLogin) Process(ctx context.Context, seqId int32, ip
 }
 
 type AuthServiceLoginArgs struct {
-	Req *LoginRequest `thrift:"req,1" json:"req"`
+	Req *LoginRequest `thrift:"req,1" frugal:"1,default,LoginRequest" json:"req"`
 }
 
 func NewAuthServiceLoginArgs() *AuthServiceLoginArgs {
 	return &AuthServiceLoginArgs{}
+}
+
+func (p *AuthServiceLoginArgs) InitDefault() {
+	*p = AuthServiceLoginArgs{}
 }
 
 var AuthServiceLoginArgs_Req_DEFAULT *LoginRequest
@@ -627,11 +639,15 @@ func (p *AuthServiceLoginArgs) Field1DeepEqual(src *LoginRequest) bool {
 }
 
 type AuthServiceLoginResult struct {
-	Success *LoginResponse `thrift:"success,0,optional" json:"success,omitempty"`
+	Success *LoginResponse `thrift:"success,0,optional" frugal:"0,optional,LoginResponse" json:"success,omitempty"`
 }
 
 func NewAuthServiceLoginResult() *AuthServiceLoginResult {
 	return &AuthServiceLoginResult{}
+}
+
+func (p *AuthServiceLoginResult) InitDefault() {
+	*p = AuthServiceLoginResult{}
 }
 
 var AuthServiceLoginResult_Success_DEFAULT *LoginResponse

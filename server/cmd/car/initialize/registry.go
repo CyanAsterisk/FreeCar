@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"fmt"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
+	"net"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/registry"
@@ -16,9 +16,9 @@ import (
 
 // InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
-	r, err := consul.NewConsulRegister(fmt.Sprintf("%s:%d",
+	r, err := consul.NewConsulRegister(net.JoinHostPort(
 		global.ServerConfig.ConsulInfo.Host,
-		global.ServerConfig.ConsulInfo.Port),
+		strconv.Itoa(global.ServerConfig.ConsulInfo.Port)),
 		consul.WithCheck(&api.AgentServiceCheck{
 			Interval:                       consts.ConsulCheckInterval,
 			Timeout:                        consts.ConsulCheckTimeout,
@@ -35,7 +35,7 @@ func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 	}
 	info := &registry.Info{
 		ServiceName: global.ServerConfig.Name,
-		Addr:        utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", global.ServerConfig.Host, Port)),
+		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort(global.ServerConfig.Host, strconv.Itoa(Port))),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},

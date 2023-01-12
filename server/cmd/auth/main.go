@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"net"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
@@ -40,7 +41,7 @@ func main() {
 	}
 	// Create new server.
 	srv := auth.NewServer(impl,
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

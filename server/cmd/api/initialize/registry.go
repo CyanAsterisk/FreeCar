@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"fmt"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
+	"net"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -18,9 +18,9 @@ import (
 func InitRegistry() (registry.Registry, *registry.Info) {
 	// build a consul client
 	config := api.DefaultConfig()
-	config.Address = fmt.Sprintf("%s:%d",
+	config.Address = net.JoinHostPort(
 		global.ServerConfig.ConsulInfo.Host,
-		global.ServerConfig.ConsulInfo.Port)
+		strconv.Itoa(global.ServerConfig.ConsulInfo.Port))
 	consulClient, err := api.NewClient(config)
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
@@ -43,8 +43,8 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 	}
 	info := &registry.Info{
 		ServiceName: global.ServerConfig.Name,
-		Addr: utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", global.ServerConfig.Host,
-			global.ServerConfig.Port)),
+		Addr: utils.NewNetAddr(consts.TCP, net.JoinHostPort(global.ServerConfig.Host,
+			strconv.Itoa(global.ServerConfig.Port))),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},

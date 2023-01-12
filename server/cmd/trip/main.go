@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"net"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
@@ -47,7 +48,7 @@ func main() {
 	impl.POIManager = &poi.Manager{}
 	// Create new server.
 	srv := trip.NewServer(impl,
-		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, fmt.Sprintf("%s:%d", IP, Port))),
+		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),

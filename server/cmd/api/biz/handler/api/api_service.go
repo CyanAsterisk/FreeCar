@@ -17,7 +17,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 )
 
 // Login .

@@ -10,7 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 )
 
 var (

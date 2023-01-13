@@ -8,9 +8,9 @@ require (
 	github.com/bytedance/sonic v1.6.1
 	github.com/cloudwego/hertz v0.4.2
 	github.com/cloudwego/kitex v0.4.4
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/docker v20.10.22+incompatible
 	github.com/docker/go-connections v0.4.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386

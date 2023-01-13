@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"

@@ -3,8 +3,8 @@ package global
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip/tripservice"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -14,6 +14,7 @@ var (
 	NacosConfig  config.NacosConfig
 	Publisher    mq.Publisher
 	Subscriber   mq.Subscriber
-	TripClient   tripservice.Client
-	CarClient    carservice.Client
+
+	TripClient tripservice.Client
+	CarClient  carservice.Client
 )

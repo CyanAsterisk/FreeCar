@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile/profileservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/profile/profileservice"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	"github.com/bytedance/sonic"
 )

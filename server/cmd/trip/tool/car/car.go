@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 )
 

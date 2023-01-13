@@ -20,11 +20,11 @@ TODO
 
 ## 目录介绍
 
-| 目录     | 介绍                           |
-|--------|------------------------------|
-| Server | Core services of the project |
-| Shared | Reusable code                |
-| Static | Front-end static files       |
+| 目录     | 介绍     |
+|--------|--------|
+| Server | 项目核心部分 |
+| Shared | 可复用代码  |
+| Static | 前端静态文件 |
 
 ## 快速开始
 
@@ -224,16 +224,19 @@ make start
 ```
 
 - 自动新建 MySQL 数据表
+
 ```shell
 make migrate
 ```
 
 - 启动基于 Hertz 的 HTTP 服务
+
 ```shell
 make api
 ```
 
 - 启动基于 Kitex 的微服务
+
 ```shell
 make auth
 make blob
@@ -781,18 +784,35 @@ service AuthService {
 
 在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
 
+##### 服务端
+
 ```shell
-kitex -service auth -module github.com/CyanAsterisk/FreeCar  ./../../idl/auth.thrift
+kitex -service auth -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
+```
+
+##### 客户端
+
+```shell
+kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
 ```
 
 注意项：
 
 - 用 `-module github.com/CyanAsterisk/FreeCar` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
+- 当前服务需要调用其他服务时需生成客户端文件。
 
 #### Hertz
 
+##### 初始化
+
 ```shell
 hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
+```
+
+##### 更新
+
+```shell
+hz update -I -idl ./../../idl/api.proto
 ```
 
 注意项：

@@ -4,9 +4,9 @@ import (
 	"context"
 
 	cartr "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip/tripservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 

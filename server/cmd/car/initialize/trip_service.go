@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip/tripservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"

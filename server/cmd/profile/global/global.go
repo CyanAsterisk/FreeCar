@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob/blobservice"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/auth/authservice"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"

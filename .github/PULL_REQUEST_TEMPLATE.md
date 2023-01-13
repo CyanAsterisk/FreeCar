@@ -24,14 +24,3 @@ Please check your PR title with the below requirements:
 - [ ] This PR title match the format: \<type\>(optional scope): \<description\>
 - [ ] The description of this PR title is user-oriented and clear enough for others to understand.
 
-
-#### (Optional) More detail description for this PR.
-<!--
-Provide more detailed info for review. If it is a perf type PR, perf data is suggested to give.
--->
-
-#### Which issue(s) this PR fixes:
-<!--
-Automatically closes linked issue when PR is merged.
-Eg: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
--->

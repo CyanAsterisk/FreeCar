@@ -38,15 +38,9 @@ func (p *Publisher) Publish(_ context.Context, car *car.CarEntity) error {
 		return fmt.Errorf("cannot marshal: %v", err)
 	}
 
-	return p.ch.Publish(
-		p.exchange,
-		"",
-		false,
-		false,
-		amqp.Publishing{
-			Body: body,
-		},
-	)
+	return p.ch.Publish(p.exchange, "", false, false, amqp.Publishing{
+		Body: body,
+	})
 }
 
 // Subscriber implements an amqp subscriber.
@@ -86,51 +80,25 @@ func (s *Subscriber) SubscribeRaw(_ context.Context) (<-chan amqp.Delivery, func
 		}
 	}
 
-	q, err := ch.QueueDeclare(
-		"",
-		false,
-		true,
-		false,
-		false,
-		nil,
-	)
+	q, err := ch.QueueDeclare("", false, true, false, false, nil)
 	if err != nil {
 		return nil, closeCh, fmt.Errorf("cannot declare queue: %v", err)
 	}
 
 	cleanUp := func() {
-		_, err := ch.QueueDelete(
-			q.Name,
-			false,
-			false,
-			false,
-		)
+		_, err := ch.QueueDelete(q.Name, false, false, false)
 		if err != nil {
 			klog.Errorf("cannot delete queue %s : %s", q.Name, err.Error())
 		}
 		closeCh()
 	}
 
-	err = ch.QueueBind(
-		q.Name,
-		"",
-		s.exchange,
-		false,
-		nil,
-	)
+	err = ch.QueueBind(q.Name, "", s.exchange, false, nil)
 	if err != nil {
 		return nil, cleanUp, fmt.Errorf("cannot bind: %v", err)
 	}
 
-	msgs, err := ch.Consume(
-		q.Name,
-		"",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	msgs, err := ch.Consume(q.Name, "", true, false, false, false, nil)
 	if err != nil {
 		return nil, cleanUp, fmt.Errorf("cannot consume queue: %v", err)
 	}
@@ -160,13 +128,5 @@ func (s *Subscriber) Subscribe(c context.Context) (chan *car.CarEntity, func(), 
 }
 
 func declareExchange(ch *amqp.Channel, exchange string) error {
-	return ch.ExchangeDeclare(
-		exchange,
-		"fanout",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	return ch.ExchangeDeclare(exchange, "fanout", true, false, false, false, nil)
 }

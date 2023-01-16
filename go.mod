@@ -23,7 +23,7 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20221109071748-a433b0b57972
 	github.com/kitex-contrib/registry-consul v0.0.0-20221024133802-971ac457240a
 	github.com/medivhzhan/weapp/v2 v2.5.0
-	github.com/nacos-group/nacos-sdk-go v1.1.3
+	github.com/nacos-group/nacos-sdk-go v1.1.4
 	github.com/spf13/viper v1.14.0
 	github.com/streadway/amqp v1.0.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40

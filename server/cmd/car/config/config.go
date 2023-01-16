@@ -27,11 +27,6 @@ type RabbitMqConfig struct {
 	Password string `mapstructure:"password" json:"password"`
 }
 
-type ConsulConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Port int    `mapstructure:"port" json:"port"`
-}
-
 type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
@@ -42,7 +37,6 @@ type ServerConfig struct {
 	WsAddr       string         `mapstructure:"wsAddr" json:"wsAddr"`
 	MongoDBInfo  MongoDBConfig  `mapstructure:"mongodb" json:"mongodb"`
 	RabbitMqInfo RabbitMqConfig `mapstructure:"rabbitmq" json:"rabbitmq"`
-	ConsulInfo   ConsulConfig   `mapstructure:"consul" json:"consul"`
 	OtelInfo     OtelConfig     `mapstructure:"otel" json:"otel"`
 	TripSrvInfo  TripSrvConfig  `mapstructure:"trip_srv" json:"trip_srv"`
 }

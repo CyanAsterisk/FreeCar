@@ -19,11 +19,6 @@ type MysqlConfig struct {
 	Salt     string `mapstructure:"salt" json:"salt"`
 }
 
-type ConsulConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Port int    `mapstructure:"port" json:"port"`
-}
-
 type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
@@ -35,10 +30,9 @@ type CosConfig struct {
 }
 
 type ServerConfig struct {
-	Name       string       `mapstructure:"name" json:"name"`
-	Host       string       `mapstructure:"host" json:"host"`
-	MysqlInfo  MysqlConfig  `mapstructure:"mysql" json:"mysql"`
-	ConsulInfo ConsulConfig `mapstructure:"consul" json:"consul"`
-	OtelInfo   OtelConfig   `mapstructure:"otel" json:"otel"`
-	CosConfig  CosConfig    `mapstructure:"cos_config" json:"cos_config"`
+	Name      string      `mapstructure:"name" json:"name"`
+	Host      string      `mapstructure:"host" json:"host"`
+	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
+	OtelInfo  OtelConfig  `mapstructure:"otel" json:"otel"`
+	CosConfig CosConfig   `mapstructure:"cos_config" json:"cos_config"`
 }

@@ -1,10 +1,9 @@
 package rpc
 
 import (
-	"fmt"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -12,14 +11,37 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
-	"github.com/kitex-contrib/registry-consul"
+	nacos "github.com/kitex-contrib/registry-nacos/resolver"
+	"github.com/nacos-group/nacos-sdk-go/clients"
+	"github.com/nacos-group/nacos-sdk-go/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
 func initCar() {
 	// init resolver
-	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
-		global.ServerConfig.ConsulInfo.Host,
-		global.ServerConfig.ConsulInfo.Port))
+	// Read configuration information from nacos
+	sc := []constant.ServerConfig{
+		{
+			IpAddr: global.NacosConfig.Host,
+			Port:   global.NacosConfig.Port,
+		},
+	}
+
+	cc := constant.ClientConfig{
+		NamespaceId:         global.NacosConfig.Namespace,
+		TimeoutMs:           5000,
+		NotLoadCacheAtStart: true,
+		LogDir:              consts.NacosLogDir,
+		CacheDir:            consts.NacosCacheDir,
+		LogLevel:            consts.NacosLogLevel,
+	}
+
+	nacosCli, err := clients.NewNamingClient(
+		vo.NacosClientParam{
+			ClientConfig:  &cc,
+			ServerConfigs: sc,
+		})
+	r := nacos.NewNacosResolver(nacosCli)
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}

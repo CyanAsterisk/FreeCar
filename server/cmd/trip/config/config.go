@@ -19,11 +19,6 @@ type MongoDBConfig struct {
 	Collection string `mapstructure:"collection" json:"collection"`
 }
 
-type ConsulConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Port int    `mapstructure:"port" json:"port"`
-}
-
 type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
@@ -32,7 +27,6 @@ type ServerConfig struct {
 	Name           string           `mapstructure:"name" json:"name"`
 	Host           string           `mapstructure:"host" json:"host"`
 	MongoDBInfo    MongoDBConfig    `mapstructure:"mongodb" json:"mongodb"`
-	ConsulInfo     ConsulConfig     `mapstructure:"consul" json:"consul"`
 	OtelInfo       OtelConfig       `mapstructure:"otel" json:"otel"`
 	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`

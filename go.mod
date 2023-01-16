@@ -26,7 +26,7 @@ require (
 	github.com/nacos-group/nacos-sdk-go v1.1.4
 	github.com/spf13/viper v1.14.0
 	github.com/streadway/amqp v1.0.0
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.41
 	go.mongodb.org/mongo-driver v1.11.1
 	google.golang.org/protobuf v1.28.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0

@@ -4,25 +4,13 @@
 
 FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
-## 架构图
-
+## 项目架构
 ### 调用关系
-
-```
-┌────────────────┐    HTTP CALL    ┌──────────────────────────┐    RPC CALL     ┌────────────────┐
-│                ├────────────────►│                          ├────────────────►│                │
-│  Hertz-Server  │                 │       Kitex-Client       │                 │  Kitex-Server  │
-│                │◄────────────────┤                          │◄────────────────┤                │
-└────────────────┘                 └──────────────────────────┘                 └────────────────┘
-```
-
-### 层次结构
-
+![call_relations.png](static/resources/call_relation.png)
+### 技术架构
 TODO
-
 ### 服务关系
-
-![call_relations.png](static/resources/call_relations.png)
+![service_relations.png](static/resources/service_relations.png)
 
 ## 目录介绍
 

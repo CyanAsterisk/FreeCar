@@ -16,8 +16,7 @@ import (
 func main() {
 	// initialize
 	initialize.InitLogger()
-	initialize.InitConfig()
-	r, info := initialize.InitRegistry()
+	r, info := initialize.InitNacos()
 	tracer, cfg := hertztracing.NewServerTracer()
 	rpc.Init()
 	// create a new server

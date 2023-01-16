@@ -1,19 +1,26 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
+	"net"
+	"strconv"
+
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/shared/consts"
+	"github.com/bwmarrin/snowflake"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/registry"
+	"github.com/cloudwego/kitex/pkg/utils"
+	nacos "github.com/kitex-contrib/registry-nacos/registry"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/spf13/viper"
 )
 
-// InitConfig to init viper
-func InitConfig() {
-	configFileName := "./server/cmd/blob/config.yaml"
+// InitNacos to init nacos
+func InitNacos(Port int) (registry.Registry, *registry.Info) {
+	configFileName := "./server/cmd/profile/config.yaml"
 
 	v := viper.New()
 	v.SetConfigFile(configFileName)
@@ -62,4 +69,26 @@ func InitConfig() {
 	if err != nil {
 		klog.Fatalf("nacos config failed: %s", err.Error())
 	}
+
+	registryClient, err := clients.NewNamingClient(
+		vo.NacosClientParam{
+			ClientConfig:  &cc,
+			ServerConfigs: sc,
+		},
+	)
+
+	r := nacos.NewNacosRegistry(registryClient)
+
+	sf, err := snowflake.NewNode(2)
+	if err != nil {
+		klog.Fatalf("generate service name failed: %s", err.Error())
+	}
+	info := &registry.Info{
+		ServiceName: global.ServerConfig.Name,
+		Addr:        utils.NewNetAddr(consts.TCP, net.JoinHostPort(global.ServerConfig.Host, strconv.Itoa(Port))),
+		Tags: map[string]string{
+			"ID": sf.Generate().Base36(),
+		},
+	}
+	return r, info
 }

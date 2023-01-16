@@ -27,13 +27,11 @@ func main() {
 	// initialization
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
-	initialize.InitConfig()
+	r, info := initialize.InitNacos(Port)
 	initialize.InitDB()
 	initialize.InitMq()
 	initialize.InitTrip()
 	initialize.InitCar()
-
-	r, info := initialize.InitRegistry(Port)
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(global.ServerConfig.Name),
 		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),

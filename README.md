@@ -36,6 +36,8 @@ make start
 
 ![nacos.png](static/resources/nacos.png)
 
+![nacos_registry.png](static/resources/nacos_registry.png)
+
 *api => API_GROUP*
 
 ```json
@@ -244,12 +246,6 @@ make trip
 > Visit `http://127.0.0.1:16686/` on browser.
 
 ![jaeger.jpg](static/resources/jaeger.jpg)
-
-### Consul
-
-> Visit `http://127.0.0.1:8500/` on browser.
-
-![consul.jpg](static/resources/consul.png)
 
 ### Prometheus
 
@@ -834,7 +830,7 @@ Refer to `server/cmd/auth/global` to provide globally callable methods for micro
 #### Initialize
 
 Refer to `server/cmd/auth/initialize` to provide the initialization function of the necessary components, among
-which `config.go` `flag.go` `logger.go` `registry.go` are required.
+which `nacos.go` `flag.go` `logger.go` are required.
 
 #### Tool
 

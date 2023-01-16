@@ -1,10 +1,9 @@
 package initialize
 
 import (
-	"fmt"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob/blobservice"
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
@@ -13,15 +12,38 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
-	consul "github.com/kitex-contrib/registry-consul"
+	nacos "github.com/kitex-contrib/registry-nacos/resolver"
+	"github.com/nacos-group/nacos-sdk-go/clients"
+	"github.com/nacos-group/nacos-sdk-go/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
 // InitBlob to init blob service
 func InitBlob() {
 	// init resolver
-	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
-		global.ServerConfig.ConsulInfo.Host,
-		global.ServerConfig.ConsulInfo.Port))
+	// Read configuration information from nacos
+	sc := []constant.ServerConfig{
+		{
+			IpAddr: global.NacosConfig.Host,
+			Port:   global.NacosConfig.Port,
+		},
+	}
+
+	cc := constant.ClientConfig{
+		NamespaceId:         global.NacosConfig.Namespace,
+		TimeoutMs:           5000,
+		NotLoadCacheAtStart: true,
+		LogDir:              consts.NacosLogDir,
+		CacheDir:            consts.NacosCacheDir,
+		LogLevel:            consts.NacosLogLevel,
+	}
+
+	nacosCli, err := clients.NewNamingClient(
+		vo.NacosClientParam{
+			ClientConfig:  &cc,
+			ServerConfigs: sc,
+		})
+	r := nacos.NewNacosResolver(nacosCli)
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}

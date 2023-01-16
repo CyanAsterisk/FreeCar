@@ -36,6 +36,8 @@ make start
 
 ![nacos.png](static/resources/nacos.png)
 
+![nacos_registry.png](static/resources/nacos_registry.png)
+
 *api => API_GROUP*
 
 ```json
@@ -244,12 +246,6 @@ make trip
 > 在浏览器上访问 `http://127.0.0.1:16686/`
 
 ![jaeger.jpg](static/resources/jaeger.jpg)
-
-### Consul
-
-> 在浏览器上访问 `http://127.0.0.1:8500/`
-
-![consul.jpg](static/resources/consul.png)
 
 ### Prometheus
 
@@ -828,7 +824,7 @@ hz update -I -idl ./../../idl/api.proto
 
 #### Initialize
 
-参考 `server/cmd/auth/initialize`，提供必要组件的初始化功能，其中 `config.go` `flag.go` `logger.go` `registry.go` 为必须项。
+参考 `server/cmd/auth/initialize`，提供必要组件的初始化功能，其中 `nacos.go` `flag.go` `logger.go` 为必须项。
 
 #### Tool
 

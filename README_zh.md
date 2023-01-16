@@ -4,7 +4,9 @@
 
 FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
-## 调用关系
+## 架构图
+
+### 调用关系
 
 ```
 ┌────────────────┐    HTTP CALL    ┌──────────────────────────┐    RPC CALL     ┌────────────────┐
@@ -14,13 +16,13 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 └────────────────┘                 └──────────────────────────┘                 └────────────────┘
 ```
 
-## 架构图
-### 调用关系
-![call_relations.png](static/resources/call_relations.png)
 ### 层次结构
+
 TODO
+
 ### 服务关系
-TODO
+
+![call_relations.png](static/resources/call_relations.png)
 
 ## 目录介绍
 

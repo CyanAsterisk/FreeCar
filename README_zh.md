@@ -48,10 +48,6 @@ make start
   "jwt": {
     "key": "km!RU#a*43BsTsBVLQPpmuXI&$BJD%Sz"
   },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
-  },
   "otel": {
     "endpoint": ":4317"
   },
@@ -84,10 +80,6 @@ make start
     "db": "FreeCar",
     "salt": "FreeCar"
   },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
-  },
   "otel": {
     "endpoint": ":4317"
   },
@@ -111,10 +103,6 @@ make start
     "password": "123456",
     "db": "FreeCar",
     "salt": "FreeCar"
-  },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
   },
   "otel": {
     "endpoint": ":4317"
@@ -149,10 +137,6 @@ make start
     "password": "guest",
     "exchange": "FreeCar"
   },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
-  },
   "otel": {
     "endpoint": ":4317"
   },
@@ -176,10 +160,6 @@ make start
     "db": "FreeCar",
     "collection": "profile"
   },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
-  },
   "otel": {
     "endpoint": ":4317"
   },
@@ -202,10 +182,6 @@ make start
     "password": "123456",
     "db": "FreeCar",
     "collection": "trip"
-  },
-  "consul": {
-    "host": "127.0.0.1",
-    "port": 8500
   },
   "otel": {
     "endpoint": ":4317"

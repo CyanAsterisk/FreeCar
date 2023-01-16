@@ -35,17 +35,6 @@ services:
       - JVM_XMX=512m
       - JVM_XMN=256m
 
-  # Consul
-  consul:
-    image: consul:latest
-    command: agent -dev -client=0.0.0.0
-    ports:
-      - "8500:8500"
-      - "8300:8300"
-      - "8301:8301"
-      - "8302:8302"
-      - "8600:8600/udp"
-
   # RabbitMQ
   rabbitmq:
     image: rabbitmq:management

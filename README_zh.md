@@ -8,7 +8,7 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 ### 调用关系
 ![call_relations.png](static/resources/call_relation.png)
 ### 技术架构
-TODO
+![tech_arch](static/resources/tech_arch.png)
 ### 服务关系
 ![service_relations.png](static/resources/service_relations.png)
 

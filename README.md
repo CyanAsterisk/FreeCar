@@ -36,7 +36,7 @@ make start
 
 ![nacos.png](static/resources/nacos.png)
 
-![nacos_registry.png](static/resources/nacos_registry.png)
+![nacos_registry.png](static/resources/nacos_registry.jpg)
 
 *api => API_GROUP*
 

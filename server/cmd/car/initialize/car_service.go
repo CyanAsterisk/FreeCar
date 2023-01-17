@@ -43,7 +43,7 @@ func InitCar() {
 			ClientConfig:  &cc,
 			ServerConfigs: sc,
 		})
-	r := nacos.NewNacosResolver(nacosCli)
+	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.CarGroup))
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}

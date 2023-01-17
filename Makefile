@@ -17,29 +17,29 @@ migrate:
 # run the auth
 .PHONY: auth
 auth:
-	go run server/cmd/auth/*.go
+	go run ./server/cmd/auth
 
 # run the blob
 .PHONY: blob
 blob:
-	go run server/cmd/blob/*.go
+	go run ./server/cmd/blob
 
 # run the car
 .PHONY: car
 car:
-	go run server/cmd/car/*.go
+	go run ./server/cmd/car
 
 # run the profile
 .PHONY: profile
 profile:
-	go run server/cmd/profile/*.go
+	go run ./server/cmd/profile
 
 # run the trip
 .PHONY: trip
 trip:
-	go run server/cmd/trip/*.go
+	go run ./server/cmd/trip
 
 # run the api
 .PHONY: api
 api:
-	go run server/cmd/api/*.go
+	go run ./server/cmd/api

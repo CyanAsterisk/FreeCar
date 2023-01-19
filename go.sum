@@ -106,6 +106,7 @@ github.com/cloudwego/hertz v0.2.1/go.mod h1:prTyExvsH/UmDkvfU3dp3EHsZFQISfT8R7Bi
 github.com/cloudwego/hertz v0.2.2-0.20220819075506-6fff4a1e7a9c/go.mod h1:GWWYlAVkq1gDu6vJd/XNciWsP6q0d4TrEKk5fpJYF04=
 github.com/cloudwego/hertz v0.3.0/go.mod h1:GWWYlAVkq1gDu6vJd/XNciWsP6q0d4TrEKk5fpJYF04=
 github.com/cloudwego/hertz v0.3.2/go.mod h1:hnv3B7eZ6kMv7CKFHT2OC4LU0mA4s5XPyu/SbixLcrU=
+github.com/cloudwego/hertz v0.4.2/go.mod h1:K1U0RlU07CDeBINfHNbafH/3j9uSgIW8otbjUys3OPY=
 github.com/cloudwego/hertz v0.5.0 h1:xEGRUJIHCOdMtch3jcga7PEiViiXyvN3upfIskcJ+Bk=
 github.com/cloudwego/hertz v0.5.0/go.mod h1:K1U0RlU07CDeBINfHNbafH/3j9uSgIW8otbjUys3OPY=
 github.com/cloudwego/kitex v0.0.4/go.mod h1:EIjPJ4Dom2ornk7xDCdKpUpOnf4Tulevimh4Tn05OGc=
@@ -284,6 +285,8 @@ github.com/hertz-contrib/pprof v0.1.0 h1:yES6PQ5AJZRKiUQem1cpXU2gskO4cHdPMiXu9qS
 github.com/hertz-contrib/pprof v0.1.0/go.mod h1:4vgREcobBOExepQdEt/EMD/Nc1u01rpXXaQa2TNjA4A=
 github.com/hertz-contrib/registry/nacos v0.0.0-20221226122036-3c451682dc72 h1:q0mVLJ2JV+Pv3S5Ea+oHOWesLGHlJmd8etTE5yvMG9k=
 github.com/hertz-contrib/registry/nacos v0.0.0-20221226122036-3c451682dc72/go.mod h1:hMq9ay3uMBpcCIbAuZpaeTrLMASE/ZTz8yElXMAcacw=
+github.com/hertz-contrib/requestid v1.1.0 h1:+y1cuNlNX2KUoEC1SnBJ6M55/TlMTx3M9yxkqi0oTkk=
+github.com/hertz-contrib/requestid v1.1.0/go.mod h1:+l5CbZl//cSUoos421fnDFKQ6YYlVHcYc3Ri7AS8DUA=
 github.com/hertz-contrib/websocket v0.0.1 h1:NVtGICwqFyAXPotY/KGwYMXSi2l1S+vM6JJMqkIu0Ho=
 github.com/hertz-contrib/websocket v0.0.1/go.mod h1:rBtjAV7auKVBjtKvuQX9zzR8gZ2zKPHybPodAhqdbVo=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=

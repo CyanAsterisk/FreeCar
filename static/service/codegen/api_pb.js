@@ -1203,6 +1203,280 @@ export const api = $root.api = (() => {
         return GetCarRequest;
     })();
 
+    api.GetCarsRequest = (function() {
+
+        /**
+         * Properties of a GetCarsRequest.
+         * @memberof api
+         * @interface IGetCarsRequest
+         */
+
+        /**
+         * Constructs a new GetCarsRequest.
+         * @memberof api
+         * @classdesc Represents a GetCarsRequest.
+         * @implements IGetCarsRequest
+         * @constructor
+         * @param {api.IGetCarsRequest=} [properties] Properties to set
+         */
+        function GetCarsRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a GetCarsRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.GetCarsRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.GetCarsRequest} GetCarsRequest
+         */
+        GetCarsRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.GetCarsRequest)
+                return object;
+            return new $root.api.GetCarsRequest();
+        };
+
+        /**
+         * Creates a plain object from a GetCarsRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.GetCarsRequest
+         * @static
+         * @param {api.GetCarsRequest} message GetCarsRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetCarsRequest.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this GetCarsRequest to JSON.
+         * @function toJSON
+         * @memberof api.GetCarsRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetCarsRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetCarsRequest;
+    })();
+
+    api.GetCarsResponse = (function() {
+
+        /**
+         * Properties of a GetCarsResponse.
+         * @memberof api
+         * @interface IGetCarsResponse
+         * @property {Array.<api.ICarEntity>|null} [cars] GetCarsResponse cars
+         */
+
+        /**
+         * Constructs a new GetCarsResponse.
+         * @memberof api
+         * @classdesc Represents a GetCarsResponse.
+         * @implements IGetCarsResponse
+         * @constructor
+         * @param {api.IGetCarsResponse=} [properties] Properties to set
+         */
+        function GetCarsResponse(properties) {
+            this.cars = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetCarsResponse cars.
+         * @member {Array.<api.ICarEntity>} cars
+         * @memberof api.GetCarsResponse
+         * @instance
+         */
+        GetCarsResponse.prototype.cars = $util.emptyArray;
+
+        /**
+         * Creates a GetCarsResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.GetCarsResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.GetCarsResponse} GetCarsResponse
+         */
+        GetCarsResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.GetCarsResponse)
+                return object;
+            let message = new $root.api.GetCarsResponse();
+            if (object.cars) {
+                if (!Array.isArray(object.cars))
+                    throw TypeError(".api.GetCarsResponse.cars: array expected");
+                message.cars = [];
+                for (let i = 0; i < object.cars.length; ++i) {
+                    if (typeof object.cars[i] !== "object")
+                        throw TypeError(".api.GetCarsResponse.cars: object expected");
+                    message.cars[i] = $root.api.CarEntity.fromObject(object.cars[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetCarsResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.GetCarsResponse
+         * @static
+         * @param {api.GetCarsResponse} message GetCarsResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetCarsResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.cars = [];
+            if (message.cars && message.cars.length) {
+                object.cars = [];
+                for (let j = 0; j < message.cars.length; ++j)
+                    object.cars[j] = $root.api.CarEntity.toObject(message.cars[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this GetCarsResponse to JSON.
+         * @function toJSON
+         * @memberof api.GetCarsResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetCarsResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetCarsResponse;
+    })();
+
+    api.EGetCarsResponse = (function() {
+
+        /**
+         * Properties of a EGetCarsResponse.
+         * @memberof api
+         * @interface IEGetCarsResponse
+         * @property {number|null} [code] EGetCarsResponse code
+         * @property {api.IGetCarsResponse|null} [data] EGetCarsResponse data
+         * @property {string|null} [message] EGetCarsResponse message
+         */
+
+        /**
+         * Constructs a new EGetCarsResponse.
+         * @memberof api
+         * @classdesc Represents a EGetCarsResponse.
+         * @implements IEGetCarsResponse
+         * @constructor
+         * @param {api.IEGetCarsResponse=} [properties] Properties to set
+         */
+        function EGetCarsResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EGetCarsResponse code.
+         * @member {number} code
+         * @memberof api.EGetCarsResponse
+         * @instance
+         */
+        EGetCarsResponse.prototype.code = 0;
+
+        /**
+         * EGetCarsResponse data.
+         * @member {api.IGetCarsResponse|null|undefined} data
+         * @memberof api.EGetCarsResponse
+         * @instance
+         */
+        EGetCarsResponse.prototype.data = null;
+
+        /**
+         * EGetCarsResponse message.
+         * @member {string} message
+         * @memberof api.EGetCarsResponse
+         * @instance
+         */
+        EGetCarsResponse.prototype.message = "";
+
+        /**
+         * Creates a EGetCarsResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.EGetCarsResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.EGetCarsResponse} EGetCarsResponse
+         */
+        EGetCarsResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.EGetCarsResponse)
+                return object;
+            let message = new $root.api.EGetCarsResponse();
+            if (object.code != null)
+                message.code = object.code | 0;
+            if (object.data != null) {
+                if (typeof object.data !== "object")
+                    throw TypeError(".api.EGetCarsResponse.data: object expected");
+                message.data = $root.api.GetCarsResponse.fromObject(object.data);
+            }
+            if (object.message != null)
+                message.message = String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a EGetCarsResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.EGetCarsResponse
+         * @static
+         * @param {api.EGetCarsResponse} message EGetCarsResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EGetCarsResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.code = 0;
+                object.data = null;
+                object.message = "";
+            }
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = $root.api.GetCarsResponse.toObject(message.data, options);
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this EGetCarsResponse to JSON.
+         * @function toJSON
+         * @memberof api.EGetCarsResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EGetCarsResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EGetCarsResponse;
+    })();
+
     api.LocationStatus = (function() {
 
         /**
@@ -4214,6 +4488,39 @@ export const api = $root.api = (() => {
          * @instance
          * @param {api.IGetCarRequest} request GetCarRequest message or plain object
          * @returns {Promise<api.Car>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link api.apiService#getCars}.
+         * @memberof api.apiService
+         * @typedef GetCarsCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {api.GetCarsRequest} [response] GetCarsRequest
+         */
+
+        /**
+         * Calls GetCars.
+         * @function getCars
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IGetCarsRequest} request GetCarsRequest message or plain object
+         * @param {api.apiService.GetCarsCallback} callback Node-style callback called with the error, if any, and GetCarsRequest
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(apiService.prototype.getCars = function getCars(request, callback) {
+            return this.rpcCall(getCars, $root.api.GetCarsRequest, $root.api.GetCarsRequest, request, callback);
+        }, "name", { value: "GetCars" });
+
+        /**
+         * Calls GetCars.
+         * @function getCars
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IGetCarsRequest} request GetCarsRequest message or plain object
+         * @returns {Promise<api.GetCarsRequest>} Promise
          * @variation 2
          */
 

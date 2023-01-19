@@ -1,0 +1,43 @@
+page {
+    background-color: #f7f8fa;
+  }
+  .card {
+    display:flex;
+    justify-content:space-between;
+    margin-top: 24rpx;
+    margin-left: 24rpx;
+    width: 702rpx;
+    height: 300rpx;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 16rpx 0 rgba(36,44,69,0.20);
+    border-radius: 8rpx;
+  }
+
+  .card .eyebrow{
+    margin-top:20rpx;
+    box-sizing: border-box;
+    position: absolute;
+    height: 60rpx;
+    width: 702rpx;
+    text-align: center;
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: 800;
+  }
+
+  .card .info{
+    box-sizing: border-box;
+    position: absolute;
+    margin-left: 20rpx;
+    margin-top: 80rpx;
+    font-size: small;
+    font-weight: 700;
+  }
+
+  .card .icon {
+    float:right;
+    position:absolute;
+    margin-top: 70rpx;
+    margin-left: 440rpx;
+    width: 200rpx;
+    height: 200rpx;
+  }

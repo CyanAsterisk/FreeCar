@@ -16,6 +16,10 @@
     "noUnusedParameters": true,
     "strict": true,
     "strictPropertyInitialization": true,
+    "baseUrl": ".",
+    "paths": {
+      "@vant/weapp/*": ["node_modules/@vant/weapp/dist/*"]
+    },
     "lib": ["ES6"],
     "types":["miniprogram-api-typings"]
   },

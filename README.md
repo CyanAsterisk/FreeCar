@@ -1,4 +1,4 @@
-![FreeCar](static/resources/FreeCar.png)
+![FreeCar](static/images/doc/FreeCar.png)
 
 English | [中文](README_zh.md)
 
@@ -7,15 +7,21 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 ## Architecture
 
 ### Call Relations
-![call_relations.png](static/resources/call_relation.png)
+
+![call_relations.png](static/images/doc/call_relation.png)
+
 ### Technology Architecture
-![tech_arch](static/resources/tech_arch.png)
+
+![tech_arch](static/images/doc/tech_arch.png)
+
 ### Service Relations
-![service_relations.png](static/resources/service_relations.png)
+
+![service_relations.png](static/images/doc/service_relations.png)
+
 ## Catalog Introduce
 
 | Catalog | Introduce                    |
-|---------|------------------------------|
+| ------- | ---------------------------- |
 | Server  | Core services of the project |
 | Shared  | Reusable code                |
 | Static  | Front-end static files       |
@@ -34,11 +40,11 @@ make start
 >
 > For the default namespace and configuration groups, please refer to each `config.yaml` configuration file.
 
-![nacos.png](static/resources/nacos.png)
+![nacos.png](static/images/doc/nacos.png)
 
-![nacos_registry.png](static/resources/nacos_registry.jpg)
+![nacos_registry.png](static/images/doc/nacos_registry.png)
 
-*api => API_GROUP*
+_api => API_GROUP_
 
 ```json
 {
@@ -66,7 +72,7 @@ make start
 }
 ```
 
-*auth_srv => AUTH_GROUP*
+_auth_srv => AUTH_GROUP_
 
 ```json
 {
@@ -90,7 +96,7 @@ make start
 }
 ```
 
-*blob_srv => BLOB_GROUP*
+_blob_srv => BLOB_GROUP_
 
 ```json
 {
@@ -115,7 +121,7 @@ make start
 }
 ```
 
-*car_srv => CAR_GROUP*
+_car_srv => CAR_GROUP_
 
 ```json
 {
@@ -146,7 +152,7 @@ make start
 }
 ```
 
-*profile_srv => RENTAL_GROUP*
+_profile_srv => RENTAL_GROUP_
 
 ```json
 {
@@ -169,7 +175,7 @@ make start
 }
 ```
 
-*trip_srv => RENTAL_GROUP*
+_trip_srv => RENTAL_GROUP_
 
 ```json
 {
@@ -221,13 +227,13 @@ make trip
 
 > Visit `http://127.0.0.1:16686/` on browser.
 
-![jaeger.jpg](static/resources/jaeger.jpg)
+![jaeger.jpg](static/images/doc/jaeger.jpg)
 
 ### Prometheus
 
 > Visit `http://127.0.0.1:3000/` on browser.
 
-![prometheus.jpg](static/resources/prometheus.png)
+![prometheus.jpg](static/images/doc/prometheus.png)
 
 ## API Requests
 

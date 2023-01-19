@@ -18,3 +18,13 @@ export function formatDuration(sec: number) {
 export function formatFee(cents: number) {
     return (cents / 100).toFixed(2)
 }
+
+
+
+export function formatDate(millis: number) {
+    const dt = new Date(millis)
+    const y = dt.getFullYear()
+    const m = dt.getMonth() + 1
+    const d = dt.getDate()
+    return `${padString(y)}-${padString(m)}-${padString(d)}`
+}

@@ -1,0 +1,27 @@
+<view wx:if="{{!licImgURL}}">
+    <image class="license" src="/images/drivers-license.svg"></image>
+    <button class="btn" type="primary" bindtap="onUploadLic">上传驾照</button>
+</view>
+<view wx:else>
+    <view class="lic-tmpl">
+        <image class="license" src="{{licImgURL}}"></image>
+        <image wx:if="{{state==='VERIFIED'}}" class="checked" src="/images/checked.svg" />
+    </view>
+    <van-cell-group>
+        <van-field value="{{ licNo }}" left-icon="/images/lic/lic-id.svg" input-align="center" placeholder="驾驶证号" disabled="{{state!=='UNSUBMITTED'}}" />
+        <van-field value="{{ name }}" left-icon="/images/lic/name.svg" input-align="center" placeholder="姓名" disabled="{{state!=='UNSUBMITTED'}}" />
+        <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genders}}" disabled="{{state!=='UNSUBMITTED'}}">
+            <van-field value="{{ genders[genderIndex] }}" input-align="center" disabled="{{state!=='UNSUBMITTED'}}" left-icon="/images/lic/gender.svg" placeholder="性别" />
+        </picker>
+        <picker mode="date" value="{{birthDate}}" bindchange="onBirthDateChange" disabled="{{state!=='UNSUBMITTED'}}">
+            <van-field value="{{ birthDate }}" input-align="center" disabled="{{state!=='UNSUBMITTED'}}" left-icon="/images/lic/birthday.svg" placeholder="出生日期" />
+        </picker>
+    </van-cell-group>
+    <button class="btn" type="primary" wx:if="{{state==='UNSUBMITTED' && licImgURL}}" bindtap="onSubmit">
+        递交审查
+    </button>
+    <button class="btn" type="default" wx:if="{{state==='PENDING'}}" disabled>审查中</button>
+    <button class="btn" type="warn" wx:if="{{state==='VERIFIED'}}" bindtap="onResubmit">
+        重新审查
+    </button>
+</view>

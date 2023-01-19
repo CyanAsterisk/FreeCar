@@ -24,4 +24,12 @@ export namespace CarService {
             respMarshaller: api.Car.fromObject,
         })
     }
+
+    export function getCars(): Promise<api.EGetCarsResponse> {
+        return FreeCar.sendRequestWithAuthRetry({
+            method: 'GET',
+            path: `/cars`,
+            respMarshaller: api.EGetCarsResponse.fromObject,
+        })
+    }
 }

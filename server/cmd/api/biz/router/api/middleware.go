@@ -123,3 +123,10 @@ func _completeprofilephotoMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getcarsMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}

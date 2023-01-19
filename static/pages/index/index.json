@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "modal": "/components/modal/modal"
-  }
+    "van-tabbar": "@vant/weapp/tabbar/index",
+    "van-tabbar-item": "@vant/weapp/tabbar-item/index"
+  },
+  "navigationBarTitleText": "FreeCar"
 }

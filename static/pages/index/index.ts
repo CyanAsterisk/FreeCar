@@ -1,11 +1,4 @@
-import { IAppOption } from "../../appoption"
-import { TripService } from "../../service/trip"
-import { routing } from "../../utils/routing"
-import { api } from "../../service/codegen/api_pb"
-import { ProfileService } from "../../service/profile"
 import { CarService } from "../../service/car"
-
-
 interface Marker {
   iconPath: string
   id: number
@@ -15,7 +8,7 @@ interface Marker {
   height: number
 }
 
-const defaultAvatar = '/resources/car.png'
+const defaultAvatar = '/images/car.svg'
 const initialLat = 29.53832
 const initialLng = 106.613922
 
@@ -23,7 +16,6 @@ Page({
   isPageShowing: false,
   socket: undefined as WechatMiniprogram.SocketTask | undefined,
   data: {
-    avatarURL: '',
     setting:{
       skew: 0,
       rotate: 0,
@@ -46,169 +38,114 @@ Page({
     },
     scale:10,
     markers: [] as Marker[],
-    },
-
-    async onLoad(){
-      const userInfo = await getApp<IAppOption>().globalData.userInfo
+  },
+  
+  onShow() {
+    this.isPageShowing = true;
+    if (!this.socket) {
       this.setData({
-        avatarURL:userInfo.avatarUrl,
+        markers: []
+      }, () => {
+        this.setupCarPosUpdater()
       })
+    }
+  },
 
-    },
-
-    onMyLocationTap() {
-     
-      wx.getLocation({
-        type: 'gcj02',
-        success: res => {
-          this.setData({
-            location: {
-              latitude: res.latitude,
-              longitude: res.longitude,
-            },
-          })
-        }, 
-        fail: () => {
-          wx.showToast({
-            icon: 'none',
-            title: '请前往设置页授权',
-          })
+  onHide() {
+    this.isPageShowing = false;
+    if (this.socket) {
+      this.socket.close({
+        success: () => {
+          this.socket = undefined
         }
       })
-    },
+  }
+  },
 
-    async onScanTap(){
-      const trips = await TripService.getTrips({
-        status: api.TripStatus.IN_PROGRESS,
-      })
-      if ((trips.data!.trips?.length || 0) > 0) {
-        await this.selectComponent('#tripModal').showModal()
-        wx.navigateTo({
-          url: routing.driving({
-            trip_id: trips.data!.trips![0].id!,
-          }),
-        })
+  
+  setupCarPosUpdater(){
+    const map = wx.createMapContext("map")
+    const markersByCarID = new Map<string, Marker>()
+    let translationInProgress = false
+    const endTranslation = () => {
+      translationInProgress = false
+    }
+    this.socket = CarService.subscribe(car => {
+      if (!car.id || translationInProgress || !this.isPageShowing) {
+        console.log('dropped')
         return
       }
-      wx.scanCode({
-        success: async()=>{
-           //TODO: get car if from scan result
-           const carID = '63ba9d52a956e840c614a3da'
-           const lockURL = routing.lock({
-             car_id:carID
-           })
-          const prof = await ProfileService.getProfile()
-          if (prof.data!.identityStatus === api.IdentityStatus.VERIFIED){
-            wx.navigateTo({
-              url:lockURL,
-            })
-          }else{
-            await this.selectComponent('#licModal').showModal()
-          wx.navigateTo({
-            url:routing.register({
-              redirectURL:lockURL
-            }),
-          })
-          }
-        },
-        fail:console.error,
-      })
-    },
-   
-    onShow() {
-      this.isPageShowing = true;
-      if (!this.socket) {
+      const marker = markersByCarID.get(car.id)
+      if (!marker) {
+        // Insert new marker.
+        const newMarker: Marker = {
+          id: this.data.markers.length,
+          iconPath: car.car?.driver?.avatarUrl || defaultAvatar,
+          latitude: car.car?.position?.latitude || initialLat,
+          longitude: car.car?.position?.longitude || initialLng,
+          height: 20,
+          width: 20,
+        }
+        markersByCarID.set(car.id, newMarker)
+        this.data.markers.push(newMarker)
+        translationInProgress = true
         this.setData({
-          markers: []
-        }, () => {
-          this.setupCarPosUpdater()
+          markers: this.data.markers,
+        }, endTranslation)
+        return
+      }
+
+      const newAvatar = car.car?.driver?.avatarUrl || defaultAvatar
+      const newLat = car.car?.position?.latitude || initialLat
+      const newLng = car.car?.position?.longitude || initialLng
+      if (marker.iconPath !== newAvatar) {
+        // Change iconPath and possibly position.
+        marker.iconPath = newAvatar
+        marker.latitude = newLat
+        marker.longitude = newLng
+        translationInProgress = true
+        this.setData({
+          markers: this.data.markers,
+        }, endTranslation)
+        return
+      }
+
+      if (marker.latitude !== newLat || marker.longitude !== newLng) {
+        // Move marker.
+        translationInProgress = true
+        map.translateMarker({
+          markerId: marker.id,
+          destination: {
+            latitude: newLat,
+            longitude: newLng,
+          },
+          autoRotate: false,
+          rotate: 0,
+          duration: 80,
+          animationEnd: endTranslation,
         })
       }
-    },
+    })
+  },
 
-    onHide() {
-      this.isPageShowing = false;
-      if (this.socket) {
-        this.socket.close({
-          success: () => {
-            this.socket = undefined
-          }
+
+  onMyLocationTap() {
+    wx.getLocation({
+      type: 'gcj02',
+      success: res => {
+        this.setData({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude,
+          },
         })
-    }
-    },
-   
-
-
-    onMyTripsTap() {
-      wx.navigateTo({
-        url: routing.mytrips()
-      })
-    },
-    
-
-    setupCarPosUpdater(){
-      const map = wx.createMapContext("map")
-      const markersByCarID = new Map<string, Marker>()
-      let translationInProgress = false
-      const endTranslation = () => {
-        translationInProgress = false
+      }, 
+      fail: () => {
+        wx.showToast({
+          icon: 'none',
+          title: '请前往设置页授权',
+        })
       }
-      this.socket = CarService.subscribe(car => {
-        if (!car.id || translationInProgress || !this.isPageShowing) {
-          console.log('dropped')
-          return
-        }
-        const marker = markersByCarID.get(car.id)
-        if (!marker) {
-          // Insert new marker.
-          const newMarker: Marker = {
-            id: this.data.markers.length,
-            iconPath: car.car?.driver?.avatarUrl || defaultAvatar,
-            latitude: car.car?.position?.latitude || initialLat,
-            longitude: car.car?.position?.longitude || initialLng,
-            height: 20,
-            width: 20,
-          }
-          markersByCarID.set(car.id, newMarker)
-          this.data.markers.push(newMarker)
-          translationInProgress = true
-          this.setData({
-            markers: this.data.markers,
-          }, endTranslation)
-          return
-        }
-  
-        const newAvatar = car.car?.driver?.avatarUrl || defaultAvatar
-        const newLat = car.car?.position?.latitude || initialLat
-        const newLng = car.car?.position?.longitude || initialLng
-        if (marker.iconPath !== newAvatar) {
-          // Change iconPath and possibly position.
-          marker.iconPath = newAvatar
-          marker.latitude = newLat
-          marker.longitude = newLng
-          translationInProgress = true
-          this.setData({
-            markers: this.data.markers,
-          }, endTranslation)
-          return
-        }
-  
-        if (marker.latitude !== newLat || marker.longitude !== newLng) {
-          // Move marker.
-          translationInProgress = true
-          map.translateMarker({
-            markerId: marker.id,
-            destination: {
-              latitude: newLat,
-              longitude: newLng,
-            },
-            autoRotate: false,
-            rotate: 0,
-            duration: 80,
-            animationEnd: endTranslation,
-          })
-        }
-      })
-    },
-  
-})
+    })
+  },
+});

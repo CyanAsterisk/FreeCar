@@ -540,6 +540,135 @@ export namespace api {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a GetCarsRequest. */
+    interface IGetCarsRequest {
+    }
+
+    /** Represents a GetCarsRequest. */
+    class GetCarsRequest implements IGetCarsRequest {
+
+        /**
+         * Constructs a new GetCarsRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IGetCarsRequest);
+
+        /**
+         * Creates a GetCarsRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GetCarsRequest
+         */
+        public static fromObject(object: { [k: string]: any }): api.GetCarsRequest;
+
+        /**
+         * Creates a plain object from a GetCarsRequest message. Also converts values to other types if specified.
+         * @param message GetCarsRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.GetCarsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GetCarsRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a GetCarsResponse. */
+    interface IGetCarsResponse {
+
+        /** GetCarsResponse cars */
+        cars?: (api.ICarEntity[]|null);
+    }
+
+    /** Represents a GetCarsResponse. */
+    class GetCarsResponse implements IGetCarsResponse {
+
+        /**
+         * Constructs a new GetCarsResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IGetCarsResponse);
+
+        /** GetCarsResponse cars. */
+        public cars: api.ICarEntity[];
+
+        /**
+         * Creates a GetCarsResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GetCarsResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.GetCarsResponse;
+
+        /**
+         * Creates a plain object from a GetCarsResponse message. Also converts values to other types if specified.
+         * @param message GetCarsResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.GetCarsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GetCarsResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a EGetCarsResponse. */
+    interface IEGetCarsResponse {
+
+        /** EGetCarsResponse code */
+        code?: (number|null);
+
+        /** EGetCarsResponse data */
+        data?: (api.IGetCarsResponse|null);
+
+        /** EGetCarsResponse message */
+        message?: (string|null);
+    }
+
+    /** Represents a EGetCarsResponse. */
+    class EGetCarsResponse implements IEGetCarsResponse {
+
+        /**
+         * Constructs a new EGetCarsResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IEGetCarsResponse);
+
+        /** EGetCarsResponse code. */
+        public code: number;
+
+        /** EGetCarsResponse data. */
+        public data?: (api.IGetCarsResponse|null);
+
+        /** EGetCarsResponse message. */
+        public message: string;
+
+        /**
+         * Creates a EGetCarsResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EGetCarsResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.EGetCarsResponse;
+
+        /**
+         * Creates a plain object from a EGetCarsResponse message. Also converts values to other types if specified.
+         * @param message EGetCarsResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.EGetCarsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EGetCarsResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a LocationStatus. */
     interface ILocationStatus {
 
@@ -1931,6 +2060,20 @@ export namespace api {
         public getCar(request: api.IGetCarRequest): Promise<api.Car>;
 
         /**
+         * Calls GetCars.
+         * @param request GetCarsRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and GetCarsRequest
+         */
+        public getCars(request: api.IGetCarsRequest, callback: api.apiService.GetCarsCallback): void;
+
+        /**
+         * Calls GetCars.
+         * @param request GetCarsRequest message or plain object
+         * @returns Promise
+         */
+        public getCars(request: api.IGetCarsRequest): Promise<api.GetCarsRequest>;
+
+        /**
          * Calls GetProfile.
          * @param request GetProfileRequest message or plain object
          * @param callback Node-style callback called with the error, if any, and Profile
@@ -2107,6 +2250,13 @@ export namespace api {
          * @param [response] Car
          */
         type GetCarCallback = (error: (Error|null), response?: api.Car) => void;
+
+        /**
+         * Callback as used by {@link api.apiService#getCars}.
+         * @param error Error, if any
+         * @param [response] GetCarsRequest
+         */
+        type GetCarsCallback = (error: (Error|null), response?: api.GetCarsRequest) => void;
 
         /**
          * Callback as used by {@link api.apiService#getProfile}.

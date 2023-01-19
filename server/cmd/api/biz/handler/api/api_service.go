@@ -105,6 +105,22 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	errno.SendResponse(c, errno.Success, resp)
 }
 
+// GetCars .
+// @router /cars [GET]
+func GetCars(ctx context.Context, c *app.RequestContext) {
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		errno.SendResponse(c, errno.AuthorizeFail, nil)
+		return
+	}
+	resp, err := global.CarClient.GetCars(ctx, &car.GetCarsRequest{AccountId: aid.(int64)})
+	if err != nil {
+		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
 // GetProfile .
 // @router /profile [GET]
 func GetProfile(ctx context.Context, c *app.RequestContext) {

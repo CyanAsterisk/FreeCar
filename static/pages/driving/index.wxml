@@ -1,0 +1,23 @@
+<view class="container">
+    <view class="pannel">
+        <view class="end-btn" bindtap="onEndTripTap">
+            <image class="icon" src="/images/end.svg"></image>
+            <text>结束</text>
+        </view>
+        <view class="v-divider"></view>
+        <view class="info">
+            <view class="time">
+                <text>{{elapsed}}</text>
+            </view>
+            <view class="fee">
+                <text>￥{{fee}}</text>
+            </view>
+        </view>
+        <view class="v-divider"></view>
+        <view class="hang-up" bindtap="onHangUpTap">
+            <image class="icon" src="/images/hangup.svg"></image>
+            <text>挂起</text>
+        </view>
+    </view>
+    <map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" show-location scale="{{scale}}" markers="{{markers}}" />
+</view>

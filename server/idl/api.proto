@@ -70,6 +70,19 @@ message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
 }
 
+message GetCarsRequest{
+}
+
+message GetCarsResponse{
+  repeated CarEntity cars = 1;
+}
+
+message EGetCarsResponse{
+  int32 code = 1;
+  GetCarsResponse data = 2;
+  string message = 3;
+}
+
 message LocationStatus{
   Location location = 1;
   int32 fee_cent = 2[(api.body) = "fee_cent"];
@@ -231,6 +244,7 @@ service apiService {
 
   rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/car";}
   rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/car";}
+  rpc GetCars (GetCarsRequest) returns (GetCarsRequest) {option (api.get) = "/cars";}
 
   rpc GetProfile (GetProfileRequest) returns (Profile) {option (api.get) = "/profile";}
   rpc SubmitProfile (SubmitProfileRequest) returns (Profile) {option (api.post) = "/profile";}

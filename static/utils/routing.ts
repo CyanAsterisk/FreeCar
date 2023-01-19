@@ -6,35 +6,33 @@
     }
 
     export function driving(o: DrivingOpts) {
-        return `/pages/driving/driving?trip_id=${o.trip_id}`
+        return `/pages/driving/index?trip_id=${o.trip_id}`
     }
-
-    export interface LockOpts {
-        car_id: string
-    }
-
-    export function lock(o: LockOpts) {
-        return `/pages/lock/lock?car_id=${o.car_id}`
-    }
-
     export interface RegisterOpts {
         redirect?: string
     }
-
     export interface RegisterParams {
         redirectURL: string
     }
 
-    export function register(p?: RegisterParams) {
-        const page = '/pages/register/register'
+    export function license(p?: RegisterParams) {
+        const page = '/pages/license/license'
         if (!p) {
             return page
         }
         return `${page}?redirect=${encodeURIComponent(p.redirectURL)}`
     }
 
-    export function mytrips() {
-        return '/pages/mytrips/mytrips'
+    export function trip() {
+        return '/pages/trip/trip'
+    }
+
+    export function index(){
+        return '/pages/index/index'
+    }
+
+    export function cars(){
+        return '/pages/cars/index'
     }
 }
 

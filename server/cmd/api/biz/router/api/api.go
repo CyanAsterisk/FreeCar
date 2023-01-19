@@ -20,6 +20,7 @@ func Register(r *server.Hertz) {
 	root := r.Group("/", rootMw()...)
 	root.POST("/car", append(_createcarMw(), api.CreateCar)...)
 	root.GET("/car", append(_getcarMw(), api.GetCar)...)
+	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
 	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)

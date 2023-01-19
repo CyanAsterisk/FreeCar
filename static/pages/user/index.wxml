@@ -1,0 +1,17 @@
+<view class="header-box">
+  <button class="avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+    <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/fake-avatar.png' }}" mode="aspectFill"></image>
+  </button>
+  <view class="r">
+    <view class="uid">ID: 1024</view>
+    <view class="nick" bindtap="editNick">
+      {{ apiUserInfoMap.base.nick ? apiUserInfoMap.base.nick : 'FreeCar' }}
+    </view>
+  </view>
+</view>
+<van-cell title="驾照信息" value="{{licStatus}}" bindtap="toLicensePage" />
+<van-cell-group title="其他功能">
+  <van-cell title="帮助中心" is-link url="/pages/help/index" />
+  <van-cell title="个人信息" is-link url="/pages/my/info-menu" />
+  <van-cell title="系统设置" is-link url="/pages/my/setting" />
+</van-cell-group>

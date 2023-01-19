@@ -1,0 +1,86 @@
+page {
+    width: 100%;
+    height: 100%;
+  }
+.container {
+  height: 100%;
+  flex-direction: column-reverse;
+  justify-content: start;
+}
+
+#map {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.pannel {
+  width: 100%;
+  height: 150rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color:#f2f1f1;
+  margin: 0 20rpx 50rpx 20rpx;
+  border-radius: 20rpx 20rpx 0 0;
+}
+
+.v-divider{
+  border: 1px solid;
+  border-color: #717786;
+  height: 100rpx;
+
+}
+  /* <view style="border:1rpx solid ;float:left;height:100rpx;"></view> */
+
+.end-btn{
+  display: flex;
+  width: 100rpx;
+  align-items: center;
+  flex-direction: column;
+}
+
+.info{
+  text-align: center;
+  align-items: center;
+  width: 545rpx;
+}
+
+
+.hang-up{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 15rpx;
+}
+
+
+.info .time{
+  font-weight:bolder;
+  font-size: 60rpx;
+}
+
+.info .fee{
+  font-weight: bold;
+}
+
+.end-btn text{
+  font-size: medium;
+  font-weight: bold;
+}
+
+.hang-up text{
+  margin-top: 10rpx;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.end-btn .icon{
+  width: 50rpx;
+  height: 50rpx;
+
+}
+
+.hang-up .icon{
+  width: 40rpx;
+  height: 40rpx;
+}

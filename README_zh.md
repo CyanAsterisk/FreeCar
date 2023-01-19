@@ -1,23 +1,29 @@
-![FreeCar](static/resources/FreeCar.png)
+![FreeCar](static/images/doc/FreeCar.png)
 
 [English](README.md) | 中文
 
 FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
 ## 项目架构
+
 ### 调用关系
-![call_relations.png](static/resources/call_relation.png)
+
+![call_relations.png](static/images/doc/call_relation.png)
+
 ### 技术架构
-![tech_arch](static/resources/tech_arch.png)
+
+![tech_arch](static/images/doc/tech_arch.png)
+
 ### 服务关系
-![service_relations.png](static/resources/service_relations.png)
+
+![service_relations.png](static/images/doc/service_relations.png)
 
 ## 目录介绍
 
-| 目录     | 介绍     |
-|--------|--------|
+| 目录   | 介绍         |
+| ------ | ------------ |
 | Server | 项目核心部分 |
-| Shared | 可复用代码  |
+| Shared | 可复用代码   |
 | Static | 前端静态文件 |
 
 ## 快速开始
@@ -34,11 +40,11 @@ make start
 >
 > 默认命名空间以及配置组等请参考各个 `config.yaml` 配置文件。
 
-![nacos.png](static/resources/nacos.png)
+![nacos.png](static/images/doc/nacos.png)
 
-![nacos_registry.png](static/resources/nacos_registry.png)
+![nacos_registry.png](static/images/doc/nacos_registry.png)
 
-*api => API_GROUP*
+_api => API_GROUP_
 
 ```json
 {
@@ -66,7 +72,7 @@ make start
 }
 ```
 
-*auth_srv => AUTH_GROUP*
+_auth_srv => AUTH_GROUP_
 
 ```json
 {
@@ -90,7 +96,7 @@ make start
 }
 ```
 
-*blob_srv => BLOB_GROUP*
+_blob_srv => BLOB_GROUP_
 
 ```json
 {
@@ -115,7 +121,7 @@ make start
 }
 ```
 
-*car_srv => CAR_GROUP*
+_car_srv => CAR_GROUP_
 
 ```json
 {
@@ -146,7 +152,7 @@ make start
 }
 ```
 
-*profile_srv => RENTAL_GROUP*
+_profile_srv => RENTAL_GROUP_
 
 ```json
 {
@@ -169,7 +175,7 @@ make start
 }
 ```
 
-*trip_srv => RENTAL_GROUP*
+_trip_srv => RENTAL_GROUP_
 
 ```json
 {
@@ -221,13 +227,13 @@ make trip
 
 > 在浏览器上访问 `http://127.0.0.1:16686/`
 
-![jaeger.jpg](static/resources/jaeger.jpg)
+![jaeger.jpg](static/images/doc/jaeger.jpg)
 
 ### Prometheus
 
 > 在浏览器上访问 `http://127.0.0.1:3000/`
 
-![prometheus.jpg](static/resources/prometheus.png)
+![prometheus.jpg](static/images/doc/prometheus.png)
 
 ## API 请求
 

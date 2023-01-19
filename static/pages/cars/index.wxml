@@ -1,0 +1,12 @@
+<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}"></map>
+<view class="card-container">
+    <view class="card" wx:for="{{cars}}" wx:key="id">
+        <view class="info">
+            <view>车牌号:京A66666</view>
+            <view>电量: 50%</view>
+            <view>距离: {{item.distance}}</view>
+        </view>
+        <image class="icon" wx:if="{{item.canlock}}" src="/images/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
+        <image class="icon" wx:else src="/images/navi.svg"></image>
+    </view>
+</view>

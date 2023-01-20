@@ -5,7 +5,7 @@
         <view class="info">
             <view class="date item">
                 <image class="icon" src="/images/trips/date.svg"></image>
-                <view class="text">2022/03/04</view>
+                <view class="text">{{item.date}}</view>
             </view>
             <view class="duration item">
                 <image class="icon" src="/images/trips/time.svg"></image>

@@ -1,16 +1,15 @@
-import { formatDuration, formatFee } from "../../utils/format"
+import { formatDuration, formatFee ,formatDate} from "../../utils/format"
 import { api } from "../../service/codegen/api_pb"
 import { TripService } from "../../service/trip"
 
 interface Trip {
-    id: string
     start: string
     end: string
+    date: string
     duration: string
     fee: string
     distance: string
     status: string
-    inProgress: boolean
 }
 
 const tripStatusMap = new Map([
@@ -48,14 +47,13 @@ Page({
         let  trips: Trip[] = []
         for(let trip of ts){
           const t: Trip = {
-            id: trip.id!,
             start: trip.trip?.start?.poiName||'未知',
             end: '',
+            date: formatDate(trip.trip?.start?.timestampSec! * 1000) || '未知',
             distance: '',
             duration: '',
             fee: '',
             status: tripStatusMap.get(trip.trip?.status!)||'未知',
-            inProgress: trip.trip?.status ===  api.TripStatus.IN_PROGRESS,
           }
           const end = trip.trip?.end
           if(end){
@@ -66,7 +64,7 @@ Page({
             t.duration = `${dur.hh}时${dur.mm}分`
           }
           
-          trips.push(t)
+          trips.unshift(t)
         }
         this.setData({
           trips,

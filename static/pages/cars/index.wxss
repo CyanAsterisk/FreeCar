@@ -13,7 +13,6 @@ page{
 .card-container{
     box-sizing: border-box;
     position: absolute;
-    margin-left: 70rpx;
     margin-top:500rpx;
     z-index: 1;
     width: 750rpx;
@@ -22,27 +21,53 @@ page{
 
 .card {
     display:flex;
+    flex-direction: row;
     justify-content:space-between;
     margin-top: 24rpx;
-    margin-left: 24rpx;
-    width: 600rpx;
-    height: 175rpx;
+    margin-left: 25rpx;
+    width:700rpx;
+    height: 270rpx;
     background-color: #FFFFFF;
     box-shadow: 0 0 16rpx 0 rgba(36,44,69,0.20);
     border-radius: 8rpx;
   }
 
   .card .info{
+    justify-content: center;
+    align-items: start;
     box-sizing: border-box;
-    margin-top: 35rpx;
+    display: flex;
+    flex-direction: column;
+    margin-top:20rpx;
     margin-left: 20rpx;
-    font-size: small;
-    font-weight: 900;
+    width: 400rpx;
   }
 
   .card .icon{
-    margin-top:50rpx;
-    margin-right: 50rpx;
+    margin-top:97rpx;
+    margin-right: 60rpx;
     width: 50rpx;
     height: 75rpx;
   }
+
+  .info .item{
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+  }
+
+  .info .content{
+    margin-top: 20rpx;
+    font-size: 30rpx;
+    font-weight: bold;
+    align-self: auto;
+  }
+
+  .info .icon{
+    margin: 10rpx 30rpx 5rpx 20rpx;
+    width: 50rpx;
+    height: 50rpx;
+  }
+  

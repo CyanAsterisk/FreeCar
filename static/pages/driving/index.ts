@@ -136,5 +136,25 @@ Page({
         wx.redirectTo({
             url: routing.index(),
         })
-    }
+    },
+
+    onMyLocationTap() {
+        wx.getLocation({
+          type: 'gcj02',
+          success: res => {
+            this.setData({
+              location: {
+                latitude: res.latitude,
+                longitude: res.longitude,
+              },
+            })
+          }, 
+          fail: () => {
+            wx.showToast({
+              icon: 'none',
+              title: '请前往设置页授权',
+            })
+          }
+        })
+      },
 })

@@ -19,5 +19,7 @@
             <text>挂起</text>
         </view>
     </view>
-    <map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" show-location scale="{{scale}}" markers="{{markers}}" />
+    <map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" show-location scale="{{scale}}" markers="{{markers}}">
+        <image class="location-icon" src="/images/shared/location.svg" bindtap="onMyLocationTap"></image>
+    </map>
 </view>

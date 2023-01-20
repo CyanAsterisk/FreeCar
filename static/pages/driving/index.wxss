@@ -13,6 +13,15 @@ page {
   flex-grow: 1;
 }
 
+
+#map .location-icon{
+  position: fixed;
+  width: 60rpx;
+  height: 60rpx;
+  top: 50rpx;
+  left: 15rpx;
+}
+
 .pannel {
   width: 100%;
   height: 150rpx;

@@ -118,7 +118,16 @@ Page({
         }
       })
     },
-  
+    
+    goMap(event: any) {
+      const pos = event.currentTarget.dataset.car_pos
+      wx.openLocation({
+        latitude:pos.latitude,
+        longitude:pos.longitude,
+        scale: 28
+      })
+    },
+
     onPullDownRefresh(){
       this.syscars()
       wx.stopPullDownRefresh()
@@ -176,60 +185,61 @@ Page({
     },
     async unlockCar(event: any){
       const carId = event.currentTarget.dataset.carid
-      wx.getLocation({
-        type: 'gcj02',
-        success: async loc => {
-            console.log('starting a trip', {
-                location: {
-                    latitude: loc.latitude,
-                    longitude: loc.longitude,
-                },
-                avatarURL: ""
-            })
-            let trip: api.IETripEntity
-            try {
+      console.log(carId);
+    //   wx.getLocation({
+    //     type: 'gcj02',
+    //     success: async loc => {
+    //         console.log('starting a trip', {
+    //             location: {
+    //                 latitude: loc.latitude,
+    //                 longitude: loc.longitude,
+    //             },
+    //             avatarURL: ""
+    //         })
+    //         let trip: api.IETripEntity
+    //         try {
                
-                trip =  await TripService.createTrip({
-                    start: {
-                        latitude : loc.latitude,
-                        longitude : loc.longitude
-                    },
-                    carId: carId,
-                    avatarUrl: "/images/car.svg"
-                })
-                if (!trip.data!.id) {
-                    console.error('no tripID in response', trip)
-                    return
-                }
-            } catch(err) {
-                wx.showToast({
-                    title: '创建行程失败',
-                    icon: 'none',
-                })
-                return
-            }
+    //             trip =  await TripService.createTrip({
+    //                 start: {
+    //                     latitude : loc.latitude,
+    //                     longitude : loc.longitude
+    //                 },
+    //                 carId: carId,
+    //                 avatarUrl: "/images/car.svg"
+    //             })
+    //             if (!trip.data!.id) {
+    //                 console.error('no tripID in response', trip)
+    //                 return
+    //             }
+    //         } catch(err) {
+    //             wx.showToast({
+    //                 title: '创建行程失败',
+    //                 icon: 'none',
+    //             })
+    //             return
+    //         }
 
-            wx.showLoading({
-                title: '开锁中',
-                mask: true,
-            })
-            setTimeout(() => {
-                wx.redirectTo({
-                    url: routing.driving({
-                        trip_id: trip.data!.id!,
-                    }),
-                    complete: () => {
-                        wx.hideLoading()
-                    }
-                })
-            }, 2000);
-        },
-        fail: () => {
-            wx.showToast({
-                icon: 'none',
-                title: '请前往设置页授权位置信息',
-            })
-        }
-    })
+    //         wx.showLoading({
+    //             title: '开锁中',
+    //             mask: true,
+    //         })
+    //         setTimeout(() => {
+    //             wx.redirectTo({
+    //                 url: routing.driving({
+    //                     trip_id: trip.data!.id!,
+    //                 }),
+    //                 complete: () => {
+    //                     wx.hideLoading()
+    //                 }
+    //             })
+    //         }, 2000);
+    //     },
+    //     fail: () => {
+    //         wx.showToast({
+    //             icon: 'none',
+    //             title: '请前往设置页授权位置信息',
+    //         })
+    //     }
+    // })
     }
 })

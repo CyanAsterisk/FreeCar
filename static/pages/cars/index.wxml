@@ -18,6 +18,6 @@
             </view>
         </view>
         <image class="icon" wx:if="{{item.canlock}}" src="/images/cars/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
-        <image class="icon" wx:else src="/images/cars/navi.svg"></image>
+        <image class="icon" wx:else src="/images/cars/navi.svg" bindtap="goMap" data-car_pos="{{item.position}}"></image>
     </view>
 </view>

@@ -63,14 +63,21 @@ func Login(ctx context.Context, c *app.RequestContext) {
 func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.CreateCarRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
+		return
+	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 		return
 	}
-	req.AccountId = aid.(int64)
 
-	resp, err := global.CarClient.CreateCar(ctx, &car.CreateCarRequest{AccountId: req.AccountId})
+	resp, err := global.CarClient.CreateCar(ctx, &car.CreateCarRequest{
+		AccountId: aid.(int64),
+		PlateNum:  req.PlateNum,
+	})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return

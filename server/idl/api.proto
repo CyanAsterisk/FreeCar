@@ -55,6 +55,8 @@ message Car {
   Driver driver = 2;
   Location position = 3;
   string trip_id = 4[(api.body) = "trip_id"];
+  float power = 5;
+  string plate_num = 6[(api.body) = "plate_id"];
 }
 message ECar{
   int32 code = 1;
@@ -63,7 +65,7 @@ message ECar{
 }
 
 message CreateCarRequest {
-  int64 account_id = 1[(api.body) = "account_id"];
+  string plate_num = 6[(api.body) = "plate_id"];
 }
 
 message GetCarRequest {

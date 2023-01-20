@@ -10,6 +10,14 @@ page{
     z-index: 2;
 }
 
+#map .location-icon{
+    position: fixed;
+    width: 60rpx;
+    height: 60rpx;
+    top:400rpx;
+    right: 30rpx;
+}
+
 .card-container{
     box-sizing: border-box;
     position: absolute;

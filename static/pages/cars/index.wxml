@@ -1,4 +1,6 @@
-<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}"></map>
+<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}">
+    <image class="location-icon" src="/images/shared/location.svg" bindtap="onMyLocationTap"></image>
+</map>
 <view class="card-container">
     <view class="card" wx:for="{{cars}}" wx:key="id">
         <view class="info">

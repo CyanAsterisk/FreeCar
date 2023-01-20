@@ -22,7 +22,10 @@ func TestCarUpdate(t *testing.T) {
 
 	carID := id.CarID("5f8132eb22814bf629489056")
 	mgutil.NewObjIDWithValue(carID)
-	_, err := s.CreateCar(c, &car.CreateCarRequest{})
+	_, err := s.CreateCar(c, &car.CreateCarRequest{
+		AccountId: 1024,
+		PlateNum:  "渝A66666",
+	})
 	if err != nil {
 		t.Fatalf("cannot create car: %v", err)
 	}
@@ -38,22 +41,22 @@ func TestCarUpdate(t *testing.T) {
 			op: func() error {
 				return nil
 			},
-			want: `{"status":1,"driver":null,"position":{"latitude":30,"longitude":120},"trip_id":""}`,
+			want: `{"status":1,"driver":null,"position":{"latitude":29.5,"longitude":106.6},"trip_id":"","power":100,"plate_num":"渝A66666"}`,
 		},
 		{
 			name: "unlock_car",
 			op: func() error {
 				_, err = s.UnlockCar(c, &car.UnlockCarRequest{
 					Id:     carID.String(),
-					TripId: "test_trip",
+					TripId: "test-tripId",
 					Driver: &car.Driver{
 						Id:        1024,
-						AvatarUrl: "test_avatar",
+						AvatarUrl: "test-avatarURL",
 					},
 				})
 				return err
 			},
-			want: `{"status":2,"driver":{"id":1024,"avatar_url":"test_avatar"},"position":{"latitude":30,"longitude":120},"trip_id":"test_trip"}`,
+			want: `{"status":2,"driver":{"id":1024,"avatar_url":"test-avatarURL"},"position":{"latitude":29.5,"longitude":106.6},"trip_id":"test-tripId","power":100,"plate_num":"渝A66666"}`,
 		},
 		{
 			name: "unlock_complete",
@@ -68,7 +71,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want: `{"status":3,"driver":{"id":1024,"avatar_url":"test_avatar"},"position":{"latitude":31,"longitude":121},"trip_id":"test_trip"}`,
+			want: `{"status":3,"driver":{"id":1024,"avatar_url":"test-avatarURL"},"position":{"latitude":31,"longitude":121},"trip_id":"test-tripId","power":100,"plate_num":"渝A66666"}`,
 		},
 		{
 			name: "unlock_car_by_another_driver",
@@ -93,7 +96,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want: `{"status":4,"driver":{"id":1024,"avatar_url":"test_avatar"},"position":{"latitude":31,"longitude":121},"trip_id":"test_trip"}`,
+			want: `{"status":4,"driver":{"id":1024,"avatar_url":"test-avatarURL"},"position":{"latitude":31,"longitude":121},"trip_id":"test-tripId","power":100,"plate_num":"渝A66666"}`,
 		},
 		{
 			name: "lock_complete",
@@ -104,7 +107,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want: `{"status":1,"driver":{"id":0,"avatar_url":""},"position":{"latitude":31,"longitude":121},"trip_id":""}`,
+			want: `{"status":1,"driver":{"id":0,"avatar_url":""},"position":{"latitude":31,"longitude":121},"trip_id":"","power":100,"plate_num":"渝A66666"}`,
 		},
 	}
 	for _, cc := range cases {

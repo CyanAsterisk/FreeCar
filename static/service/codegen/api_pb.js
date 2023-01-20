@@ -766,6 +766,8 @@ export const api = $root.api = (() => {
          * @property {api.IDriver|null} [driver] Car driver
          * @property {api.ILocation|null} [position] Car position
          * @property {string|null} [tripId] Car tripId
+         * @property {number|null} [power] Car power
+         * @property {string|null} [plateNum] Car plateNum
          */
 
         /**
@@ -816,6 +818,22 @@ export const api = $root.api = (() => {
         Car.prototype.tripId = "";
 
         /**
+         * Car power.
+         * @member {number} power
+         * @memberof api.Car
+         * @instance
+         */
+        Car.prototype.power = 0;
+
+        /**
+         * Car plateNum.
+         * @member {string} plateNum
+         * @memberof api.Car
+         * @instance
+         */
+        Car.prototype.plateNum = "";
+
+        /**
          * Creates a Car message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
          * @memberof api.Car
@@ -861,6 +879,10 @@ export const api = $root.api = (() => {
             }
             if (object.tripId != null)
                 message.tripId = String(object.tripId);
+            if (object.power != null)
+                message.power = Number(object.power);
+            if (object.plateNum != null)
+                message.plateNum = String(object.plateNum);
             return message;
         };
 
@@ -882,6 +904,8 @@ export const api = $root.api = (() => {
                 object.driver = null;
                 object.position = null;
                 object.tripId = "";
+                object.power = 0;
+                object.plateNum = "";
             }
             if (message.status != null && message.hasOwnProperty("status"))
                 object.status = options.enums === String ? $root.api.CarStatus[message.status] : message.status;
@@ -891,6 +915,10 @@ export const api = $root.api = (() => {
                 object.position = $root.api.Location.toObject(message.position, options);
             if (message.tripId != null && message.hasOwnProperty("tripId"))
                 object.tripId = message.tripId;
+            if (message.power != null && message.hasOwnProperty("power"))
+                object.power = options.json && !isFinite(message.power) ? String(message.power) : message.power;
+            if (message.plateNum != null && message.hasOwnProperty("plateNum"))
+                object.plateNum = message.plateNum;
             return object;
         };
 
@@ -1029,7 +1057,7 @@ export const api = $root.api = (() => {
          * Properties of a CreateCarRequest.
          * @memberof api
          * @interface ICreateCarRequest
-         * @property {number|null} [accountId] CreateCarRequest accountId
+         * @property {string|null} [plateNum] CreateCarRequest plateNum
          */
 
         /**
@@ -1048,12 +1076,12 @@ export const api = $root.api = (() => {
         }
 
         /**
-         * CreateCarRequest accountId.
-         * @member {number} accountId
+         * CreateCarRequest plateNum.
+         * @member {string} plateNum
          * @memberof api.CreateCarRequest
          * @instance
          */
-        CreateCarRequest.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        CreateCarRequest.prototype.plateNum = "";
 
         /**
          * Creates a CreateCarRequest message from a plain object. Also converts values to their respective internal types.
@@ -1067,15 +1095,8 @@ export const api = $root.api = (() => {
             if (object instanceof $root.api.CreateCarRequest)
                 return object;
             let message = new $root.api.CreateCarRequest();
-            if (object.accountId != null)
-                if ($util.Long)
-                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
-                else if (typeof object.accountId === "string")
-                    message.accountId = parseInt(object.accountId, 10);
-                else if (typeof object.accountId === "number")
-                    message.accountId = object.accountId;
-                else if (typeof object.accountId === "object")
-                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
+            if (object.plateNum != null)
+                message.plateNum = String(object.plateNum);
             return message;
         };
 
@@ -1093,16 +1114,9 @@ export const api = $root.api = (() => {
                 options = {};
             let object = {};
             if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.accountId = options.longs === String ? "0" : 0;
-            if (message.accountId != null && message.hasOwnProperty("accountId"))
-                if (typeof message.accountId === "number")
-                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
-                else
-                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
+                object.plateNum = "";
+            if (message.plateNum != null && message.hasOwnProperty("plateNum"))
+                object.plateNum = message.plateNum;
             return object;
         };
 

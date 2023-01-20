@@ -360,6 +360,12 @@ export namespace api {
 
         /** Car tripId */
         tripId?: (string|null);
+
+        /** Car power */
+        power?: (number|null);
+
+        /** Car plateNum */
+        plateNum?: (string|null);
     }
 
     /** Represents a Car. */
@@ -382,6 +388,12 @@ export namespace api {
 
         /** Car tripId. */
         public tripId: string;
+
+        /** Car power. */
+        public power: number;
+
+        /** Car plateNum. */
+        public plateNum: string;
 
         /**
          * Creates a Car message from a plain object. Also converts values to their respective internal types.
@@ -461,8 +473,8 @@ export namespace api {
     /** Properties of a CreateCarRequest. */
     interface ICreateCarRequest {
 
-        /** CreateCarRequest accountId */
-        accountId?: (number|null);
+        /** CreateCarRequest plateNum */
+        plateNum?: (string|null);
     }
 
     /** Represents a CreateCarRequest. */
@@ -474,8 +486,8 @@ export namespace api {
          */
         constructor(properties?: api.ICreateCarRequest);
 
-        /** CreateCarRequest accountId. */
-        public accountId: number;
+        /** CreateCarRequest plateNum. */
+        public plateNum: string;
 
         /**
          * Creates a CreateCarRequest message from a plain object. Also converts values to their respective internal types.

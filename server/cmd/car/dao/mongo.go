@@ -41,6 +41,7 @@ func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 			},
 			Status:   carthrf.CarStatus_LOCKED,
 			PlateNum: plateNum,
+			Power:    100,
 		},
 	}
 	cr.ID = mgutil.NewObjID()

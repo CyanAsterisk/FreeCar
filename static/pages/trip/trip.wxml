@@ -13,7 +13,7 @@
             </view>
             <view class="car-id item">
                 <image class="icon" src="/images/trips/car.svg"></image>
-                <view class="text">京A-66666</view>
+                <view class="text">{{item.carPlateNum}}</view>
             </view>
             <view class="fee item">
                 <image class="icon" src="/images/trips/fee.svg"></image>

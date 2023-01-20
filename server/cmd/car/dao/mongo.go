@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"fmt"
+	"math/rand"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
@@ -20,6 +21,8 @@ const (
 	driverField   = carField + ".driver"
 	positionField = carField + ".position"
 	tripIDField   = carField + ".tripid"
+	initLatitude  = 29.5
+	initLongitude = 106.6
 )
 
 // CarRecord defines a car record in mongo db.
@@ -29,14 +32,15 @@ type CarRecord struct {
 }
 
 // CreateCar creates a car.
-func CreateCar(c context.Context) (*CarRecord, error) {
+func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
-				Latitude:  30,
-				Longitude: 120,
+				Latitude:  initLatitude + (rand.Float64()-0.5)*0.1,
+				Longitude: initLongitude + (rand.Float64()-0.5)*0.1,
 			},
-			Status: carthrf.CarStatus_LOCKED,
+			Status:   carthrf.CarStatus_LOCKED,
+			PlateNum: plateNum,
 		},
 	}
 	cr.ID = mgutil.NewObjID()

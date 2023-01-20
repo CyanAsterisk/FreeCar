@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"fmt"
-	"math/rand"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
@@ -37,8 +36,8 @@ func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
-				Latitude:  initLatitude + (rand.Float64()-0.5)*0.1,
-				Longitude: initLongitude + (rand.Float64()-0.5)*0.1,
+				Latitude:  initLatitude,
+				Longitude: initLongitude,
 			},
 			Status:   carthrf.CarStatus_LOCKED,
 			PlateNum: plateNum,

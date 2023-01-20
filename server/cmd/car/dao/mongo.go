@@ -21,6 +21,7 @@ const (
 	driverField   = carField + ".driver"
 	positionField = carField + ".position"
 	tripIDField   = carField + ".tripid"
+	powerField    = carField + ".power"
 	initLatitude  = 29.5
 	initLongitude = 106.6
 )
@@ -89,6 +90,7 @@ type CarUpdate struct {
 	Status       carthrf.CarStatus
 	Position     *carthrf.Location
 	Driver       *carthrf.Driver
+	Power        float64
 	UpdateTripID bool
 	TripID       id.TripID
 }
@@ -122,7 +124,9 @@ func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update 
 	if update.UpdateTripID {
 		u[tripIDField] = update.TripID.String()
 	}
-
+	if update.Power > 0 {
+		u[powerField] = update.Power
+	}
 	res := global.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 

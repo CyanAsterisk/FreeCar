@@ -14,6 +14,7 @@ interface Marker {
   height: number
 }
 interface Car {
+    id:string
     plateNum: string
     power: string
     position:{
@@ -141,7 +142,7 @@ Page({
       if(resp.code != 10000){
         wx.hideLoading()
         wx.showToast({
-          title: '服务器出错',
+          title: '同步车辆信息失败',
           icon:'none',
           duration:1000
         })
@@ -153,6 +154,7 @@ Page({
       for(let car of cs){
         if(car.car?.status != api.CarStatus.LOCKED) continue;
         const c: Car = {
+          id: car.id!,
           plateNum: car.car.plateNum!,
           power: (car.car.power!).toFixed(2)+"%",
           position: {

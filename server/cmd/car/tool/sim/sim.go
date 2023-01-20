@@ -43,7 +43,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	if len(cars) < minCarNum {
 		for i := minCarNum - len(cars); i > 0; i-- {
 			res, err := c.CarService.CreateCar(ctx, &car.CreateCarRequest{
-				AccountId: 1024,
+				AccountId: AccountId,
 				PlateNum:  genPlateNum(),
 			})
 			if err != nil {
@@ -105,19 +105,14 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 	for update := range ch {
 		time.Sleep(time.Millisecond * 500)
 		if update.Status == car.CarStatus_UNLOCKING {
-			var err error
-			if update.Power < 10 {
-				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-					Id:     carID,
-					Status: car.CarStatus_LOCKED,
-				})
-			} else {
-				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-					Id:       carID,
-					Status:   car.CarStatus_UNLOCKED,
-					Position: update.Position,
-				})
-			}
+			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+				Id:     carID,
+				Status: car.CarStatus_UNLOCKED,
+				Position: &car.Location{
+					Latitude:  CQUPTLatitude,
+					Longitude: CQUPTLongitude,
+				},
+			})
 			if err != nil {
 				klog.Errorf("cannot unlock car: %s", err.Error())
 			}
@@ -127,7 +122,7 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 				Status: car.CarStatus_LOCKED,
 			})
 			if err != nil {
-				klog.Errorf("cannot update car: %s", err.Error())
+				klog.Errorf("cannot lock car: %s", err.Error())
 			}
 		} else if update.Status == car.CarStatus_UNLOCKED {
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
@@ -138,20 +133,6 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 				},
 				Power: update.Power - 0.02*rand.Float64(),
 			})
-			if err != nil {
-				klog.Errorf("cannot update car position: %s", err.Error())
-			}
-		} else if update.Status == car.CarStatus_LOCKED {
-			var err error
-			if update.Power >= 100 {
-				return
-			} else {
-				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-					Id:       carID,
-					Power:    update.Power + 0.01*rand.Float64(),
-					Position: update.Position,
-				})
-			}
 			if err != nil {
 				klog.Errorf("cannot update car position: %s", err.Error())
 			}

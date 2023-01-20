@@ -3,6 +3,7 @@ package sim
 import (
 	"context"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
@@ -12,7 +13,7 @@ import (
 )
 
 const (
-	minCarNum      = 8
+	minCarNum      = 10
 	AccountId      = 1024
 	CQUPTLatitude  = 29.53832
 	CQUPTLongitude = 106.613922
@@ -41,7 +42,10 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 
 	if len(cars) < minCarNum {
 		for i := minCarNum - len(cars); i > 0; i-- {
-			res, err := c.CarService.CreateCar(ctx, &car.CreateCarRequest{})
+			res, err := c.CarService.CreateCar(ctx, &car.CreateCarRequest{
+				AccountId: 1024,
+				PlateNum:  genPlateNum(1),
+			})
 			if err != nil {
 				klog.Fatalf("create cars error: %s", err.Error())
 			}
@@ -62,10 +66,11 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 		req := &car.UpdateCarRequest{
 			Id: _car.Id,
 			Position: &car.Location{
-				Latitude:  CQUPTLatitude,
-				Longitude: CQUPTLongitude,
+				Latitude:  CQUPTLatitude + (rand.Float64()-0.5)*0.1,
+				Longitude: CQUPTLongitude + (rand.Float64()-0.5)*0.1,
 			},
 			AccountId: AccountId,
+			Power:     99,
 		}
 		if idx < minCarNum-2 {
 			req.Status = car.CarStatus_UNLOCKED
@@ -112,12 +117,20 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 				klog.Errorf("cannot unlock car: %s", err.Error())
 			}
 		} else if update.Status == car.CarStatus_LOCKING {
-			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-				Id:     carID,
-				Status: car.CarStatus_LOCKED,
-			})
+			var err error
+			if update.Power < 5 {
+				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+					Id:     carID,
+					Status: car.CarStatus_LOCKED,
+				})
+			} else {
+				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+					Id:     carID,
+					Status: car.CarStatus_LOCKED,
+				})
+			}
 			if err != nil {
-				klog.Errorf("cannot lock car: %s", err.Error())
+				klog.Errorf("cannot update car: %s", err.Error())
 			}
 		} else if update.Status == car.CarStatus_UNLOCKED {
 			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
@@ -126,10 +139,39 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 					Latitude:  update.Position.Latitude + (rand.Float64()-0.5)*0.001,
 					Longitude: update.Position.Longitude + (rand.Float64()-0.5)*0.001,
 				},
+				Power: update.Power - 0.01,
 			})
+			if err != nil {
+				klog.Errorf("cannot update car position: %s", err.Error())
+			}
+		} else if update.Status == car.CarStatus_LOCKED {
+			var err error
+			if update.Power > 100 {
+				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+					Id:    carID,
+					Power: 100,
+				})
+			} else {
+				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+					Id:    carID,
+					Power: update.Power + 0.01,
+				})
+			}
 			if err != nil {
 				klog.Errorf("cannot update car position: %s", err.Error())
 			}
 		}
 	}
+}
+
+func genPlateNum(seed int64) string {
+	rand.Seed(seed)
+
+	const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+	plateNum := "渝"
+	plateNum += string(letters[rand.Int()%26])
+	for i := 0; i < 5; i++ {
+		plateNum += strconv.Itoa(rand.Int() % 10)
+	}
+	return plateNum
 }

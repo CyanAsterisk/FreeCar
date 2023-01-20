@@ -11,14 +11,8 @@ interface Trip {
     duration: string
     fee: string
     distance: string
-    carPlateMum: string
-    status: string
+    plateNum: string
 }
-
-const tripStatusMap = new Map([
-    [api.TripStatus.IN_PROGRESS, '进行中'],
-    [api.TripStatus.FINISHED, '已完成'],
-])
 
 Page({
     data: {
@@ -41,50 +35,53 @@ Page({
       this.sysTrips()
       wx.stopPullDownRefresh()
     },
-    sysTrips(){
+    async sysTrips(){
       wx.showLoading({
         title: '',
       })
-      TripService.getTrips({}).then((resp)=>{
-        if(resp.code != 10000){
+      const resp = await TripService.getTrips({status:api.TripStatus.FINISHED})
+      if (resp.code!= 10000){
+         wx.hideLoading()
+         wx.showToast({
+          title: "获取行程记录失败",
+          icon: 'none',
+          duration: 1000,
+         })
+         return
+      }
+      let ts = resp.data!.trips!
+      let  trips: Trip[] = []
+      for(let trip of ts){
+        const end = trip.trip?.end
+        const t: Trip = {
+          start: trip.trip?.start?.poiName||'未知',
+          end: end!.poiName || '未知',
+          date: formatDate(trip.trip?.start?.timestampSec! * 1000) || '未知',
+          distance: end!.kmDriven?.toFixed(1) + '公里',
+          duration: '',
+          fee: formatFee(end!.feeCent||0),
+          plateNum: '',
+        }
+        const dur = formatDuration((end!.timestampSec||0)-(trip.trip?.start?.timestampSec||0))
+        t.duration = `${dur.hh}时${dur.mm}分`
+
+        const resp = await CarService.getCar({id:trip.trip!.carId!})
+        if (resp.code!= 10000){
           wx.hideLoading()
           wx.showToast({
-            title: '获取行程失败',
-            icon:'none',
-            duration: 2000,
+           title: "获取车辆信息失败",
+           icon: 'none',
+           duration: 1000,
           })
-        }
-        let ts = resp.data!.trips!
-        let  trips: Trip[] = []
-        for(let trip of ts){
-          const t: Trip = {
-            start: trip.trip?.start?.poiName||'未知',
-            end: '',
-            date: formatDate(trip.trip?.start?.timestampSec! * 1000) || '未知',
-            distance: '',
-            duration: '',
-            fee: '',
-            carPlateMum: '',
-            status: tripStatusMap.get(trip.trip?.status!)||'未知',
-          }
-          CarService.getCar(trip.trip!.carId!).then((car)=>{
-            t.carPlateMum = car.plateNum!
-          })
-          const end = trip.trip?.end
-          if(end){
-            t.end = end.poiName || '未知',
-            t.distance = end.kmDriven?.toFixed(1) + '公里',
-            t.fee = formatFee(end.feeCent||0)
-            const dur = formatDuration((end.timestampSec||0)-(trip.trip?.start?.timestampSec||0))
-            t.duration = `${dur.hh}时${dur.mm}分`
-          }
-          
-          trips.unshift(t)
-        }
+          return
+       }
+        t.plateNum = resp.data?.plateNum!
+        trips.unshift(t)
+      }
         this.setData({
           trips,
         })
         wx.hideLoading()
-      })
-    }
+      }
+    
 })

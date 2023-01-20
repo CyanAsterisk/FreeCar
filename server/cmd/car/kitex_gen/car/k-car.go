@@ -632,6 +632,34 @@ func (p *Car) FastRead(buf []byte) (int, error) {
 					goto SkipFieldError
 				}
 			}
+		case 5:
+			if fieldTypeId == thrift.DOUBLE {
+				l, err = p.FastReadField5(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				l, err = p.FastReadField6(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
 		default:
 			l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
 			offset += l
@@ -721,6 +749,34 @@ func (p *Car) FastReadField4(buf []byte) (int, error) {
 	return offset, nil
 }
 
+func (p *Car) FastReadField5(buf []byte) (int, error) {
+	offset := 0
+
+	if v, l, err := bthrift.Binary.ReadDouble(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+
+		p.Power = v
+
+	}
+	return offset, nil
+}
+
+func (p *Car) FastReadField6(buf []byte) (int, error) {
+	offset := 0
+
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+
+		p.PlateNum = v
+
+	}
+	return offset, nil
+}
+
 // for compatibility
 func (p *Car) FastWrite(buf []byte) int {
 	return 0
@@ -730,10 +786,12 @@ func (p *Car) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int
 	offset := 0
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "Car")
 	if p != nil {
+		offset += p.fastWriteField5(buf[offset:], binaryWriter)
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
+		offset += p.fastWriteField6(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
 	offset += bthrift.Binary.WriteStructEnd(buf[offset:])
@@ -748,6 +806,8 @@ func (p *Car) BLength() int {
 		l += p.field2Length()
 		l += p.field3Length()
 		l += p.field4Length()
+		l += p.field5Length()
+		l += p.field6Length()
 	}
 	l += bthrift.Binary.FieldStopLength()
 	l += bthrift.Binary.StructEndLength()
@@ -788,6 +848,24 @@ func (p *Car) fastWriteField4(buf []byte, binaryWriter bthrift.BinaryWriter) int
 	return offset
 }
 
+func (p *Car) fastWriteField5(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "power", thrift.DOUBLE, 5)
+	offset += bthrift.Binary.WriteDouble(buf[offset:], p.Power)
+
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
+func (p *Car) fastWriteField6(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "plate_num", thrift.STRING, 6)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PlateNum)
+
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
 func (p *Car) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("status", thrift.I32, 1)
@@ -822,6 +900,24 @@ func (p *Car) field4Length() int {
 	return l
 }
 
+func (p *Car) field5Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("power", thrift.DOUBLE, 5)
+	l += bthrift.Binary.DoubleLength(p.Power)
+
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *Car) field6Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("plate_num", thrift.STRING, 6)
+	l += bthrift.Binary.StringLengthNocopy(p.PlateNum)
+
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
 func (p *CreateCarRequest) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
@@ -847,6 +943,20 @@ func (p *CreateCarRequest) FastRead(buf []byte) (int, error) {
 		case 1:
 			if fieldTypeId == thrift.I64 {
 				l, err = p.FastReadField1(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				l, err = p.FastReadField2(buf[offset:])
 				offset += l
 				if err != nil {
 					goto ReadFieldError
@@ -907,6 +1017,20 @@ func (p *CreateCarRequest) FastReadField1(buf []byte) (int, error) {
 	return offset, nil
 }
 
+func (p *CreateCarRequest) FastReadField2(buf []byte) (int, error) {
+	offset := 0
+
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+
+		p.PlateNum = v
+
+	}
+	return offset, nil
+}
+
 // for compatibility
 func (p *CreateCarRequest) FastWrite(buf []byte) int {
 	return 0
@@ -917,6 +1041,7 @@ func (p *CreateCarRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.Bina
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "CreateCarRequest")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
 	offset += bthrift.Binary.WriteStructEnd(buf[offset:])
@@ -928,6 +1053,7 @@ func (p *CreateCarRequest) BLength() int {
 	l += bthrift.Binary.StructBeginLength("CreateCarRequest")
 	if p != nil {
 		l += p.field1Length()
+		l += p.field2Length()
 	}
 	l += bthrift.Binary.FieldStopLength()
 	l += bthrift.Binary.StructEndLength()
@@ -943,10 +1069,28 @@ func (p *CreateCarRequest) fastWriteField1(buf []byte, binaryWriter bthrift.Bina
 	return offset
 }
 
+func (p *CreateCarRequest) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "plate_num", thrift.STRING, 2)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PlateNum)
+
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
 func (p *CreateCarRequest) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("account_id", thrift.I64, 1)
 	l += bthrift.Binary.I64Length(p.AccountId)
+
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *CreateCarRequest) field2Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("plate_num", thrift.STRING, 2)
+	l += bthrift.Binary.StringLengthNocopy(p.PlateNum)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -2096,6 +2240,20 @@ func (p *UpdateCarRequest) FastRead(buf []byte) (int, error) {
 					goto SkipFieldError
 				}
 			}
+		case 5:
+			if fieldTypeId == thrift.DOUBLE {
+				l, err = p.FastReadField5(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
 		default:
 			l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
 			offset += l
@@ -2186,6 +2344,20 @@ func (p *UpdateCarRequest) FastReadField4(buf []byte) (int, error) {
 	return offset, nil
 }
 
+func (p *UpdateCarRequest) FastReadField5(buf []byte) (int, error) {
+	offset := 0
+
+	if v, l, err := bthrift.Binary.ReadDouble(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+
+		p.Power = v
+
+	}
+	return offset, nil
+}
+
 // for compatibility
 func (p *UpdateCarRequest) FastWrite(buf []byte) int {
 	return 0
@@ -2196,6 +2368,7 @@ func (p *UpdateCarRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.Bina
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateCarRequest")
 	if p != nil {
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
+		offset += p.fastWriteField5(buf[offset:], binaryWriter)
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
@@ -2213,6 +2386,7 @@ func (p *UpdateCarRequest) BLength() int {
 		l += p.field2Length()
 		l += p.field3Length()
 		l += p.field4Length()
+		l += p.field5Length()
 	}
 	l += bthrift.Binary.FieldStopLength()
 	l += bthrift.Binary.StructEndLength()
@@ -2254,6 +2428,15 @@ func (p *UpdateCarRequest) fastWriteField4(buf []byte, binaryWriter bthrift.Bina
 	return offset
 }
 
+func (p *UpdateCarRequest) fastWriteField5(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "power", thrift.DOUBLE, 5)
+	offset += bthrift.Binary.WriteDouble(buf[offset:], p.Power)
+
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
 func (p *UpdateCarRequest) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("id", thrift.STRING, 1)
@@ -2284,6 +2467,15 @@ func (p *UpdateCarRequest) field4Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("account_id", thrift.I64, 4)
 	l += bthrift.Binary.I64Length(p.AccountId)
+
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *UpdateCarRequest) field5Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("power", thrift.DOUBLE, 5)
+	l += bthrift.Binary.DoubleLength(p.Power)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

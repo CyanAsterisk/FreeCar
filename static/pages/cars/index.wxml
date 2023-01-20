@@ -6,7 +6,7 @@
             <view>电量: 50%</view>
             <view>距离: {{item.distance}}</view>
         </view>
-        <image class="icon" wx:if="{{item.canlock}}" src="/images/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
-        <image class="icon" wx:else src="/images/navi.svg"></image>
+        <image class="icon" wx:if="{{item.canlock}}" src="/images/cars/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
+        <image class="icon" wx:else src="/images/cars/navi.svg"></image>
     </view>
 </view>

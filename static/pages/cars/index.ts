@@ -161,7 +161,7 @@ Page({
           id:markers.length,
           latitude:car.car.position!.latitude! || initialLat,
           longitude: car.car.position!.longitude! || initialLng,
-          iconPath: '/images/car-pos.svg',
+          iconPath: '/images/cars/car-pos.svg',
           width: 20,
           height:20,
         })

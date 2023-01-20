@@ -8,5 +8,5 @@
         <view>车辆: 京A6666</view>
         <view>价格: {{item.fee}}￥</view>
     </view>
-    <image class="icon" src="/images/bx-trip.svg"></image>
+    <image class="icon" src="/images/trips/bx-trip.svg"></image>
 </view>

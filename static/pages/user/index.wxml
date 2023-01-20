@@ -1,6 +1,6 @@
 <view class="header-box">
   <button class="avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/fake-avatar.png' }}" mode="aspectFill"></image>
+    <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/shared/fake-avatar.png' }}" mode="aspectFill"></image>
   </button>
   <view class="r">
     <view class="uid">ID: 1024</view>

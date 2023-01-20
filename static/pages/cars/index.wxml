@@ -6,11 +6,11 @@
         <view class="info">
             <view class="card-id item">
                 <image class="icon" src="/images/cars/car-id.svg"></image>
-                <view class="content">京A66666</view>
+                <view class="content">{{item.plateNum}}</view>
             </view>
             <view class="power item">
                 <image class="icon" src="/images/cars/power.svg"></image>
-                <view class="content">50%</view>
+                <view class="content">{{item.power}}</view>
             </view>
             <view class="distance item">
                 <image class="icon" src="/images/cars/distance.svg"></image>

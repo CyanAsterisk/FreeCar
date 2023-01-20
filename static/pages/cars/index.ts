@@ -14,7 +14,8 @@ interface Marker {
   height: number
 }
 interface Car {
-    id: string
+    plateNum: string
+    power: string
     position:{
       latitude: number,
       longitude: number
@@ -152,7 +153,8 @@ Page({
       for(let car of cs){
         if(car.car?.status != api.CarStatus.LOCKED) continue;
         const c: Car = {
-          id: car.id!,
+          plateNum: car.car.plateNum!,
+          power: (car.car.power!).toFixed(2)+"%",
           position: {
             latitude:car.car.position!.latitude! || initialLat,
             longitude: car.car.position!.longitude! || initialLng,

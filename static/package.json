@@ -8,7 +8,6 @@
   "license": "Apache-2.0 license",
   "dependencies": {
     "@vant/weapp": "^1.10.11",
-    "apifm-wxapi": "^3.55.0",
     "camelcase-keys": "^6.2.2",
     "decamelize-keys-deep": "^0.1.1",
     "protobufjs": "^6.10.1"

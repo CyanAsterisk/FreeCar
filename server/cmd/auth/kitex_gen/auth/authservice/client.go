@@ -12,6 +12,9 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	Login(ctx context.Context, req *auth.LoginRequest, callOptions ...callopt.Option) (r *auth.LoginResponse, err error)
+	UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset, callOptions ...callopt.Option) (r *auth.UploadAvatarResponse, err error)
+	UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error)
+	GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -46,4 +49,19 @@ type kAuthServiceClient struct {
 func (p *kAuthServiceClient) Login(ctx context.Context, req *auth.LoginRequest, callOptions ...callopt.Option) (r *auth.LoginResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Login(ctx, req)
+}
+
+func (p *kAuthServiceClient) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset, callOptions ...callopt.Option) (r *auth.UploadAvatarResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UploadAvatar(ctx, req)
+}
+
+func (p *kAuthServiceClient) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdateUser(ctx, req)
+}
+
+func (p *kAuthServiceClient) GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUser(ctx, req)
 }

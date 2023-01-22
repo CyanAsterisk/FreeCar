@@ -40,11 +40,29 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 		if result.Error != nil {
 			return nil, status.Errorf(codes.Internal, result.Error.Error())
 		}
-		return &auth.LoginResponse{AccountID: user.ID}, nil
+		return &auth.LoginResponse{AccountId: user.ID}, nil
 	}
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	return &auth.LoginResponse{AccountID: user.ID}, nil
+	return &auth.LoginResponse{AccountId: user.ID}, nil
+}
+
+// UploadAvatar implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (resp *auth.UploadAvatarResponse, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// UpdateUser implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// GetUser implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.UserInfo, err error) {
+	// TODO: Your code here...
+	return
 }

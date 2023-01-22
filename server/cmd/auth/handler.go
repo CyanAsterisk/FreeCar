@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
@@ -63,6 +65,29 @@ func (s *AuthServiceImpl) UpdateUser(ctx context.Context, req *auth.UpdateUserRe
 
 // GetUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.UserInfo, err error) {
-	// TODO: Your code here...
+	var user model.User
+	result := global.DB.Where(&model.User{ID: req.AccontId}).First(&user)
+
+	if result.RowsAffected == 0 {
+		return nil, status.Errorf(codes.NotFound, result.Error.Error())
+	}
+
+	resp = &auth.UserInfo{
+		AccountId:   user.ID,
+		Username:    user.Username,
+		PhoneNumber: user.PhoneNumber,
+		AvatarUrl:   "",
+	}
+
+	if user.AvatarBlobId != 0 {
+		res, err := global.BlobClent.GetBlobURL(ctx, &blob.GetBlobURLRequest{
+			Id:         user.AvatarBlobId,
+			TimeoutSec: int32(5 * time.Second.Seconds()),
+		})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, err.Error())
+		}
+		resp.AvatarUrl = res.Url
+	}
 	return
 }

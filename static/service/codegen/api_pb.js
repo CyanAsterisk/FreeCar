@@ -324,6 +324,777 @@ export const api = $root.api = (() => {
         return ELoginResponse;
     })();
 
+    api.UserInfo = (function() {
+
+        /**
+         * Properties of a UserInfo.
+         * @memberof api
+         * @interface IUserInfo
+         * @property {number|null} [accountId] UserInfo accountId
+         * @property {string|null} [username] UserInfo username
+         * @property {number|null} [phoneNumber] UserInfo phoneNumber
+         * @property {string|null} [avatarUrl] UserInfo avatarUrl
+         */
+
+        /**
+         * Constructs a new UserInfo.
+         * @memberof api
+         * @classdesc Represents a UserInfo.
+         * @implements IUserInfo
+         * @constructor
+         * @param {api.IUserInfo=} [properties] Properties to set
+         */
+        function UserInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * UserInfo accountId.
+         * @member {number} accountId
+         * @memberof api.UserInfo
+         * @instance
+         */
+        UserInfo.prototype.accountId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * UserInfo username.
+         * @member {string} username
+         * @memberof api.UserInfo
+         * @instance
+         */
+        UserInfo.prototype.username = "";
+
+        /**
+         * UserInfo phoneNumber.
+         * @member {number} phoneNumber
+         * @memberof api.UserInfo
+         * @instance
+         */
+        UserInfo.prototype.phoneNumber = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * UserInfo avatarUrl.
+         * @member {string} avatarUrl
+         * @memberof api.UserInfo
+         * @instance
+         */
+        UserInfo.prototype.avatarUrl = "";
+
+        /**
+         * Creates a UserInfo message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.UserInfo
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.UserInfo} UserInfo
+         */
+        UserInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.UserInfo)
+                return object;
+            let message = new $root.api.UserInfo();
+            if (object.accountId != null)
+                if ($util.Long)
+                    (message.accountId = $util.Long.fromValue(object.accountId)).unsigned = false;
+                else if (typeof object.accountId === "string")
+                    message.accountId = parseInt(object.accountId, 10);
+                else if (typeof object.accountId === "number")
+                    message.accountId = object.accountId;
+                else if (typeof object.accountId === "object")
+                    message.accountId = new $util.LongBits(object.accountId.low >>> 0, object.accountId.high >>> 0).toNumber();
+            if (object.username != null)
+                message.username = String(object.username);
+            if (object.phoneNumber != null)
+                if ($util.Long)
+                    (message.phoneNumber = $util.Long.fromValue(object.phoneNumber)).unsigned = false;
+                else if (typeof object.phoneNumber === "string")
+                    message.phoneNumber = parseInt(object.phoneNumber, 10);
+                else if (typeof object.phoneNumber === "number")
+                    message.phoneNumber = object.phoneNumber;
+                else if (typeof object.phoneNumber === "object")
+                    message.phoneNumber = new $util.LongBits(object.phoneNumber.low >>> 0, object.phoneNumber.high >>> 0).toNumber();
+            if (object.avatarUrl != null)
+                message.avatarUrl = String(object.avatarUrl);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a UserInfo message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.UserInfo
+         * @static
+         * @param {api.UserInfo} message UserInfo
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UserInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.accountId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.accountId = options.longs === String ? "0" : 0;
+                object.username = "";
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.phoneNumber = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.phoneNumber = options.longs === String ? "0" : 0;
+                object.avatarUrl = "";
+            }
+            if (message.accountId != null && message.hasOwnProperty("accountId"))
+                if (typeof message.accountId === "number")
+                    object.accountId = options.longs === String ? String(message.accountId) : message.accountId;
+                else
+                    object.accountId = options.longs === String ? $util.Long.prototype.toString.call(message.accountId) : options.longs === Number ? new $util.LongBits(message.accountId.low >>> 0, message.accountId.high >>> 0).toNumber() : message.accountId;
+            if (message.username != null && message.hasOwnProperty("username"))
+                object.username = message.username;
+            if (message.phoneNumber != null && message.hasOwnProperty("phoneNumber"))
+                if (typeof message.phoneNumber === "number")
+                    object.phoneNumber = options.longs === String ? String(message.phoneNumber) : message.phoneNumber;
+                else
+                    object.phoneNumber = options.longs === String ? $util.Long.prototype.toString.call(message.phoneNumber) : options.longs === Number ? new $util.LongBits(message.phoneNumber.low >>> 0, message.phoneNumber.high >>> 0).toNumber() : message.phoneNumber;
+            if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
+                object.avatarUrl = message.avatarUrl;
+            return object;
+        };
+
+        /**
+         * Converts this UserInfo to JSON.
+         * @function toJSON
+         * @memberof api.UserInfo
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UserInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return UserInfo;
+    })();
+
+    api.EUserInfo = (function() {
+
+        /**
+         * Properties of a EUserInfo.
+         * @memberof api
+         * @interface IEUserInfo
+         * @property {number|null} [code] EUserInfo code
+         * @property {api.IUserInfo|null} [data] EUserInfo data
+         * @property {string|null} [message] EUserInfo message
+         */
+
+        /**
+         * Constructs a new EUserInfo.
+         * @memberof api
+         * @classdesc Represents a EUserInfo.
+         * @implements IEUserInfo
+         * @constructor
+         * @param {api.IEUserInfo=} [properties] Properties to set
+         */
+        function EUserInfo(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EUserInfo code.
+         * @member {number} code
+         * @memberof api.EUserInfo
+         * @instance
+         */
+        EUserInfo.prototype.code = 0;
+
+        /**
+         * EUserInfo data.
+         * @member {api.IUserInfo|null|undefined} data
+         * @memberof api.EUserInfo
+         * @instance
+         */
+        EUserInfo.prototype.data = null;
+
+        /**
+         * EUserInfo message.
+         * @member {string} message
+         * @memberof api.EUserInfo
+         * @instance
+         */
+        EUserInfo.prototype.message = "";
+
+        /**
+         * Creates a EUserInfo message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.EUserInfo
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.EUserInfo} EUserInfo
+         */
+        EUserInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.EUserInfo)
+                return object;
+            let message = new $root.api.EUserInfo();
+            if (object.code != null)
+                message.code = object.code | 0;
+            if (object.data != null) {
+                if (typeof object.data !== "object")
+                    throw TypeError(".api.EUserInfo.data: object expected");
+                message.data = $root.api.UserInfo.fromObject(object.data);
+            }
+            if (object.message != null)
+                message.message = String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a EUserInfo message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.EUserInfo
+         * @static
+         * @param {api.EUserInfo} message EUserInfo
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EUserInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.code = 0;
+                object.data = null;
+                object.message = "";
+            }
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = $root.api.UserInfo.toObject(message.data, options);
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this EUserInfo to JSON.
+         * @function toJSON
+         * @memberof api.EUserInfo
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EUserInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EUserInfo;
+    })();
+
+    api.GetUserInfoRequest = (function() {
+
+        /**
+         * Properties of a GetUserInfoRequest.
+         * @memberof api
+         * @interface IGetUserInfoRequest
+         */
+
+        /**
+         * Constructs a new GetUserInfoRequest.
+         * @memberof api
+         * @classdesc Represents a GetUserInfoRequest.
+         * @implements IGetUserInfoRequest
+         * @constructor
+         * @param {api.IGetUserInfoRequest=} [properties] Properties to set
+         */
+        function GetUserInfoRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a GetUserInfoRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.GetUserInfoRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.GetUserInfoRequest} GetUserInfoRequest
+         */
+        GetUserInfoRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.GetUserInfoRequest)
+                return object;
+            return new $root.api.GetUserInfoRequest();
+        };
+
+        /**
+         * Creates a plain object from a GetUserInfoRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.GetUserInfoRequest
+         * @static
+         * @param {api.GetUserInfoRequest} message GetUserInfoRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetUserInfoRequest.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this GetUserInfoRequest to JSON.
+         * @function toJSON
+         * @memberof api.GetUserInfoRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetUserInfoRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetUserInfoRequest;
+    })();
+
+    api.UpdateUserRequest = (function() {
+
+        /**
+         * Properties of an UpdateUserRequest.
+         * @memberof api
+         * @interface IUpdateUserRequest
+         * @property {string|null} [username] UpdateUserRequest username
+         * @property {number|null} [phoneNumber] UpdateUserRequest phoneNumber
+         */
+
+        /**
+         * Constructs a new UpdateUserRequest.
+         * @memberof api
+         * @classdesc Represents an UpdateUserRequest.
+         * @implements IUpdateUserRequest
+         * @constructor
+         * @param {api.IUpdateUserRequest=} [properties] Properties to set
+         */
+        function UpdateUserRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * UpdateUserRequest username.
+         * @member {string} username
+         * @memberof api.UpdateUserRequest
+         * @instance
+         */
+        UpdateUserRequest.prototype.username = "";
+
+        /**
+         * UpdateUserRequest phoneNumber.
+         * @member {number} phoneNumber
+         * @memberof api.UpdateUserRequest
+         * @instance
+         */
+        UpdateUserRequest.prototype.phoneNumber = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates an UpdateUserRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.UpdateUserRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.UpdateUserRequest} UpdateUserRequest
+         */
+        UpdateUserRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.UpdateUserRequest)
+                return object;
+            let message = new $root.api.UpdateUserRequest();
+            if (object.username != null)
+                message.username = String(object.username);
+            if (object.phoneNumber != null)
+                if ($util.Long)
+                    (message.phoneNumber = $util.Long.fromValue(object.phoneNumber)).unsigned = false;
+                else if (typeof object.phoneNumber === "string")
+                    message.phoneNumber = parseInt(object.phoneNumber, 10);
+                else if (typeof object.phoneNumber === "number")
+                    message.phoneNumber = object.phoneNumber;
+                else if (typeof object.phoneNumber === "object")
+                    message.phoneNumber = new $util.LongBits(object.phoneNumber.low >>> 0, object.phoneNumber.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an UpdateUserRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.UpdateUserRequest
+         * @static
+         * @param {api.UpdateUserRequest} message UpdateUserRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UpdateUserRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.username = "";
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.phoneNumber = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.phoneNumber = options.longs === String ? "0" : 0;
+            }
+            if (message.username != null && message.hasOwnProperty("username"))
+                object.username = message.username;
+            if (message.phoneNumber != null && message.hasOwnProperty("phoneNumber"))
+                if (typeof message.phoneNumber === "number")
+                    object.phoneNumber = options.longs === String ? String(message.phoneNumber) : message.phoneNumber;
+                else
+                    object.phoneNumber = options.longs === String ? $util.Long.prototype.toString.call(message.phoneNumber) : options.longs === Number ? new $util.LongBits(message.phoneNumber.low >>> 0, message.phoneNumber.high >>> 0).toNumber() : message.phoneNumber;
+            return object;
+        };
+
+        /**
+         * Converts this UpdateUserRequest to JSON.
+         * @function toJSON
+         * @memberof api.UpdateUserRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UpdateUserRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return UpdateUserRequest;
+    })();
+
+    api.UpdateUserResponse = (function() {
+
+        /**
+         * Properties of an UpdateUserResponse.
+         * @memberof api
+         * @interface IUpdateUserResponse
+         */
+
+        /**
+         * Constructs a new UpdateUserResponse.
+         * @memberof api
+         * @classdesc Represents an UpdateUserResponse.
+         * @implements IUpdateUserResponse
+         * @constructor
+         * @param {api.IUpdateUserResponse=} [properties] Properties to set
+         */
+        function UpdateUserResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates an UpdateUserResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.UpdateUserResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.UpdateUserResponse} UpdateUserResponse
+         */
+        UpdateUserResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.UpdateUserResponse)
+                return object;
+            return new $root.api.UpdateUserResponse();
+        };
+
+        /**
+         * Creates a plain object from an UpdateUserResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.UpdateUserResponse
+         * @static
+         * @param {api.UpdateUserResponse} message UpdateUserResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UpdateUserResponse.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this UpdateUserResponse to JSON.
+         * @function toJSON
+         * @memberof api.UpdateUserResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UpdateUserResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return UpdateUserResponse;
+    })();
+
+    api.UploadAvatarRequest = (function() {
+
+        /**
+         * Properties of an UploadAvatarRequest.
+         * @memberof api
+         * @interface IUploadAvatarRequest
+         */
+
+        /**
+         * Constructs a new UploadAvatarRequest.
+         * @memberof api
+         * @classdesc Represents an UploadAvatarRequest.
+         * @implements IUploadAvatarRequest
+         * @constructor
+         * @param {api.IUploadAvatarRequest=} [properties] Properties to set
+         */
+        function UploadAvatarRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates an UploadAvatarRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.UploadAvatarRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.UploadAvatarRequest} UploadAvatarRequest
+         */
+        UploadAvatarRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.UploadAvatarRequest)
+                return object;
+            return new $root.api.UploadAvatarRequest();
+        };
+
+        /**
+         * Creates a plain object from an UploadAvatarRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.UploadAvatarRequest
+         * @static
+         * @param {api.UploadAvatarRequest} message UploadAvatarRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UploadAvatarRequest.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this UploadAvatarRequest to JSON.
+         * @function toJSON
+         * @memberof api.UploadAvatarRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UploadAvatarRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return UploadAvatarRequest;
+    })();
+
+    api.UploadAvatarResponse = (function() {
+
+        /**
+         * Properties of an UploadAvatarResponse.
+         * @memberof api
+         * @interface IUploadAvatarResponse
+         * @property {string|null} [uploadUrl] UploadAvatarResponse uploadUrl
+         */
+
+        /**
+         * Constructs a new UploadAvatarResponse.
+         * @memberof api
+         * @classdesc Represents an UploadAvatarResponse.
+         * @implements IUploadAvatarResponse
+         * @constructor
+         * @param {api.IUploadAvatarResponse=} [properties] Properties to set
+         */
+        function UploadAvatarResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * UploadAvatarResponse uploadUrl.
+         * @member {string} uploadUrl
+         * @memberof api.UploadAvatarResponse
+         * @instance
+         */
+        UploadAvatarResponse.prototype.uploadUrl = "";
+
+        /**
+         * Creates an UploadAvatarResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.UploadAvatarResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.UploadAvatarResponse} UploadAvatarResponse
+         */
+        UploadAvatarResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.UploadAvatarResponse)
+                return object;
+            let message = new $root.api.UploadAvatarResponse();
+            if (object.uploadUrl != null)
+                message.uploadUrl = String(object.uploadUrl);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an UploadAvatarResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.UploadAvatarResponse
+         * @static
+         * @param {api.UploadAvatarResponse} message UploadAvatarResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UploadAvatarResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.uploadUrl = "";
+            if (message.uploadUrl != null && message.hasOwnProperty("uploadUrl"))
+                object.uploadUrl = message.uploadUrl;
+            return object;
+        };
+
+        /**
+         * Converts this UploadAvatarResponse to JSON.
+         * @function toJSON
+         * @memberof api.UploadAvatarResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UploadAvatarResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return UploadAvatarResponse;
+    })();
+
+    api.EUploadAvatarResponse = (function() {
+
+        /**
+         * Properties of a EUploadAvatarResponse.
+         * @memberof api
+         * @interface IEUploadAvatarResponse
+         * @property {string|null} [uploadUrl] EUploadAvatarResponse uploadUrl
+         * @property {api.IUploadAvatarRequest|null} [data] EUploadAvatarResponse data
+         * @property {string|null} [message] EUploadAvatarResponse message
+         */
+
+        /**
+         * Constructs a new EUploadAvatarResponse.
+         * @memberof api
+         * @classdesc Represents a EUploadAvatarResponse.
+         * @implements IEUploadAvatarResponse
+         * @constructor
+         * @param {api.IEUploadAvatarResponse=} [properties] Properties to set
+         */
+        function EUploadAvatarResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EUploadAvatarResponse uploadUrl.
+         * @member {string} uploadUrl
+         * @memberof api.EUploadAvatarResponse
+         * @instance
+         */
+        EUploadAvatarResponse.prototype.uploadUrl = "";
+
+        /**
+         * EUploadAvatarResponse data.
+         * @member {api.IUploadAvatarRequest|null|undefined} data
+         * @memberof api.EUploadAvatarResponse
+         * @instance
+         */
+        EUploadAvatarResponse.prototype.data = null;
+
+        /**
+         * EUploadAvatarResponse message.
+         * @member {string} message
+         * @memberof api.EUploadAvatarResponse
+         * @instance
+         */
+        EUploadAvatarResponse.prototype.message = "";
+
+        /**
+         * Creates a EUploadAvatarResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.EUploadAvatarResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.EUploadAvatarResponse} EUploadAvatarResponse
+         */
+        EUploadAvatarResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.EUploadAvatarResponse)
+                return object;
+            let message = new $root.api.EUploadAvatarResponse();
+            if (object.uploadUrl != null)
+                message.uploadUrl = String(object.uploadUrl);
+            if (object.data != null) {
+                if (typeof object.data !== "object")
+                    throw TypeError(".api.EUploadAvatarResponse.data: object expected");
+                message.data = $root.api.UploadAvatarRequest.fromObject(object.data);
+            }
+            if (object.message != null)
+                message.message = String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a EUploadAvatarResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.EUploadAvatarResponse
+         * @static
+         * @param {api.EUploadAvatarResponse} message EUploadAvatarResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EUploadAvatarResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.uploadUrl = "";
+                object.data = null;
+                object.message = "";
+            }
+            if (message.uploadUrl != null && message.hasOwnProperty("uploadUrl"))
+                object.uploadUrl = message.uploadUrl;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = $root.api.UploadAvatarRequest.toObject(message.data, options);
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this EUploadAvatarResponse to JSON.
+         * @function toJSON
+         * @memberof api.EUploadAvatarResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EUploadAvatarResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EUploadAvatarResponse;
+    })();
+
     api.CarEntity = (function() {
 
         /**
@@ -4436,6 +5207,105 @@ export const api = $root.api = (() => {
          * @instance
          * @param {api.ILoginRequest} request LoginRequest message or plain object
          * @returns {Promise<api.LoginResponse>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link api.apiService#getUserInfo}.
+         * @memberof api.apiService
+         * @typedef GetUserInfoCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {api.UserInfo} [response] UserInfo
+         */
+
+        /**
+         * Calls GetUserInfo.
+         * @function getUserInfo
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IGetUserInfoRequest} request GetUserInfoRequest message or plain object
+         * @param {api.apiService.GetUserInfoCallback} callback Node-style callback called with the error, if any, and UserInfo
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(apiService.prototype.getUserInfo = function getUserInfo(request, callback) {
+            return this.rpcCall(getUserInfo, $root.api.GetUserInfoRequest, $root.api.UserInfo, request, callback);
+        }, "name", { value: "GetUserInfo" });
+
+        /**
+         * Calls GetUserInfo.
+         * @function getUserInfo
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IGetUserInfoRequest} request GetUserInfoRequest message or plain object
+         * @returns {Promise<api.UserInfo>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link api.apiService#updateUserInfo}.
+         * @memberof api.apiService
+         * @typedef UpdateUserInfoCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {api.UpdateUserResponse} [response] UpdateUserResponse
+         */
+
+        /**
+         * Calls UpdateUserInfo.
+         * @function updateUserInfo
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IUpdateUserRequest} request UpdateUserRequest message or plain object
+         * @param {api.apiService.UpdateUserInfoCallback} callback Node-style callback called with the error, if any, and UpdateUserResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(apiService.prototype.updateUserInfo = function updateUserInfo(request, callback) {
+            return this.rpcCall(updateUserInfo, $root.api.UpdateUserRequest, $root.api.UpdateUserResponse, request, callback);
+        }, "name", { value: "UpdateUserInfo" });
+
+        /**
+         * Calls UpdateUserInfo.
+         * @function updateUserInfo
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IUpdateUserRequest} request UpdateUserRequest message or plain object
+         * @returns {Promise<api.UpdateUserResponse>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link api.apiService#uploadAvatar}.
+         * @memberof api.apiService
+         * @typedef UploadAvatarCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {api.UploadAvatarResponse} [response] UploadAvatarResponse
+         */
+
+        /**
+         * Calls UploadAvatar.
+         * @function uploadAvatar
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IUploadAvatarRequest} request UploadAvatarRequest message or plain object
+         * @param {api.apiService.UploadAvatarCallback} callback Node-style callback called with the error, if any, and UploadAvatarResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(apiService.prototype.uploadAvatar = function uploadAvatar(request, callback) {
+            return this.rpcCall(uploadAvatar, $root.api.UploadAvatarRequest, $root.api.UploadAvatarResponse, request, callback);
+        }, "name", { value: "UploadAvatar" });
+
+        /**
+         * Calls UploadAvatar.
+         * @function uploadAvatar
+         * @memberof api.apiService
+         * @instance
+         * @param {api.IUploadAvatarRequest} request UploadAvatarRequest message or plain object
+         * @returns {Promise<api.UploadAvatarResponse>} Promise
          * @variation 2
          */
 

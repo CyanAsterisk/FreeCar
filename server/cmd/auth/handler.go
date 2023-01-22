@@ -74,7 +74,18 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 
 // UpdateUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
-	// TODO: Your code here...
+
+	var user model.User
+	user.ID = req.AccountId
+
+	u := map[string]interface{}{}
+	if req.Username != "" {
+		u["username"] = req.Username
+	}
+	if req.PhoneNumber != 0 {
+		u["phone_number"] = req.PhoneNumber
+	}
+	global.DB.Model(&user).Updates(u)
 	return
 }
 

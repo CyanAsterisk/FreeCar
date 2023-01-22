@@ -9,6 +9,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 )
@@ -53,7 +54,21 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 
 // UploadAvatar implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (resp *auth.UploadAvatarResponse, err error) {
-	// TODO: Your code here...
+	aid := req.AccountId
+	br, err := global.BlobClent.CreateBlob(ctx, &blob.CreateBlobRequest{
+		AccountId:           aid,
+		UploadUrlTimeoutSec: int32(10 * time.Second.Seconds()),
+	})
+	if err != nil {
+		klog.Error("cannot create blob", err)
+		return nil, status.Err(codes.Aborted, "")
+	}
+
+	var user model.User
+	user.ID = req.AccountId
+	global.DB.Model(&user).Update("avatar_blob_id", br.Id)
+
+	resp.UploadUrl = br.UploadUrl
 	return
 }
 

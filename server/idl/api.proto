@@ -21,6 +21,41 @@ message ELoginResponse{
   string message = 3;
 }
 
+message UserInfo{
+   int64 account_id = 1;
+   string username = 2;
+   int64 phone_number = 3;
+   string avatar_url = 4;
+}
+
+message EUserInfo{
+  int32 code = 1;
+  UserInfo data = 2;
+  string message = 3;
+}
+
+message GetUserInfoRequest{}
+
+message UpdateUserRequest{
+    string username = 1;
+    int64 phone_number = 2;
+}
+
+message UpdateUserResponse{
+}
+
+message UploadAvatarRequest{}
+
+message UploadAvatarResponse{
+  string upload_url = 1;
+}
+
+message EUploadAvatarResponse{
+  string upload_url = 1;
+  UploadAvatarRequest data = 2;
+  string message = 3;
+}
+
 message CarEntity {
   string id = 1;
   Car car = 2;
@@ -243,6 +278,9 @@ message EClearProfilePhotoResponse {
 
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/auth/login";}
+  rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {option (api.get) = "/auth/info";}
+  rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/auth/info";}
+  rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
 
   rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/car";}
   rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/car";}

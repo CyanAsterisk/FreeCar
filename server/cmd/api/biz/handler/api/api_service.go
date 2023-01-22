@@ -39,7 +39,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	// create a JWT
 	j := middleware.NewJWT()
 	claims := models.CustomClaims{
-		ID: resp.AccountID,
+		ID: resp.AccountId,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
 			ExpiresAt: time.Now().Unix() + consts.ThirtyDays,
@@ -56,6 +56,74 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		Token:     token,
 		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
 	})
+}
+
+// GetUserInfo .
+// @router /auth/info [GET]
+func GetUserInfo(ctx context.Context, c *app.RequestContext) {
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		errno.SendResponse(c, errno.ParamErr, nil)
+		return
+	}
+
+	resp, err := global.AuthClient.GetUser(ctx, &auth.GetUserRequest{AccontId: aid.(int64)})
+	if err != nil {
+		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, api.UserInfo{
+		AccountId:   resp.AccountId,
+		Username:    resp.Username,
+		AvatarUrl:   resp.AvatarUrl,
+		PhoneNumber: resp.PhoneNumber,
+	})
+}
+
+// UpdateUserInfo .
+// @router /auth/info [POST]
+func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateUserRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
+		return
+	}
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		errno.SendResponse(c, errno.ParamErr, nil)
+		return
+	}
+
+	_, err = global.AuthClient.UpdateUser(ctx, &auth.UpdateUserRequest{
+		AccountId:   aid.(int64),
+		Username:    req.Username,
+		PhoneNumber: req.PhoneNumber,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, api.UpdateUserResponse{})
+}
+
+// UploadAvatar .
+// @router /auth/avatar [POST]
+func UploadAvatar(ctx context.Context, c *app.RequestContext) {
+	var err error
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		errno.SendResponse(c, errno.ParamErr, nil)
+		return
+	}
+
+	resp, err := global.AuthClient.UploadAvatar(ctx, &auth.UploadAvatarRequset{AccountId: aid.(int64)})
+	if err != nil {
+		errno.SendResponse(c, errno.RequestServerFail, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, api.UploadAvatarResponse{UploadUrl: resp.UploadUrl})
 }
 
 // CreateCar .

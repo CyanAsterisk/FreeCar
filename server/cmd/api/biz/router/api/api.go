@@ -3,9 +3,8 @@
 package Api
 
 import (
-	"github.com/cloudwego/hertz/pkg/app/server"
-
 	api "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/handler/api"
+	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
 /*
@@ -26,6 +25,9 @@ func Register(r *server.Hertz) {
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	{
 		_auth := root.Group("/auth", _authMw()...)
+		_auth.POST("/avatar", append(_upload_vatarMw(), api.UploadAvatar)...)
+		_auth.GET("/info", append(_getuserinfoMw(), api.GetUserInfo)...)
+		_auth.POST("/info", append(_updateuserinfoMw(), api.UpdateUserInfo)...)
 		_auth.POST("/login", append(_loginMw(), api.Login)...)
 	}
 	root.GET("/profile", append(_profileMw(), api.GetProfile)...)

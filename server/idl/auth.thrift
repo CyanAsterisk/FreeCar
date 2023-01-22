@@ -11,7 +11,7 @@ struct LoginResponse {
 struct UserInfo{
     1: i64 account_id;
     2: string username;
-    3: string phone_number;
+    3: i64 phone_number;
     4: string avatar_url;
 }
 
@@ -30,7 +30,7 @@ struct UploadAvatarResponse{
 struct UpdateUserRequest{
     1: i64 account_id;
     2: string username;
-    3: string phone_number;
+    3: i64 phone_number;
     4: string avatar_url
 }
 

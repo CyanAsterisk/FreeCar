@@ -334,7 +334,7 @@ func (p *UserInfo) FastRead(buf []byte) (int, error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				l, err = p.FastReadField3(buf[offset:])
 				offset += l
 				if err != nil {
@@ -427,7 +427,7 @@ func (p *UserInfo) FastReadField2(buf []byte) (int, error) {
 func (p *UserInfo) FastReadField3(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
@@ -462,8 +462,8 @@ func (p *UserInfo) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UserInfo")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
-		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
@@ -505,8 +505,8 @@ func (p *UserInfo) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter
 
 func (p *UserInfo) fastWriteField3(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "phone_number", thrift.STRING, 3)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PhoneNumber)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "phone_number", thrift.I64, 3)
+	offset += bthrift.Binary.WriteI64(buf[offset:], p.PhoneNumber)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -541,8 +541,8 @@ func (p *UserInfo) field2Length() int {
 
 func (p *UserInfo) field3Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("phone_number", thrift.STRING, 3)
-	l += bthrift.Binary.StringLengthNocopy(p.PhoneNumber)
+	l += bthrift.Binary.FieldBeginLength("phone_number", thrift.I64, 3)
+	l += bthrift.Binary.I64Length(p.PhoneNumber)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -998,7 +998,7 @@ func (p *UpdateUserRequest) FastRead(buf []byte) (int, error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				l, err = p.FastReadField3(buf[offset:])
 				offset += l
 				if err != nil {
@@ -1091,7 +1091,7 @@ func (p *UpdateUserRequest) FastReadField2(buf []byte) (int, error) {
 func (p *UpdateUserRequest) FastReadField3(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
@@ -1126,8 +1126,8 @@ func (p *UpdateUserRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.Bin
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateUserRequest")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
-		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
@@ -1169,8 +1169,8 @@ func (p *UpdateUserRequest) fastWriteField2(buf []byte, binaryWriter bthrift.Bin
 
 func (p *UpdateUserRequest) fastWriteField3(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "phone_number", thrift.STRING, 3)
-	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PhoneNumber)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "phone_number", thrift.I64, 3)
+	offset += bthrift.Binary.WriteI64(buf[offset:], p.PhoneNumber)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -1205,8 +1205,8 @@ func (p *UpdateUserRequest) field2Length() int {
 
 func (p *UpdateUserRequest) field3Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("phone_number", thrift.STRING, 3)
-	l += bthrift.Binary.StringLengthNocopy(p.PhoneNumber)
+	l += bthrift.Binary.FieldBeginLength("phone_number", thrift.I64, 3)
+	l += bthrift.Binary.I64Length(p.PhoneNumber)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

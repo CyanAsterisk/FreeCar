@@ -451,8 +451,8 @@ export namespace api {
     /** Properties of a EUploadAvatarResponse. */
     interface IEUploadAvatarResponse {
 
-        /** EUploadAvatarResponse uploadUrl */
-        uploadUrl?: (string|null);
+        /** EUploadAvatarResponse code */
+        code?: (string|null);
 
         /** EUploadAvatarResponse data */
         data?: (api.IUploadAvatarRequest|null);
@@ -470,8 +470,8 @@ export namespace api {
          */
         constructor(properties?: api.IEUploadAvatarResponse);
 
-        /** EUploadAvatarResponse uploadUrl. */
-        public uploadUrl: string;
+        /** EUploadAvatarResponse code. */
+        public code: string;
 
         /** EUploadAvatarResponse data. */
         public data?: (api.IUploadAvatarRequest|null);

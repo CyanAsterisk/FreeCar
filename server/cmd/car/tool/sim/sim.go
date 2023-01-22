@@ -136,6 +136,20 @@ func (c *Controller) SimulateCar(ctx context.Context, initial *car.CarEntity, ch
 			if err != nil {
 				klog.Errorf("cannot update car position: %s", err.Error())
 			}
+		} else if update.Status == car.CarStatus_LOCKED {
+			var err error
+			if update.Power >= 100 {
+				return
+			} else {
+				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
+					Id:       carID,
+					Power:    update.Power + 0.01*rand.Float64(),
+					Position: update.Position,
+				})
+			}
+			if err != nil {
+				klog.Errorf("cannot update car position: %s", err.Error())
+			}
 		}
 	}
 }

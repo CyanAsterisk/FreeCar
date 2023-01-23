@@ -18,7 +18,7 @@ type CarServiceImpl struct{}
 
 // CreateCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarRequest) (*car.CarEntity, error) {
-	cr, err := dao.CreateCar(ctx)
+	cr, err := dao.CreateCar(ctx, req.PlateNum)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
@@ -95,6 +95,7 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 	update := &dao.CarUpdate{
 		Status:   req.Status,
 		Position: req.Position,
+		Power:    req.Power,
 	}
 	if req.Status == car.CarStatus_LOCKED {
 		update.Driver = &car.Driver{}

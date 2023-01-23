@@ -1,12 +1,25 @@
 <van-empty wx:if="{{(!trips || trips.length == 0) }}" description="暂无行程" />
 <view class="card" wx:for="{{trips}}" wx:key="id">
-    <view class="eyebrow">{{item.start}}->{{item.end}}</view>
-    <view class="info">
-        <view>日期: 2022/10/10</view>
-        <view>时长: {{item.duration}}</view>
-        <view>路程: {{item.distance}}</view>
-        <view>车辆: 京A6666</view>
-        <view>价格: {{item.fee}}￥</view>
+    <view class="title">{{item.start}}->{{item.end}}</view>
+    <view class="content">
+        <view class="info">
+            <view class="date item">
+                <image class="icon" src="/images/trips/date.svg"></image>
+                <view class="text">{{item.date}}</view>
+            </view>
+            <view class="duration item">
+                <image class="icon" src="/images/trips/time.svg"></image>
+                <view class="text">{{item.duration}}</view>
+            </view>
+            <view class="car-id item">
+                <image class="icon" src="/images/trips/car.svg"></image>
+                <view class="text">{{item.plateNum}}</view>
+            </view>
+            <view class="fee item">
+                <image class="icon" src="/images/trips/fee.svg"></image>
+                <view class="text">{{item.fee}}元</view>
+            </view>
+        </view>
+        <image class="big-icon" src="/images/trips/bx-trip.svg"></image>
     </view>
-    <image class="icon" src="/images/bx-trip.svg"></image>
 </view>

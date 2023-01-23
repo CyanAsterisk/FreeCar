@@ -26,7 +26,7 @@ Page({
         fee: '0.00',
         markers: [
             {
-                iconPath: "/images/car.svg",
+                iconPath: "/images/shared/car.svg",
                 id: 0,
                 latitude: initialLat,
                 longitude: initialLng,
@@ -136,5 +136,25 @@ Page({
         wx.redirectTo({
             url: routing.index(),
         })
-    }
+    },
+
+    onMyLocationTap() {
+        wx.getLocation({
+          type: 'gcj02',
+          success: res => {
+            this.setData({
+              location: {
+                latitude: res.latitude,
+                longitude: res.longitude,
+              },
+            })
+          }, 
+          fail: () => {
+            wx.showToast({
+              icon: 'none',
+              title: '请前往设置页授权',
+            })
+          }
+        })
+      },
 })

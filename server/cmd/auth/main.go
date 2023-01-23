@@ -32,6 +32,7 @@ func main() {
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
+	initialize.InitBlob()
 
 	impl := new(AuthServiceImpl)
 	impl.OpenIDResolver = &tool.AuthServiceImpl{

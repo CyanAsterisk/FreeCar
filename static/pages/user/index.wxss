@@ -20,125 +20,13 @@
     margin-left: 32rpx;
   }
   .header-box .r {
-    margin-left: 32rpx;
+    margin-left: 10rpx;
     font-size: 28rpx;
   }
-  
-  page,view,image,input {
-    display: block;
-    box-sizing: border-box;
+  .nick{
+    font-size:x-large;
+    font-weight: bolder;
   }
-  
-  .container{
-    min-height: 100%;
-    overflow: hidden;
-    overflow-y: hidden;
-  }
-  
-  .asset {
-    width: 100vw;
-    display: flex;
-    border-top: 1px solid #eee;
-    padding-top:20rpx;
-    padding-bottom:20rpx;
-  }
-  .asset .item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    font-size: 24rpx;
-    line-height: 20px;
-    color:#666;
-  }
-  .asset .item .amount {
-    color:#333;
-    font-size: 32rpx;
-    padding-bottom: 12rpx;
-  }
-  .asset .right {
-    border-left: 1px solid #eee;
-  }
-  
-  .version {
-    width:100vw;
-      font-size: 24rpx;
-      text-align: center;
-    padding: 32rpx;
-  }
-  .to-authorize{
-    padding: 0rpx;
-    margin: 0rpx;
-    background: none;
-    border: none;
-    height: auto;
-    line-height: auto;
-  }
-  /* 绑定手机号 */
-  .bind-phone-number{
-    margin: 20rpx;
-    width: 100%;
-  }
-  /* flex重新构建菜单 */
-  .menu-item {
-    width: 100vw;
-    height: 104rpx;
-    padding: 0 32rpx;
-    background: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .menu-item .l {
-    font-size:34rpx;
-    color:#333;
-    line-height:104rpx;
-  }
-  .menu-item .r {
-    font-size:32rpx;
-    color:#999;
-    line-height:104rpx;
-  }
-  .menu-item .next {
-    width: 40rpx;
-    height: 40rpx;
-  }
-  .menu-item button {
-    margin: 0;
-  }
-  .space {
-    width: 100vw;
-    height: 2rpx;
-    background: #F4F5F9;
-  }
-  .line {
-    width:718px;
-    height:1px;
-    background:#EEEEEE;
-    margin-left: 32rpx;
-  }
-  
-  
-  .login-box .logo {
-    width: 200rpx;
-    margin: 64rpx 275rpx;
-  }
-  .login-box .line {
-    height: 2rpx;
-    width: 686rpx;
-    background-color: #ebedf0;
-    margin: 0 32rpx;
-  }
-  .login-box .title {
-    margin: 64rpx 0 0 32rpx;
-    color: #333;
-    font-size: 36rpx;
-  }
-  .login-box .profile {
-    margin: 32rpx 0 0 32rpx;
-    color: #999;
-    font-size: 28rpx;
-  }
-  .login-box .btn {
-    margin: 88rpx 32rpx;
+  .uid{
+    margin-top: 20rpx;
   }

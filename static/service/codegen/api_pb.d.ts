@@ -143,6 +143,417 @@ export namespace api {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserInfo. */
+    interface IUserInfo {
+
+        /** UserInfo accountId */
+        accountId?: (number|null);
+
+        /** UserInfo username */
+        username?: (string|null);
+
+        /** UserInfo phoneNumber */
+        phoneNumber?: (number|null);
+
+        /** UserInfo avatarUrl */
+        avatarUrl?: (string|null);
+    }
+
+    /** Represents a UserInfo. */
+    class UserInfo implements IUserInfo {
+
+        /**
+         * Constructs a new UserInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IUserInfo);
+
+        /** UserInfo accountId. */
+        public accountId: number;
+
+        /** UserInfo username. */
+        public username: string;
+
+        /** UserInfo phoneNumber. */
+        public phoneNumber: number;
+
+        /** UserInfo avatarUrl. */
+        public avatarUrl: string;
+
+        /**
+         * Creates a UserInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserInfo
+         */
+        public static fromObject(object: { [k: string]: any }): api.UserInfo;
+
+        /**
+         * Creates a plain object from a UserInfo message. Also converts values to other types if specified.
+         * @param message UserInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.UserInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a EUserInfo. */
+    interface IEUserInfo {
+
+        /** EUserInfo code */
+        code?: (number|null);
+
+        /** EUserInfo data */
+        data?: (api.IUserInfo|null);
+
+        /** EUserInfo message */
+        message?: (string|null);
+    }
+
+    /** Represents a EUserInfo. */
+    class EUserInfo implements IEUserInfo {
+
+        /**
+         * Constructs a new EUserInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IEUserInfo);
+
+        /** EUserInfo code. */
+        public code: number;
+
+        /** EUserInfo data. */
+        public data?: (api.IUserInfo|null);
+
+        /** EUserInfo message. */
+        public message: string;
+
+        /**
+         * Creates a EUserInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EUserInfo
+         */
+        public static fromObject(object: { [k: string]: any }): api.EUserInfo;
+
+        /**
+         * Creates a plain object from a EUserInfo message. Also converts values to other types if specified.
+         * @param message EUserInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.EUserInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EUserInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a GetUserInfoRequest. */
+    interface IGetUserInfoRequest {
+    }
+
+    /** Represents a GetUserInfoRequest. */
+    class GetUserInfoRequest implements IGetUserInfoRequest {
+
+        /**
+         * Constructs a new GetUserInfoRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IGetUserInfoRequest);
+
+        /**
+         * Creates a GetUserInfoRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GetUserInfoRequest
+         */
+        public static fromObject(object: { [k: string]: any }): api.GetUserInfoRequest;
+
+        /**
+         * Creates a plain object from a GetUserInfoRequest message. Also converts values to other types if specified.
+         * @param message GetUserInfoRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.GetUserInfoRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GetUserInfoRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an UpdateUserRequest. */
+    interface IUpdateUserRequest {
+
+        /** UpdateUserRequest username */
+        username?: (string|null);
+
+        /** UpdateUserRequest phoneNumber */
+        phoneNumber?: (number|null);
+    }
+
+    /** Represents an UpdateUserRequest. */
+    class UpdateUserRequest implements IUpdateUserRequest {
+
+        /**
+         * Constructs a new UpdateUserRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IUpdateUserRequest);
+
+        /** UpdateUserRequest username. */
+        public username: string;
+
+        /** UpdateUserRequest phoneNumber. */
+        public phoneNumber: number;
+
+        /**
+         * Creates an UpdateUserRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UpdateUserRequest
+         */
+        public static fromObject(object: { [k: string]: any }): api.UpdateUserRequest;
+
+        /**
+         * Creates a plain object from an UpdateUserRequest message. Also converts values to other types if specified.
+         * @param message UpdateUserRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.UpdateUserRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UpdateUserRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an UpdateUserResponse. */
+    interface IUpdateUserResponse {
+    }
+
+    /** Represents an UpdateUserResponse. */
+    class UpdateUserResponse implements IUpdateUserResponse {
+
+        /**
+         * Constructs a new UpdateUserResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IUpdateUserResponse);
+
+        /**
+         * Creates an UpdateUserResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UpdateUserResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.UpdateUserResponse;
+
+        /**
+         * Creates a plain object from an UpdateUserResponse message. Also converts values to other types if specified.
+         * @param message UpdateUserResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.UpdateUserResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UpdateUserResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a EUpdateUserResponse. */
+    interface IEUpdateUserResponse {
+
+        /** EUpdateUserResponse code */
+        code?: (number|null);
+
+        /** EUpdateUserResponse data */
+        data?: (api.IUpdateUserResponse|null);
+
+        /** EUpdateUserResponse message */
+        message?: (string|null);
+    }
+
+    /** Represents a EUpdateUserResponse. */
+    class EUpdateUserResponse implements IEUpdateUserResponse {
+
+        /**
+         * Constructs a new EUpdateUserResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IEUpdateUserResponse);
+
+        /** EUpdateUserResponse code. */
+        public code: number;
+
+        /** EUpdateUserResponse data. */
+        public data?: (api.IUpdateUserResponse|null);
+
+        /** EUpdateUserResponse message. */
+        public message: string;
+
+        /**
+         * Creates a EUpdateUserResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EUpdateUserResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.EUpdateUserResponse;
+
+        /**
+         * Creates a plain object from a EUpdateUserResponse message. Also converts values to other types if specified.
+         * @param message EUpdateUserResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.EUpdateUserResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EUpdateUserResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an UploadAvatarRequest. */
+    interface IUploadAvatarRequest {
+    }
+
+    /** Represents an UploadAvatarRequest. */
+    class UploadAvatarRequest implements IUploadAvatarRequest {
+
+        /**
+         * Constructs a new UploadAvatarRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IUploadAvatarRequest);
+
+        /**
+         * Creates an UploadAvatarRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UploadAvatarRequest
+         */
+        public static fromObject(object: { [k: string]: any }): api.UploadAvatarRequest;
+
+        /**
+         * Creates a plain object from an UploadAvatarRequest message. Also converts values to other types if specified.
+         * @param message UploadAvatarRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.UploadAvatarRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UploadAvatarRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an UploadAvatarResponse. */
+    interface IUploadAvatarResponse {
+
+        /** UploadAvatarResponse uploadUrl */
+        uploadUrl?: (string|null);
+    }
+
+    /** Represents an UploadAvatarResponse. */
+    class UploadAvatarResponse implements IUploadAvatarResponse {
+
+        /**
+         * Constructs a new UploadAvatarResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IUploadAvatarResponse);
+
+        /** UploadAvatarResponse uploadUrl. */
+        public uploadUrl: string;
+
+        /**
+         * Creates an UploadAvatarResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UploadAvatarResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.UploadAvatarResponse;
+
+        /**
+         * Creates a plain object from an UploadAvatarResponse message. Also converts values to other types if specified.
+         * @param message UploadAvatarResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.UploadAvatarResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UploadAvatarResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a EUploadAvatarResponse. */
+    interface IEUploadAvatarResponse {
+
+        /** EUploadAvatarResponse code */
+        code?: (number|null);
+
+        /** EUploadAvatarResponse data */
+        data?: (api.IUploadAvatarResponse|null);
+
+        /** EUploadAvatarResponse message */
+        message?: (string|null);
+    }
+
+    /** Represents a EUploadAvatarResponse. */
+    class EUploadAvatarResponse implements IEUploadAvatarResponse {
+
+        /**
+         * Constructs a new EUploadAvatarResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IEUploadAvatarResponse);
+
+        /** EUploadAvatarResponse code. */
+        public code: number;
+
+        /** EUploadAvatarResponse data. */
+        public data?: (api.IUploadAvatarResponse|null);
+
+        /** EUploadAvatarResponse message. */
+        public message: string;
+
+        /**
+         * Creates a EUploadAvatarResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EUploadAvatarResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.EUploadAvatarResponse;
+
+        /**
+         * Creates a plain object from a EUploadAvatarResponse message. Also converts values to other types if specified.
+         * @param message EUploadAvatarResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.EUploadAvatarResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EUploadAvatarResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a CarEntity. */
     interface ICarEntity {
 
@@ -360,6 +771,12 @@ export namespace api {
 
         /** Car tripId */
         tripId?: (string|null);
+
+        /** Car power */
+        power?: (number|null);
+
+        /** Car plateNum */
+        plateNum?: (string|null);
     }
 
     /** Represents a Car. */
@@ -382,6 +799,12 @@ export namespace api {
 
         /** Car tripId. */
         public tripId: string;
+
+        /** Car power. */
+        public power: number;
+
+        /** Car plateNum. */
+        public plateNum: string;
 
         /**
          * Creates a Car message from a plain object. Also converts values to their respective internal types.
@@ -461,8 +884,8 @@ export namespace api {
     /** Properties of a CreateCarRequest. */
     interface ICreateCarRequest {
 
-        /** CreateCarRequest accountId */
-        accountId?: (number|null);
+        /** CreateCarRequest plateNum */
+        plateNum?: (string|null);
     }
 
     /** Represents a CreateCarRequest. */
@@ -474,8 +897,8 @@ export namespace api {
          */
         constructor(properties?: api.ICreateCarRequest);
 
-        /** CreateCarRequest accountId. */
-        public accountId: number;
+        /** CreateCarRequest plateNum. */
+        public plateNum: string;
 
         /**
          * Creates a CreateCarRequest message from a plain object. Also converts values to their respective internal types.
@@ -2032,6 +2455,48 @@ export namespace api {
         public login(request: api.ILoginRequest): Promise<api.LoginResponse>;
 
         /**
+         * Calls GetUserInfo.
+         * @param request GetUserInfoRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and UserInfo
+         */
+        public getUserInfo(request: api.IGetUserInfoRequest, callback: api.apiService.GetUserInfoCallback): void;
+
+        /**
+         * Calls GetUserInfo.
+         * @param request GetUserInfoRequest message or plain object
+         * @returns Promise
+         */
+        public getUserInfo(request: api.IGetUserInfoRequest): Promise<api.UserInfo>;
+
+        /**
+         * Calls UpdateUserInfo.
+         * @param request UpdateUserRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and UpdateUserResponse
+         */
+        public updateUserInfo(request: api.IUpdateUserRequest, callback: api.apiService.UpdateUserInfoCallback): void;
+
+        /**
+         * Calls UpdateUserInfo.
+         * @param request UpdateUserRequest message or plain object
+         * @returns Promise
+         */
+        public updateUserInfo(request: api.IUpdateUserRequest): Promise<api.UpdateUserResponse>;
+
+        /**
+         * Calls UploadAvatar.
+         * @param request UploadAvatarRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and UploadAvatarResponse
+         */
+        public uploadAvatar(request: api.IUploadAvatarRequest, callback: api.apiService.UploadAvatarCallback): void;
+
+        /**
+         * Calls UploadAvatar.
+         * @param request UploadAvatarRequest message or plain object
+         * @returns Promise
+         */
+        public uploadAvatar(request: api.IUploadAvatarRequest): Promise<api.UploadAvatarResponse>;
+
+        /**
          * Calls CreateCar.
          * @param request CreateCarRequest message or plain object
          * @param callback Node-style callback called with the error, if any, and CarEntity
@@ -2236,6 +2701,27 @@ export namespace api {
          * @param [response] LoginResponse
          */
         type LoginCallback = (error: (Error|null), response?: api.LoginResponse) => void;
+
+        /**
+         * Callback as used by {@link api.apiService#getUserInfo}.
+         * @param error Error, if any
+         * @param [response] UserInfo
+         */
+        type GetUserInfoCallback = (error: (Error|null), response?: api.UserInfo) => void;
+
+        /**
+         * Callback as used by {@link api.apiService#updateUserInfo}.
+         * @param error Error, if any
+         * @param [response] UpdateUserResponse
+         */
+        type UpdateUserInfoCallback = (error: (Error|null), response?: api.UpdateUserResponse) => void;
+
+        /**
+         * Callback as used by {@link api.apiService#uploadAvatar}.
+         * @param error Error, if any
+         * @param [response] UploadAvatarResponse
+         */
+        type UploadAvatarCallback = (error: (Error|null), response?: api.UploadAvatarResponse) => void;
 
         /**
          * Callback as used by {@link api.apiService#createCar}.

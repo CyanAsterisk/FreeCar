@@ -1,11 +1,11 @@
 <view wx:if="{{!licImgURL}}">
-    <image class="license" src="/images/drivers-license.svg"></image>
+    <image class="license" src="/images/lic/drivers-license.svg"></image>
     <button class="btn" type="primary" bindtap="onUploadLic">上传驾照</button>
 </view>
 <view wx:else>
     <view class="lic-tmpl">
         <image class="license" src="{{licImgURL}}"></image>
-        <image wx:if="{{state==='VERIFIED'}}" class="checked" src="/images/checked.svg" />
+        <image wx:if="{{state==='VERIFIED'}}" class="checked" src="/images/lic/checked.svg" />
     </view>
     <van-cell-group>
         <van-field value="{{ licNo }}" left-icon="/images/lic/lic-id.svg" input-align="center" placeholder="驾驶证号" disabled="{{state!=='UNSUBMITTED'}}" />

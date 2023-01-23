@@ -130,3 +130,27 @@ func _getcarsMw() []app.HandlerFunc {
 		middleware.JWTAuth(),
 	}
 }
+
+func _upload_vatarMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _getuserinfoMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}
+
+func _updateuserinfoMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.Recovery(),
+		middleware.JWTAuth(),
+	}
+}

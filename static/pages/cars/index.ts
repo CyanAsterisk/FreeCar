@@ -14,7 +14,9 @@ interface Marker {
   height: number
 }
 interface Car {
-    id: string
+    id:string
+    plateNum: string
+    power: string
     position:{
       latitude: number,
       longitude: number
@@ -81,18 +83,23 @@ Page({
         })
       }
       if(resp.data!.identityStatus !== api.IdentityStatus.VERIFIED){
-        wx.showToast({
-          title: '请先完成认证',
-          icon: 'none',
-          duration: 1000,
-          mask: true,
-        }).then(()=>{
-          wx.redirectTo({
-            url:routing.license({
-              redirectURL: routing.cars(),
-            }),
-          })
-        })      
+        wx.showModal({
+          title: '未认证',
+          content: '完善驾照信息后方可租车',
+          success: (res)=>{
+            if(res.cancel){
+              wx.redirectTo({
+                url: routing.index(),
+              })
+            }else if(res.confirm){
+              wx.redirectTo({
+                url:routing.license({
+                  redirectURL: routing.cars(),
+                }),
+              })
+            }
+          }
+         })
       }
     },
 
@@ -118,7 +125,16 @@ Page({
         }
       })
     },
-  
+    
+    goMap(event: any) {
+      const pos = event.currentTarget.dataset.car_pos
+      wx.openLocation({
+        latitude:pos.latitude,
+        longitude:pos.longitude,
+        scale: 28
+      })
+    },
+
     onPullDownRefresh(){
       this.syscars()
       wx.stopPullDownRefresh()
@@ -131,7 +147,7 @@ Page({
       if(resp.code != 10000){
         wx.hideLoading()
         wx.showToast({
-          title: '服务器出错',
+          title: '同步车辆信息失败',
           icon:'none',
           duration:1000
         })
@@ -144,6 +160,8 @@ Page({
         if(car.car?.status != api.CarStatus.LOCKED) continue;
         const c: Car = {
           id: car.id!,
+          plateNum: car.car.plateNum!,
+          power: (car.car.power!).toFixed(2)+"%",
           position: {
             latitude:car.car.position!.latitude! || initialLat,
             longitude: car.car.position!.longitude! || initialLng,
@@ -161,7 +179,7 @@ Page({
           id:markers.length,
           latitude:car.car.position!.latitude! || initialLat,
           longitude: car.car.position!.longitude! || initialLng,
-          iconPath: '/images/car-pos.svg',
+          iconPath: '/images/cars/car-pos.svg',
           width: 20,
           height:20,
         })

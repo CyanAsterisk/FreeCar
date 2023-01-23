@@ -20,6 +20,9 @@ const (
 	driverField   = carField + ".driver"
 	positionField = carField + ".position"
 	tripIDField   = carField + ".tripid"
+	powerField    = carField + ".power"
+	initLatitude  = 29.5
+	initLongitude = 106.6
 )
 
 // CarRecord defines a car record in mongo db.
@@ -29,14 +32,16 @@ type CarRecord struct {
 }
 
 // CreateCar creates a car.
-func CreateCar(c context.Context) (*CarRecord, error) {
+func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
-				Latitude:  30,
-				Longitude: 120,
+				Latitude:  initLatitude,
+				Longitude: initLongitude,
 			},
-			Status: carthrf.CarStatus_LOCKED,
+			Status:   carthrf.CarStatus_LOCKED,
+			PlateNum: plateNum,
+			Power:    100,
 		},
 	}
 	cr.ID = mgutil.NewObjID()
@@ -85,6 +90,7 @@ type CarUpdate struct {
 	Status       carthrf.CarStatus
 	Position     *carthrf.Location
 	Driver       *carthrf.Driver
+	Power        float64
 	UpdateTripID bool
 	TripID       id.TripID
 }
@@ -118,7 +124,9 @@ func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update 
 	if update.UpdateTripID {
 		u[tripIDField] = update.TripID.String()
 	}
-
+	if update.Power > 0 {
+		u[powerField] = update.Power
+	}
 	res := global.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 

@@ -1,10 +1,8 @@
 namespace go car
 
-
 struct CarEntity{
     1: string id
     2: Car car
-
 }
 
 enum CarStatus{
@@ -14,7 +12,6 @@ enum CarStatus{
     UNLOCKED = 3,
     LOCKING = 4
 }
-
 
 struct Driver{
     1: i64 id
@@ -31,10 +28,13 @@ struct Car{
     2: Driver driver
     3: Location position
     4: string trip_id
+    5: double power
+    6: string plate_num
 }
 
 struct CreateCarRequest{
      1: i64 account_id
+     2: string plate_num
 }
 
 struct GetCarRequest{
@@ -71,10 +71,10 @@ struct UpdateCarRequest{
     2: CarStatus status
     3: Location position
     4: i64 account_id
+    5: double power
 }
 
 struct UpdateCarResponse{}
-
 
 service CarService {
     CarEntity CreateCar (1:CreateCarRequest req)

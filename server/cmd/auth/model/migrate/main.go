@@ -43,7 +43,8 @@ func main() {
 	for i := 0; i < 10; i++ {
 		cryOpenID := tool.Md5Crypt(fmt.Sprintf("openid%d", i), "FreeCar")
 		user := model.User{
-			OpenID: cryOpenID,
+			Username: fmt.Sprintf("user%d", i),
+			OpenID:   cryOpenID,
 		}
 		db.Save(&user)
 	}

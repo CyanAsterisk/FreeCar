@@ -32,7 +32,7 @@ export function getUserInfo(): Promise<WechatMiniprogram.GetUserInfoSuccessCallb
     wx.getUserInfo({
       success: res=>{
         res.userInfo={
-          avatarUrl: '/images/man.jpg', 
+          avatarUrl: '/images/shared/fake-avater.png', 
           city: '重庆',
           country: '中国',  
           gender: 1,

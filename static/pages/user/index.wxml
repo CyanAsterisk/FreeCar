@@ -1,17 +1,18 @@
 <view class="header-box">
   <button class="avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/fake-avatar.png' }}" mode="aspectFill"></image>
+    <image class="avatar-img" src="{{avatarURL? avatarURL:'/images/shared/default.png'}}" mode="aspectFill"></image>
   </button>
   <view class="r">
-    <view class="uid">ID: 1024</view>
-    <view class="nick" bindtap="editNick">
-      {{ apiUserInfoMap.base.nick ? apiUserInfoMap.base.nick : 'FreeCar' }}
-    </view>
+    <view class="nick" bindtap="editNick">{{  username ? username : '点击设置昵称' }}</view>
+    <view class="uid">ID:  {{accountID}}</view>
   </view>
 </view>
-<van-cell title="驾照信息" value="{{licStatus}}" bindtap="toLicensePage" />
+<van-cell title="驾照信息" value="{{licStatus}}" is-link url="/pages/license/license" />
 <van-cell-group title="其他功能">
-  <van-cell title="帮助中心" is-link url="/pages/help/index" />
-  <van-cell title="个人信息" is-link url="/pages/my/info-menu" />
-  <van-cell title="系统设置" is-link url="/pages/my/setting" />
+  <van-cell title="关于我们" is-link url="/pages/about/index" />
+  <van-cell title="清除缓存" bind:click="clearStorage" />
+  <van-cell title="当前版本" value="0.1.0" />
 </van-cell-group>
+<van-dialog use-slot title="修改昵称" show="{{ nickShow }}" show-cancel-button bind:confirm="_editNick">
+  <van-field model:value="{{ username }}" type="nickname" placeholder="请输入昵称" size="large" clearable />
+</van-dialog>

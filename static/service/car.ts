@@ -17,11 +17,12 @@ export namespace CarService {
         return socket
     }
 
-    export function getCar(id: string): Promise<api.ICar> {
+    export function getCar(req: api.IGetCarRequest): Promise<api.IECar> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: `/car/${encodeURIComponent(id)}`,
-            respMarshaller: api.Car.fromObject,
+            path: `/car`,
+            data:req,
+            respMarshaller: api.ECar.fromObject,
         })
     }
 

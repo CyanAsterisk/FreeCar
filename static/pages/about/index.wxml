@@ -1,0 +1,4 @@
+<view>
+    <image class="logo" src="/images/doc/FreeCar.png" />
+    <view class="content">FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。</view>
+</view>

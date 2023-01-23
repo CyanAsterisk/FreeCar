@@ -1,12 +1,23 @@
-<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}"></map>
+<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}">
+    <image class="location-icon" src="/images/shared/location.svg" bindtap="onMyLocationTap"></image>
+</map>
 <view class="card-container">
     <view class="card" wx:for="{{cars}}" wx:key="id">
         <view class="info">
-            <view>车牌号:京A66666</view>
-            <view>电量: 50%</view>
-            <view>距离: {{item.distance}}</view>
+            <view class="card-id item">
+                <image class="icon" src="/images/cars/car-id.svg"></image>
+                <view class="content">{{item.plateNum}}</view>
+            </view>
+            <view class="power item">
+                <image class="icon" src="/images/cars/power.svg"></image>
+                <view class="content">{{item.power}}</view>
+            </view>
+            <view class="distance item">
+                <image class="icon" src="/images/cars/distance.svg"></image>
+                <view class="content">{{item.distance}}km</view>
+            </view>
         </view>
-        <image class="icon" wx:if="{{item.canlock}}" src="/images/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
-        <image class="icon" wx:else src="/images/navi.svg"></image>
+        <image class="icon" wx:if="{{item.canlock}}" src="/images/cars/unlock.svg" bindtap="unlockCar" data-carid="{{item.id}}"></image>
+        <image class="icon" wx:else src="/images/cars/navi.svg" bindtap="goMap" data-car_pos="{{item.position}}"></image>
     </view>
 </view>

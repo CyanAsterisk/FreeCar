@@ -83,18 +83,23 @@ Page({
         })
       }
       if(resp.data!.identityStatus !== api.IdentityStatus.VERIFIED){
-        wx.showToast({
-          title: '请先完成认证',
-          icon: 'none',
-          duration: 1000,
-          mask: true,
-        }).then(()=>{
-          wx.redirectTo({
-            url:routing.license({
-              redirectURL: routing.cars(),
-            }),
-          })
-        })      
+        wx.showModal({
+          title: '未认证',
+          content: '完善驾照信息后方可租车',
+          success: (res)=>{
+            if(res.cancel){
+              wx.redirectTo({
+                url: routing.index(),
+              })
+            }else if(res.confirm){
+              wx.redirectTo({
+                url:routing.license({
+                  redirectURL: routing.cars(),
+                }),
+              })
+            }
+          }
+         })
       }
     },
 

@@ -51,8 +51,8 @@ message UploadAvatarResponse{
 }
 
 message EUploadAvatarResponse{
-  string code = 1;
-  UploadAvatarRequest data = 2;
+  int32 code = 1;
+  UploadAvatarResponse data = 2;
   string message = 3;
 }
 

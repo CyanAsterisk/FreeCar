@@ -1,7 +1,6 @@
 import { ProfileService } from "../../service/profile"
 import { AuthService } from "../../service/auth"
 import { api } from "../../service/codegen/api_pb"
-import { routing } from "../../utils/routing"
 import { FreeCar } from "../../service/request"
 
 const licStatusMap = new Map([
@@ -43,11 +42,6 @@ Page({
   })
   },
 
-  toLicensePage(){
-    wx.navigateTo({
-      url: routing.license(),
-    })
-  },
   async onChooseAvatar(e:any) {
     const localPath = e.detail.avatarUrl
     this.setData({
@@ -67,6 +61,13 @@ Page({
       url: resp.data!.uploadUrl!,
     })
     
+  },
+  clearStorage(){
+    wx.clearStorageSync()
+    wx.showToast({
+      title: '已清除',
+      icon: 'success'
+    })
   },
   editNick() {
     this.setData({

@@ -20,6 +20,13 @@
     margin-left: 32rpx;
   }
   .header-box .r {
-    margin-left: 32rpx;
+    margin-left: 10rpx;
     font-size: 28rpx;
+  }
+  .nick{
+    font-size:x-large;
+    font-weight: bolder;
+  }
+  .uid{
+    margin-top: 20rpx;
   }

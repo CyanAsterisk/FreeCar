@@ -18,6 +18,10 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 ![service_relations.png](static/images/doc/service_relations.png)
 
+## Display
+
+![display.png](static/images/doc/display.png)
+
 ## Catalog Introduce
 
 | Catalog | Introduce                    |

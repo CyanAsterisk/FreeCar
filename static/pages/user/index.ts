@@ -67,5 +67,33 @@ Page({
       url: resp.data!.uploadUrl!,
     })
     
-  }
+  },
+  editNick() {
+    this.setData({
+      nickShow: true
+    })
+  },
+  async _editNick() {
+    if (!this.data.username) {
+      wx.showToast({
+        title: '请填写昵称',
+        icon: 'none'
+      })
+      return
+    }
+    const res = await AuthService.updateUserInfo({
+      username: this.data.username
+    })
+
+    if (res.code != 10000){
+      wx.showToast({
+        title: res.message!,
+        icon: 'none'
+      })
+      return
+    }
+    wx.showToast({
+      title: '设置成功',
+    })
+    }
 })

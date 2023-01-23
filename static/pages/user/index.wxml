@@ -3,8 +3,8 @@
     <image class="avatar-img" src="{{avatarURL? avatarURL:'/images/shared/default.png'}}" mode="aspectFill"></image>
   </button>
   <view class="r">
-    <view class="uid">ID: 1024</view>
-    <view class="nick" bindtap="editNick">{{FreeCar}}</view>
+    <view class="uid">ID: {{accountID}}</view>
+    <view class="nick" bindtap="editNick">{{  username ? username : '点击设置昵称' }}</view>
   </view>
 </view>
 <van-cell title="驾照信息" value="{{licStatus}}" bindtap="toLicensePage" />
@@ -13,3 +13,6 @@
   <van-cell title="个人信息" is-link url="/pages/my/info-menu" />
   <van-cell title="系统设置" is-link url="/pages/my/setting" />
 </van-cell-group>
+<van-dialog use-slot title="修改昵称" show="{{ nickShow }}" show-cancel-button bind:confirm="_editNick">
+  <van-field model:value="{{ username }}" type="nickname" placeholder="请输入昵称" size="large" clearable />
+</van-dialog>

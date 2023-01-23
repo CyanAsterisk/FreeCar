@@ -74,8 +74,7 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 }
 
 // UpdateUser implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
-
+func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
 	var user model.User
 	user.ID = req.AccountId
 

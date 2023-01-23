@@ -34,6 +34,7 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 | Catalog | Introduce                                          |
 |---------|----------------------------------------------------|
+| API     | Hertz-based Gateway Service                        |
 | Auth    | User Authentication Service                        |
 | Blob    | Services Related to Pictures and Tencent Cloud COS |
 | Car     | Car Service                                        |

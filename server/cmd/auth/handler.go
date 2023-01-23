@@ -53,9 +53,9 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 }
 
 // UploadAvatar implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (resp *auth.UploadAvatarResponse, err error) {
+func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (*auth.UploadAvatarResponse, error) {
 	aid := req.AccountId
-	br, err := global.BlobClent.CreateBlob(ctx, &blob.CreateBlobRequest{
+	br, err := global.BlobClient.CreateBlob(ctx, &blob.CreateBlobRequest{
 		AccountId:           aid,
 		UploadUrlTimeoutSec: int32(10 * time.Second.Seconds()),
 	})
@@ -68,8 +68,9 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 	user.ID = req.AccountId
 	global.DB.Model(&user).Update("avatar_blob_id", br.Id)
 
-	resp.UploadUrl = br.UploadUrl
-	return
+	return &auth.UploadAvatarResponse{
+		UploadUrl: br.UploadUrl,
+	}, nil
 }
 
 // UpdateUser implements the AuthServiceImpl interface.
@@ -106,7 +107,7 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 	}
 
 	if user.AvatarBlobId != 0 {
-		res, err := global.BlobClent.GetBlobURL(ctx, &blob.GetBlobURLRequest{
+		res, err := global.BlobClient.GetBlobURL(ctx, &blob.GetBlobURLRequest{
 			Id:         user.AvatarBlobId,
 			TimeoutSec: int32(5 * time.Second.Seconds()),
 		})

@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob/blobservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob/blobservice"
 	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"

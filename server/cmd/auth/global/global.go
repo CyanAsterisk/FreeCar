@@ -11,5 +11,5 @@ var (
 	ServerConfig config.ServerConfig
 	NacosConfig  config.NacosConfig
 
-	BlobClent blobservice.Client
+	BlobClient blobservice.Client
 )

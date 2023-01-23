@@ -986,8 +986,8 @@ export const api = $root.api = (() => {
          * Properties of a EUploadAvatarResponse.
          * @memberof api
          * @interface IEUploadAvatarResponse
-         * @property {string|null} [code] EUploadAvatarResponse code
-         * @property {api.IUploadAvatarRequest|null} [data] EUploadAvatarResponse data
+         * @property {number|null} [code] EUploadAvatarResponse code
+         * @property {api.IUploadAvatarResponse|null} [data] EUploadAvatarResponse data
          * @property {string|null} [message] EUploadAvatarResponse message
          */
 
@@ -1008,15 +1008,15 @@ export const api = $root.api = (() => {
 
         /**
          * EUploadAvatarResponse code.
-         * @member {string} code
+         * @member {number} code
          * @memberof api.EUploadAvatarResponse
          * @instance
          */
-        EUploadAvatarResponse.prototype.code = "";
+        EUploadAvatarResponse.prototype.code = 0;
 
         /**
          * EUploadAvatarResponse data.
-         * @member {api.IUploadAvatarRequest|null|undefined} data
+         * @member {api.IUploadAvatarResponse|null|undefined} data
          * @memberof api.EUploadAvatarResponse
          * @instance
          */
@@ -1043,11 +1043,11 @@ export const api = $root.api = (() => {
                 return object;
             let message = new $root.api.EUploadAvatarResponse();
             if (object.code != null)
-                message.code = String(object.code);
+                message.code = object.code | 0;
             if (object.data != null) {
                 if (typeof object.data !== "object")
                     throw TypeError(".api.EUploadAvatarResponse.data: object expected");
-                message.data = $root.api.UploadAvatarRequest.fromObject(object.data);
+                message.data = $root.api.UploadAvatarResponse.fromObject(object.data);
             }
             if (object.message != null)
                 message.message = String(object.message);
@@ -1068,14 +1068,14 @@ export const api = $root.api = (() => {
                 options = {};
             let object = {};
             if (options.defaults) {
-                object.code = "";
+                object.code = 0;
                 object.data = null;
                 object.message = "";
             }
             if (message.code != null && message.hasOwnProperty("code"))
                 object.code = message.code;
             if (message.data != null && message.hasOwnProperty("data"))
-                object.data = $root.api.UploadAvatarRequest.toObject(message.data, options);
+                object.data = $root.api.UploadAvatarResponse.toObject(message.data, options);
             if (message.message != null && message.hasOwnProperty("message"))
                 object.message = message.message;
             return object;

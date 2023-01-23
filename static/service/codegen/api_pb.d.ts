@@ -452,10 +452,10 @@ export namespace api {
     interface IEUploadAvatarResponse {
 
         /** EUploadAvatarResponse code */
-        code?: (string|null);
+        code?: (number|null);
 
         /** EUploadAvatarResponse data */
-        data?: (api.IUploadAvatarRequest|null);
+        data?: (api.IUploadAvatarResponse|null);
 
         /** EUploadAvatarResponse message */
         message?: (string|null);
@@ -471,10 +471,10 @@ export namespace api {
         constructor(properties?: api.IEUploadAvatarResponse);
 
         /** EUploadAvatarResponse code. */
-        public code: string;
+        public code: number;
 
         /** EUploadAvatarResponse data. */
-        public data?: (api.IUploadAvatarRequest|null);
+        public data?: (api.IUploadAvatarResponse|null);
 
         /** EUploadAvatarResponse message. */
         public message: string;

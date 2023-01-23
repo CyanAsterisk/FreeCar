@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
@@ -21,6 +19,5 @@ func (b *BlobRecord) BeforeCreate(_ *gorm.DB) (err error) {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}
 	b.ID = sf.Generate().Int64()
-	b.Path = fmt.Sprintf("license/%d", b.ID)
 	return nil
 }

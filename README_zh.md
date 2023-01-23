@@ -18,6 +18,10 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
 ![service_relations.png](static/images/doc/service_relations.png)
 
+## 页面展示
+
+![display.png](static/images/doc/display.png)
+
 ## 目录介绍
 
 | 目录   | 介绍         |

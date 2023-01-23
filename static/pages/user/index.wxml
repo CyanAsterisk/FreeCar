@@ -1,12 +1,10 @@
 <view class="header-box">
   <button class="avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/shared/fake-avatar.png' }}" mode="aspectFill"></image>
+    <image class="avatar-img" src="{{avatarURL? avatarURL:'/images/shared/default.png'}}" mode="aspectFill"></image>
   </button>
   <view class="r">
     <view class="uid">ID: 1024</view>
-    <view class="nick" bindtap="editNick">
-      {{ apiUserInfoMap.base.nick ? apiUserInfoMap.base.nick : 'FreeCar' }}
-    </view>
+    <view class="nick" bindtap="editNick">{{FreeCar}}</view>
   </view>
 </view>
 <van-cell title="驾照信息" value="{{licStatus}}" bindtap="toLicensePage" />

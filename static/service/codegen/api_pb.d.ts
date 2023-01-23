@@ -372,6 +372,59 @@ export namespace api {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a EUpdateUserResponse. */
+    interface IEUpdateUserResponse {
+
+        /** EUpdateUserResponse code */
+        code?: (number|null);
+
+        /** EUpdateUserResponse data */
+        data?: (api.IUpdateUserResponse|null);
+
+        /** EUpdateUserResponse message */
+        message?: (string|null);
+    }
+
+    /** Represents a EUpdateUserResponse. */
+    class EUpdateUserResponse implements IEUpdateUserResponse {
+
+        /**
+         * Constructs a new EUpdateUserResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: api.IEUpdateUserResponse);
+
+        /** EUpdateUserResponse code. */
+        public code: number;
+
+        /** EUpdateUserResponse data. */
+        public data?: (api.IUpdateUserResponse|null);
+
+        /** EUpdateUserResponse message. */
+        public message: string;
+
+        /**
+         * Creates a EUpdateUserResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EUpdateUserResponse
+         */
+        public static fromObject(object: { [k: string]: any }): api.EUpdateUserResponse;
+
+        /**
+         * Creates a plain object from a EUpdateUserResponse message. Also converts values to other types if specified.
+         * @param message EUpdateUserResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: api.EUpdateUserResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EUpdateUserResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of an UploadAvatarRequest. */
     interface IUploadAvatarRequest {
     }

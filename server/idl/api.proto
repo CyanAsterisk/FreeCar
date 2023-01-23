@@ -44,6 +44,11 @@ message UpdateUserRequest{
 message UpdateUserResponse{
 }
 
+message EUpdateUserResponse{
+  int32 code = 1;
+  UpdateUserResponse data = 2;
+  string message = 3;
+}
 message UploadAvatarRequest{}
 
 message UploadAvatarResponse{

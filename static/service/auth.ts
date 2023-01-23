@@ -10,11 +10,12 @@ export namespace AuthService {
         })
     }
 
-    export function updateUserInfo(): Promise<api.IUpdateUserResponse> {
+    export function updateUserInfo(req :api.IUpdateUserRequest): Promise<api.IEUpdateUserResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
             path: '/auth/info',
-            respMarshaller: api.UpdateUserRequest.fromObject
+            data: req,
+            respMarshaller: api.EUpdateUserResponse.fromObject
         })
     }
    

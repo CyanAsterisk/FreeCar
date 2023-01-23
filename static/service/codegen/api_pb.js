@@ -833,6 +833,121 @@ export const api = $root.api = (() => {
         return UpdateUserResponse;
     })();
 
+    api.EUpdateUserResponse = (function() {
+
+        /**
+         * Properties of a EUpdateUserResponse.
+         * @memberof api
+         * @interface IEUpdateUserResponse
+         * @property {number|null} [code] EUpdateUserResponse code
+         * @property {api.IUpdateUserResponse|null} [data] EUpdateUserResponse data
+         * @property {string|null} [message] EUpdateUserResponse message
+         */
+
+        /**
+         * Constructs a new EUpdateUserResponse.
+         * @memberof api
+         * @classdesc Represents a EUpdateUserResponse.
+         * @implements IEUpdateUserResponse
+         * @constructor
+         * @param {api.IEUpdateUserResponse=} [properties] Properties to set
+         */
+        function EUpdateUserResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EUpdateUserResponse code.
+         * @member {number} code
+         * @memberof api.EUpdateUserResponse
+         * @instance
+         */
+        EUpdateUserResponse.prototype.code = 0;
+
+        /**
+         * EUpdateUserResponse data.
+         * @member {api.IUpdateUserResponse|null|undefined} data
+         * @memberof api.EUpdateUserResponse
+         * @instance
+         */
+        EUpdateUserResponse.prototype.data = null;
+
+        /**
+         * EUpdateUserResponse message.
+         * @member {string} message
+         * @memberof api.EUpdateUserResponse
+         * @instance
+         */
+        EUpdateUserResponse.prototype.message = "";
+
+        /**
+         * Creates a EUpdateUserResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof api.EUpdateUserResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {api.EUpdateUserResponse} EUpdateUserResponse
+         */
+        EUpdateUserResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.api.EUpdateUserResponse)
+                return object;
+            let message = new $root.api.EUpdateUserResponse();
+            if (object.code != null)
+                message.code = object.code | 0;
+            if (object.data != null) {
+                if (typeof object.data !== "object")
+                    throw TypeError(".api.EUpdateUserResponse.data: object expected");
+                message.data = $root.api.UpdateUserResponse.fromObject(object.data);
+            }
+            if (object.message != null)
+                message.message = String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a EUpdateUserResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof api.EUpdateUserResponse
+         * @static
+         * @param {api.EUpdateUserResponse} message EUpdateUserResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EUpdateUserResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.code = 0;
+                object.data = null;
+                object.message = "";
+            }
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = $root.api.UpdateUserResponse.toObject(message.data, options);
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this EUpdateUserResponse to JSON.
+         * @function toJSON
+         * @memberof api.EUpdateUserResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EUpdateUserResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EUpdateUserResponse;
+    })();
+
     api.UploadAvatarRequest = (function() {
 
         /**

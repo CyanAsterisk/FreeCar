@@ -5,7 +5,8 @@
     "pages/trip/trip",
     "pages/user/index",
     "pages/license/license",
-    "pages/driving/index"
+    "pages/driving/index",
+    "pages/about/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

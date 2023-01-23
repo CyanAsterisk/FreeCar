@@ -25,10 +25,20 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 ## Catalog Introduce
 
 | Catalog | Introduce                    |
-| ------- | ---------------------------- |
+|---------|------------------------------|
 | Server  | Core services of the project |
 | Shared  | Reusable code                |
-| Static  | Front-end static files       |
+| Static  | WeChat applet code           |
+
+## Service Introduce
+
+| Catalog | Introduce                                          |
+|---------|----------------------------------------------------|
+| Auth    | User Authentication Service                        |
+| Blob    | Services Related to Pictures and Tencent Cloud COS |
+| Car     | Car Service                                        |
+| Profile | Profile and Picture Recognition Services           |
+| Trip    | Trip Service                                       |
 
 ## Quick Start
 

@@ -211,4 +211,4 @@ Regarding the use of middleware, you only need to add middleware logic in `serve
 
 ## License
 
-FreeCar is distributed under the Apache License, version 2.0.
+FreeCar is distributed under the GNU General Public License, version 3.0.

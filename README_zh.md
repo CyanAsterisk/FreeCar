@@ -202,4 +202,4 @@ hz update -I -idl ./../../idl/api.proto
 
 ## 许可证
 
-FreeCar 在 Apache 许可证 2.0 版下开源。
+FreeCar 在 GNU General Public 许可证 3.0 版下开源。

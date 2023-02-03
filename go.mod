@@ -8,7 +8,7 @@ require (
 	github.com/bytedance/sonic v1.7.0
 	github.com/cloudwego/hertz v0.5.1
 	github.com/cloudwego/kitex v0.4.4
-	github.com/docker/docker v20.10.23+incompatible
+	github.com/docker/docker v23.0.0+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hertz-contrib/gzip v0.0.1

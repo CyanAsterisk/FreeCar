@@ -48,6 +48,9 @@ _auth_srv => AUTH_GROUP_
   "wx_config": {
     "app_id": "your app id",
     "app_secret": "your app secret"
+  },
+  "blob_srv": {
+    "name": "blob_srv"
   }
 }
 ```

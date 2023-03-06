@@ -1,8 +1,9 @@
-package tool
+package tools
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
+
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 )
 
 // GetFreePort get a free port.
@@ -16,6 +17,7 @@ func GetFreePort() (int, error) {
 	if err != nil {
 		return 0, err
 	}
+
 	defer l.Close()
 	return l.Addr().(*net.TCPAddr).Port, nil
 }

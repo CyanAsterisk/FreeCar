@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"

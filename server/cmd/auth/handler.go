@@ -6,7 +6,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -34,7 +34,7 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 	}
 	var user model.User
 	// Encrypt with md5.
-	cryOpenID := tool.Md5Crypt(openID, global.ServerConfig.MysqlInfo.Salt)
+	cryOpenID := pkg.Md5Crypt(openID, global.ServerConfig.MysqlInfo.Salt)
 	result := global.DB.Where(&model.User{OpenID: cryOpenID}).First(&user)
 	// Add new user to database.
 	if result.RowsAffected == 0 {

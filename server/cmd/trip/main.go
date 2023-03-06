@@ -7,9 +7,9 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/profile"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"

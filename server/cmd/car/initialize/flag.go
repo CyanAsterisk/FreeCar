@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"flag"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
@@ -15,7 +15,7 @@ func InitFlag() (string, int) {
 	// Parsing flags and if Port is 0 , then will automatically get an empty Port.
 	flag.Parse()
 	if *Port == 0 {
-		*Port, _ = tool.GetFreePort()
+		*Port, _ = tools.GetFreePort()
 	}
 	klog.Info("ip: ", *IP)
 	klog.Info("port: ", *Port)

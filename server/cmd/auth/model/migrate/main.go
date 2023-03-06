@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -41,7 +41,7 @@ func main() {
 	_ = db.AutoMigrate(&model.User{})
 
 	for i := 0; i < 10; i++ {
-		cryOpenID := tool.Md5Crypt(fmt.Sprintf("openid%d", i), "FreeCar")
+		cryOpenID := pkg.Md5Crypt(fmt.Sprintf("openid%d", i), "FreeCar")
 		user := model.User{
 			Username: fmt.Sprintf("user%d", i),
 			OpenID:   cryOpenID,

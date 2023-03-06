@@ -1,9 +1,10 @@
-package tool
+package pkg
 
 import (
 	"context"
-	"github.com/minio/minio-go/v7"
 	"time"
+
+	"github.com/minio/minio-go/v7"
 )
 
 type Storage struct {

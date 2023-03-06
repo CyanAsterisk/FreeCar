@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -74,6 +74,9 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 			ServerConfigs: sc,
 		},
 	)
+	if err != nil {
+		klog.Fatalf("new naming client failed: %s", err.Error())
+	}
 
 	r := nacos.NewNacosRegistry(registryClient, nacos.WithGroup(consts.RentalGroup))
 

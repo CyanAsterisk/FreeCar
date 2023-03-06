@@ -1,4 +1,4 @@
-package tool
+package pkg
 
 import (
 	"github.com/cloudwego/kitex/pkg/klog"

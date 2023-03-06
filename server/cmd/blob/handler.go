@@ -8,7 +8,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/model"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/tool"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -18,7 +18,7 @@ import (
 
 // BlobServiceImpl implements the last service interface defined in the IDL.
 type BlobServiceImpl struct {
-	tool.Storage
+	pkg.Storage
 }
 
 // CreateBlob implements the BlobServiceImpl interface.

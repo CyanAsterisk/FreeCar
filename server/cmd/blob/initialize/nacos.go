@@ -75,6 +75,9 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 			ServerConfigs: sc,
 		},
 	)
+	if err != nil {
+		klog.Fatalf("new naming client failed: %s", err.Error())
+	}
 
 	r := nacos.NewNacosRegistry(registryClient, nacos.WithGroup(consts.BlobGroup))
 

@@ -3,7 +3,7 @@ package trip
 import (
 	"context"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq"
 	cartr "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"

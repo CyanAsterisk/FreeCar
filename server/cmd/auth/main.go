@@ -7,7 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -35,7 +35,7 @@ func main() {
 	initialize.InitBlob()
 
 	impl := new(AuthServiceImpl)
-	impl.OpenIDResolver = &tool.AuthServiceImpl{
+	impl.OpenIDResolver = &pkg.AuthServiceImpl{
 		AppID:     global.ServerConfig.WXInfo.AppId,
 		AppSecret: global.ServerConfig.WXInfo.AppSecret,
 	}

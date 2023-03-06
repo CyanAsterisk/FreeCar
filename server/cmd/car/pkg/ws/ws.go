@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/websocket"

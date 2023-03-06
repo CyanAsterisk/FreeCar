@@ -5,7 +5,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/sim"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/trip"
@@ -33,8 +33,8 @@ func main() {
 	initialize.InitTrip()
 	initialize.InitCar()
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
@@ -48,22 +48,22 @@ func main() {
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
-	h := hzserver.Default(hzserver.WithHostPorts(global.ServerConfig.WsAddr))
-	h.GET("/ws", ws.Handler(global.Subscriber))
+	h := hzserver.Default(hzserver.WithHostPorts(config.GlobalServerConfig.WsAddr))
+	h.GET("/ws", ws.Handler(config.Subscriber))
 	h.NoHijackConnPool = true
 	go func() {
-		klog.Infof("HTTP server started. addr: %s", global.ServerConfig.WsAddr)
+		klog.Infof("HTTP server started. addr: %s", config.GlobalServerConfig.WsAddr)
 		h.Spin()
 	}()
 
-	go trip.RunUpdater(global.Subscriber, global.TripClient)
+	go trip.RunUpdater(config.Subscriber, config.TripClient)
 
 	simController := sim.Controller{
-		CarService: global.CarClient,
-		Subscriber: global.Subscriber,
+		CarService: config.CarClient,
+		Subscriber: config.Subscriber,
 	}
 	go simController.RunSimulations(context.Background())
 

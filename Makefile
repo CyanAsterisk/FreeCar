@@ -43,3 +43,13 @@ trip:
 .PHONY: api
 api:
 	go run ./server/cmd/api
+	
+# update the api by hz(thrift)
+.PHONY: update-api-thrift
+update-api-thrift:
+	hz update -idl ../../api.thrift
+
+# update the api by hz(proto)
+.PHONY: update-api-proto
+update-api-proto:
+	hz update -I -idl ../../api.proto

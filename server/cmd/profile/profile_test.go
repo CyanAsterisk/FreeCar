@@ -11,7 +11,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
-	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"
+	"github.com/CyanAsterisk/FreeCar/shared/test"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
@@ -220,16 +220,16 @@ func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest
 }
 
 func newDB(c context.Context, t *testing.T) {
-	mc, err := mongotesting.NewClient(c)
+	mc, err := test.NewClient(c)
 	if err != nil {
 		t.Fatalf("cannot create new mongo client: %v", err)
 	}
 	db := mc.Database("FreeCar")
-	mongotesting.SetupIndexes(c, db)
+	test.SetupIndexes(c, db)
 
 	global.DB = db.Collection("profile")
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mongotesting.RunWithMongoInDocker(m))
+	os.Exit(test.RunWithMongoInDocker(m))
 }

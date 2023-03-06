@@ -10,7 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
-	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"
+	"github.com/CyanAsterisk/FreeCar/shared/test"
 )
 
 func TestCarUpdate(t *testing.T) {
@@ -141,12 +141,12 @@ func TestCarUpdate(t *testing.T) {
 }
 
 func newDB(c context.Context, t *testing.T) {
-	mc, err := mongotesting.NewClient(c)
+	mc, err := test.NewClient(c)
 	if err != nil {
 		t.Fatalf("cannot create new mongo client: %v", err)
 	}
 	db := mc.Database("FreeCar")
-	mongotesting.SetupIndexes(c, db)
+	test.SetupIndexes(c, db)
 
 	global.Col = db.Collection("car")
 }
@@ -156,7 +156,7 @@ func newMq(c context.Context, t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mongotesting.RunWithMongoInDocker(m))
+	os.Exit(test.RunWithMongoInDocker(m))
 }
 
 type testPublisher struct{}

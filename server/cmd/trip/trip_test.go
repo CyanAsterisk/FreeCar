@@ -13,7 +13,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
 	"github.com/CyanAsterisk/FreeCar/shared/id"
 	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
-	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"
+	"github.com/CyanAsterisk/FreeCar/shared/test"
 )
 
 func TestCreateTrip(t *testing.T) {
@@ -243,16 +243,16 @@ func (m *carManager) Lock(c context.Context, cid id.CarID, aid id.AccountID) err
 }
 
 func newDB(c context.Context, t *testing.T) {
-	mc, err := mongotesting.NewClient(c)
+	mc, err := test.NewClient(c)
 	if err != nil {
 		t.Fatalf("cannot create new mongo client: %v", err)
 	}
 	db := mc.Database("FreeCar")
-	mongotesting.SetupIndexes(c, db)
+	test.SetupIndexes(c, db)
 
 	global.DB = db.Collection("trip")
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mongotesting.RunWithMongoInDocker(m))
+	os.Exit(test.RunWithMongoInDocker(m))
 }

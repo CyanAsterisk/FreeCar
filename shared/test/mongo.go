@@ -1,10 +1,11 @@
-package mongotesting
+package test
 
 import (
 	"context"
 	"fmt"
 	"testing"
 
+	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
@@ -14,12 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const (
-	image         = "mongo:latest"
-	containerPort = "27017/tcp"
-	ip            = "127.0.0.1"
-	port          = "0"
-)
+const ()
 
 var mongoURI string
 
@@ -34,16 +30,16 @@ func RunWithMongoInDocker(m *testing.M) int {
 	ctx := context.Background()
 
 	resp, err := c.ContainerCreate(ctx, &container.Config{
-		Image: image,
+		Image: consts.MongoImage,
 		ExposedPorts: nat.PortSet{
-			containerPort: {},
+			consts.MongoContainerPort: {},
 		},
 	}, &container.HostConfig{
 		PortBindings: nat.PortMap{
-			containerPort: []nat.PortBinding{
+			consts.MongoContainerPort: []nat.PortBinding{
 				{
-					HostIP:   ip,
-					HostPort: port,
+					HostIP:   consts.MongoContainerIP,
+					HostPort: consts.MongoPort,
 				},
 			},
 		},
@@ -70,7 +66,7 @@ func RunWithMongoInDocker(m *testing.M) int {
 	if err != nil {
 		panic(err)
 	}
-	hostPort := inspRes.NetworkSettings.Ports[containerPort][0]
+	hostPort := inspRes.NetworkSettings.Ports[consts.MongoContainerPort][0]
 	mongoURI = fmt.Sprintf("mongodb://%s:%s", hostPort.HostIP, hostPort.HostPort)
 
 	return m.Run()

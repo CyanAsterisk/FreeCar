@@ -1,6 +1,7 @@
 package consts
 
 const (
+	FreeCar    = "FreeCar"
 	JWTIssuer  = "FreeCar"
 	ThirtyDays = 60 * 60 * 24 * 30
 	AccountID  = "accountID"
@@ -45,4 +46,21 @@ const (
 	DefaultName      = "FreeCar"
 	DefaultGender    = 1
 	DefaultBirth     = 631152000000
+
+	RedisImage         = "redis:latest"
+	RedisContainerPort = "6379/tcp"
+	RedisContainerIP   = "127.0.0.1"
+	RedisPort          = "0"
+
+	MySQLImage         = "mysql:latest"
+	MySQLContainerPort = "3306/tcp"
+	MySQLContainerIP   = "127.0.0.1"
+	MySQLPort          = "0"
+	MySQLAdmin         = "root"
+	DockerTestMySQLPwd = "123456"
+
+	MongoImage         = "mongo:latest"
+	MongoContainerPort = "27017/tcp"
+	MongoContainerIP   = "127.0.0.1"
+	MongoPort          = "0"
 )

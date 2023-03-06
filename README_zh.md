@@ -174,7 +174,7 @@ hz update -idl ./../../idl/api.thrift
 注意项：
 
 - 用 `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
-- 选项`-I`是专门为proto文件添加的。
+- 选项 `-I` 是专门为proto文件添加的。
 
 ### 业务开发
 

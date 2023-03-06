@@ -23,10 +23,11 @@ type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
 
-type CosConfig struct {
-	Addr   string `mapstructure:"addr" json:"addr"`
-	SecId  string `mapstructure:"sec_id" json:"sec_id"`
-	SecKey string `mapstructure:"sec_key" json:"sec_key"`
+type MinioConfig struct {
+	Endpoint        string `mapstructure:"endpoint" json:"endpoint"`
+	AccessKeyID     string `mapstructure:"access_key_id" json:"access_key_id"`
+	SecretAccessKey string `mapstructure:"secret_access_key" json:"secret_access_key"`
+	Bucket          string `mapstructure:"bucket" json:"bucket"`
 }
 
 type ServerConfig struct {
@@ -34,5 +35,5 @@ type ServerConfig struct {
 	Host      string      `mapstructure:"host" json:"host"`
 	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
 	OtelInfo  OtelConfig  `mapstructure:"otel" json:"otel"`
-	CosConfig CosConfig   `mapstructure:"cos_config" json:"cos_config"`
+	MinioInfo MinioConfig `mapstructure:"minio_config" json:"minio_config"`
 }

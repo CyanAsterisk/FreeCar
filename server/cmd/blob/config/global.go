@@ -1,13 +1,13 @@
 package config
 
 import (
-	"github.com/tencentyun/cos-go-sdk-v5"
+	"github.com/minio/minio-go/v7"
 	"gorm.io/gorm"
 )
 
 var (
 	DB                 *gorm.DB
-	CosClient          *cos.Client
+	minioClient        *minio.Client
 	GlobalServerConfig ServerConfig
 	GlobalNacosConfig  NacosConfig
 )

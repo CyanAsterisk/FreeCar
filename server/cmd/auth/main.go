@@ -5,7 +5,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -27,8 +27,8 @@ func main() {
 	r, info := initialize.InitNacos(Port)
 	initialize.InitDB()
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
@@ -36,8 +36,8 @@ func main() {
 
 	impl := new(AuthServiceImpl)
 	impl.OpenIDResolver = &pkg.AuthServiceImpl{
-		AppID:     global.ServerConfig.WXInfo.AppId,
-		AppSecret: global.ServerConfig.WXInfo.AppSecret,
+		AppID:     config.GlobalServerConfig.WXInfo.AppId,
+		AppSecret: config.GlobalServerConfig.WXInfo.AppSecret,
 	}
 	// Create new server.
 	srv := authservice.NewServer(impl,
@@ -48,7 +48,7 @@ func main() {
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
 	err := srv.Run()

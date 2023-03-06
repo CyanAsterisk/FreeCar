@@ -8,3 +8,4 @@ all:
 	make service=car generate
 	make service=profile generate
 	make service=trip generate
+	make service=errno generate

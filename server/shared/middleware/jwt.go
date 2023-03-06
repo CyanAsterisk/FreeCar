@@ -3,12 +3,12 @@ package middleware
 import (
 	"context"
 	"errors"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"strings"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
+	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )

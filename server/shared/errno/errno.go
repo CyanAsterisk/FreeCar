@@ -3,7 +3,7 @@ package errno
 import (
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno/kitex_gen/errno"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )

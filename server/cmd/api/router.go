@@ -5,8 +5,8 @@ package main
 import (
 	"context"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
-	handler "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/handler"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/handler"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )

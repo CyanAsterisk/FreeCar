@@ -6,11 +6,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"

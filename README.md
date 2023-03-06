@@ -167,13 +167,18 @@ hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cm
 ##### Update
 
 ```shell
+//If the update is a proto file
 hz update -I -idl ./../../idl/api.proto
+
+//If the update is a Thrift file
+hz update -I -idl ./../../idl/api.thrift
 ```
 
 Note:
 
 - Use `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` This parameter is used to specify the Go module to which
   the generated code belongs to avoid path problems.
+- The -I option is specially added for proto files
 
 ### Business Development
 

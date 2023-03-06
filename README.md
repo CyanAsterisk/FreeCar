@@ -167,10 +167,10 @@ hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cm
 ##### Update
 
 ```shell
-//If the update is a proto file
+# If the update is a proto file
 hz update -I -idl ./../../idl/api.proto
 
-//If the update is a Thrift file
+# If the update is a Thrift file
 hz update -I -idl ./../../idl/api.thrift
 ```
 

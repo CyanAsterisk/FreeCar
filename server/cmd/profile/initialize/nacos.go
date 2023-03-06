@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
 	"github.com/bwmarrin/snowflake"
@@ -67,6 +68,13 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 	err = sonic.Unmarshal([]byte(content), &global.ServerConfig)
 	if err != nil {
 		klog.Fatalf("nacos config failed: %s", err.Error())
+	}
+
+	if global.ServerConfig.Host == "" {
+		global.ServerConfig.Host, err = tools.GetLocalIPv4Address()
+		if err != nil {
+			klog.Fatalf("get localIpv4Addr failed:%s", err.Error())
+		}
 	}
 
 	registryClient, err := clients.NewNamingClient(

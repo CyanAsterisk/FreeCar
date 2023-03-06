@@ -178,7 +178,7 @@ Note:
 
 - Use `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` This parameter is used to specify the Go module to which
   the generated code belongs to avoid path problems.
-- The -I option is specially added for proto files
+- The -I option is specially added for proto files.
 
 ### Business Development
 

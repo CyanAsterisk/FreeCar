@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/bytedance/sonic v1.7.0
+	github.com/bytedance/sonic v1.8.3
 	github.com/cloudwego/hertz v0.5.1
 	github.com/cloudwego/kitex v0.4.4
 	github.com/docker/docker v20.10.23+incompatible

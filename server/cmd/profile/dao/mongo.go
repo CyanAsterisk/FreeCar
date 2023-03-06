@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -28,7 +28,7 @@ type ProfileRecord struct {
 
 // GetProfile gets profile for an account.
 func GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
-	res := global.DB.FindOne(c, byAccountID(aid))
+	res := config.DB.FindOne(c, byAccountID(aid))
 	if err := res.Err(); err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func UpdateProfile(c context.Context, aid id.AccountID, prevState profile.Identi
 		filter = mgutil.ZeroOrDoesNotExist(identityStatusField, prevState)
 	}
 	filter[accountIDField] = aid.Int64()
-	_, err := global.DB.UpdateOne(c, filter, mgutil.Set(bson.M{
+	_, err := config.DB.UpdateOne(c, filter, mgutil.Set(bson.M{
 		accountIDField: aid.Int64(),
 		profileField:   p,
 	}), options.Update().SetUpsert(true))
@@ -58,7 +58,7 @@ func UpdateProfile(c context.Context, aid id.AccountID, prevState profile.Identi
 
 // UpdateProfilePhoto updates profile photo blob id.
 func UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
-	_, err := global.DB.UpdateOne(c, bson.M{
+	_, err := config.DB.UpdateOne(c, bson.M{
 		accountIDField: aid.Int64(),
 	}, mgutil.Set(bson.M{
 		accountIDField:   aid.Int64(),

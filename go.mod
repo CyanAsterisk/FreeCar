@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/bytedance/sonic v1.7.0
+	github.com/bytedance/sonic v1.8.3
 	github.com/cloudwego/hertz v0.5.1
 	github.com/cloudwego/kitex v0.4.4
 	github.com/docker/docker v20.10.23+incompatible
@@ -30,9 +30,9 @@ require (
 	go.mongodb.org/mongo-driver v1.11.1
 	go.opentelemetry.io/otel/trace v1.9.0
 	google.golang.org/protobuf v1.28.1
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.4.5
-	gorm.io/gorm v1.24.3
+	gorm.io/gorm v1.24.6
 	gorm.io/plugin/opentelemetry v0.1.0
 )
 

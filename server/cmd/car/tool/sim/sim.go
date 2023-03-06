@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 

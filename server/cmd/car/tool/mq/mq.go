@@ -3,7 +3,7 @@ package mq
 import (
 	"context"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 )
 
 // Publisher defines the publish interface.

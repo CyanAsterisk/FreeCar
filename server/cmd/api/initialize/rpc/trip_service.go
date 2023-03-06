@@ -2,9 +2,9 @@ package rpc
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/trip/tripservice"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"

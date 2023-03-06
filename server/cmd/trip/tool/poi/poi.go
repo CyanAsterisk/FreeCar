@@ -3,7 +3,7 @@ package poi
 import (
 	"hash/fnv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/bytedance/sonic"
 )
 

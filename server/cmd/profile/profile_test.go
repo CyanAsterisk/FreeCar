@@ -8,10 +8,10 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/blob"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
-	mongotesting "github.com/CyanAsterisk/FreeCar/shared/mongo/testing"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
@@ -209,10 +209,6 @@ func (b *blobClient) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest
 	}, nil
 }
 
-func (b *blobClient) GetBlob(ctx context.Context, req *blob.GetBlobRequest, callOptions ...callopt.Option) (r *blob.GetBlobResponse, err error) {
-	return &blob.GetBlobResponse{}, nil
-}
-
 func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error) {
 	return &blob.GetBlobURLResponse{
 		Url: "get_url for " + strconv.FormatInt(req.Id, 10),
@@ -220,16 +216,16 @@ func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest
 }
 
 func newDB(c context.Context, t *testing.T) {
-	mc, err := mongotesting.NewClient(c)
+	mc, err := test.NewClient(c)
 	if err != nil {
 		t.Fatalf("cannot create new mongo client: %v", err)
 	}
 	db := mc.Database("FreeCar")
-	mongotesting.SetupIndexes(c, db)
+	test.SetupIndexes(c, db)
 
 	global.DB = db.Collection("profile")
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mongotesting.RunWithMongoInDocker(m))
+	os.Exit(test.RunWithMongoInDocker(m))
 }

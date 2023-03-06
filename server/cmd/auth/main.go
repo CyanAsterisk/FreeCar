@@ -7,10 +7,10 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
-	auth "github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth/authservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -40,7 +40,7 @@ func main() {
 		AppSecret: global.ServerConfig.WXInfo.AppSecret,
 	}
 	// Create new server.
-	srv := auth.NewServer(impl,
+	srv := authservice.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

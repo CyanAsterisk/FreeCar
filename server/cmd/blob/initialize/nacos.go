@@ -4,8 +4,9 @@ import (
 	"net"
 	"strconv"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"

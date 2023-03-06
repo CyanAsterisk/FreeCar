@@ -2,10 +2,10 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq/amqpclt"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/streadway/amqp"
 )

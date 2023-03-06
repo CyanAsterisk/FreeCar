@@ -5,7 +5,7 @@ services:
   mysql:
     image: mysql:latest
     volumes:
-      - ./pkg/configs/sql:/docker-entrypoint-initdb.d
+      - ./data/configs/sql:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment:
@@ -23,6 +23,31 @@ services:
     restart: "no"
     ports:
       - "27017:27017"
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/data/redis:/data
+      - ./data/logs:/logs
+    command: redis-server --requirepass tikgok
+
+  minio:
+    image: minio/minio:latest
+    command: server --console-address ":9001" /data
+    volumes:
+      - ./data/configs/minio:/root/.minio
+      - ./data/data/minio:/data
+    environment:
+      - MINIO_ACCESS_KEY=admin
+      - MINIO_SECRET_KEY=admin123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: always
 
   # Nacos
   nacos:

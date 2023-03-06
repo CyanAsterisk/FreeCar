@@ -5,8 +5,8 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"

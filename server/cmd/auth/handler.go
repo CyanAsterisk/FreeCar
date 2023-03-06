@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/auth"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/tool"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"

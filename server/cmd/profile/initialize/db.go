@@ -3,9 +3,9 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

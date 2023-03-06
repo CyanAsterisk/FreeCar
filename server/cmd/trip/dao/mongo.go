@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
-	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
-	"github.com/CyanAsterisk/FreeCar/shared/mongo/objid"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )

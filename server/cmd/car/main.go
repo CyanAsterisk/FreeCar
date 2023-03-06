@@ -5,14 +5,15 @@ import (
 	"net"
 	"strconv"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
-	car "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/sim"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	hzserver "github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -40,7 +41,7 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	// Create new server.
-	srv := car.NewServer(new(CarServiceImpl),
+	srv := carservice.NewServer(new(CarServiceImpl),
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

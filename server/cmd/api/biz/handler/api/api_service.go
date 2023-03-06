@@ -4,18 +4,18 @@ package api
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/auth"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/profile"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/kitex_gen/trip"
 	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )

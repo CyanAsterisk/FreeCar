@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -148,11 +148,11 @@ func newDB(c context.Context, t *testing.T) {
 	db := mc.Database("FreeCar")
 	test.SetupIndexes(c, db)
 
-	global.Col = db.Collection("car")
+	config.Col = db.Collection("car")
 }
 
 func newMq(c context.Context, t *testing.T) {
-	global.Publisher = &testPublisher{}
+	config.Publisher = &testPublisher{}
 }
 
 func TestMain(m *testing.M) {

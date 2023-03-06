@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -45,7 +45,7 @@ func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 		},
 	}
 	cr.ID = mgutil.NewObjID()
-	_, err := global.Col.InsertOne(c, cr)
+	_, err := config.Col.InsertOne(c, cr)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 		return nil, fmt.Errorf("invalid id: %v", err)
 	}
 
-	return convertSingleResult(global.Col.FindOne(c, bson.M{
+	return convertSingleResult(config.Col.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
 	}))
 }
@@ -67,7 +67,7 @@ func GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 // GetCars gets cars.
 func GetCars(c context.Context) ([]*CarRecord, error) {
 	filter := bson.M{}
-	res, err := global.Col.Find(c, filter, options.Find())
+	res, err := config.Col.Find(c, filter, options.Find())
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update 
 	if update.Power > 0 {
 		u[powerField] = update.Power
 	}
-	res := global.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
+	res := config.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/model"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/tool"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -18,7 +18,7 @@ import (
 
 // BlobServiceImpl implements the last service interface defined in the IDL.
 type BlobServiceImpl struct {
-	tool.Storage
+	pkg.Storage
 }
 
 // CreateBlob implements the BlobServiceImpl interface.
@@ -32,7 +32,7 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 	}
 	br.Path = fmt.Sprintf("%d/%d", req.AccountId, sf.Generate().Int64())
 
-	result := global.DB.Create(&br)
+	result := config.DB.Create(&br)
 	if result.Error != nil {
 		return nil, status.Errorf(codes.Internal, result.Error.Error())
 	}
@@ -50,7 +50,7 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 func (s *BlobServiceImpl) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest) (*blob.GetBlobURLResponse, error) {
 	var br model.BlobRecord
 
-	result := global.DB.Where(&model.BlobRecord{ID: req.Id}).First(&br)
+	result := config.DB.Where(&model.BlobRecord{ID: req.Id}).First(&br)
 	if result.RowsAffected == 0 {
 		return nil, status.Errorf(codes.NotFound, "")
 	}

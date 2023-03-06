@@ -6,7 +6,6 @@ import (
 	"context"
 
 	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/limiter"

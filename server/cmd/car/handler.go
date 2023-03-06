@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/dao"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -111,7 +111,7 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 }
 
 func (s *CarServiceImpl) publish(c context.Context, cr *dao.CarRecord) {
-	err := global.Publisher.Publish(c, &car.CarEntity{
+	err := config.Publisher.Publish(c, &car.CarEntity{
 		Id:  cr.ID.Hex(),
 		Car: cr.Car,
 	})

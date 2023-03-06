@@ -2,8 +2,8 @@ package objid
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

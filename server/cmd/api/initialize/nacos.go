@@ -1,16 +1,18 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/bwmarrin/snowflake"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/registry/nacos"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -25,21 +27,21 @@ func InitNacos() (registry.Registry, *registry.Info) {
 	if err := v.ReadInConfig(); err != nil {
 		hlog.Fatalf("read viper config failed: %s", err.Error())
 	}
-	if err := v.Unmarshal(&global.NacosConfig); err != nil {
+	if err := v.Unmarshal(&config.GlobalNacosConfig); err != nil {
 		hlog.Fatalf("unmarshal err failed: %s", err.Error())
 	}
-	hlog.Infof("Config Info: %v", global.NacosConfig)
+	hlog.Infof("Config Info: %v", config.GlobalNacosConfig)
 
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
 		{
-			IpAddr: global.NacosConfig.Host,
-			Port:   global.NacosConfig.Port,
+			IpAddr: config.GlobalNacosConfig.Host,
+			Port:   config.GlobalNacosConfig.Port,
 		},
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.NacosConfig.Namespace,
+		NamespaceId:         config.GlobalNacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -56,16 +58,23 @@ func InitNacos() (registry.Registry, *registry.Info) {
 	}
 
 	content, err := configClient.GetConfig(vo.ConfigParam{
-		DataId: global.NacosConfig.DataId,
-		Group:  global.NacosConfig.Group,
+		DataId: config.GlobalNacosConfig.DataId,
+		Group:  config.GlobalNacosConfig.Group,
 	})
 	if err != nil {
 		hlog.Fatalf("get config failed: %s", err.Error())
 	}
 
-	err = sonic.Unmarshal([]byte(content), &global.ServerConfig)
+	err = sonic.Unmarshal([]byte(content), &config.GlobalServerConfig)
 	if err != nil {
 		hlog.Fatalf("nacos config failed: %s", err.Error())
+	}
+
+	if config.GlobalServerConfig.Host == "" {
+		config.GlobalServerConfig.Host, err = tools.GetLocalIPv4Address()
+		if err != nil {
+			hlog.Fatalf("get localIpv4Addr failed:%s", err.Error())
+		}
 	}
 
 	registryClient, err := clients.NewNamingClient(
@@ -74,6 +83,9 @@ func InitNacos() (registry.Registry, *registry.Info) {
 			ServerConfigs: sc,
 		},
 	)
+	if err != nil {
+		klog.Fatalf("new naming client failed: %s", err.Error())
+	}
 
 	r := nacos.NewNacosRegistry(registryClient, nacos.WithRegistryGroup(consts.ApiGroup))
 
@@ -82,9 +94,9 @@ func InitNacos() (registry.Registry, *registry.Info) {
 		hlog.Fatalf("generate service name failed: %s", err.Error())
 	}
 	info := &registry.Info{
-		ServiceName: global.ServerConfig.Name,
-		Addr: utils.NewNetAddr(consts.TCP, net.JoinHostPort(global.ServerConfig.Host,
-			strconv.Itoa(global.ServerConfig.Port))),
+		ServiceName: config.GlobalServerConfig.Name,
+		Addr: utils.NewNetAddr(consts.TCP, net.JoinHostPort(config.GlobalServerConfig.Host,
+			strconv.Itoa(config.GlobalServerConfig.Port))),
 		Tags: map[string]string{
 			"ID": sf.Generate().Base36(),
 		},

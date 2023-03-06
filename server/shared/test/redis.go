@@ -3,8 +3,9 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"testing"
+
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"

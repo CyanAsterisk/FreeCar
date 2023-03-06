@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -35,7 +35,7 @@ func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 	r.ID = mgutil.NewObjID()
 	r.UpdatedAt = mgutil.UpdatedAt()
 
-	_, err := global.DB.InsertOne(c, r)
+	_, err := config.DB.InsertOne(c, r)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*TripReco
 	if err != nil {
 		return nil, fmt.Errorf("invalid id :%v", err)
 	}
-	res := global.DB.FindOne(c, bson.M{
+	res := config.DB.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
 		accountIDField:     accountID,
 	})
@@ -75,7 +75,7 @@ func GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus)
 		filter[statusField] = status
 	}
 
-	res, err := global.DB.Find(c, filter)
+	res, err := config.DB.Find(c, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt in
 	}
 
 	newUpdatedAt := mgutil.UpdatedAt()
-	res, err := global.DB.UpdateOne(c, bson.M{
+	res, err := config.DB.UpdateOne(c, bson.M{
 		mgutil.IDFieldName:        objID,
 		accountIDField:            aid.Int64(),
 		mgutil.UpdatedAtFieldName: updatedAt,

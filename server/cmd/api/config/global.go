@@ -1,7 +1,6 @@
-package global
+package config
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile/profileservice"
@@ -9,11 +8,11 @@ import (
 )
 
 var (
-	ServerConfig = &config.ServerConfig{}
-	NacosConfig  = &config.NacosConfig{}
+	GlobalServerConfig = &ServerConfig{}
+	GlobalNacosConfig  = &NacosConfig{}
 
-	AuthClient    authservice.Client
-	CarClient     carservice.Client
-	ProfileClient profileservice.Client
-	TripClient    tripservice.Client
+	GlobalAuthClient    authservice.Client
+	GlobalCarClient     carservice.Client
+	GlobalProfileClient profileservice.Client
+	GlobalTripClient    tripservice.Client
 )

@@ -4,8 +4,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -22,7 +22,7 @@ func main() {
 	// create a new server
 	h := server.New(
 		tracer,
-		server.WithHostPorts(fmt.Sprintf(":%d", global.ServerConfig.Port)),
+		server.WithHostPorts(fmt.Sprintf(":%d", config.GlobalServerConfig.Port)),
 		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
 	)

@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile/profileservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -22,13 +22,13 @@ func initProfile() {
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
 		{
-			IpAddr: global.NacosConfig.Host,
-			Port:   global.NacosConfig.Port,
+			IpAddr: config.GlobalNacosConfig.Host,
+			Port:   config.GlobalNacosConfig.Port,
 		},
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.NacosConfig.Namespace,
+		NamespaceId:         config.GlobalNacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -47,24 +47,24 @@ func initProfile() {
 	}
 	// init OpenTelemetry
 	provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.ProfileSrvInfo.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.ProfileSrvInfo.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 
 	// create a new client
 	c, err := profileservice.NewClient(
-		global.ServerConfig.ProfileSrvInfo.Name,
+		config.GlobalServerConfig.ProfileSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.ProfileSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.ProfileSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	global.ProfileClient = c
+	config.GlobalProfileClient = c
 }

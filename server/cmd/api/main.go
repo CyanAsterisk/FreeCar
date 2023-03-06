@@ -4,8 +4,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app/server"

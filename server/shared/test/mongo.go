@@ -3,9 +3,9 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"testing"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
@@ -14,8 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-const ()
 
 var mongoURI string
 

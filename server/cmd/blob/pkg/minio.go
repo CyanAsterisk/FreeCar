@@ -15,7 +15,7 @@ func NewStorage(client minio.Client) *Storage {
 	return &Storage{client}
 }
 
-func (s *Storage) GetObjectURL(ctx context.Context, buckName string, objectName string, timeOut time.Duration) (string, error) {
+func (s *Storage) GetObjectURL(ctx context.Context, buckName, objectName string, timeOut time.Duration) (string, error) {
 	url, err := s.client.PresignedGetObject(ctx, buckName, objectName, timeOut, nil)
 	if err != nil {
 		return "", err
@@ -23,7 +23,7 @@ func (s *Storage) GetObjectURL(ctx context.Context, buckName string, objectName 
 	return url.Path, err
 }
 
-func (s *Storage) PutObjectURL(ctx context.Context, buckName string, objectName string, timeOut time.Duration) (string, error) {
+func (s *Storage) PutObjectURL(ctx context.Context, buckName, objectName string, timeOut time.Duration) (string, error) {
 	url, err := s.client.PresignedPutObject(ctx, buckName, objectName, timeOut)
 	if err != nil {
 		return "", err

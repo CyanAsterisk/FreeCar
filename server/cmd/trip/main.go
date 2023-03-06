@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"net"
 	"strconv"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"

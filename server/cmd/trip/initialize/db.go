@@ -3,8 +3,8 @@ package initialize
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"go.mongodb.org/mongo-driver/mongo"

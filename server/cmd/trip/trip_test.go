@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"math/rand"
 	"os"
 	"testing"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"

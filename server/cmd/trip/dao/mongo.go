@@ -3,8 +3,8 @@ package dao
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"

@@ -2,9 +2,9 @@ package mgutil
 
 import (
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

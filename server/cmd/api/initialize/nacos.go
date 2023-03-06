@@ -1,10 +1,10 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"net"
 	"strconv"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/bwmarrin/snowflake"

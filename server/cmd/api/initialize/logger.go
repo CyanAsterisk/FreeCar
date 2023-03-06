@@ -3,6 +3,7 @@ package initialize
 import (
 	"os"
 	"path"
+	"runtime"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -37,9 +38,12 @@ func InitLogger() {
 		MaxAge:     10,   // A file can exist for a maximum of 10 days.
 		Compress:   true, // Compress with gzip.
 	}
-
-	logger.SetOutput(lumberjackLogger)
-	logger.SetLevel(hlog.LevelDebug)
+	if runtime.GOOS == "linux" {
+		logger.SetOutput(lumberjackLogger)
+		logger.SetLevel(hlog.LevelWarn)
+	} else {
+		logger.SetLevel(hlog.LevelDebug)
+	}
 
 	hlog.SetLogger(logger)
 }

@@ -3,6 +3,7 @@ package initialize
 import (
 	"os"
 	"path"
+	"runtime"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -38,8 +39,12 @@ func InitLogger() {
 		Compress:   true, // Compress with gzip.
 	}
 
-	logger.SetOutput(lumberjackLogger)
-	logger.SetLevel(klog.LevelDebug)
+	if runtime.GOOS == "linux" {
+		logger.SetOutput(lumberjackLogger)
+		logger.SetLevel(klog.LevelWarn)
+	} else {
+		logger.SetLevel(klog.LevelDebug)
+	}
 
 	klog.SetLogger(logger)
 }

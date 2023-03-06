@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/mysql"
@@ -17,7 +17,7 @@ import (
 
 // InitDB to init database
 func InitDB() {
-	c := global.ServerConfig.MysqlInfo
+	c := config.GlobalServerConfig.MysqlInfo
 	dsn := fmt.Sprintf(consts.MySqlDSN, c.User, c.Password, c.Host, c.Port, c.Name)
 	newLogger := logger.New(
 		logrus.NewWriter(), // io writer
@@ -30,7 +30,7 @@ func InitDB() {
 
 	// global mode
 	var err error
-	global.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	config.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
@@ -39,7 +39,7 @@ func InitDB() {
 	if err != nil {
 		klog.Fatalf("init gorm failed: %s", err.Error())
 	}
-	if err := global.DB.Use(tracing.NewPlugin()); err != nil {
+	if err := config.DB.Use(tracing.NewPlugin()); err != nil {
 		klog.Fatalf("use tracing plugin failed: %s", err.Error())
 	}
 }

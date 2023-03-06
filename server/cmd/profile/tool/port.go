@@ -1,9 +1,8 @@
 package tool
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 )
 
 // GetFreePort get a free port.

@@ -3,10 +3,10 @@ package trip
 import (
 	"context"
 
-	cartr "github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	cartr "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 

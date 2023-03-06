@@ -7,9 +7,9 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/initialize"
-	blob "github.com/CyanAsterisk/FreeCar/server/cmd/blob/kitex_gen/blob/blobservice"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
+	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -34,13 +34,13 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	// Create new server.
-	srv := blob.NewServer(new(BlobServiceImpl),
+	srv := blobservice.NewServer(new(BlobServiceImpl),
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
-		server.WithMiddleware(middleware.CommonMiddleware),
-		server.WithMiddleware(middleware.ServerMiddleware),
+		server.WithMiddleware(middleware2.CommonMiddleware),
+		server.WithMiddleware(middleware2.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)

@@ -1,2 +1,2 @@
 server:
-	kitex -service blob -module github.com/CyanAsterisk/FreeCar  ./../../idl/blob.thrift
+	kitex -service blob -module github.com/CyanAsterisk/FreeCar -use github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen  ./../../idl/blob.thrift

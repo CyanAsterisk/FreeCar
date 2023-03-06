@@ -4,8 +4,8 @@ package Api
 
 import (
 	"context"
+	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/limiter"
@@ -31,57 +31,57 @@ func rootMw() []app.HandlerFunc {
 
 func _createcarMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _getcarMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _submitprofileMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _clearprofileMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _tripMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _updatetripMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _gettripMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _gettripsMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
@@ -97,8 +97,8 @@ func _loginMw() []app.HandlerFunc {
 
 func _profileMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
@@ -114,8 +114,8 @@ func _clearprofilephotoMw() []app.HandlerFunc {
 
 func _photoMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
@@ -126,31 +126,31 @@ func _completeprofilephotoMw() []app.HandlerFunc {
 
 func _getcarsMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _upload_vatarMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _getuserinfoMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }
 
 func _updateuserinfoMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware2.Recovery(),
+		middleware2.JWTAuth(),
 	}
 }

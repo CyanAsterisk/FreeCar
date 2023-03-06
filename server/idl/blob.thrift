@@ -10,14 +10,6 @@ struct CreateBlobResponse {
     2: string upload_url
 }
 
-struct GetBlobRequest {
-    1: i64 id
-}
-
-struct GetBlobResponse {
-    1: binary data
-}
-
 struct GetBlobURLRequest {
     1: i64 id
     2: i32 timeout_sec
@@ -29,6 +21,5 @@ struct GetBlobURLResponse {
 
 service BlobService {
     CreateBlobResponse CreateBlob (1:CreateBlobRequest req)
-    GetBlobResponse GetBlob(1: GetBlobRequest req)
     GetBlobURLResponse GetBlobURL(1: GetBlobURLRequest req)
 }

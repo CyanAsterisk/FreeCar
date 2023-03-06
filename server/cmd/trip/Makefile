@@ -1,2 +1,2 @@
 server:
-	kitex -service trip -module github.com/CyanAsterisk/FreeCar  ./../../idl/trip.thrift
+	kitex -service trip -module github.com/CyanAsterisk/FreeCar -use github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen  ./../../idl/trip.thrift

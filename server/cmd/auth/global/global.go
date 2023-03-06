@@ -2,7 +2,7 @@ package global
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob/blobservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
 	"gorm.io/gorm"
 )
 

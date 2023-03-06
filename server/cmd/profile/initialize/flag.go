@@ -2,8 +2,7 @@ package initialize
 
 import (
 	"flag"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/tool"
 	"github.com/cloudwego/kitex/pkg/klog"

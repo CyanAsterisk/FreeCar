@@ -7,10 +7,10 @@ import (
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
-	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
-	"github.com/CyanAsterisk/FreeCar/shared/test"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
 
 func TestCarUpdate(t *testing.T) {

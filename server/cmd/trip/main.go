@@ -7,12 +7,12 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
-	trip "github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/profile"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
+	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -46,13 +46,13 @@ func main() {
 	}
 	impl.POIManager = &poi.Manager{}
 	// Create new server.
-	srv := trip.NewServer(impl,
+	srv := tripservice.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
-		server.WithMiddleware(middleware.CommonMiddleware),
-		server.WithMiddleware(middleware.ServerMiddleware),
+		server.WithMiddleware(middleware2.CommonMiddleware),
+		server.WithMiddleware(middleware2.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)

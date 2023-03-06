@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/kitex_gen/profile"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
-	mgutil "github.com/CyanAsterisk/FreeCar/shared/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

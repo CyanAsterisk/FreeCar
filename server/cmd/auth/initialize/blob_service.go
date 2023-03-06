@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/kitex_gen/blob/blobservice"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
+	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -59,8 +59,8 @@ func InitBlob() {
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
-		client.WithMiddleware(middleware.CommonMiddleware),
-		client.WithInstanceMW(middleware.ClientMiddleware),
+		client.WithMiddleware(middleware2.CommonMiddleware),
+		client.WithInstanceMW(middleware2.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.BlobSrvInfo.Name}),
 	)

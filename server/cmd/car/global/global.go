@@ -2,9 +2,9 @@ package global
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/car/carservice"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/mq"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

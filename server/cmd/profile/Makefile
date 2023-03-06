@@ -1,2 +1,2 @@
 server:
-	kitex -service profile -module github.com/CyanAsterisk/FreeCar  ./../../idl/profile.thrift
+	kitex -service profile -module github.com/CyanAsterisk/FreeCar -use github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen  ./../../idl/profile.thrift

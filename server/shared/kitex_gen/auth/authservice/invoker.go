@@ -3,7 +3,7 @@
 package authservice
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	auth "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	server "github.com/cloudwego/kitex/server"
 )
 

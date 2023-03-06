@@ -1,6 +1,6 @@
 # eg. make service=video generate
 generate:
-	kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/$(service).thrift
+	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/$(service).thrift
 
 all:
 	make service=auth generate

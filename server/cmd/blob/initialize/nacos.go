@@ -1,9 +1,10 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
 	"strconv"
+
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/global"
 	"github.com/bwmarrin/snowflake"

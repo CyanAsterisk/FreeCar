@@ -135,15 +135,15 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return nil, status.Err(codes.NotFound, "")
 	}
 
-	br, err := global.BlobClient.GetBlob(ctx, &blob.GetBlobRequest{
-		Id: pr.PhotoBlobID,
-	})
+	// br, err := global.BlobClient.GetBlob(ctx, &blob.GetBlobRequest{
+	// 	Id: pr.PhotoBlobID,
+	// })
 	if err != nil {
 		klog.Error("cannot get blob", err)
 		return nil, status.Err(codes.Aborted, "")
 	}
 	// TODO: Auto get license info
-	klog.Info("got profile photo", "size", len(br.Data))
+	// klog.Info("got profile photo", "size", len(br.Data))
 	return &profile.Identity{
 		LicNumber:       consts.DefaultLicNumber,
 		Name:            consts.DefaultName,

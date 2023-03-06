@@ -3,7 +3,7 @@
 package profileservice
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	profile "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	server "github.com/cloudwego/kitex/server"
 )
 

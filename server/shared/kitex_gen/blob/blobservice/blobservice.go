@@ -4,7 +4,7 @@ package blobservice
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	blob "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )
@@ -20,7 +20,6 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	handlerType := (*blob.BlobService)(nil)
 	methods := map[string]kitex.MethodInfo{
 		"CreateBlob": kitex.NewMethodInfo(createBlobHandler, newBlobServiceCreateBlobArgs, newBlobServiceCreateBlobResult, false),
-		"GetBlob":    kitex.NewMethodInfo(getBlobHandler, newBlobServiceGetBlobArgs, newBlobServiceGetBlobResult, false),
 		"GetBlobURL": kitex.NewMethodInfo(getBlobURLHandler, newBlobServiceGetBlobURLArgs, newBlobServiceGetBlobURLResult, false),
 	}
 	extra := map[string]interface{}{
@@ -53,24 +52,6 @@ func newBlobServiceCreateBlobArgs() interface{} {
 
 func newBlobServiceCreateBlobResult() interface{} {
 	return blob.NewBlobServiceCreateBlobResult()
-}
-
-func getBlobHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*blob.BlobServiceGetBlobArgs)
-	realResult := result.(*blob.BlobServiceGetBlobResult)
-	success, err := handler.(blob.BlobService).GetBlob(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newBlobServiceGetBlobArgs() interface{} {
-	return blob.NewBlobServiceGetBlobArgs()
-}
-
-func newBlobServiceGetBlobResult() interface{} {
-	return blob.NewBlobServiceGetBlobResult()
 }
 
 func getBlobURLHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -106,16 +87,6 @@ func (p *kClient) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest) (
 	_args.Req = req
 	var _result blob.BlobServiceCreateBlobResult
 	if err = p.c.Call(ctx, "CreateBlob", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) GetBlob(ctx context.Context, req *blob.GetBlobRequest) (r *blob.GetBlobResponse, err error) {
-	var _args blob.BlobServiceGetBlobArgs
-	_args.Req = req
-	var _result blob.BlobServiceGetBlobResult
-	if err = p.c.Call(ctx, "GetBlob", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

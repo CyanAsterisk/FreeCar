@@ -4,7 +4,7 @@ package carservice
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	car "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )

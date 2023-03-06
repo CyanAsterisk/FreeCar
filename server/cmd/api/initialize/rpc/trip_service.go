@@ -4,7 +4,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
-	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
@@ -58,8 +58,8 @@ func initTrip() {
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
-		client.WithMiddleware(middleware2.CommonMiddleware),
-		client.WithInstanceMW(middleware2.ClientMiddleware),
+		client.WithMiddleware(middleware.CommonMiddleware),
+		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.TripSrvInfo.Name}),
 	)

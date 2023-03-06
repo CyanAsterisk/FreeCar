@@ -4,7 +4,7 @@ package tripservice
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	trip "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )

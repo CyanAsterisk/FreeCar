@@ -4,7 +4,7 @@ package blobservice
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	blob "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )
@@ -12,7 +12,6 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	CreateBlob(ctx context.Context, req *blob.CreateBlobRequest, callOptions ...callopt.Option) (r *blob.CreateBlobResponse, err error)
-	GetBlob(ctx context.Context, req *blob.GetBlobRequest, callOptions ...callopt.Option) (r *blob.GetBlobResponse, err error)
 	GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error)
 }
 
@@ -48,11 +47,6 @@ type kBlobServiceClient struct {
 func (p *kBlobServiceClient) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest, callOptions ...callopt.Option) (r *blob.CreateBlobResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CreateBlob(ctx, req)
-}
-
-func (p *kBlobServiceClient) GetBlob(ctx context.Context, req *blob.GetBlobRequest, callOptions ...callopt.Option) (r *blob.GetBlobResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetBlob(ctx, req)
 }
 
 func (p *kBlobServiceClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error) {

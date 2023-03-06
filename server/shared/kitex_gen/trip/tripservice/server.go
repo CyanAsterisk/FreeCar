@@ -2,7 +2,7 @@
 package tripservice
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	trip "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	server "github.com/cloudwego/kitex/server"
 )
 

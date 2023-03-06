@@ -3,7 +3,7 @@
 package carservice
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	car "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	server "github.com/cloudwego/kitex/server"
 )
 

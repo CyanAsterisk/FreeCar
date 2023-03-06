@@ -12,7 +12,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
-	middleware2 "github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -51,8 +51,8 @@ func main() {
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
 		server.WithLimit(&limit.Option{MaxConnections: 2000, MaxQPS: 500}),
-		server.WithMiddleware(middleware2.CommonMiddleware),
-		server.WithMiddleware(middleware2.ServerMiddleware),
+		server.WithMiddleware(middleware.CommonMiddleware),
+		server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
 	)

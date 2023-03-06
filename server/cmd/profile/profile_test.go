@@ -209,10 +209,6 @@ func (b *blobClient) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest
 	}, nil
 }
 
-func (b *blobClient) GetBlob(ctx context.Context, req *blob.GetBlobRequest, callOptions ...callopt.Option) (r *blob.GetBlobResponse, err error) {
-	return &blob.GetBlobResponse{}, nil
-}
-
 func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error) {
 	return &blob.GetBlobURLResponse{
 		Url: "get_url for " + strconv.FormatInt(req.Id, 10),

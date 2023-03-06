@@ -2,7 +2,7 @@
 package blobservice
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	blob "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	server "github.com/cloudwego/kitex/server"
 )
 

@@ -4,7 +4,7 @@ package authservice
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	auth "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )

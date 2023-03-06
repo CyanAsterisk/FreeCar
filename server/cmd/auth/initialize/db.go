@@ -2,9 +2,8 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"time"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/global"
 	"github.com/cloudwego/kitex/pkg/klog"

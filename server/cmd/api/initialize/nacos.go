@@ -1,11 +1,11 @@
 package initialize
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"net"
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/kitex_gen/car/carservice"
-	"github.com/CyanAsterisk/FreeCar/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 )
 
 // Manager defines a car manager.

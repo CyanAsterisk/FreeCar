@@ -1,11 +1,10 @@
 package initialize
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"os"
 	"path"
 	"time"
-
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"

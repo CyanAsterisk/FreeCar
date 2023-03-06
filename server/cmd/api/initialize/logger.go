@@ -1,11 +1,11 @@
 package initialize
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"os"
 	"path"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/shared/consts"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"

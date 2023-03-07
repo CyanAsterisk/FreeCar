@@ -164,7 +164,7 @@ hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cm
 ##### 更新
 
 ```shell
-# 如果更新的是proto文件
+# 如果更新的是proto文件（此项目的api是proto文件，应该使用这条命令）
 hz update -I -idl ./../../idl/api.proto
 
 # 如果更新的是thrift文件

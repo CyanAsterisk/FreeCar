@@ -7,11 +7,15 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
-	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )
+
+type CustomClaims struct {
+	ID int64
+	jwt.StandardClaims
+}
 
 var (
 	TokenExpired     = errors.New("token is expired")
@@ -59,14 +63,14 @@ func NewJWT() *JWT {
 }
 
 // CreateToken to create a token
-func (j *JWT) CreateToken(claims models.CustomClaims) (string, error) {
+func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
 // ParseToken to parse a token
-func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
+func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
@@ -84,7 +88,7 @@ func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 		}
 	}
 	if token != nil {
-		if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
+		if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
 		return nil, TokenInvalid
@@ -99,13 +103,13 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	jwt.TimeFunc = func() time.Time {
 		return time.Unix(0, 0)
 	}
-	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
 		return "", err
 	}
-	if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		jwt.TimeFunc = time.Now
 		claims.StandardClaims.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
 		return j.CreateToken(*claims)

@@ -171,7 +171,7 @@ hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cm
 hz update -I -idl ./../../idl/api.proto
 
 # If the update is a Thrift file
-hz update -I -idl ./../../idl/api.thrift
+hz update -idl ./../../idl/api.thrift
 ```
 
 Note:

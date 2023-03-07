@@ -3,6 +3,3 @@ init:
 
 update-proto:
 	hz update -I -idl ../../idl/api.proto
-
-update-thrift:
-	hz update -idl ../../idl/api.proto

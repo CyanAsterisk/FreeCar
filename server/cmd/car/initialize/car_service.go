@@ -19,7 +19,7 @@ import (
 )
 
 // InitCar to init car service
-func InitCar() {
+func InitCar() *carservice.Client {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
@@ -68,5 +68,5 @@ func InitCar() {
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	config.CarClient = c
+	return &c
 }

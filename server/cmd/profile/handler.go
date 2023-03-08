@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg"
@@ -11,7 +12,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -48,8 +48,8 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 	aid := id.AccountID(req.AccountId)
 	pv, err := s.RedisManager.GetProfile(ctx, aid)
 	if err != nil {
-		// TODO Errno
-		return nil, err
+		klog.Error("get profile error", err)
+		return &profile.Profile{}, errno.ProfileSrvErr.WithMessage("get profile error")
 	}
 	if pv == nil {
 		pr, err := s.MongoManager.GetProfile(ctx, aid)
@@ -58,14 +58,15 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 			if code == codes.NotFound {
 				return &profile.Profile{}, nil
 			}
-			return nil, status.Err(code, "")
+			klog.Error("get profile error", err)
+			return nil, errno.ProfileSrvErr.WithMessage("get profile error")
 		}
 		if pr.Profile == nil {
 			return &profile.Profile{}, nil
 		}
 		if err = s.RedisManager.InsertProfile(ctx, id.AccountID(pr.AccountID), pr.Profile); err != nil {
-			// TODO Errno & Logic
-			return nil, err
+			klog.Error("get profile error", err)
+			return &profile.Profile{}, errno.ProfileSrvErr.WithMessage("get profile error")
 		}
 		return pr.Profile, nil
 	}
@@ -82,7 +83,7 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
 	if err != nil {
 		klog.Error("cannot update profile", err)
-		return nil, status.Err(codes.Internal, "")
+		return nil, errno.ProfileSrvErr.WithMessage("submit profile error")
 	}
 	go func() {
 		time.Sleep(3 * time.Second)
@@ -105,12 +106,12 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_VERIFIED, p)
 	if err != nil {
 		klog.Error("cannot update profile", err)
-		return nil, status.Err(codes.Internal, "")
+		return nil, errno.ProfileSrvErr.WithMessage("clear profile error")
 	}
 	err = s.RedisManager.RemoveProfile(ctx, aid)
 	if err != nil {
-		// TODO Errno
-		return nil, err
+		klog.Error("cannot remove profile in redis", err)
+		return nil, errno.ProfileSrvErr.WithMessage("clear profile error")
 	}
 	return p, nil
 }
@@ -120,11 +121,13 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
-		return nil, status.Err(s.logAndConvertProfileErr(err), "")
+		klog.Error("cannot get profile", err)
+		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
 	}
 
 	if pr.PhotoBlobID == 0 {
-		return nil, status.Err(codes.NotFound, "")
+		klog.Warn("photo blob id = 0")
+		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
 	}
 
 	br, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
@@ -133,7 +136,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 	})
 	if err != nil {
 		klog.Error("cannot get blob", err)
-		return nil, status.Err(codes.Internal, "")
+		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
 	}
 
 	return &profile.GetProfilePhotoResponse{
@@ -150,13 +153,13 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 	})
 	if err != nil {
 		klog.Error("cannot create blob", err)
-		return nil, status.Err(codes.Aborted, "")
+		return nil, errno.ProfileSrvErr.WithMessage("create profile photo error")
 	}
 
 	err = s.MongoManager.UpdateProfilePhoto(ctx, id.AccountID(req.AccountId), id.BlobID(br.Id))
 	if err != nil {
 		klog.Error("cannot update profile photo", err)
-		return nil, status.Err(codes.Aborted, "")
+		return nil, errno.ProfileSrvErr.WithMessage("create profile photo error")
 	}
 
 	return &profile.CreateProfilePhotoResponse{
@@ -169,11 +172,13 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
-		return nil, status.Err(s.logAndConvertProfileErr(err), "")
+		klog.Error("get profile error", err)
+		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
 
 	if pr.PhotoBlobID == 0 {
-		return nil, status.Err(codes.NotFound, "")
+		klog.Warn("photo blob id = 0")
+		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
 
 	// br, err := global.BlobClient.GetBlob(ctx, &blob.GetBlobRequest{
@@ -181,7 +186,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 	// })
 	if err != nil {
 		klog.Error("cannot get blob", err)
-		return nil, status.Err(codes.Aborted, "")
+		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
 	// TODO: Auto get license info
 	// klog.Info("got profile photo", "size", len(br.Data))
@@ -199,7 +204,7 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, 0)
 	if err != nil {
 		klog.Error("cannot clear profile photo", err)
-		return nil, status.Err(codes.Internal, "")
+		return nil, errno.ProfileSrvErr.WithMessage("clear profile photo error")
 	}
 	return &profile.ClearProfilePhotoResponse{}, nil
 }

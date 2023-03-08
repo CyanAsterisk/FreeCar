@@ -16,7 +16,7 @@ import (
 )
 
 // InitDB to init database
-func InitDB() {
+func InitDB() *gorm.DB {
 	c := config.GlobalServerConfig.MysqlInfo
 	dsn := fmt.Sprintf(consts.MySqlDSN, c.User, c.Password, c.Host, c.Port, c.Name)
 	newLogger := logger.New(
@@ -28,9 +28,7 @@ func InitDB() {
 		},
 	)
 
-	// global mode
-	var err error
-	config.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
@@ -39,7 +37,8 @@ func InitDB() {
 	if err != nil {
 		klog.Fatalf("init gorm failed: %s", err.Error())
 	}
-	if err := config.DB.Use(tracing.NewPlugin()); err != nil {
+	if err := db.Use(tracing.NewPlugin()); err != nil {
 		klog.Fatalf("use tracing plugin failed: %s", err.Error())
 	}
+	return db
 }

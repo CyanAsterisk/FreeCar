@@ -8,7 +8,6 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
-	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
@@ -38,7 +37,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	}
 	// create a JWT
 	j := middleware.NewJWT()
-	claims := models.CustomClaims{
+	claims := middleware.CustomClaims{
 		ID: resp.AccountId,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),

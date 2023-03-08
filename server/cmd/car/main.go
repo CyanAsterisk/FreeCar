@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq/amqpclt"
 	"net"
 	"strconv"
 
@@ -28,10 +30,10 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	initialize.InitDB()
-	initialize.InitMq()
-	initialize.InitTrip()
-	initialize.InitCar()
+	col := initialize.InitDB()
+	amqpC := initialize.InitMq()
+	tripClient := initialize.InitTrip()
+	carClient := initialize.InitCar()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -39,8 +41,22 @@ func main() {
 	)
 	defer p.Shutdown(context.Background())
 
+	mqInfo := config.GlobalServerConfig.RabbitMqInfo
+	publisher, err := amqpclt.NewPublisher(amqpC, mqInfo.Exchange)
+	if err != nil {
+		klog.Fatal("cannot create publisher")
+	}
+
+	subscriber, err := amqpclt.NewSubscriber(amqpC, mqInfo.Exchange)
+	if err != nil {
+		klog.Fatal("cannot create subscriber")
+	}
+
 	// Create new server.
-	srv := carservice.NewServer(new(CarServiceImpl),
+	srv := carservice.NewServer(&CarServiceImpl{
+		pub:   publisher,
+		mongo: mongoPkg.NewManager(col),
+	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
@@ -52,22 +68,22 @@ func main() {
 	)
 
 	h := hzserver.Default(hzserver.WithHostPorts(config.GlobalServerConfig.WsAddr))
-	h.GET("/ws", ws.Handler(config.Subscriber))
+	h.GET("/ws", ws.Handler(subscriber))
 	h.NoHijackConnPool = true
 	go func() {
 		klog.Infof("HTTP server started. addr: %s", config.GlobalServerConfig.WsAddr)
 		h.Spin()
 	}()
 
-	go trip.RunUpdater(config.Subscriber, config.TripClient)
+	go trip.RunUpdater(subscriber, *tripClient)
 
 	simController := sim.Controller{
-		CarService: config.CarClient,
-		Subscriber: config.Subscriber,
+		CarService: *carClient,
+		Subscriber: subscriber,
 	}
 	go simController.RunSimulations(context.Background())
 
-	err := srv.Run()
+	err = srv.Run()
 	if err != nil {
 		klog.Fatal(err)
 	}

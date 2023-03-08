@@ -1,10 +1,9 @@
-package dao
+package mongo
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -31,8 +30,17 @@ type CarRecord struct {
 	Car            *carthrf.Car `bson:"car"`
 }
 
+type Manager struct {
+	col *mongo.Collection
+}
+
+// NewManager creates a mongo manager.
+func NewManager(col *mongo.Collection) *Manager {
+	return &Manager{col: col}
+}
+
 // CreateCar creates a car.
-func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
+func (m *Manager) CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 	cr := &CarRecord{
 		Car: &carthrf.Car{
 			Position: &carthrf.Location{
@@ -45,7 +53,7 @@ func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 		},
 	}
 	cr.ID = mgutil.NewObjID()
-	_, err := config.Col.InsertOne(c, cr)
+	_, err := m.col.InsertOne(c, cr)
 	if err != nil {
 		return nil, err
 	}
@@ -53,21 +61,21 @@ func CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 }
 
 // GetCar gets a car.
-func GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
+func (m *Manager) GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
 	}
 
-	return convertSingleResult(config.Col.FindOne(c, bson.M{
+	return convertSingleResult(m.col.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
 	}))
 }
 
 // GetCars gets cars.
-func GetCars(c context.Context) ([]*CarRecord, error) {
+func (m *Manager) GetCars(c context.Context) ([]*CarRecord, error) {
 	filter := bson.M{}
-	res, err := config.Col.Find(c, filter, options.Find())
+	res, err := m.col.Find(c, filter, options.Find())
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +106,7 @@ type CarUpdate struct {
 // UpdateCar updates a car. If status is specified,
 // it updates the car only when existing record matches the
 // status specified.
-func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
+func (m *Manager) UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
@@ -127,7 +135,7 @@ func UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update 
 	if update.Power > 0 {
 		u[powerField] = update.Power
 	}
-	res := config.Col.FindOneAndUpdate(c, filter, mgutil.Set(u),
+	res := m.col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)

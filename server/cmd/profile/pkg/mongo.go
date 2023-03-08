@@ -1,4 +1,4 @@
-package dao
+package pkg
 
 import (
 	"context"
@@ -11,6 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type MongoManager struct{}
 
 const (
 	accountIDField      = "accountid"
@@ -27,7 +29,7 @@ type ProfileRecord struct {
 }
 
 // GetProfile gets profile for an account.
-func GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
+func (m *MongoManager) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
 	res := config.DB.FindOne(c, byAccountID(aid))
 	if err := res.Err(); err != nil {
 		return nil, err
@@ -41,7 +43,7 @@ func GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
 }
 
 // UpdateProfile updates profile for an account.
-func UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
+func (m *MongoManager) UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
 	filter := bson.M{
 		identityStatusField: prevState,
 	}
@@ -57,7 +59,7 @@ func UpdateProfile(c context.Context, aid id.AccountID, prevState profile.Identi
 }
 
 // UpdateProfilePhoto updates profile photo blob id.
-func UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
+func (m *MongoManager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
 	_, err := config.DB.UpdateOne(c, bson.M{
 		accountIDField: aid.Int64(),
 	}, mgutil.Set(bson.M{

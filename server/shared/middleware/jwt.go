@@ -28,7 +28,7 @@ func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		token := c.Request.Header.Get("authorization")
 		if token == "" {
-			errno.SendResponse(c, errno.AuthorizeFail, nil)
+			errno.SendResponse(c, errno.AuthorizeFail)
 			c.Abort()
 			return
 		}
@@ -38,11 +38,11 @@ func JWTAuth() app.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				errno.SendResponse(c, errno.AuthorizeFail, nil)
+				errno.SendResponse(c, errno.AuthorizeFail)
 				c.Abort()
 				return
 			}
-			errno.SendResponse(c, errno.AuthorizeFail, nil)
+			errno.SendResponse(c, errno.AuthorizeFail)
 			c.Abort()
 			return
 		}

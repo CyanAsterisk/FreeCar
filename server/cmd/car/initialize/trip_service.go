@@ -19,7 +19,7 @@ import (
 )
 
 // InitTrip to init trip service
-func InitTrip() {
+func InitTrip() *tripservice.Client {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
@@ -68,5 +68,5 @@ func InitTrip() {
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	config.TripClient = c
+	return &c
 }

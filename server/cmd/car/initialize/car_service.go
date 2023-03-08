@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -19,18 +19,18 @@ import (
 )
 
 // InitCar to init car service
-func InitCar() {
+func InitCar() *carservice.Client {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
 		{
-			IpAddr: global.NacosConfig.Host,
-			Port:   global.NacosConfig.Port,
+			IpAddr: config.GlobalNacosConfig.Host,
+			Port:   config.GlobalNacosConfig.Port,
 		},
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.NacosConfig.Namespace,
+		NamespaceId:         config.GlobalNacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -49,24 +49,24 @@ func InitCar() {
 	}
 	// init OpenTelemetry
 	provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 
 	// create a new client
 	c, err := carservice.NewClient(
-		global.ServerConfig.Name,
-		client.WithResolver(r), // service discovery
+		config.GlobalServerConfig.Name,
+		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	global.CarClient = c
+	return &c
 }

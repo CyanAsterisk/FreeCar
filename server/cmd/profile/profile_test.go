@@ -6,8 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/dao"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
@@ -71,7 +70,7 @@ func TestProfileLifeCycle(t *testing.T) {
 					},
 					IdentityStatus: profile.IdentityStatus_VERIFIED,
 				}
-				err := dao.UpdateProfile(c, aid, profile.IdentityStatus_PENDING, p)
+				err := s.UpdateProfile(c, aid, profile.IdentityStatus_PENDING, p)
 				if err != nil {
 					return nil, err
 				}
@@ -119,7 +118,7 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 	newDB(c, t)
 
 	aid := id.AccountID(123)
-	global.BlobClient = &blobClient{
+	config.BlobClient = &blobClient{
 		idForCreate: 123,
 	}
 
@@ -223,7 +222,7 @@ func newDB(c context.Context, t *testing.T) {
 	db := mc.Database("FreeCar")
 	test.SetupIndexes(c, db)
 
-	global.DB = db.Collection("profile")
+	config.DB = db.Collection("profile")
 }
 
 func TestMain(m *testing.M) {

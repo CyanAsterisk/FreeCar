@@ -4,18 +4,17 @@ package api
 
 import (
 	"context"
+	"time"
+
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
-	"time"
-
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/errno"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/global"
-	models "github.com/CyanAsterisk/FreeCar/server/cmd/api/model"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )
@@ -31,14 +30,14 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	// rpc to get accountID
-	resp, err := global.AuthClient.Login(ctx, &auth.LoginRequest{Code: req.Code})
+	resp, err := config.GlobalAuthClient.Login(ctx, &auth.LoginRequest{Code: req.Code})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
 	}
 	// create a JWT
 	j := middleware.NewJWT()
-	claims := models.CustomClaims{
+	claims := middleware.CustomClaims{
 		ID: resp.AccountId,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
@@ -67,7 +66,7 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.AuthClient.GetUser(ctx, &auth.GetUserRequest{AccontId: aid.(int64)})
+	resp, err := config.GlobalAuthClient.GetUser(ctx, &auth.GetUserRequest{AccontId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -96,7 +95,7 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	_, err = global.AuthClient.UpdateUser(ctx, &auth.UpdateUserRequest{
+	_, err = config.GlobalAuthClient.UpdateUser(ctx, &auth.UpdateUserRequest{
 		AccountId:   aid.(int64),
 		Username:    req.Username,
 		PhoneNumber: req.PhoneNumber,
@@ -118,7 +117,7 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.AuthClient.UploadAvatar(ctx, &auth.UploadAvatarRequset{AccountId: aid.(int64)})
+	resp, err := config.GlobalAuthClient.UploadAvatar(ctx, &auth.UploadAvatarRequset{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -142,7 +141,7 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.CarClient.CreateCar(ctx, &car.CreateCarRequest{
+	resp, err := config.GlobalCarClient.CreateCar(ctx, &car.CreateCarRequest{
 		AccountId: aid.(int64),
 		PlateNum:  req.PlateNum,
 	})
@@ -169,7 +168,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.CarClient.GetCar(ctx, &car.GetCarRequest{
+	resp, err := config.GlobalCarClient.GetCar(ctx, &car.GetCarRequest{
 		AccountId: aid.(int64),
 		Id:        req.Id,
 	})
@@ -188,7 +187,7 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.AuthorizeFail, nil)
 		return
 	}
-	resp, err := global.CarClient.GetCars(ctx, &car.GetCarsRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalCarClient.GetCars(ctx, &car.GetCarsRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -207,7 +206,7 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.GetProfile(ctx, &profile.GetProfileRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.GetProfile(ctx, &profile.GetProfileRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -232,7 +231,7 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.SubmitProfile(ctx, &profile.SubmitProfileRequest{
+	resp, err := config.GlobalProfileClient.SubmitProfile(ctx, &profile.SubmitProfileRequest{
 		AccountId: aid.(int64),
 		Identity: &profile.Identity{
 			LicNumber:       req.Identity.LicNumber,
@@ -255,13 +254,17 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.ClearProfileRequest
 	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.BindAndValidateFail, nil)
+		return
+	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
 		errno.SendResponse(c, errno.ParamErr, nil)
 		return
 	}
 
-	resp, err := global.ProfileClient.ClearProfile(ctx, &profile.ClearProfileRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.ClearProfile(ctx, &profile.ClearProfileRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -280,7 +283,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.GetProfilePhoto(ctx, &profile.GetProfilePhotoRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.GetProfilePhoto(ctx, &profile.GetProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -299,7 +302,7 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.CreateProfilePhoto(ctx, &profile.CreateProfilePhotoRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.CreateProfilePhoto(ctx, &profile.CreateProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -318,7 +321,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.CompleteProfilePhoto(ctx, &profile.CompleteProfilePhotoRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.CompleteProfilePhoto(ctx, &profile.CompleteProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -337,7 +340,7 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.ProfileClient.ClearProfilePhoto(ctx, &profile.ClearProfilePhotoRequest{AccountId: aid.(int64)})
+	resp, err := config.GlobalProfileClient.ClearProfilePhoto(ctx, &profile.ClearProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
 		errno.SendResponse(c, errno.RequestServerFail, nil)
 		return
@@ -362,7 +365,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.TripClient.CreateTrip(ctx, &trip.CreateTripRequest{
+	resp, err := config.GlobalTripClient.CreateTrip(ctx, &trip.CreateTripRequest{
 		Start: &trip.Location{
 			Latitude:  req.Start.Latitude,
 			Longitude: req.Start.Longitude,
@@ -391,7 +394,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 	}
 	req.Id = c.Param("id")
 
-	resp, err := global.TripClient.GetTrip(ctx, &trip.GetTripRequest{
+	resp, err := config.GlobalTripClient.GetTrip(ctx, &trip.GetTripRequest{
 		Id:        req.Id,
 		AccountId: aid.(int64),
 	})
@@ -419,7 +422,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := global.TripClient.GetTrips(ctx, &trip.GetTripsRequest{
+	resp, err := config.GlobalTripClient.GetTrips(ctx, &trip.GetTripsRequest{
 		Status:    trip.TripStatus(req.Status),
 		AccountId: aid.(int64),
 	})
@@ -448,7 +451,7 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	}
 	req.Id = c.Param(consts.ID)
 
-	resp, err := global.TripClient.UpdateTrip(ctx, &trip.UpdateTripRequest{
+	resp, err := config.GlobalTripClient.UpdateTrip(ctx, &trip.UpdateTripRequest{
 		Id: req.Id,
 		Current: &trip.Location{
 			Latitude:  req.Current.Latitude,

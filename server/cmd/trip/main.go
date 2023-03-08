@@ -5,11 +5,11 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/global"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/car"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/poi"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/tool/profile"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -29,8 +29,8 @@ func main() {
 	r, info := initialize.InitNacos(Port)
 	initialize.InitDB()
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
@@ -39,10 +39,10 @@ func main() {
 
 	impl := new(TripServiceImpl)
 	impl.CarManager = &car.Manager{
-		CarService: global.CarClient,
+		CarService: config.CarClient,
 	}
 	impl.ProfileManager = &profile.Manager{
-		ProfileService: global.ProfileClient,
+		ProfileService: config.ProfileClient,
 	}
 	impl.POIManager = &poi.Manager{}
 	// Create new server.
@@ -54,7 +54,7 @@ func main() {
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
 	err := srv.Run()

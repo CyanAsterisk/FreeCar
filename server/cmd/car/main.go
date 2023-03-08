@@ -2,18 +2,19 @@ package main
 
 import (
 	"context"
+	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq/amqpclt"
 	"net"
 	"strconv"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/sim"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/trip"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/ws"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
-
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/sim"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/trip"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/tool/ws"
 	hzserver "github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -29,19 +30,33 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	initialize.InitDB()
-	initialize.InitMq()
-	initialize.InitTrip()
-	initialize.InitCar()
+	col := initialize.InitDB()
+	amqpC := initialize.InitMq()
+	tripClient := initialize.InitTrip()
+	carClient := initialize.InitCar()
 	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(global.ServerConfig.Name),
-		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithServiceName(config.GlobalServerConfig.Name),
+		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
 
+	mqInfo := config.GlobalServerConfig.RabbitMqInfo
+	publisher, err := amqpclt.NewPublisher(amqpC, mqInfo.Exchange)
+	if err != nil {
+		klog.Fatal("cannot create publisher")
+	}
+
+	subscriber, err := amqpclt.NewSubscriber(amqpC, mqInfo.Exchange)
+	if err != nil {
+		klog.Fatal("cannot create subscriber")
+	}
+
 	// Create new server.
-	srv := carservice.NewServer(new(CarServiceImpl),
+	srv := carservice.NewServer(&CarServiceImpl{
+		pub:   publisher,
+		mongo: mongoPkg.NewManager(col),
+	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
@@ -49,26 +64,26 @@ func main() {
 		server.WithMiddleware(middleware.CommonMiddleware),
 		server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithSuite(tracing.NewServerSuite()),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.Name}),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
-	h := hzserver.Default(hzserver.WithHostPorts(global.ServerConfig.WsAddr))
-	h.GET("/ws", ws.Handler(global.Subscriber))
+	h := hzserver.Default(hzserver.WithHostPorts(config.GlobalServerConfig.WsAddr))
+	h.GET("/ws", ws.Handler(subscriber))
 	h.NoHijackConnPool = true
 	go func() {
-		klog.Infof("HTTP server started. addr: %s", global.ServerConfig.WsAddr)
+		klog.Infof("HTTP server started. addr: %s", config.GlobalServerConfig.WsAddr)
 		h.Spin()
 	}()
 
-	go trip.RunUpdater(global.Subscriber, global.TripClient)
+	go trip.RunUpdater(subscriber, *tripClient)
 
 	simController := sim.Controller{
-		CarService: global.CarClient,
-		Subscriber: global.Subscriber,
+		CarService: *carClient,
+		Subscriber: subscriber,
 	}
 	go simController.RunSimulations(context.Background())
 
-	err := srv.Run()
+	err = srv.Run()
 	if err != nil {
 		klog.Fatal(err)
 	}

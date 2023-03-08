@@ -3,13 +3,13 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"log"
 	"os"
 	"strconv"
 	"testing"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"

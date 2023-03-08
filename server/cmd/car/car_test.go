@@ -6,7 +6,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/global"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -16,9 +15,6 @@ import (
 func TestCarUpdate(t *testing.T) {
 	c := context.Background()
 	s := CarServiceImpl{}
-
-	newDB(c, t)
-	newMq(c, t)
 
 	carID := id.CarID("5f8132eb22814bf629489056")
 	mgutil.NewObjIDWithValue(carID)
@@ -138,21 +134,6 @@ func TestCarUpdate(t *testing.T) {
 			t.Errorf("%s: incorrect response; want: %s, got: %s", cc.name, cc.want, got)
 		}
 	}
-}
-
-func newDB(c context.Context, t *testing.T) {
-	mc, err := test.NewClient(c)
-	if err != nil {
-		t.Fatalf("cannot create new mongo client: %v", err)
-	}
-	db := mc.Database("FreeCar")
-	test.SetupIndexes(c, db)
-
-	global.Col = db.Collection("car")
-}
-
-func newMq(c context.Context, t *testing.T) {
-	global.Publisher = &testPublisher{}
 }
 
 func TestMain(m *testing.M) {

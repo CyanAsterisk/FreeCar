@@ -1,11 +1,12 @@
 package initialize
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"os"
 	"path"
+	"runtime"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -38,8 +39,12 @@ func InitLogger() {
 		Compress:   true, // Compress with gzip.
 	}
 
-	logger.SetOutput(lumberjackLogger)
-	logger.SetLevel(klog.LevelNotice)
+	if runtime.GOOS == "linux" {
+		logger.SetOutput(lumberjackLogger)
+		logger.SetLevel(klog.LevelWarn)
+	} else {
+		logger.SetLevel(klog.LevelDebug)
+	}
 
 	klog.SetLogger(logger)
 }

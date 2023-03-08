@@ -1,10 +1,16 @@
 package id
 
+import "strconv"
+
 // AccountID defines account id object.
 type AccountID int64
 
 func (a AccountID) Int64() int64 {
 	return int64(a)
+}
+
+func (a AccountID) String() string {
+	return strconv.FormatInt(int64(a), 10)
 }
 
 // TripID defines trip id object.

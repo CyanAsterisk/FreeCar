@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	carthrf "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -35,8 +36,8 @@ type Manager struct {
 }
 
 // NewManager creates a mongo manager.
-func NewManager(col *mongo.Collection) *Manager {
-	return &Manager{col: col}
+func NewManager(db *mongo.Database) *Manager {
+	return &Manager{col: db.Collection(consts.CarCollection)}
 }
 
 // CreateCar creates a car.

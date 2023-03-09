@@ -30,7 +30,7 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	col := initialize.InitDB()
+	db := initialize.InitDB()
 	amqpC := initialize.InitMq()
 	tripClient := initialize.InitTrip()
 	carClient := initialize.InitCar()
@@ -55,7 +55,7 @@ func main() {
 	// Create new server.
 	srv := carservice.NewServer(&CarServiceImpl{
 		pub:   publisher,
-		mongo: mongoPkg.NewManager(col),
+		mongo: mongoPkg.NewManager(db),
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),

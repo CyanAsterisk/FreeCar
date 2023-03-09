@@ -64,6 +64,10 @@ const (
 	MongoContainerIP   = "127.0.0.1"
 	MongoPort          = "0"
 
+	CarCollection     = "car"
+	ProfileCollection = "profile"
+	TripCollection    = "trip"
+
 	RedisProfileClientDB = 1
 	RedisBlobClientDB    = 2
 	RedisCarClientDB     = 3

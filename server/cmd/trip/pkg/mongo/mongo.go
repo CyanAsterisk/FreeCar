@@ -1,10 +1,10 @@
-package dao
+package mongo
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -26,8 +26,17 @@ type TripRecord struct {
 	Trip                  *trip.Trip `bson:"trip"`
 }
 
+type Manager struct {
+	col *mongo.Collection
+}
+
+// NewManager creates a mongo manager.
+func NewManager(db *mongo.Database) *Manager {
+	return &Manager{col: db.Collection(consts.TripCollection)}
+}
+
 // CreateTrip creates a trip.
-func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
+func (m *Manager) CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 	r := &TripRecord{
 		Trip: trip,
 	}
@@ -35,7 +44,7 @@ func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 	r.ID = mgutil.NewObjID()
 	r.UpdatedAt = mgutil.UpdatedAt()
 
-	_, err := config.DB.InsertOne(c, r)
+	_, err := m.col.InsertOne(c, r)
 	if err != nil {
 		return nil, err
 	}
@@ -43,12 +52,12 @@ func CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
 }
 
 // GetTrip gets a trip.
-func GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*TripRecord, error) {
+func (m *Manager) GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*TripRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id :%v", err)
 	}
-	res := config.DB.FindOne(c, bson.M{
+	res := m.col.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
 		accountIDField:     accountID,
 	})
@@ -67,7 +76,7 @@ func GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*TripReco
 
 // GetTrips gets trips for the account by status.
 // If status is not specified, gets all trips for the account.
-func GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*TripRecord, error) {
+func (m *Manager) GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*TripRecord, error) {
 	filter := bson.M{
 		accountIDField: accountID.Int64(),
 	}
@@ -75,7 +84,7 @@ func GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus)
 		filter[statusField] = status
 	}
 
-	res, err := config.DB.Find(c, filter)
+	res, err := m.col.Find(c, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -93,14 +102,14 @@ func GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus)
 }
 
 // UpdateTrip updates a trip.
-func UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error {
+func (m *Manager) UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error {
 	objID, err := objid.FromID(tid)
 	if err != nil {
 		return fmt.Errorf("invalid id: %v", err)
 	}
 
 	newUpdatedAt := mgutil.UpdatedAt()
-	res, err := config.DB.UpdateOne(c, bson.M{
+	res, err := m.col.UpdateOne(c, bson.M{
 		mgutil.IDFieldName:        objID,
 		accountIDField:            aid.Int64(),
 		mgutil.UpdatedAtFieldName: updatedAt,

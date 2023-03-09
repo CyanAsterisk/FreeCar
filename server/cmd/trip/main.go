@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -27,7 +28,7 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	initialize.InitDB()
+	db := initialize.InitDB()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -45,6 +46,8 @@ func main() {
 		ProfileService: config.ProfileClient,
 	}
 	impl.POIManager = &poi.Manager{}
+
+	impl.MongoManager = mongo.NewManager(db)
 	// Create new server.
 	srv := tripservice.NewServer(impl,
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),

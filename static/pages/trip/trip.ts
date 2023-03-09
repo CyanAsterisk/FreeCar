@@ -40,7 +40,7 @@ Page({
         title: '',
       })
       const resp = await TripService.getTrips({status:api.TripStatus.FINISHED})
-      if (resp.code!= 10000){
+      if (resp.code!= 0){
          wx.hideLoading()
          wx.showToast({
           title: "获取行程记录失败",
@@ -66,7 +66,7 @@ Page({
         t.duration = `${dur.hh}时${dur.mm}分`
 
         const resp = await CarService.getCar({id:trip.trip!.carId!})
-        if (resp.code!= 10000){
+        if (resp.code!= 0){
           wx.hideLoading()
           wx.showToast({
            title: "获取车辆信息失败",

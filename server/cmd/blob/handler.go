@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"time"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/minio"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/redis"
@@ -14,8 +14,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 )
 
 // BlobServiceImpl implements the last service interface defined in the IDL.
@@ -38,11 +36,13 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 
 	err = s.mysqlManager.CreateBlobRecord(&br)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		klog.Error("create blob record err", err)
+		return nil, errno.BlobSrvErr
 	}
-	url, err := s.minioManager.PutObjectURL(ctx, http.MethodPut, br.Path, time.Duration(req.UploadUrlTimeoutSec)*time.Second)
+	url, err := s.minioManager.PutObjectURL(ctx, config.GlobalServerConfig.MinioInfo.Bucket, br.Path, time.Duration(req.UploadUrlTimeoutSec)*time.Second)
 	if err != nil {
-		return nil, status.Errorf(codes.Aborted, "cannot sign url: %v", err)
+		klog.Error("presigned put object url err", err)
+		return nil, errno.BlobSrvErr
 	}
 	return &blob.CreateBlobResponse{
 		Id:        br.ID,
@@ -69,9 +69,10 @@ func (s *BlobServiceImpl) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRe
 			}
 		}()
 	}
-	url, err := s.minioManager.GetObjectURL(ctx, http.MethodGet, br.Path, time.Duration(req.TimeoutSec)*time.Second)
+	url, err := s.minioManager.GetObjectURL(ctx, config.GlobalServerConfig.MinioInfo.Bucket, br.Path, time.Duration(req.TimeoutSec)*time.Second)
 	if err != nil {
-		return nil, status.Errorf(codes.Aborted, "cannot sigh url: %v", err)
+		klog.Error("cannot get object url", err)
+		return nil, errno.BlobSrvErr
 	}
 
 	return &blob.GetBlobURLResponse{Url: url}, nil

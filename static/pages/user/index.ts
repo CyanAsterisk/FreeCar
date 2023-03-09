@@ -19,7 +19,7 @@ Page({
   },
 	async onLoad() {
     let resp = await AuthService.getUserInfo()
-    if (resp.code != 10000){
+    if (resp.code !== 0){
       wx.showToast({
         title:"获取用户信息失败",
         icon: "none",

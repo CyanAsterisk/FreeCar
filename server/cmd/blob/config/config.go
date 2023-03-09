@@ -42,5 +42,5 @@ type ServerConfig struct {
 	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
 	RedisInfo RedisConfig `mapstructure:"redis" json:"redis"`
 	OtelInfo  OtelConfig  `mapstructure:"otel" json:"otel"`
-	MinioInfo MinioConfig `mapstructure:"minio_config" json:"minio_config"`
+	MinioInfo MinioConfig `mapstructure:"minio" json:"minio"`
 }

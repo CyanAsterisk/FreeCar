@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/mysql"
@@ -38,6 +39,14 @@ func InitDB() {
 	})
 	if err != nil {
 		klog.Fatalf("init gorm failed: %s", err.Error())
+	}
+
+	m := config.DB.Migrator()
+	if !m.HasTable(&model.User{}) {
+		err = m.CreateTable(&model.User{})
+		if err != nil {
+			klog.Fatalf("create table err", err.Error())
+		}
 	}
 	if err := config.DB.Use(tracing.NewPlugin()); err != nil {
 		klog.Fatalf("use tracing plugin failed: %s", err.Error())

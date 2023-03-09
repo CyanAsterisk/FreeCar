@@ -15,19 +15,20 @@ const (
 	Err_BadRequest         Err = 10000
 	Err_ParamsErr          Err = 10001
 	Err_AuthorizeFail      Err = 10002
-	Err_RPCAuthSrvErr      Err = 20000
-	Err_AuthSrvErr         Err = 20001
-	Err_RPCBlobSrvErr      Err = 30000
-	Err_BlobSrvErr         Err = 30001
-	Err_RPCCarSrvErr       Err = 40000
-	Err_CarSrvErr          Err = 40001
-	Err_RPCProfileSrvErr   Err = 50000
-	Err_ProfileSrvErr      Err = 50001
-	Err_RPCTripSrvErr      Err = 60000
-	Err_TripSrvErr         Err = 60001
-	Err_RecordNotFound     Err = 70000
-	Err_RecordAlreadyExist Err = 70001
-	Err_DirtyData          Err = 70003
+	Err_ServiceErr         Err = 20000
+	Err_RPCAuthSrvErr      Err = 30000
+	Err_AuthSrvErr         Err = 30001
+	Err_RPCBlobSrvErr      Err = 40000
+	Err_BlobSrvErr         Err = 40001
+	Err_RPCCarSrvErr       Err = 50000
+	Err_CarSrvErr          Err = 50001
+	Err_RPCProfileSrvErr   Err = 60000
+	Err_ProfileSrvErr      Err = 60001
+	Err_RPCTripSrvErr      Err = 70000
+	Err_TripSrvErr         Err = 70001
+	Err_RecordNotFound     Err = 80000
+	Err_RecordAlreadyExist Err = 80001
+	Err_DirtyData          Err = 80003
 )
 
 func (p Err) String() string {
@@ -40,6 +41,8 @@ func (p Err) String() string {
 		return "ParamsErr"
 	case Err_AuthorizeFail:
 		return "AuthorizeFail"
+	case Err_ServiceErr:
+		return "ServiceErr"
 	case Err_RPCAuthSrvErr:
 		return "RPCAuthSrvErr"
 	case Err_AuthSrvErr:
@@ -80,6 +83,8 @@ func ErrFromString(s string) (Err, error) {
 		return Err_ParamsErr, nil
 	case "AuthorizeFail":
 		return Err_AuthorizeFail, nil
+	case "ServiceErr":
+		return Err_ServiceErr, nil
 	case "RPCAuthSrvErr":
 		return Err_RPCAuthSrvErr, nil
 	case "AuthSrvErr":

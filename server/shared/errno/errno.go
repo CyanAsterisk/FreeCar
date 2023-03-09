@@ -41,6 +41,7 @@ var (
 	BadRequest         = NewErrNo(int64(errno.Err_BadRequest), "bad request")
 	ParamsErr          = NewErrNo(int64(errno.Err_ParamsErr), "params error")
 	AuthorizeFail      = NewErrNo(int64(errno.Err_AuthorizeFail), "authorize failed")
+	ServiceErr         = NewErrNo(int64(errno.Err_ServiceErr), "service error")
 	RPCAuthSrvErr      = NewErrNo(int64(errno.Err_RPCAuthSrvErr), "rpc auth service error")
 	AuthSrvErr         = NewErrNo(int64(errno.Err_AuthSrvErr), "auth service error")
 	RPCBlobSrvErr      = NewErrNo(int64(errno.Err_RPCBlobSrvErr), "rpc blob service error")
@@ -57,6 +58,10 @@ var (
 )
 
 // SendResponse pack response
-func SendResponse(c *app.RequestContext, data interface{}) {
-	c.JSON(consts.StatusOK, data)
+func SendResponse(c *app.RequestContext, err ErrNo, data interface{}) {
+	c.JSON(consts.StatusOK, Response{
+		Code:    err.ErrCode,
+		Message: err.ErrMsg,
+		Data:    data,
+	})
 }

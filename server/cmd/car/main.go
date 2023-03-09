@@ -2,13 +2,14 @@ package main
 
 import (
 	"context"
-	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq/amqpclt"
 	"net"
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/initialize"
+	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq/amqpclt"
+	redisPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/sim"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/trip"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/ws"
@@ -30,7 +31,8 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	col := initialize.InitDB()
+	db := initialize.InitDB()
+	redisClient := initialize.InitRedis()
 	amqpC := initialize.InitMq()
 	tripClient := initialize.InitTrip()
 	carClient := initialize.InitCar()
@@ -54,8 +56,9 @@ func main() {
 
 	// Create new server.
 	srv := carservice.NewServer(&CarServiceImpl{
-		pub:   publisher,
-		mongo: mongoPkg.NewManager(col),
+		Publisher:    publisher,
+		MongoManager: mongoPkg.NewManager(db),
+		RedisManager: redisPkg.NewManager(redisClient),
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),

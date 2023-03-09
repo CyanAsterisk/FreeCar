@@ -19,10 +19,10 @@ var mongoURI string
 
 // RunWithMongoInDocker runs the tests with
 // a mongodb instance in a docker container.
-func RunWithMongoInDocker(m *testing.M) int {
+func RunWithMongoInDocker(t *testing.T) (cleanUpFunc func(), cli *mongo.Client, err error) {
 	c, err := client.NewClientWithOpts()
 	if err != nil {
-		panic(err)
+		return func() {}, nil, err
 	}
 
 	ctx := context.Background()
@@ -43,39 +43,32 @@ func RunWithMongoInDocker(m *testing.M) int {
 		},
 	}, nil, nil, "")
 	if err != nil {
-		panic(err)
+		return func() {}, nil, err
 	}
 	containerID := resp.ID
-	defer func() {
+	cleanUpFunc = func() {
 		err := c.ContainerRemove(ctx, containerID, types.ContainerRemoveOptions{
 			Force: true,
 		})
 		if err != nil {
-			panic(err)
+			t.Error("remove test docker failed", err)
 		}
-	}()
+	}
 
 	err = c.ContainerStart(ctx, containerID, types.ContainerStartOptions{})
 	if err != nil {
-		panic(err)
+		return cleanUpFunc, nil, err
 	}
 
 	inspRes, err := c.ContainerInspect(ctx, containerID)
 	if err != nil {
-		panic(err)
+		return cleanUpFunc, nil, err
 	}
 	hostPort := inspRes.NetworkSettings.Ports[consts.MongoContainerPort][0]
 	mongoURI = fmt.Sprintf("mongodb://%s:%s", hostPort.HostIP, hostPort.HostPort)
 
-	return m.Run()
-}
-
-// NewClient creates a client connected to the mongo instance in docker.
-func NewClient(c context.Context) (*mongo.Client, error) {
-	if mongoURI == "" {
-		return nil, fmt.Errorf("mongoDB uri not set. Please run RunWithMongoInDocker in TestMain")
-	}
-	return mongo.Connect(c, options.Client().ApplyURI(mongoURI))
+	cli, err = mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
+	return cleanUpFunc, cli, err
 }
 
 // SetupIndexes sets up indexes for the given database.

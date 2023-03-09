@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"testing"
 
+	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	redisPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/redis"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -14,11 +16,27 @@ import (
 
 func TestCarUpdate(t *testing.T) {
 	c := context.Background()
-	s := CarServiceImpl{}
+	mongoCleanUp, mongoClient, err := test.RunWithMongoInDocker(t)
+	defer mongoCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	redisCleanUp, redisClient, err := test.RunWithRedisInDocker(consts.RedisCarClientDB, t)
+	defer redisCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s := CarServiceImpl{
+		RedisManager: redisPkg.NewManager(redisClient),
+		MongoManager: mongoPkg.NewManager(mongoClient.Database(consts.FreeCar)),
+		Publisher:    &testPublisher{},
+	}
 
 	carID := id.CarID("5f8132eb22814bf629489056")
 	mgutil.NewObjIDWithValue(carID)
-	_, err := s.CreateCar(c, &car.CreateCarRequest{
+	_, err = s.CreateCar(c, &car.CreateCarRequest{
 		AccountId: 1024,
 		PlateNum:  "渝A66666",
 	})
@@ -134,10 +152,6 @@ func TestCarUpdate(t *testing.T) {
 			t.Errorf("%s: incorrect response; want: %s, got: %s", cc.name, cc.want, got)
 		}
 	}
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(test.RunWithMongoInDocker(m))
 }
 
 type testPublisher struct{}

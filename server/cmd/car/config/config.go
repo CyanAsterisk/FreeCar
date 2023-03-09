@@ -19,6 +19,12 @@ type MongoDBConfig struct {
 	Collection string `mapstructure:"collection" json:"collection"`
 }
 
+type RedisConfig struct {
+	Host     string `mapstructure:"host" json:"host"`
+	Port     int    `mapstructure:"port" json:"port"`
+	Password string `mapstructure:"password" json:"password"`
+}
+
 type RabbitMqConfig struct {
 	Host     string `mapstructure:"host" json:"host"`
 	Port     int    `mapstructure:"port" json:"port"`
@@ -36,6 +42,7 @@ type ServerConfig struct {
 	Host         string         `mapstructure:"host" json:"host"`
 	WsAddr       string         `mapstructure:"wsAddr" json:"wsAddr"`
 	MongoDBInfo  MongoDBConfig  `mapstructure:"mongodb" json:"mongodb"`
+	RedisInfo    RedisConfig    `mapstructure:"redis" json:"redis"`
 	RabbitMqInfo RabbitMqConfig `mapstructure:"rabbitmq" json:"rabbitmq"`
 	OtelInfo     OtelConfig     `mapstructure:"otel" json:"otel"`
 	TripSrvInfo  TripSrvConfig  `mapstructure:"trip_srv" json:"trip_srv"`

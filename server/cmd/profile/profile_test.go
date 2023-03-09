@@ -2,19 +2,18 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 	"github.com/cloudwego/kitex/client/callopt"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 )
 
 func TestProfileLifeCycle(t *testing.T) {
@@ -32,97 +31,77 @@ func TestProfileLifeCycle(t *testing.T) {
 	}
 
 	s := ProfileServiceImpl{
-		MongoManager: pkg.NewMongoManager(mongoClient.Database(consts.FreeCar)),
-		RedisManager: pkg.NewRedisManager(redisClient),
+		MongoManager: mongo.NewManager(mongoClient.Database(consts.FreeCar)),
+		RedisManager: redis.NewManager(redisClient),
 	}
 
 	aid := id.AccountID(123)
 	cases := []struct {
-		name       string
-		op         func() (*profile.Profile, error)
-		wantName   string
-		wantStatus profile.IdentityStatus
-		wantErr    bool
+		name string
+		op   func() string
+		want string
 	}{
 		{
 			name: "get_empty",
-			op: func() (*profile.Profile, error) {
-				return s.GetProfile(c, &profile.GetProfileRequest{})
+			op: func() string {
+				resp, err := s.GetProfile(c, &profile.GetProfileRequest{})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			wantStatus: profile.IdentityStatus_UNSUBMITTED,
+			want: "[err = <nil>][resp = Profile({Identity:<nil> IdentityStatus:UNSUBMITTED})]",
 		},
 		{
 			name: "submit",
-			op: func() (*profile.Profile, error) {
-				return s.SubmitProfile(c, &profile.SubmitProfileRequest{
+			op: func() string {
+				resp, err := s.SubmitProfile(c, &profile.SubmitProfileRequest{
 					AccountId: int64(aid),
 					Identity: &profile.Identity{
 						Name: "abc",
 					},
 				})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			wantName:   "abc",
-			wantStatus: profile.IdentityStatus_PENDING,
+			want: "[err = <nil>][resp = Profile({Identity:Identity({LicNumber: Name:abc Gender:G_NOT_SPECIFIED BirthDateMillis:0}) IdentityStatus:PENDING})]",
 		},
 		{
 			name: "submit_again",
-			op: func() (*profile.Profile, error) {
-				return s.SubmitProfile(c, &profile.SubmitProfileRequest{
+			op: func() string {
+				resp, err := s.SubmitProfile(c, &profile.SubmitProfileRequest{
 					AccountId: int64(aid),
 					Identity: &profile.Identity{
 						Name: "abc",
 					},
 				})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			wantErr: true,
+			want: "[err = <nil>][resp = Profile({Identity:Identity({LicNumber: Name:abc Gender:G_NOT_SPECIFIED BirthDateMillis:0}) IdentityStatus:PENDING})]",
 		},
 		{
 			name: "todo_force_verify",
-			op: func() (*profile.Profile, error) {
+			op: func() string {
 				p := &profile.Profile{
 					Identity: &profile.Identity{
 						Name: "abc",
 					},
 					IdentityStatus: profile.IdentityStatus_VERIFIED,
 				}
-				err := s.UpdateProfile(c, aid, profile.IdentityStatus_PENDING, p)
-				if err != nil {
-					return nil, err
-				}
-				return p, nil
+				err = s.UpdateProfile(c, aid, profile.IdentityStatus_PENDING, p)
+				return fmt.Sprintf("[err = %+v]", err)
 			},
-			wantName:   "abc",
-			wantStatus: profile.IdentityStatus_VERIFIED,
+			want: "[err = <nil>]",
 		},
 		{
 			name: "clear",
-			op: func() (*profile.Profile, error) {
-				return s.ClearProfile(c, &profile.ClearProfileRequest{})
+			op: func() string {
+				resp, err := s.ClearProfile(c, &profile.ClearProfileRequest{})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			wantStatus: profile.IdentityStatus_UNSUBMITTED,
+			want: "[err = <nil>][resp = Profile({Identity:<nil> IdentityStatus:UNSUBMITTED})]",
 		},
 	}
 	for _, cc := range cases {
-		p, err := cc.op()
-		if cc.wantErr {
-			if err == nil {
-				t.Errorf("%s: want error; got none", cc.name)
-			} else {
-				continue
-			}
-		}
-		if err != nil {
-			t.Errorf("%s: operation failed: %v", cc.name, err)
-		}
-		gotName := ""
-		if p.Identity != nil {
-			gotName = p.Identity.Name
-		}
-		if gotName != cc.wantName {
-			t.Errorf("%s: name field incorrect: want %q, got %q", cc.name, cc.wantName, gotName)
-		}
-		if p.IdentityStatus != cc.wantStatus {
-			t.Errorf("%s: status field incorrect: want %s, got %s", cc.name, cc.wantStatus, p.IdentityStatus)
+		got := cc.op()
+		if got != cc.want {
+			t.Errorf("%s failed: want: %s,got %s", cc.name, cc.want, got)
 		}
 	}
 }
@@ -142,86 +121,69 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 	}
 
 	s := ProfileServiceImpl{
-		MongoManager: pkg.NewMongoManager(mongoClient.Database(consts.FreeCar)),
-		RedisManager: pkg.NewRedisManager(redisClient),
+		MongoManager: mongo.NewManager(mongoClient.Database(consts.FreeCar)),
+		RedisManager: redis.NewManager(redisClient),
+		BlobManager:  &blobClient{idForCreate: 123},
 	}
-
 	aid := id.AccountID(123)
-	config.BlobClient = &blobClient{
-		idForCreate: 123,
-	}
-
-	getPhotoOp := func() (string, error) {
-		r, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
-		if err != nil {
-			return "", err
-		}
-		return r.Url, nil
-	}
-
 	cases := []struct {
-		name        string
-		op          func() (string, error)
-		wantURL     string
-		wantErrCode codes.Code
+		name string
+		op   func() string
+		want string
 	}{
 		{
-			name:        "get_photo_before_upload",
-			op:          getPhotoOp,
-			wantErrCode: codes.NotFound,
+			name: "get_photo_before_upload",
+			op: func() string {
+				resp, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = err_code=60001, err_msg=get profile photo error][resp = <nil>]",
 		},
 		{
 			name: "create_photo",
-			op: func() (string, error) {
-				r, err := s.CreateProfilePhoto(c, &profile.CreateProfilePhotoRequest{AccountId: int64(aid)})
-				if err != nil {
-					return "", err
-				}
-				return r.UploadUrl, nil
+			op: func() string {
+				resp, err := s.CreateProfilePhoto(c, &profile.CreateProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			wantURL: "upload_url for 123",
+			want: "[err = <nil>][resp = CreateProfilePhotoResponse({UploadUrl:upload_url for 123})]",
 		},
 		{
 			name: "complete_photo_upload",
-			op: func() (string, error) {
-				_, err := s.CompleteProfilePhoto(c, &profile.CompleteProfilePhotoRequest{AccountId: int64(aid)})
-				return "", err
+			op: func() string {
+				resp, err := s.CompleteProfilePhoto(c, &profile.CompleteProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
+			want: "[err = <nil>][resp = Identity({LicNumber:100000000001 Name:FreeCar Gender:MALE BirthDateMillis:631152000000})]",
 		},
 		{
-			name:    "get_photo_url",
-			op:      getPhotoOp,
-			wantURL: "get_url for 123",
+			name: "get_photo_after_upload",
+			op: func() string {
+				resp, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = <nil>][resp = GetProfilePhotoResponse({Url:get_url for 123})]",
 		},
 		{
 			name: "clear_photo",
-			op: func() (string, error) {
-				_, err := s.ClearProfilePhoto(c, &profile.ClearProfilePhotoRequest{AccountId: int64(aid)})
-				return "", err
+			op: func() string {
+				resp, err := s.ClearProfilePhoto(c, &profile.ClearProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
+			want: "[err = <nil>][resp = ClearProfilePhotoResponse({})]",
 		},
 		{
-			name:        "get_photo_after_clear",
-			op:          getPhotoOp,
-			wantErrCode: codes.NotFound,
+			name: "get_photo_after_clear",
+			op: func() string {
+				resp, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = err_code=60001, err_msg=get profile photo error][resp = <nil>]",
 		},
 	}
-
 	for _, cc := range cases {
-		got, err := cc.op()
-		code := codes.OK
-		if err != nil {
-			if s, ok := status.FromError(err); ok {
-				code = s.Code()
-			} else {
-				t.Errorf("%s: operation failed: %v", cc.name, err)
-			}
-		}
-		if code != cc.wantErrCode {
-			t.Errorf("%s: wrong error code: want %d, got %d", cc.name, cc.wantErrCode, code)
-		}
-		if got != cc.wantURL {
-			t.Errorf("%s: wrong url: want %q, got %q", cc.name, cc.wantURL, got)
+		got := cc.op()
+		if got != cc.want {
+			t.Errorf("%s failed: want: %s,got %s", cc.name, cc.want, got)
 		}
 	}
 }

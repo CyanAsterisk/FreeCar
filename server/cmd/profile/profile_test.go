@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"os"
 	"strconv"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
@@ -18,8 +19,22 @@ import (
 
 func TestProfileLifeCycle(t *testing.T) {
 	c := context.Background()
-	s := ProfileServiceImpl{}
-	newDB(c, t)
+	mongoCleanUp, mongoClient, err := test.RunWithMongoInDocker(t)
+	defer mongoCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	redisCleanUp, redisClient, err := test.RunWithRedisInDocker(consts.RedisCarClientDB, t)
+	defer redisCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s := ProfileServiceImpl{
+		MongoManager: pkg.NewMongoManager(mongoClient.Database(consts.FreeCar)),
+		RedisManager: pkg.NewRedisManager(redisClient),
+	}
 
 	aid := id.AccountID(123)
 	cases := []struct {
@@ -114,8 +129,22 @@ func TestProfileLifeCycle(t *testing.T) {
 
 func TestProfilePhotoLifecycle(t *testing.T) {
 	c := context.Background()
-	s := ProfileServiceImpl{}
-	newDB(c, t)
+	mongoCleanUp, mongoClient, err := test.RunWithMongoInDocker(t)
+	defer mongoCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	redisCleanUp, redisClient, err := test.RunWithRedisInDocker(consts.RedisCarClientDB, t)
+	defer redisCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s := ProfileServiceImpl{
+		MongoManager: pkg.NewMongoManager(mongoClient.Database(consts.FreeCar)),
+		RedisManager: pkg.NewRedisManager(redisClient),
+	}
 
 	aid := id.AccountID(123)
 	config.BlobClient = &blobClient{
@@ -212,19 +241,4 @@ func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest
 	return &blob.GetBlobURLResponse{
 		Url: "get_url for " + strconv.FormatInt(req.Id, 10),
 	}, nil
-}
-
-func newDB(c context.Context, t *testing.T) {
-	mc, err := test.NewClient(c)
-	if err != nil {
-		t.Fatalf("cannot create new mongo client: %v", err)
-	}
-	db := mc.Database("FreeCar")
-	test.SetupIndexes(c, db)
-
-	config.DB = db.Collection("profile")
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(test.RunWithMongoInDocker(m))
 }

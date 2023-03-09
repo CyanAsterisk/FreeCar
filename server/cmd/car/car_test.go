@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	mongoPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	redisPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -15,15 +16,22 @@ import (
 
 func TestCarUpdate(t *testing.T) {
 	c := context.Background()
-	cleanUpFunc, client, err := test.RunWithMongoInDocker(t)
-	defer cleanUpFunc()
+	mongoCleanUp, mongoClient, err := test.RunWithMongoInDocker(t)
+	defer mongoCleanUp()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	redisCleanUp, redisClient, err := test.RunWithRedisInDocker(consts.RedisCarClientDB, t)
+	defer redisCleanUp()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	s := CarServiceImpl{
-		mongo: mongoPkg.NewManager(client.Database(consts.FreeCar)),
-		pub:   &testPublisher{},
+		RedisManager: redisPkg.NewManager(redisClient),
+		MongoManager: mongoPkg.NewManager(mongoClient.Database(consts.FreeCar)),
+		Publisher:    &testPublisher{},
 	}
 
 	carID := id.CarID("5f8132eb22814bf629489056")

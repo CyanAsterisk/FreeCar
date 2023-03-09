@@ -6,7 +6,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	carthrf "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -28,7 +28,7 @@ const (
 // CarRecord defines a car record in mongo db.
 type CarRecord struct {
 	mgutil.IDField `bson:"inline"`
-	Car            *carthrf.Car `bson:"car"`
+	Car            *car.Car `bson:"car"`
 }
 
 type Manager struct {
@@ -43,12 +43,12 @@ func NewManager(db *mongo.Database) *Manager {
 // CreateCar creates a car.
 func (m *Manager) CreateCar(c context.Context, plateNum string) (*CarRecord, error) {
 	cr := &CarRecord{
-		Car: &carthrf.Car{
-			Position: &carthrf.Location{
+		Car: &car.Car{
+			Position: &car.Location{
 				Latitude:  initLatitude,
 				Longitude: initLongitude,
 			},
-			Status:   carthrf.CarStatus_LOCKED,
+			Status:   car.CarStatus_LOCKED,
 			PlateNum: plateNum,
 			Power:    100,
 		},
@@ -96,9 +96,9 @@ func (m *Manager) GetCars(c context.Context) ([]*CarRecord, error) {
 // CarUpdate defines updates to a car.
 // Only specified fields will be updated.
 type CarUpdate struct {
-	Status       carthrf.CarStatus
-	Position     *carthrf.Location
-	Driver       *carthrf.Driver
+	Status       car.CarStatus
+	Position     *car.Location
+	Driver       *car.Driver
 	Power        float64
 	UpdateTripID bool
 	TripID       id.TripID
@@ -107,7 +107,7 @@ type CarUpdate struct {
 // UpdateCar updates a car. If status is specified,
 // it updates the car only when existing record matches the
 // status specified.
-func (m *Manager) UpdateCar(c context.Context, id id.CarID, status carthrf.CarStatus, update *CarUpdate) (*CarRecord, error) {
+func (m *Manager) UpdateCar(c context.Context, id id.CarID, status car.CarStatus, update *CarUpdate) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
@@ -116,12 +116,12 @@ func (m *Manager) UpdateCar(c context.Context, id id.CarID, status carthrf.CarSt
 	filter := bson.M{
 		mgutil.IDFieldName: objID,
 	}
-	if status != carthrf.CarStatus_CS_NOT_SPECIFIED {
+	if status != car.CarStatus_CS_NOT_SPECIFIED {
 		filter[statusField] = status
 	}
 
 	u := bson.M{}
-	if update.Status != carthrf.CarStatus_CS_NOT_SPECIFIED {
+	if update.Status != car.CarStatus_CS_NOT_SPECIFIED {
 		u[statusField] = update.Status
 	}
 	if update.Driver != nil {

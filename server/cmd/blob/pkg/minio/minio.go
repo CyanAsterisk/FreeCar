@@ -8,10 +8,10 @@ import (
 )
 
 type Manager struct {
-	client minio.Client
+	client *minio.Client
 }
 
-func NewStorage(client minio.Client) *Manager {
+func NewStorage(client *minio.Client) *Manager {
 	return &Manager{client}
 }
 

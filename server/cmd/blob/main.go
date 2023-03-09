@@ -7,6 +7,9 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/minio"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -24,8 +27,9 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	initialize.InitDB()
-	initialize.InitMinio()
+	db := initialize.InitDB()
+	minioClient := initialize.InitMinio()
+	redisClient := initialize.InitRedis()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -34,7 +38,11 @@ func main() {
 	defer p.Shutdown(context.Background())
 
 	// Create new server.
-	srv := blobservice.NewServer(new(BlobServiceImpl),
+	srv := blobservice.NewServer(&BlobServiceImpl{
+		redisManager: redis.NewManager(redisClient),
+		minioManager: minio.NewStorage(minioClient),
+		mysqlManager: mysql.NewManager(db),
+	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

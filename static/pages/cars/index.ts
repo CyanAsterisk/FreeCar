@@ -60,7 +60,7 @@ Page({
     },
     async onShow() {
       const res = await TripService.getTrips({status:api.TripStatus.IN_PROGRESS})
-      if(res.code != 10000){
+      if(res.code != 0){
         wx.showToast({
           title: '获取行程失败', 
           duration: 2000
@@ -76,7 +76,7 @@ Page({
         return
       }
       const resp = await ProfileService.getProfile()
-      if(resp.code != 10000){
+      if(resp.code != 0){
         wx.showToast({
           title:'获取资格失败',
           duration: 20000
@@ -144,7 +144,7 @@ Page({
         title: '获取周边车辆',
       })
       CarService.getCars().then((resp)=>{
-      if(resp.code != 10000){
+      if(resp.code != 0){
         wx.hideLoading()
         wx.showToast({
           title: '同步车辆信息失败',

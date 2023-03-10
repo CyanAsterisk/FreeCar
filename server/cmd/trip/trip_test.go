@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -18,6 +18,12 @@ import (
 
 func TestCreateTrip(t *testing.T) {
 	c := context.Background()
+	cleanUpFunc, client, err := test.RunWithMongoInDocker(t)
+	defer cleanUpFunc()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	pm := &profileManager{}
 	cm := &carManager{}
 	pom := &poi.Manager{}
@@ -25,8 +31,8 @@ func TestCreateTrip(t *testing.T) {
 		ProfileManager: pm,
 		CarManager:     cm,
 		POIManager:     pom,
+		MongoManager:   mongo.NewManager(client.Database(consts.FreeCar)),
 	}
-	newDB(c, t)
 
 	req := &trip.CreateTripRequest{
 		CarId: "car1",
@@ -117,6 +123,11 @@ func TestCreateTrip(t *testing.T) {
 
 func TestTripLifecycle(t *testing.T) {
 	c := context.Background()
+	cleanUpFunc, client, err := test.RunWithMongoInDocker(t)
+	defer cleanUpFunc()
+	if err != nil {
+		t.Fatal(err)
+	}
 	pm := &profileManager{}
 	cm := &carManager{}
 	pom := &poi.Manager{}
@@ -124,8 +135,8 @@ func TestTripLifecycle(t *testing.T) {
 		ProfileManager: pm,
 		CarManager:     cm,
 		POIManager:     pom,
+		MongoManager:   mongo.NewManager(client.Database(consts.FreeCar)),
 	}
-	newDB(c, t)
 
 	aid1 := id.AccountID(123)
 
@@ -240,19 +251,4 @@ func (m *carManager) Unlock(c context.Context, cid id.CarID, aid id.AccountID, t
 
 func (m *carManager) Lock(c context.Context, cid id.CarID, aid id.AccountID) error {
 	return nil
-}
-
-func newDB(c context.Context, t *testing.T) {
-	mc, err := test.NewClient(c)
-	if err != nil {
-		t.Fatalf("cannot create new mongo client: %v", err)
-	}
-	db := mc.Database("FreeCar")
-	test.SetupIndexes(c, db)
-
-	config.DB = db.Collection("trip")
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(test.RunWithMongoInDocker(m))
 }

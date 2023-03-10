@@ -12,12 +12,12 @@ import (
 )
 
 // InitDB to init database
-func InitDB() {
+func InitDB() *mongo.Database {
 	c := config.GlobalServerConfig.MongoDBInfo
 	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(
 		fmt.Sprintf(consts.MongoURI, c.User, c.Password, c.Host, c.Port)))
 	if err != nil {
 		klog.Fatal("cannot connect mongodb", err)
 	}
-	config.DB = mongoClient.Database(c.Name).Collection(c.Collection)
+	return mongoClient.Database(c.Name)
 }

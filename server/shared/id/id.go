@@ -40,3 +40,7 @@ type BlobID int64
 func (i BlobID) Int64() int64 {
 	return int64(i)
 }
+
+func (i BlobID) String() string {
+	return strconv.FormatInt(int64(i), 10)
+}

@@ -54,7 +54,7 @@ func (m *Manager) GetCars(c context.Context) ([]*car.CarEntity, error) {
 	return carList, nil
 }
 
-func (m *Manager) InsertCar(c context.Context, cid id.CarID, cr car.Car) error {
+func (m *Manager) InsertCar(c context.Context, cid id.CarID, cr *car.Car) error {
 	cj, err := sonic.Marshal(cr)
 	if err != nil {
 		return err

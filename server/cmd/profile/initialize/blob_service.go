@@ -19,7 +19,7 @@ import (
 )
 
 // InitBlob to init blob service
-func InitBlob() {
+func InitBlob() blobservice.Client {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
@@ -67,5 +67,5 @@ func InitBlob() {
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	config.BlobClient = c
+	return c
 }

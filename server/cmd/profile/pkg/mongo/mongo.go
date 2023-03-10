@@ -1,18 +1,21 @@
-package pkg
+package mongo
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type MongoManager struct{}
+type Manager struct {
+	col *mongo.Collection
+}
 
 const (
 	accountIDField      = "accountid"
@@ -28,22 +31,30 @@ type ProfileRecord struct {
 	PhotoBlobID int64            `bson:"photoblobid"`
 }
 
+// NewManager creates a mongo manager.
+func NewManager(db *mongo.Database) *Manager {
+	return &Manager{col: db.Collection(consts.ProfileCollection)}
+}
+
 // GetProfile gets profile for an account.
-func (m *MongoManager) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
-	res := config.DB.FindOne(c, byAccountID(aid))
+func (m *Manager) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
+	res := m.col.FindOne(c, byAccountID(aid))
 	if err := res.Err(); err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errno.RecordNotFound
+		}
 		return nil, err
 	}
 	var pr ProfileRecord
 	err := res.Decode(&pr)
 	if err != nil {
-		return nil, fmt.Errorf("cannot decode profile record: %v", err)
+		return nil, err
 	}
 	return &pr, nil
 }
 
 // UpdateProfile updates profile for an account.
-func (m *MongoManager) UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
+func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
 	filter := bson.M{
 		identityStatusField: prevState,
 	}
@@ -51,7 +62,7 @@ func (m *MongoManager) UpdateProfile(c context.Context, aid id.AccountID, prevSt
 		filter = mgutil.ZeroOrDoesNotExist(identityStatusField, prevState)
 	}
 	filter[accountIDField] = aid.Int64()
-	_, err := config.DB.UpdateOne(c, filter, mgutil.Set(bson.M{
+	_, err := m.col.UpdateOne(c, filter, mgutil.Set(bson.M{
 		accountIDField: aid.Int64(),
 		profileField:   p,
 	}), options.Update().SetUpsert(true))
@@ -59,8 +70,8 @@ func (m *MongoManager) UpdateProfile(c context.Context, aid id.AccountID, prevSt
 }
 
 // UpdateProfilePhoto updates profile photo blob id.
-func (m *MongoManager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
-	_, err := config.DB.UpdateOne(c, bson.M{
+func (m *Manager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
+	_, err := m.col.UpdateOne(c, bson.M{
 		accountIDField: aid.Int64(),
 	}, mgutil.Set(bson.M{
 		accountIDField:   aid.Int64(),

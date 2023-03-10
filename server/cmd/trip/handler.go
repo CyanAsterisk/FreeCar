@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/dao"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
@@ -19,6 +19,7 @@ type TripServiceImpl struct {
 	ProfileManager ProfileManager
 	CarManager     CarManager
 	POIManager     POIManager
+	MongoManager   MongoManager
 }
 
 // ProfileManager defines the ACL(Anti Corruption Layer)
@@ -37,6 +38,14 @@ type CarManager interface {
 // POIManager resolves POI(Point Of Interest).
 type POIManager interface {
 	Resolve(*trip.Location) (string, error)
+}
+
+// MongoManager defines the mongoDB server
+type MongoManager interface {
+	CreateTrip(c context.Context, trip *trip.Trip) (*mongo.TripRecord, error)
+	GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*mongo.TripRecord, error)
+	GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*mongo.TripRecord, error)
+	UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error
 }
 
 // CreateTrip implements the TripServiceImpl interface.
@@ -62,7 +71,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 		TimestampSec: nowFunc(),
 	}, req.Start)
 
-	tr, err := dao.CreateTrip(ctx, &trip.Trip{
+	tr, err := s.MongoManager.CreateTrip(ctx, &trip.Trip{
 		AccountId:  aid.Int64(),
 		CarId:      carID.String(),
 		IdentityId: iID.String(),
@@ -92,7 +101,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 // GetTrip implements the TripServiceImpl interface.
 func (s *TripServiceImpl) GetTrip(ctx context.Context, req *trip.GetTripRequest) (resp *trip.Trip, err error) {
 	aid := id.AccountID(req.AccountId)
-	tr, err := dao.GetTrip(ctx, id.TripID(req.Id), aid)
+	tr, err := s.MongoManager.GetTrip(ctx, id.TripID(req.Id), aid)
 	if err != nil {
 		return nil, status.Err(codes.NotFound, "")
 	}
@@ -102,7 +111,7 @@ func (s *TripServiceImpl) GetTrip(ctx context.Context, req *trip.GetTripRequest)
 // GetTrips implements the TripServiceImpl interface.
 func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsRequest) (resp *trip.GetTripsResponse, err error) {
 	aid := id.AccountID(req.AccountId)
-	trips, err := dao.GetTrips(ctx, aid, req.Status)
+	trips, err := s.MongoManager.GetTrips(ctx, aid, req.Status)
 	if err != nil {
 		klog.Error("cannot get trips", err)
 		return nil, status.Err(codes.Internal, "")
@@ -121,7 +130,7 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (resp *trip.Trip, err error) {
 	aid := id.AccountID(req.AccountId)
 	tid := id.TripID(req.Id)
-	tr, err := dao.GetTrip(ctx, tid, aid)
+	tr, err := s.MongoManager.GetTrip(ctx, tid, aid)
 	if err != nil {
 		return nil, status.Err(codes.NotFound, "")
 	}
@@ -150,7 +159,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 			return nil, status.Errorf(codes.FailedPrecondition, "cannot lock car: %v", err)
 		}
 	}
-	err = dao.UpdateTrip(ctx, tid, aid, tr.UpdatedAt, tr.Trip)
+	err = s.MongoManager.UpdateTrip(ctx, tid, aid, tr.UpdatedAt, tr.Trip)
 	if err != nil {
 		return nil, status.Err(codes.Aborted, "")
 	}

@@ -1,4 +1,4 @@
-package pkg
+package wechat
 
 import (
 	"github.com/cloudwego/kitex/pkg/klog"

@@ -7,7 +7,8 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/wechat"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
@@ -25,22 +26,24 @@ func main() {
 	initialize.InitLogger()
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitNacos(Port)
-	initialize.InitDB()
+	db := initialize.InitDB()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 	defer p.Shutdown(context.Background())
-	initialize.InitBlob()
+	blobClient := initialize.InitBlob()
 
-	impl := new(AuthServiceImpl)
-	impl.OpenIDResolver = &pkg.AuthServiceImpl{
-		AppID:     config.GlobalServerConfig.WXInfo.AppId,
-		AppSecret: config.GlobalServerConfig.WXInfo.AppSecret,
-	}
 	// Create new server.
-	srv := authservice.NewServer(impl,
+	srv := authservice.NewServer(&AuthServiceImpl{
+		OpenIDResolver: &wechat.AuthServiceImpl{
+			AppID:     config.GlobalServerConfig.WXInfo.AppId,
+			AppSecret: config.GlobalServerConfig.WXInfo.AppSecret,
+		},
+		MysqlManager: mysql.NewManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
+		BlobManager:  blobClient,
+	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),

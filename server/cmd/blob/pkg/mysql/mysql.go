@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"errors"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
@@ -22,10 +22,6 @@ func (b *BlobRecord) BeforeCreate(_ *gorm.DB) (err error) {
 	b.ID = sf.Generate().Int64()
 	return nil
 }
-
-var (
-	ErrNoSuchRecord = errors.New("no such record")
-)
 
 type Manager struct {
 	db *gorm.DB
@@ -51,7 +47,7 @@ func (m *Manager) DeleteBlobRecord(bid int64) error {
 		Where(&BlobRecord{ID: bid}).First(&BlobRecord{}).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return ErrNoSuchRecord
+			return errno.RecordNotFound
 		} else {
 			return err
 		}
@@ -65,7 +61,7 @@ func (m *Manager) GetBlobRecord(bid int64) (*BlobRecord, error) {
 		Where(&BlobRecord{ID: bid}).First(&br).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return nil, ErrNoSuchRecord
+			return nil, errno.RecordNotFound
 		} else {
 			return nil, err
 		}

@@ -19,6 +19,11 @@ type MongoDBConfig struct {
 	Collection string `mapstructure:"collection" json:"collection"`
 }
 
+type ConsulConfig struct {
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+}
+
 type RedisConfig struct {
 	Host     string `mapstructure:"host" json:"host"`
 	Port     int    `mapstructure:"port" json:"port"`
@@ -34,6 +39,7 @@ type ServerConfig struct {
 	Host        string        `mapstructure:"host" json:"host"`
 	MongoDBInfo MongoDBConfig `mapstructure:"mongodb" json:"mongodb"`
 	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
+	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 	OtelInfo    OtelConfig    `mapstructure:"otel" json:"otel"`
 	BlobSrvInfo BlobSrvConfig `mapstructure:"blob_srv" json:"blob_srv"`
 }

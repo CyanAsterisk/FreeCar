@@ -42,6 +42,10 @@ const (
 
 	FreePortAddress = "localhost:0"
 
+	ConsulCheckInterval                       = "7s"
+	ConsulCheckTimeout                        = "5s"
+	ConsulCheckDeregisterCriticalServiceAfter = "15s"
+
 	DefaultLicNumber = "100000000001"
 	DefaultName      = "FreeCar"
 	DefaultGender    = 1

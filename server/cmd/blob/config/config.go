@@ -19,6 +19,11 @@ type MysqlConfig struct {
 	Salt     string `mapstructure:"salt" json:"salt"`
 }
 
+type ConsulConfig struct {
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+}
+
 type RedisConfig struct {
 	Host     string `mapstructure:"host" json:"host"`
 	Port     int    `mapstructure:"port" json:"port"`
@@ -37,10 +42,11 @@ type MinioConfig struct {
 }
 
 type ServerConfig struct {
-	Name      string      `mapstructure:"name" json:"name"`
-	Host      string      `mapstructure:"host" json:"host"`
-	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
-	RedisInfo RedisConfig `mapstructure:"redis" json:"redis"`
-	OtelInfo  OtelConfig  `mapstructure:"otel" json:"otel"`
-	MinioInfo MinioConfig `mapstructure:"minio" json:"minio"`
+	Name       string       `mapstructure:"name" json:"name"`
+	Host       string       `mapstructure:"host" json:"host"`
+	MysqlInfo  MysqlConfig  `mapstructure:"mysql" json:"mysql"`
+	ConsulInfo ConsulConfig `mapstructure:"consul" json:"consul"`
+	RedisInfo  RedisConfig  `mapstructure:"redis" json:"redis"`
+	OtelInfo   OtelConfig   `mapstructure:"otel" json:"otel"`
+	MinioInfo  MinioConfig  `mapstructure:"minio" json:"minio"`
 }

@@ -14,6 +14,11 @@ type JWTConfig struct {
 	SigningKey string `mapstructure:"key" json:"key"`
 }
 
+type ConsulConfig struct {
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+}
+
 type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
@@ -23,6 +28,7 @@ type ServerConfig struct {
 	Host           string       `mapstructure:"host" json:"host"`
 	Port           int          `mapstructure:"port" json:"port"`
 	JWTInfo        JWTConfig    `mapstructure:"jwt" json:"jwt"`
+	ConsulInfo     ConsulConfig `mapstructure:"consul" json:"consul"`
 	OtelInfo       OtelConfig   `mapstructure:"otel" json:"otel"`
 	AuthSrvInfo    RPCSrvConfig `mapstructure:"auth_srv" json:"auth_srv"`
 	CarSrvInfo     RPCSrvConfig `mapstructure:"car_srv" json:"car_srv"`

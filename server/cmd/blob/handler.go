@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/minio"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/redis"
@@ -39,7 +38,7 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 		klog.Error("create blob record err", err)
 		return nil, errno.BlobSrvErr
 	}
-	url, err := s.minioManager.PutObjectURL(ctx, config.GlobalServerConfig.MinioInfo.Bucket, br.Path, time.Duration(req.UploadUrlTimeoutSec)*time.Second)
+	url, err := s.minioManager.PutObjectURL(ctx, br.Path, time.Duration(req.UploadUrlTimeoutSec)*time.Second)
 	if err != nil {
 		klog.Error("presigned put object url err", err)
 		return nil, errno.BlobSrvErr
@@ -69,7 +68,7 @@ func (s *BlobServiceImpl) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRe
 			}
 		}()
 	}
-	url, err := s.minioManager.GetObjectURL(ctx, config.GlobalServerConfig.MinioInfo.Bucket, br.Path, time.Duration(req.TimeoutSec)*time.Second)
+	url, err := s.minioManager.GetObjectURL(ctx, br.Path, time.Duration(req.TimeoutSec)*time.Second)
 	if err != nil {
 		klog.Error("cannot get object url", err)
 		return nil, errno.BlobSrvErr

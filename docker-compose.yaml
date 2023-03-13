@@ -33,7 +33,7 @@ services:
     volumes:
       - ./data/data/redis:/data
       - ./data/logs:/logs
-    command: redis-server --requirepass tikgok
+    command: redis-server --requirepass freecar
 
   minio:
     image: minio/minio:latest

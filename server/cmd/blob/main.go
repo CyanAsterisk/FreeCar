@@ -40,7 +40,7 @@ func main() {
 	// Create new server.
 	srv := blobservice.NewServer(&BlobServiceImpl{
 		redisManager: redis.NewManager(redisClient),
-		minioManager: minio.NewStorage(minioClient),
+		minioManager: minio.NewManager(minioClient, config.GlobalServerConfig.MinioInfo.Bucket),
 		mysqlManager: mysql.NewManager(db),
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),

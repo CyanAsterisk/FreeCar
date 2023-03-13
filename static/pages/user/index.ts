@@ -48,7 +48,7 @@ Page({
       avatarURL: localPath
     })
     const resp = await AuthService.uploadAvatar()
-    if(resp.code !== 10000){
+    if(resp.code !== 0){
       wx.showToast({
         title: '获取上传链接失败',
         icon: 'none',
@@ -86,7 +86,7 @@ Page({
       username: this.data.username
     })
 
-    if (res.code != 10000){
+    if (res.code != 0){
       wx.showToast({
         title: res.message!,
         icon: 'none'

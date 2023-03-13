@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -15,7 +16,7 @@ type BlobRecord struct {
 
 // BeforeCreate uses snowflake to generate an BlobID and path.
 func (b *BlobRecord) BeforeCreate(_ *gorm.DB) (err error) {
-	sf, err := snowflake.NewNode(3)
+	sf, err := snowflake.NewNode(consts.BlobSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}

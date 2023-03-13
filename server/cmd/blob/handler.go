@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/minio"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/redis"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
@@ -27,7 +28,7 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 	var br mysql.BlobRecord
 	br.AccountId = req.AccountId
 
-	sf, err := snowflake.NewNode(3)
+	sf, err := snowflake.NewNode(consts.BlobSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}

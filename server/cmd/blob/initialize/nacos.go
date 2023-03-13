@@ -88,7 +88,7 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 
 	r := nacos.NewNacosRegistry(registryClient, nacos.WithGroup(consts.BlobGroup))
 
-	sf, err := snowflake.NewNode(2)
+	sf, err := snowflake.NewNode(consts.NacosSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate service name failed: %s", err.Error())
 	}

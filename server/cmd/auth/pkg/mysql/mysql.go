@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -18,7 +19,7 @@ type User struct {
 
 // BeforeCreate uses snowflake to generate an ID.
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
-	sf, err := snowflake.NewNode(1)
+	sf, err := snowflake.NewNode(consts.UserSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}

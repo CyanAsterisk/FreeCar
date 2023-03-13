@@ -71,4 +71,8 @@ const (
 	RedisProfileClientDB = 1
 	RedisBlobClientDB    = 2
 	RedisCarClientDB     = 3
+
+	NacosSnowflakeNode = 1
+	UserSnowflakeNode  = 2
+	BlobSnowflakeNode  = 3
 )

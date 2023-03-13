@@ -3,22 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
-	"github.com/cloudwego/kitex/client/callopt"
 	"strconv"
 	"testing"
 
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
+	"github.com/cloudwego/kitex/client/callopt"
 )
 
 func TestUserLifeCycle(t *testing.T) {
 	ctx := context.Background()
-	//mysqlCleanUp, mysqlDb, err := test.RunWithMySQLInDocker(t)
-	//defer mysqlCleanUp()
+	mysqlCleanUp, mysqlDb, err := test.RunWithMySQLInDocker(t)
+	defer mysqlCleanUp()
 
-	mysqlDb, err := test.FakeMysql()
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/go-redis/redis/v8"

@@ -20,6 +20,7 @@ type Manager struct {
 func NewManager(client *redis.Client) *Manager {
 	return &Manager{client: client}
 }
+
 func (m *Manager) Insert(c context.Context, br *mysql.BlobRecord) error {
 	bj, err := sonic.Marshal(*br)
 	if err != nil {

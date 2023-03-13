@@ -5,6 +5,7 @@ enum Err {
     BadRequest         = 10000,
     ParamsErr          = 10001,
     AuthorizeFail      = 10002,
+    TooManyRequest     = 10003,
     ServiceErr         = 20000,
     RPCAuthSrvErr      = 30000,
     AuthSrvErr         = 30001,

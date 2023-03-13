@@ -3,16 +3,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	cfg "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
+	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
 	"github.com/hertz-contrib/pprof"
 )
 
@@ -20,6 +24,7 @@ func main() {
 	// initialize
 	initialize.InitLogger()
 	r, info := initialize.InitNacos()
+	initialize.InitSentinel()
 	tracer, trcCfg := hertztracing.NewServerTracer()
 	tlsCfg := initialize.InitTLS()
 	rpc.Init()
@@ -37,9 +42,16 @@ func main() {
 		cfg.WithReadTimeout(time.Minute),
 		cfg.WithDisableKeepAlive(false)))
 	tlsCfg.NextProtos = append(tlsCfg.NextProtos, "h2")
-	// use pprof & tracer mw
+	// use pprof & tracer & sentinel mw
 	pprof.Register(h)
 	h.Use(hertztracing.ServerMiddleware(trcCfg))
+	h.Use(hertzSentinel.SentinelServerMiddleware(
+		// abort with status 429 by default
+		hertzSentinel.WithServerBlockFallback(func(c context.Context, ctx *app.RequestContext) {
+			errno.SendResponse(ctx, errno.TooManyReqeust, nil)
+			ctx.Abort()
+		}),
+	))
 	register(h)
 	h.Spin()
 }

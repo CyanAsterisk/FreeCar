@@ -41,6 +41,7 @@ var (
 	BadRequest         = NewErrNo(int64(errno.Err_BadRequest), "bad request")
 	ParamsErr          = NewErrNo(int64(errno.Err_ParamsErr), "params error")
 	AuthorizeFail      = NewErrNo(int64(errno.Err_AuthorizeFail), "authorize failed")
+	TooManyReqeust     = NewErrNo(int64(errno.Err_TooManyRequest), "too many requests")
 	ServiceErr         = NewErrNo(int64(errno.Err_ServiceErr), "service error")
 	RPCAuthSrvErr      = NewErrNo(int64(errno.Err_RPCAuthSrvErr), "rpc auth service error")
 	AuthSrvErr         = NewErrNo(int64(errno.Err_AuthSrvErr), "auth service error")

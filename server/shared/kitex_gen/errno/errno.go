@@ -15,6 +15,7 @@ const (
 	Err_BadRequest         Err = 10000
 	Err_ParamsErr          Err = 10001
 	Err_AuthorizeFail      Err = 10002
+	Err_TooManyRequest     Err = 10003
 	Err_ServiceErr         Err = 20000
 	Err_RPCAuthSrvErr      Err = 30000
 	Err_AuthSrvErr         Err = 30001
@@ -41,6 +42,8 @@ func (p Err) String() string {
 		return "ParamsErr"
 	case Err_AuthorizeFail:
 		return "AuthorizeFail"
+	case Err_TooManyRequest:
+		return "TooManyRequest"
 	case Err_ServiceErr:
 		return "ServiceErr"
 	case Err_RPCAuthSrvErr:
@@ -83,6 +86,8 @@ func ErrFromString(s string) (Err, error) {
 		return Err_ParamsErr, nil
 	case "AuthorizeFail":
 		return Err_AuthorizeFail, nil
+	case "TooManyRequest":
+		return Err_TooManyRequest, nil
 	case "ServiceErr":
 		return Err_ServiceErr, nil
 	case "RPCAuthSrvErr":

@@ -27,4 +27,4 @@ private.key
 *.log
 **@**
 data
-server.crt
+/server/cmd/api/cert/

@@ -28,7 +28,7 @@ type OpenIDResolver interface {
 }
 
 type MysqlManager interface {
-	CreateUser(openID string) (*mysql.User, error)
+	CreateUser(user *mysql.User) (*mysql.User, error)
 	GetUserByOpenId(openId string) (*mysql.User, error)
 	GetUserByAccountId(aid int64) (*mysql.User, error)
 	UpdateUser(user *mysql.User) error
@@ -55,7 +55,7 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 			klog.Error("get user by open id err", err)
 			return nil, errno.AuthSrvErr.WithMessage("")
 		}
-		user, err = s.MysqlManager.CreateUser(openID)
+		user, err = s.MysqlManager.CreateUser(&mysql.User{OpenID: openID})
 		if err != nil {
 			klog.Error("create user err", err)
 			return nil, errno.AuthSrvErr

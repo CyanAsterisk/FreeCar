@@ -4,11 +4,14 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	cfg "github.com/hertz-contrib/http2/config"
+	"github.com/hertz-contrib/http2/factory"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/hertz-contrib/pprof"
 )
@@ -17,18 +20,26 @@ func main() {
 	// initialize
 	initialize.InitLogger()
 	r, info := initialize.InitNacos()
-	tracer, cfg := hertztracing.NewServerTracer()
+	tracer, trcCfg := hertztracing.NewServerTracer()
+	tlsCfg := initialize.InitTLS()
 	rpc.Init()
 	// create a new server
 	h := server.New(
 		tracer,
+		server.WithALPN(true),
+		server.WithTLS(tlsCfg),
 		server.WithHostPorts(fmt.Sprintf(":%d", config.GlobalServerConfig.Port)),
 		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
 	)
+	// add h2
+	h.AddProtocol("h2", factory.NewServerFactory(
+		cfg.WithReadTimeout(time.Minute),
+		cfg.WithDisableKeepAlive(false)))
+	tlsCfg.NextProtos = append(tlsCfg.NextProtos, "h2")
 	// use pprof & tracer mw
 	pprof.Register(h)
-	h.Use(hertztracing.ServerMiddleware(cfg))
+	h.Use(hertztracing.ServerMiddleware(trcCfg))
 	register(h)
 	h.Spin()
 }

@@ -6,12 +6,13 @@ require (
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.8.3
-	github.com/cloudwego/hertz v0.5.1
+	github.com/cloudwego/hertz v0.6.0
 	github.com/cloudwego/kitex v0.4.4
 	github.com/docker/docker v20.10.23+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hertz-contrib/gzip v0.0.1
+	github.com/hertz-contrib/http2 v0.1.5
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
@@ -40,8 +41,10 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/kr/pretty v0.3.1 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/minio/sha256-simd v1.0.0 // indirect
+	github.com/onsi/gomega v1.20.1 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 )
 

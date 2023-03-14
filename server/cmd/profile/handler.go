@@ -55,7 +55,7 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return &profile.Profile{}, nil
+			return nil, errno.RecordNotFound
 		}
 		klog.Error("get profile error", err)
 		return nil, errno.ProfileSrvErr.WithMessage("get profile error")
@@ -81,6 +81,9 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 	}
 	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
 	if err != nil {
+		if err == errno.RecordAlreadyExist {
+			return nil, errno.RecordAlreadyExist
+		}
 		klog.Error("cannot update profile", err)
 		return nil, errno.ProfileSrvErr.WithMessage("submit profile error")
 	}
@@ -124,13 +127,15 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
-		klog.Error("cannot get profile", err)
+		if err == errno.RecordNotFound {
+			return nil, errno.RecordNotFound
+		}
 		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
 	}
 
 	if pr.PhotoBlobID == 0 {
 		klog.Warn("photo blob id = 0")
-		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
+		return nil, errno.RecordNotFound.WithMessage("no profile photo")
 	}
 
 	br, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{

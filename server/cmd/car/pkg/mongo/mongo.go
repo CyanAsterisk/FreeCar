@@ -83,12 +83,12 @@ func (m *Manager) GetCars(c context.Context) ([]*CarRecord, error) {
 
 	var cars []*CarRecord
 	for res.Next(c) {
-		var car CarRecord
-		err := res.Decode(&car)
+		var cr CarRecord
+		err := res.Decode(&cr)
 		if err != nil {
 			return nil, err
 		}
-		cars = append(cars, &car)
+		cars = append(cars, &cr)
 	}
 	return cars, nil
 }

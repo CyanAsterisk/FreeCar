@@ -40,6 +40,13 @@ var UpdatedAt = func() int64 {
 	return time.Now().UnixNano()
 }
 
+// SetNextUpdateAt sets id for next objectID generation.
+func SetNextUpdateAt(time int64) {
+	UpdatedAt = func() int64 {
+		return time
+	}
+}
+
 // Set returns a $set update document.
 func Set(v interface{}) bson.M {
 	return bson.M{

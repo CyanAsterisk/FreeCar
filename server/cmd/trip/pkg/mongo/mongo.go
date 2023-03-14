@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -46,6 +47,9 @@ func (m *Manager) CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, e
 
 	_, err := m.col.InsertOne(c, r)
 	if err != nil {
+		if mongo.IsDuplicateKeyError(err) {
+			return nil, errno.RecordAlreadyExist
+		}
 		return nil, err
 	}
 	return r, nil
@@ -63,7 +67,11 @@ func (m *Manager) GetTrip(c context.Context, id id.TripID, accountID id.AccountI
 	})
 
 	if err := res.Err(); err != nil {
-		return nil, err
+		if err == mongo.ErrNoDocuments {
+			return nil, errno.RecordNotFound
+		} else {
+			return nil, err
+		}
 	}
 
 	var tr TripRecord

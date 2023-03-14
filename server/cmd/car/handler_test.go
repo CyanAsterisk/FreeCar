@@ -149,7 +149,7 @@ func TestCarUpdate(t *testing.T) {
 		}
 		got := string(b)
 		if cc.want != got {
-			t.Errorf("%s: incorrect response; want: %s, got: %s", cc.name, cc.want, got)
+			t.Errorf("%s: incorrect response;\n want:%s\n got :%s", cc.name, cc.want, got)
 		}
 	}
 }

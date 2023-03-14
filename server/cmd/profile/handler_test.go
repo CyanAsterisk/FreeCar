@@ -30,6 +30,11 @@ func TestProfileLifeCycle(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	mongoDb := mongoClient.Database(consts.FreeCar)
+	err = test.SetupIndexes(c, mongoDb)
+	if err != nil {
+		t.Fatal("set index error")
+	}
 	s := ProfileServiceImpl{
 		MongoManager: mongo.NewManager(mongoClient.Database(consts.FreeCar)),
 		RedisManager: redis.NewManager(redisClient),
@@ -47,7 +52,7 @@ func TestProfileLifeCycle(t *testing.T) {
 				resp, err := s.GetProfile(c, &profile.GetProfileRequest{})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = Profile({Identity:<nil> IdentityStatus:UNSUBMITTED})]",
+			want: "[err = err_code=80000, err_msg=record not found][resp = <nil>]",
 		},
 		{
 			name: "submit",
@@ -73,7 +78,7 @@ func TestProfileLifeCycle(t *testing.T) {
 				})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = Profile({Identity:Identity({LicNumber: Name:abc Gender:G_NOT_SPECIFIED BirthDateMillis:0}) IdentityStatus:PENDING})]",
+			want: "[err = err_code=80001, err_msg=record already exist][resp = <nil>]",
 		},
 		{
 			name: "todo_force_verify",
@@ -101,7 +106,7 @@ func TestProfileLifeCycle(t *testing.T) {
 	for _, cc := range cases {
 		got := cc.op()
 		if got != cc.want {
-			t.Errorf("%s failed: want: %s,got %s", cc.name, cc.want, got)
+			t.Errorf("%s failed: \nwant:%s\ngot :%s", cc.name, cc.want, got)
 		}
 	}
 }
@@ -137,7 +142,7 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 				resp, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = err_code=60001, err_msg=get profile photo error][resp = <nil>]",
+			want: "[err = err_code=80000, err_msg=record not found][resp = <nil>]",
 		},
 		{
 			name: "create_photo",
@@ -177,13 +182,13 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 				resp, err := s.GetProfilePhoto(c, &profile.GetProfilePhotoRequest{AccountId: int64(aid)})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = err_code=60001, err_msg=get profile photo error][resp = <nil>]",
+			want: "[err = err_code=80000, err_msg=no profile photo][resp = <nil>]",
 		},
 	}
 	for _, cc := range cases {
 		got := cc.op()
 		if got != cc.want {
-			t.Errorf("%s failed: want: %s,got %s", cc.name, cc.want, got)
+			t.Errorf("%s failed: \nwant:%s\ngot :%s", cc.name, cc.want, got)
 		}
 	}
 }

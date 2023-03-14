@@ -131,11 +131,16 @@ func TestTripLifecycle(t *testing.T) {
 	pm := &profileManager{}
 	cm := &carManager{}
 	pom := &poi.Manager{}
+	db := client.Database(consts.FreeCar)
+	err = test.SetupIndexes(c, db)
+	if err != nil {
+		t.Fatal("set index err")
+	}
 	s := TripServiceImpl{
 		ProfileManager: pm,
 		CarManager:     cm,
 		POIManager:     pom,
-		MongoManager:   mongo.NewManager(client.Database(consts.FreeCar)),
+		MongoManager:   mongo.NewManager(db),
 	}
 
 	aid1 := id.AccountID(123)

@@ -38,22 +38,6 @@ func (m *Manager) GetCar(c context.Context, cid id.CarID) (*car.CarEntity, error
 	}, nil
 }
 
-func (m *Manager) GetCars(c context.Context) ([]*car.CarEntity, error) {
-	var carList []*car.CarEntity
-	iter := m.client.Scan(c, 0, "prefix:*", 0).Iterator()
-	for iter.Next(c) {
-		carEn, err := m.GetCar(c, id.CarID(iter.Val()))
-		if err != nil {
-			return nil, err
-		}
-		carList = append(carList, carEn)
-	}
-	if err := iter.Err(); err != nil {
-		return nil, err
-	}
-	return carList, nil
-}
-
 func (m *Manager) InsertCar(c context.Context, cid id.CarID, cr *car.Car) error {
 	cj, err := sonic.Marshal(cr)
 	if err != nil {

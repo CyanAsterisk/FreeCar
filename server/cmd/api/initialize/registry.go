@@ -19,8 +19,8 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 	// build a consul client
 	cfg := api.DefaultConfig()
 	cfg.Address = net.JoinHostPort(
-		config.GlobalServerConfig.ConsulInfo.Host,
-		strconv.Itoa(config.GlobalServerConfig.ConsulInfo.Port))
+		config.GlobalConsulConfig.Host,
+		strconv.Itoa(config.GlobalConsulConfig.Port))
 	consulClient, err := api.NewClient(cfg)
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())

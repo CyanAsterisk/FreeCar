@@ -26,8 +26,9 @@ import (
 func main() {
 	// initialization
 	initialize.InitLogger()
+	initialize.InitConfig()
 	IP, Port := initialize.InitFlag()
-	r, info := initialize.InitNacos(Port)
+	r, info := initialize.InitRegistry(Port)
 	db := initialize.InitDB()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),

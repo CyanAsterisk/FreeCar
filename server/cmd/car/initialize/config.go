@@ -4,7 +4,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/car/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/bytedance/sonic"

@@ -44,7 +44,7 @@ type BlobManager interface {
 
 // LicenseManager gets license info by Baidu OCR Api.
 type LicenseManager interface {
-	GetLicenseInfo(ctx context.Context, url string) *profile.Identity
+	GetLicenseInfo(url string) (*profile.Identity, error)
 }
 
 // GetProfile implements the ProfileServiceImpl interface.
@@ -207,7 +207,11 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		klog.Error("cannot get blob", err)
 		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
-	info := s.LicenseManager.GetLicenseInfo(ctx, br.Url)
+	info, err := s.LicenseManager.GetLicenseInfo(br.Url)
+	if err != nil {
+		klog.Error("cannot get license info", err)
+		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
+	}
 	return info, nil
 }
 

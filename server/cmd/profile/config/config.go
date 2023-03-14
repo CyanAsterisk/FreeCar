@@ -25,12 +25,17 @@ type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
 
+type OCRConfig struct {
+	AccessToken string `mapstructure:"access_token" json:"access_token"`
+}
+
 type ServerConfig struct {
 	Name        string        `mapstructure:"name" json:"name"`
 	Host        string        `mapstructure:"host" json:"host"`
 	MongoDBInfo MongoDBConfig `mapstructure:"mongodb" json:"mongodb"`
 	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
 	OtelInfo    OtelConfig    `mapstructure:"otel" json:"otel"`
+	OCRConfig   OCRConfig     `mapstructure:"ocr" json:"ocr"`
 	BlobSrvInfo BlobSrvConfig `mapstructure:"blob_srv" json:"blob_srv"`
 }
 

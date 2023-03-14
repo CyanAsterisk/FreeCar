@@ -3,14 +3,15 @@ package ocr
 import (
 	"context"
 	"fmt"
-	"github.com/bytedance/sonic"
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/bytedance/sonic"
 	"github.com/cloudwego/hertz/pkg/app/client"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/network/standard"
 )
 
 type LicenseManager struct{}
@@ -33,7 +34,7 @@ type RequestRes struct {
 }
 
 func (l *LicenseManager) GetLicenseInfo(url string) (*profile.Identity, error) {
-	c, err := client.NewClient()
+	c, err := client.NewClient(client.WithDialer(standard.NewDialer()))
 	if err != nil {
 		hlog.Error("new hertz client error", err)
 		return nil, err

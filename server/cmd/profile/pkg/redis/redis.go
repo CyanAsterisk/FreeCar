@@ -27,14 +27,22 @@ func (r *Manager) GetProfile(c context.Context, aid id.AccountID) (*profile.Prof
 		}
 		return nil, err
 	}
-	var pv *profile.Profile
-	if err = sonic.UnmarshalString(p, pv); err != nil {
+	var pv profile.Profile
+	if err = sonic.UnmarshalString(p, &pv); err != nil {
 		return nil, err
 	}
-	return pv, nil
+	return &pv, nil
 }
 
 func (r *Manager) InsertProfile(c context.Context, aid id.AccountID, p *profile.Profile) error {
+	_, err := r.RedisClient.Get(c, aid.String()).Result()
+	if err != redis.Nil {
+		if err == nil {
+			return errno.RecordAlreadyExist
+		} else {
+			return err
+		}
+	}
 	pv, err := sonic.Marshal(p)
 	if err != nil {
 		return err

@@ -66,6 +66,9 @@ func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState p
 		accountIDField: aid.Int64(),
 		profileField:   p,
 	}), options.Update().SetUpsert(true))
+	if mongo.IsDuplicateKeyError(err) {
+		return errno.RecordAlreadyExist
+	}
 	return err
 }
 

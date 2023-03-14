@@ -25,7 +25,6 @@ type Publisher interface {
 // RedisManager defines the redis server.
 type RedisManager interface {
 	GetCar(c context.Context, cid id.CarID) (*car.CarEntity, error)
-	GetCars(c context.Context) ([]*car.CarEntity, error)
 	InsertCar(c context.Context, cid id.CarID, cr *car.Car) error
 	RemoveCar(c context.Context, cid id.CarID) error
 }
@@ -63,11 +62,9 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*c
 	if err != nil {
 		return nil, errno.CarSrvErr.WithMessage("get car error")
 	}
-	go func() {
-		if err := s.RedisManager.InsertCar(context.Background(), id.CarID(cr.ID.Hex()), cr.Car); err != nil {
-			klog.Errorf("create cache record err", err)
-		}
-	}()
+	if err := s.RedisManager.InsertCar(context.Background(), id.CarID(cr.ID.Hex()), cr.Car); err != nil {
+		klog.Errorf("create cache record err", err)
+	}
 	return cr.Car, nil
 }
 

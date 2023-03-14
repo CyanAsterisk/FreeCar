@@ -25,8 +25,9 @@ import (
 func main() {
 	// initialization
 	initialize.InitLogger()
+	initialize.InitConfig()
 	IP, Port := initialize.InitFlag()
-	r, info := initialize.InitNacos(Port)
+	r, info := initialize.InitRegistry(Port)
 	db := initialize.InitDB()
 	minioClient := initialize.InitMinio()
 	redisClient := initialize.InitRedis()

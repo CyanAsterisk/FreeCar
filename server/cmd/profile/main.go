@@ -24,8 +24,9 @@ import (
 func main() {
 	// initialization
 	initialize.InitLogger()
+	initialize.InitConfig()
 	IP, Port := initialize.InitFlag()
-	r, info := initialize.InitNacos(Port)
+	r, info := initialize.InitRegistry(Port)
 	mongoDb := initialize.InitDB()
 	redisClient := initialize.InitRedis()
 	blobClient := initialize.InitBlob()

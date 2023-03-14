@@ -17,8 +17,8 @@ import (
 // InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
 	r, err := consul.NewConsulRegister(net.JoinHostPort(
-		config.GlobalServerConfig.ConsulInfo.Host,
-		strconv.Itoa(config.GlobalServerConfig.ConsulInfo.Port)),
+		config.GlobalConsulConfig.Host,
+		strconv.Itoa(config.GlobalConsulConfig.Port)),
 		consul.WithCheck(&api.AgentServiceCheck{
 			Interval:                       consts.ConsulCheckInterval,
 			Timeout:                        consts.ConsulCheckTimeout,

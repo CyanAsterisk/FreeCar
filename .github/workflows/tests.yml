@@ -12,6 +12,8 @@ jobs:
         timeout-minutes: 12
       - run: |
           docker pull mongo:latest
+          docker pull mysql:latest
+          docker pull redis:latest
 
       - name: Set up Go
         uses: actions/setup-go@v3

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
@@ -19,6 +18,7 @@ type ProfileServiceImpl struct {
 	BlobManager
 	MongoManager
 	RedisManager
+	LicenseManager
 }
 
 // MongoManager defines the mongoDB server
@@ -40,6 +40,11 @@ type RedisManager interface {
 type BlobManager interface {
 	GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (*blob.GetBlobURLResponse, error)
 	CreateBlob(ctx context.Context, req *blob.CreateBlobRequest, callOptions ...callopt.Option) (*blob.CreateBlobResponse, error)
+}
+
+// LicenseManager gets license info by Baidu OCR Api.
+type LicenseManager interface {
+	GetLicenseInfo(ctx context.Context, url string) *profile.Identity
 }
 
 // GetProfile implements the ProfileServiceImpl interface.
@@ -194,21 +199,16 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
 
-	// br, err := global.BlobClient.GetBlob(ctx, &blob.GetBlobRequest{
-	// 	Id: pr.PhotoBlobID,
-	// })
+	br, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
+		Id:         pr.PhotoBlobID,
+		TimeoutSec: int32(5 * time.Second.Seconds()),
+	})
 	if err != nil {
 		klog.Error("cannot get blob", err)
 		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
-	// TODO: Auto get license info
-	// klog.Info("got profile photo", "size", len(br.Data))
-	return &profile.Identity{
-		LicNumber:       consts.DefaultLicNumber,
-		Name:            consts.DefaultName,
-		Gender:          consts.DefaultGender,
-		BirthDateMillis: consts.DefaultBirth,
-	}, nil
+	info := s.LicenseManager.GetLicenseInfo(ctx, br.Url)
+	return info, nil
 }
 
 // ClearProfilePhoto implements the ProfileServiceImpl interface.

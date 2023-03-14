@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	GlobalServerConfig = &ServerConfig{}
-	GlobalNacosConfig  = &NacosConfig{}
+	GlobalServerConfig ServerConfig
+	GlobalConsulConfig ConsulConfig
 
 	GlobalAuthClient    authservice.Client
 	GlobalCarClient     carservice.Client

@@ -7,7 +7,7 @@ import (
 
 var (
 	GlobalServerConfig ServerConfig
-	GlobalNacosConfig  NacosConfig
+	GlobalConsulConfig ConsulConfig
 
 	CarClient     carservice.Client
 	ProfileClient profileservice.Client

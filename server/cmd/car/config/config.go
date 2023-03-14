@@ -1,15 +1,5 @@
 package config
 
-type NacosConfig struct {
-	Host      string `mapstructure:"host"`
-	Port      uint64 `mapstructure:"port"`
-	Namespace string `mapstructure:"namespace"`
-	User      string `mapstructure:"user"`
-	Password  string `mapstructure:"password"`
-	DataId    string `mapstructure:"dataid"`
-	Group     string `mapstructure:"group"`
-}
-
 type MongoDBConfig struct {
 	Host       string `mapstructure:"host" json:"host"`
 	Port       int    `mapstructure:"port" json:"port"`
@@ -31,6 +21,12 @@ type RabbitMqConfig struct {
 	Exchange string `mapstructure:"exchange" json:"exchange"`
 	User     string `mapstructure:"user" json:"user"`
 	Password string `mapstructure:"password" json:"password"`
+}
+
+type ConsulConfig struct {
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+	Key  string `mapstructure:"key" json:"key"`
 }
 
 type OtelConfig struct {

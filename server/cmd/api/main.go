@@ -23,7 +23,8 @@ import (
 func main() {
 	// initialize
 	initialize.InitLogger()
-	r, info := initialize.InitNacos()
+	initialize.InitConfig()
+	r, info := initialize.InitRegistry()
 	initialize.InitSentinel()
 	tracer, trcCfg := hertztracing.NewServerTracer()
 	tlsCfg := initialize.InitTLS()

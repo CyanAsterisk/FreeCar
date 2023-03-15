@@ -1,4 +1,5 @@
-use FreeCar
+use
+FreeCar
 
 db.trip.createIndex({
     "trip.accountid": 1,

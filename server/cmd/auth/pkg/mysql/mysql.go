@@ -5,6 +5,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
+	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 )
@@ -91,17 +92,16 @@ func (m *Manager) GetUserByAccountId(aid int64) (*User, error) {
 }
 
 func (m *Manager) UpdateUser(user *User) error {
-	u := map[string]interface{}{}
 	if user.PhoneNumber != 0 {
-		u["phone_number"] = user.PhoneNumber
+		utils.H{}["phone_number"] = user.PhoneNumber
 	}
 	if user.Username != "" {
-		u["username"] = user.Username
+		utils.H{}["username"] = user.Username
 	}
 	if user.AvatarBlobId != 0 {
-		u["avatar_blob_id"] = user.AvatarBlobId
+		utils.H{}["avatar_blob_id"] = user.AvatarBlobId
 	}
-	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
+	err := m.db.Model(&User{ID: user.ID}).Updates(utils.H{}).Error
 	if err == gorm.ErrRecordNotFound {
 		return errno.RecordNotFound
 	}

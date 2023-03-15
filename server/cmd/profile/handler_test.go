@@ -126,9 +126,10 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 	}
 
 	s := ProfileServiceImpl{
-		MongoManager: mongo.NewManager(mongoClient.Database(consts.FreeCar)),
-		RedisManager: redis.NewManager(redisClient),
-		BlobManager:  &blobClient{idForCreate: 123},
+		MongoManager:   mongo.NewManager(mongoClient.Database(consts.FreeCar)),
+		RedisManager:   redis.NewManager(redisClient),
+		BlobManager:    &TestBlobManager{idForCreate: 123},
+		LicenseManager: &TestLicenseManager{},
 	}
 	aid := id.AccountID(123)
 	cases := []struct {
@@ -193,19 +194,31 @@ func TestProfilePhotoLifecycle(t *testing.T) {
 	}
 }
 
-type blobClient struct {
+type TestBlobManager struct {
 	idForCreate int64
 }
 
-func (b *blobClient) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest, callOptions ...callopt.Option) (r *blob.CreateBlobResponse, err error) {
+func (b *TestBlobManager) CreateBlob(ctx context.Context, req *blob.CreateBlobRequest, callOptions ...callopt.Option) (r *blob.CreateBlobResponse, err error) {
 	return &blob.CreateBlobResponse{
 		Id:        b.idForCreate,
 		UploadUrl: "upload_url for " + strconv.FormatInt(b.idForCreate, 10),
 	}, nil
 }
 
-func (b *blobClient) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error) {
+func (b *TestBlobManager) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRequest, callOptions ...callopt.Option) (r *blob.GetBlobURLResponse, err error) {
 	return &blob.GetBlobURLResponse{
 		Url: "get_url for " + strconv.FormatInt(req.Id, 10),
+	}, nil
+}
+
+type TestLicenseManager struct {
+}
+
+func (m *TestLicenseManager) GetLicenseInfo(_ string) (*profile.Identity, error) {
+	return &profile.Identity{
+		LicNumber:       "100000000001",
+		Name:            "FreeCar",
+		Gender:          1,
+		BirthDateMillis: 631152000000,
 	}, nil
 }

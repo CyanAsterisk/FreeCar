@@ -17,6 +17,7 @@ import (
 // AuthServiceImpl implements the last service interface defined in the IDL.
 type AuthServiceImpl struct {
 	OpenIDResolver
+	EncryptManager
 	AdminMysqlManager
 	UserMysqlManager
 	BlobManager
@@ -26,6 +27,10 @@ type AuthServiceImpl struct {
 // to an open id.
 type OpenIDResolver interface {
 	Resolve(code string) string
+}
+
+type EncryptManager interface {
+	EncryptPassword(code string) string
 }
 
 type UserMysqlManager interface {
@@ -78,7 +83,8 @@ func (s *AuthServiceImpl) AdminLogin(_ context.Context, req *auth.AdminLoginRequ
 		klog.Error("get password by name err", err)
 		return nil, errno.AuthSrvErr.WithMessage("login error")
 	}
-	if admin.Password != req.Password {
+	cryPassword := s.EncryptPassword(req.Password)
+	if admin.Password != cryPassword {
 		klog.Infof("%s login err", req.Username)
 		return nil, errno.AuthSrvErr.WithMessage("wrong username or password")
 	}
@@ -92,7 +98,8 @@ func (s *AuthServiceImpl) ChangeAdminPassword(_ context.Context, req *auth.Chang
 		klog.Error("get password by aid err", err)
 		return nil, errno.AuthSrvErr.WithMessage("change password error")
 	}
-	if admin.Password != req.OldPassword {
+	cryPassword := s.EncryptManager.EncryptPassword(req.OldPassword)
+	if admin.Password != cryPassword {
 		klog.Infof("%s change password err", admin.Username)
 		return nil, errno.AuthSrvErr.WithMessage("wrong password")
 	}

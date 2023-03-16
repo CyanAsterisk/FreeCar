@@ -56,7 +56,7 @@ func TestAuthLifeCycle(t *testing.T) {
 				resp, err := manager.GetAdminByAccountId(u.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1234 Username:username1 Password:newPassword-1}]",
+			want: "[err = <nil>][resp = &{ID:1234 Username:username1 Password:386ff2339004f5dc8dc0cb5aa60aa94e}]",
 		},
 	}
 

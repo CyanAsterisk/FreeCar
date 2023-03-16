@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
@@ -76,7 +77,8 @@ func (m *AdminManager) GetAdminByName(name string) (*Admin, error) {
 
 // UpdateAdminPassword updates admin password.
 func (m *AdminManager) UpdateAdminPassword(aid int64, password string) error {
-	if err := m.db.Model(&Admin{}).Where(&Admin{ID: aid}).Update("password", password).Error; err != nil {
+	cryPassword := md5.Md5Crypt(password, m.salt)
+	if err := m.db.Model(&Admin{}).Where(&Admin{ID: aid}).Update("password", cryPassword).Error; err != nil {
 		return err
 	}
 	return nil

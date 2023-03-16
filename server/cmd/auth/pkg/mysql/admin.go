@@ -76,7 +76,7 @@ func (m *AdminManager) GetAdminByName(name string) (*Admin, error) {
 
 // UpdateAdminPassword updates admin password.
 func (m *AdminManager) UpdateAdminPassword(aid int64, password string) error {
-	if err := m.db.Where(&Admin{ID: aid}).Update("password", password).Error; err != nil {
+	if err := m.db.Model(&Admin{}).Where(&Admin{ID: aid}).Update("password", password).Error; err != nil {
 		return err
 	}
 	return nil

@@ -72,7 +72,7 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 }
 
 // AdminLogin implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) AdminLogin(ctx context.Context, req *auth.AdminLoginRequest) (resp *auth.AdminLoginResponse, err error) {
+func (s *AuthServiceImpl) AdminLogin(_ context.Context, req *auth.AdminLoginRequest) (resp *auth.AdminLoginResponse, err error) {
 	admin, err := s.AdminMysqlManager.GetAdminByName(req.Username)
 	if err != nil {
 		klog.Error("get password by name err", err)
@@ -86,7 +86,7 @@ func (s *AuthServiceImpl) AdminLogin(ctx context.Context, req *auth.AdminLoginRe
 }
 
 // ChangeAdminPassword implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest) (resp *auth.ChangeAdminPasswordResponse, err error) {
+func (s *AuthServiceImpl) ChangeAdminPassword(_ context.Context, req *auth.ChangeAdminPasswordRequest) (resp *auth.ChangeAdminPasswordResponse, err error) {
 	admin, err := s.AdminMysqlManager.GetAdminByAccountId(req.AccountId)
 	if err != nil {
 		klog.Error("get password by aid err", err)

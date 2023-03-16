@@ -22,12 +22,32 @@ message ELoginResponse{
 }
 
 message AdminLoginRequest {
-  string code = 1[(api.vd) = "len($) > 0"];
+  string username = 1[(api.vd) = "len($) > 0"];
+  string password = 2[(api.vd) = "len($) > 0"];
 }
 
 message AdminLoginResponse {
   string token = 1;
   int64 expired_at = 2[(api.body) = "expired_at"];
+}
+
+message EAdminLoginResponse{
+  int32 code = 1;
+  LoginResponse data = 2;
+  string message = 3;
+}
+
+message ChangeAdminPasswordRequest {
+  string old_password = 1[(api.body) = "old_password"];
+  string new_password = 2[(api.body) = "new_password"];
+}
+
+message ChangeAdminPasswordResponse {
+}
+
+message EChangeAdminPasswordResponse {
+  int32 code = 1;
+  string message = 2;
 }
 
 message AdminELoginResponse{
@@ -37,10 +57,10 @@ message AdminELoginResponse{
 }
 
 message UserInfo{
-   int64 account_id = 1;
-   string username = 2;
-   int64 phone_number = 3;
-   string avatar_url = 4;
+  int64 account_id = 1;
+  string username = 2;
+  int64 phone_number = 3;
+  string avatar_url = 4;
 }
 
 message EUserInfo{
@@ -52,8 +72,8 @@ message EUserInfo{
 message GetUserInfoRequest{}
 
 message UpdateUserRequest{
-    string username = 1;
-    int64 phone_number = 2;
+  string username = 1;
+  int64 phone_number = 2;
 }
 
 message UpdateUserResponse{
@@ -301,6 +321,9 @@ service apiService {
   rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {option (api.get) = "/auth/info";}
   rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/auth/info";}
   rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
+
+  rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
+  rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}
 
   rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/car";}
   rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/car";}

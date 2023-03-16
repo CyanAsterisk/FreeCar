@@ -12,6 +12,8 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	Login(ctx context.Context, req *auth.LoginRequest, callOptions ...callopt.Option) (r *auth.LoginResponse, err error)
+	AdminLogin(ctx context.Context, req *auth.AdminLoginRequest, callOptions ...callopt.Option) (r *auth.AdminLoginResponse, err error)
+	ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest, callOptions ...callopt.Option) (r *auth.ChangeAdminPasswordResponse, err error)
 	UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset, callOptions ...callopt.Option) (r *auth.UploadAvatarResponse, err error)
 	UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error)
 	GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error)
@@ -49,6 +51,16 @@ type kAuthServiceClient struct {
 func (p *kAuthServiceClient) Login(ctx context.Context, req *auth.LoginRequest, callOptions ...callopt.Option) (r *auth.LoginResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Login(ctx, req)
+}
+
+func (p *kAuthServiceClient) AdminLogin(ctx context.Context, req *auth.AdminLoginRequest, callOptions ...callopt.Option) (r *auth.AdminLoginResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AdminLogin(ctx, req)
+}
+
+func (p *kAuthServiceClient) ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest, callOptions ...callopt.Option) (r *auth.ChangeAdminPasswordResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.ChangeAdminPassword(ctx, req)
 }
 
 func (p *kAuthServiceClient) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset, callOptions ...callopt.Option) (r *auth.UploadAvatarResponse, err error) {

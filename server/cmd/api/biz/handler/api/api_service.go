@@ -467,3 +467,69 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 
 	errno.SendResponse(c, errno.Success, resp)
 }
+
+// AdminLogin .
+// @router /admin/login [POST]
+func AdminLogin(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.AdminLoginRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	// rpc to get accountID
+	resp, err := config.GlobalAuthClient.AdminLogin(ctx, &auth.AdminLoginRequest{Username: req.Username, Password: req.Password})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+	// create a JWT
+	j := middleware.NewJWT()
+	claims := middleware.CustomClaims{
+		ID: resp.AccountId,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix(),
+			ExpiresAt: time.Now().Unix() + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
+		},
+	}
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		errno.SendResponse(c, errno.ServiceErr, nil)
+		return
+	}
+	// return token
+	errno.SendResponse(c, errno.Success, api.AdminLoginResponse{
+		Token:     token,
+		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
+	})
+}
+
+// ChangeAdminPassword .
+// @router /admin/password [POST]
+func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.ChangeAdminPasswordRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.ChangeAdminPassword(ctx, &auth.ChangeAdminPasswordRequest{
+		AccountId:    aid.(int64),
+		OldPassword:  req.OldPassword,
+		NewPassword_: req.NewPassword,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}

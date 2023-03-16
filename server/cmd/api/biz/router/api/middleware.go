@@ -154,3 +154,18 @@ func _updateuserinfoMw() []app.HandlerFunc {
 		middleware.JWTAuth(),
 	}
 }
+
+func _adminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func __dminloginMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _change_dminpasswordMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

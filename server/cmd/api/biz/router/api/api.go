@@ -24,6 +24,11 @@ func Register(r *server.Hertz) {
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	{
+		_admin := root.Group("/admin", _adminMw()...)
+		_admin.POST("/login", append(__dminloginMw(), api.AdminLogin)...)
+		_admin.POST("/password", append(_change_dminpasswordMw(), api.ChangeAdminPassword)...)
+	}
+	{
 		_auth := root.Group("/auth", _authMw()...)
 		_auth.POST("/avatar", append(_upload_vatarMw(), api.UploadAvatar)...)
 		_auth.GET("/info", append(_getuserinfoMw(), api.GetUserInfo)...)

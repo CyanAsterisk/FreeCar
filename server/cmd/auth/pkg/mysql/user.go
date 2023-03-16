@@ -15,7 +15,7 @@ type User struct {
 	PhoneNumber  int64
 	AvatarBlobId int64
 	Username     string `gorm:"type:varchar(40)"`
-	OpenID       string `gorm:"column:openid;type:varchar(100);unique;not null"`
+	OpenID       string `gorm:"column:openid;type:varchar(100);uniqueIndex"`
 }
 
 // BeforeCreate uses snowflake to generate an ID.
@@ -32,26 +32,26 @@ func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	return nil
 }
 
-type Manager struct {
+type UserManager struct {
 	salt string
 	db   *gorm.DB
 }
 
-// NewManager creates a mysql manager.
-func NewManager(db *gorm.DB, salt string) *Manager {
+// NewUserManager creates a mysql manager.
+func NewUserManager(db *gorm.DB, salt string) *UserManager {
 	m := db.Migrator()
 	if !m.HasTable(&User{}) {
 		if err := m.CreateTable(&User{}); err != nil {
 			panic(err)
 		}
 	}
-	return &Manager{
+	return &UserManager{
 		db:   db,
 		salt: salt,
 	}
 }
 
-func (m *Manager) CreateUser(user *User) (*User, error) {
+func (m *UserManager) CreateUser(user *User) (*User, error) {
 	if user.OpenID == "" {
 		return nil, errno.AuthSrvErr.WithMessage("openId not set")
 	}
@@ -68,7 +68,7 @@ func (m *Manager) CreateUser(user *User) (*User, error) {
 	return user, err
 }
 
-func (m *Manager) GetUserByOpenId(openID string) (*User, error) {
+func (m *UserManager) GetUserByOpenId(openID string) (*User, error) {
 	var user User
 	cryOpenID := md5.Md5Crypt(openID, m.salt)
 	err := m.db.Where(&User{OpenID: cryOpenID}).First(&user).Error
@@ -82,7 +82,7 @@ func (m *Manager) GetUserByOpenId(openID string) (*User, error) {
 	return &user, nil
 }
 
-func (m *Manager) GetUserByAccountId(aid int64) (*User, error) {
+func (m *UserManager) GetUserByAccountId(aid int64) (*User, error) {
 	var user User
 	err := m.db.Where(&User{ID: aid}).First(&user).Error
 	if err == gorm.ErrRecordNotFound {
@@ -91,7 +91,7 @@ func (m *Manager) GetUserByAccountId(aid int64) (*User, error) {
 	return &user, nil
 }
 
-func (m *Manager) UpdateUser(user *User) error {
+func (m *UserManager) UpdateUser(user *User) error {
 	if user.PhoneNumber != 0 {
 		utils.H{}["phone_number"] = user.PhoneNumber
 	}

@@ -22,7 +22,7 @@ func TestUserLifecycle(t *testing.T) {
 		Username:     "username1",
 		OpenID:       "openID-1",
 	}
-	manager := NewManager(db, salt)
+	manager := NewUserManager(db, salt)
 	cases := []struct {
 		name string
 		op   func() string

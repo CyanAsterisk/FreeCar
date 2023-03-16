@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 	"net"
 	"strconv"
 
@@ -42,8 +43,10 @@ func main() {
 			AppID:     config.GlobalServerConfig.WXInfo.AppId,
 			AppSecret: config.GlobalServerConfig.WXInfo.AppSecret,
 		},
-		MysqlManager: mysql.NewManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
-		BlobManager:  blobClient,
+		EncryptManager:    &md5.EncryptManager{Salt: config.GlobalServerConfig.MysqlInfo.Salt},
+		UserMysqlManager:  mysql.NewUserManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
+		AdminMysqlManager: mysql.NewAdminManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
+		BlobManager:       blobClient,
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),

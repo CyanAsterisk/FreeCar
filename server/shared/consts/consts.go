@@ -79,6 +79,7 @@ const (
 	NacosSnowflakeNode = 1
 	UserSnowflakeNode  = 2
 	BlobSnowflakeNode  = 3
+	AdminSnowflakeNode = 4
 
 	OCRUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/driving_license"
 )

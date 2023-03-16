@@ -24,9 +24,9 @@ func TestUserLifeCycle(t *testing.T) {
 
 	salt := "test-salt"
 	s := AuthServiceImpl{
-		OpenIDResolver: &TestOpenIDResolver{suffix: "test-openId"},
-		MysqlManager:   mysql.NewManager(mysqlDb, salt),
-		BlobManager:    &TestBlobManager{idForCreate: 1024},
+		OpenIDResolver:   &TestOpenIDResolver{suffix: "test-openId"},
+		UserMysqlManager: mysql.NewUserManager(mysqlDb, salt),
+		BlobManager:      &TestBlobManager{idForCreate: 1024},
 	}
 
 	user := mysql.User{
@@ -53,7 +53,7 @@ func TestUserLifeCycle(t *testing.T) {
 			name: "create a custom account",
 			op: func() string {
 				u := user
-				resp, err := s.MysqlManager.CreateUser(&u)
+				resp, err := s.UserMysqlManager.CreateUser(&u)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9}]",

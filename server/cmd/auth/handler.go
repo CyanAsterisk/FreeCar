@@ -17,7 +17,8 @@ import (
 // AuthServiceImpl implements the last service interface defined in the IDL.
 type AuthServiceImpl struct {
 	OpenIDResolver
-	MysqlManager
+	AdminMysqlManager
+	UserMysqlManager
 	BlobManager
 }
 
@@ -27,11 +28,17 @@ type OpenIDResolver interface {
 	Resolve(code string) string
 }
 
-type MysqlManager interface {
+type UserMysqlManager interface {
 	CreateUser(user *mysql.User) (*mysql.User, error)
 	GetUserByOpenId(openId string) (*mysql.User, error)
 	GetUserByAccountId(aid int64) (*mysql.User, error)
 	UpdateUser(user *mysql.User) error
+}
+
+type AdminMysqlManager interface {
+	GetAdminByAccountId(aid int64) (*mysql.Admin, error)
+	GetAdminByName(name string) (*mysql.Admin, error)
+	UpdateAdminPassword(aid int64, password string) error
 }
 
 // BlobManager defines the Anti Corruption Layer
@@ -49,19 +56,52 @@ func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp
 		return nil, errno.AuthSrvErr.WithMessage("bad open id")
 	}
 
-	user, err := s.MysqlManager.GetUserByOpenId(openID)
+	user, err := s.UserMysqlManager.GetUserByOpenId(openID)
 	if err != nil {
 		if err != errno.RecordNotFound {
 			klog.Error("get user by open id err", err)
 			return nil, errno.AuthSrvErr.WithMessage("")
 		}
-		user, err = s.MysqlManager.CreateUser(&mysql.User{OpenID: openID})
+		user, err = s.UserMysqlManager.CreateUser(&mysql.User{OpenID: openID})
 		if err != nil {
 			klog.Error("create user err", err)
 			return nil, errno.AuthSrvErr
 		}
 	}
 	return &auth.LoginResponse{AccountId: user.ID}, nil
+}
+
+// AdminLogin implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) AdminLogin(ctx context.Context, req *auth.AdminLoginRequest) (resp *auth.AdminLoginResponse, err error) {
+	admin, err := s.AdminMysqlManager.GetAdminByName(req.Username)
+	if err != nil {
+		klog.Error("get password by name err", err)
+		return nil, errno.AuthSrvErr.WithMessage("login error")
+	}
+	if admin.Password != req.Password {
+		klog.Infof("%s login err", req.Username)
+		return nil, errno.AuthSrvErr.WithMessage("wrong username or password")
+	}
+	return &auth.AdminLoginResponse{AccountId: admin.ID}, nil
+}
+
+// ChangeAdminPassword implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest) (resp *auth.ChangeAdminPasswordResponse, err error) {
+	admin, err := s.AdminMysqlManager.GetAdminByAccountId(req.AccountId)
+	if err != nil {
+		klog.Error("get password by aid err", err)
+		return nil, errno.AuthSrvErr.WithMessage("change password error")
+	}
+	if admin.Password != req.OldPassword {
+		klog.Infof("%s change password err", admin.Username)
+		return nil, errno.AuthSrvErr.WithMessage("wrong password")
+	}
+	err = s.UpdateAdminPassword(req.AccountId, req.NewPassword_)
+	if err != nil {
+		klog.Error("update password err", err)
+		return nil, errno.AuthSrvErr.WithMessage("change password error")
+	}
+	return &auth.ChangeAdminPasswordResponse{}, nil
 }
 
 // UploadAvatar implements the AuthServiceImpl interface.
@@ -76,7 +116,7 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 		return nil, status.Err(codes.Aborted, "")
 	}
 
-	if err = s.MysqlManager.UpdateUser(&mysql.User{
+	if err = s.UserMysqlManager.UpdateUser(&mysql.User{
 		ID:           req.AccountId,
 		AvatarBlobId: br.Id,
 	}); err != nil {
@@ -93,7 +133,7 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 
 // UpdateUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
-	err = s.MysqlManager.UpdateUser(&mysql.User{
+	err = s.UserMysqlManager.UpdateUser(&mysql.User{
 		ID:          req.AccountId,
 		PhoneNumber: req.PhoneNumber,
 		Username:    req.Username,
@@ -110,7 +150,7 @@ func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequ
 
 // GetUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.UserInfo, err error) {
-	user, err := s.MysqlManager.GetUserByAccountId(req.AccontId)
+	user, err := s.UserMysqlManager.GetUserByAccountId(req.AccontId)
 	if err != nil {
 		if err == errno.RecordNotFound {
 			return nil, errno.RecordNotFound

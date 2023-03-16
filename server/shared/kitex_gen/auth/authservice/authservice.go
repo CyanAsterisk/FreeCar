@@ -19,10 +19,12 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "AuthService"
 	handlerType := (*auth.AuthService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"Login":        kitex.NewMethodInfo(loginHandler, newAuthServiceLoginArgs, newAuthServiceLoginResult, false),
-		"UploadAvatar": kitex.NewMethodInfo(uploadAvatarHandler, newAuthServiceUploadAvatarArgs, newAuthServiceUploadAvatarResult, false),
-		"UpdateUser":   kitex.NewMethodInfo(updateUserHandler, newAuthServiceUpdateUserArgs, newAuthServiceUpdateUserResult, false),
-		"GetUser":      kitex.NewMethodInfo(getUserHandler, newAuthServiceGetUserArgs, newAuthServiceGetUserResult, false),
+		"Login":               kitex.NewMethodInfo(loginHandler, newAuthServiceLoginArgs, newAuthServiceLoginResult, false),
+		"AdminLogin":          kitex.NewMethodInfo(adminLoginHandler, newAuthServiceAdminLoginArgs, newAuthServiceAdminLoginResult, false),
+		"ChangeAdminPassword": kitex.NewMethodInfo(changeAdminPasswordHandler, newAuthServiceChangeAdminPasswordArgs, newAuthServiceChangeAdminPasswordResult, false),
+		"UploadAvatar":        kitex.NewMethodInfo(uploadAvatarHandler, newAuthServiceUploadAvatarArgs, newAuthServiceUploadAvatarResult, false),
+		"UpdateUser":          kitex.NewMethodInfo(updateUserHandler, newAuthServiceUpdateUserArgs, newAuthServiceUpdateUserResult, false),
+		"GetUser":             kitex.NewMethodInfo(getUserHandler, newAuthServiceGetUserArgs, newAuthServiceGetUserResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "auth",
@@ -54,6 +56,42 @@ func newAuthServiceLoginArgs() interface{} {
 
 func newAuthServiceLoginResult() interface{} {
 	return auth.NewAuthServiceLoginResult()
+}
+
+func adminLoginHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceAdminLoginArgs)
+	realResult := result.(*auth.AuthServiceAdminLoginResult)
+	success, err := handler.(auth.AuthService).AdminLogin(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceAdminLoginArgs() interface{} {
+	return auth.NewAuthServiceAdminLoginArgs()
+}
+
+func newAuthServiceAdminLoginResult() interface{} {
+	return auth.NewAuthServiceAdminLoginResult()
+}
+
+func changeAdminPasswordHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceChangeAdminPasswordArgs)
+	realResult := result.(*auth.AuthServiceChangeAdminPasswordResult)
+	success, err := handler.(auth.AuthService).ChangeAdminPassword(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceChangeAdminPasswordArgs() interface{} {
+	return auth.NewAuthServiceChangeAdminPasswordArgs()
+}
+
+func newAuthServiceChangeAdminPasswordResult() interface{} {
+	return auth.NewAuthServiceChangeAdminPasswordResult()
 }
 
 func uploadAvatarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -125,6 +163,26 @@ func (p *kClient) Login(ctx context.Context, req *auth.LoginRequest) (r *auth.Lo
 	_args.Req = req
 	var _result auth.AuthServiceLoginResult
 	if err = p.c.Call(ctx, "Login", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) AdminLogin(ctx context.Context, req *auth.AdminLoginRequest) (r *auth.AdminLoginResponse, err error) {
+	var _args auth.AuthServiceAdminLoginArgs
+	_args.Req = req
+	var _result auth.AuthServiceAdminLoginResult
+	if err = p.c.Call(ctx, "AdminLogin", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest) (r *auth.ChangeAdminPasswordResponse, err error) {
+	var _args auth.AuthServiceChangeAdminPasswordArgs
+	_args.Req = req
+	var _result auth.AuthServiceChangeAdminPasswordResult
+	if err = p.c.Call(ctx, "ChangeAdminPassword", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

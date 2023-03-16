@@ -8,6 +8,23 @@ struct LoginResponse {
     1: i64 account_id
 }
 
+struct AdminLoginRequest {
+    1: string username
+    2: string password
+}
+
+struct AdminLoginResponse {
+    1: i64 account_id
+}
+
+struct ChangeAdminPasswordRequest {
+    1: i64 account_id
+    2: string old_password
+    3: string new_password
+}
+
+struct ChangeAdminPasswordResponse {}
+
 struct UserInfo{
     1: i64 account_id;
     2: string username;
@@ -38,6 +55,8 @@ struct UpdateUserResponse{}
 
 service AuthService {
     LoginResponse Login(1: LoginRequest req)
+    AdminLoginResponse AdminLogin(1: AdminLoginRequest req)
+    ChangeAdminPasswordResponse ChangeAdminPassword(1: ChangeAdminPasswordRequest req)
     UploadAvatarResponse UploadAvatar(1: UploadAvatarRequset req)
     UpdateUserResponse UpdateUser (1:UpdateUserRequest req)
     UserInfo GetUser (1:GetUserRequest req)

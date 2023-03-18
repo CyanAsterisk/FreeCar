@@ -23,8 +23,11 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"AdminLogin":          kitex.NewMethodInfo(adminLoginHandler, newAuthServiceAdminLoginArgs, newAuthServiceAdminLoginResult, false),
 		"ChangeAdminPassword": kitex.NewMethodInfo(changeAdminPasswordHandler, newAuthServiceChangeAdminPasswordArgs, newAuthServiceChangeAdminPasswordResult, false),
 		"UploadAvatar":        kitex.NewMethodInfo(uploadAvatarHandler, newAuthServiceUploadAvatarArgs, newAuthServiceUploadAvatarResult, false),
-		"UpdateUser":          kitex.NewMethodInfo(updateUserHandler, newAuthServiceUpdateUserArgs, newAuthServiceUpdateUserResult, false),
 		"GetUser":             kitex.NewMethodInfo(getUserHandler, newAuthServiceGetUserArgs, newAuthServiceGetUserResult, false),
+		"AddUser":             kitex.NewMethodInfo(addUserHandler, newAuthServiceAddUserArgs, newAuthServiceAddUserResult, false),
+		"DeleteUser":          kitex.NewMethodInfo(deleteUserHandler, newAuthServiceDeleteUserArgs, newAuthServiceDeleteUserResult, false),
+		"UpdateUser":          kitex.NewMethodInfo(updateUserHandler, newAuthServiceUpdateUserArgs, newAuthServiceUpdateUserResult, false),
+		"GetUsers":            kitex.NewMethodInfo(getUsersHandler, newAuthServiceGetUsersArgs, newAuthServiceGetUsersResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "auth",
@@ -112,6 +115,60 @@ func newAuthServiceUploadAvatarResult() interface{} {
 	return auth.NewAuthServiceUploadAvatarResult()
 }
 
+func getUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceGetUserArgs)
+	realResult := result.(*auth.AuthServiceGetUserResult)
+	success, err := handler.(auth.AuthService).GetUser(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceGetUserArgs() interface{} {
+	return auth.NewAuthServiceGetUserArgs()
+}
+
+func newAuthServiceGetUserResult() interface{} {
+	return auth.NewAuthServiceGetUserResult()
+}
+
+func addUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceAddUserArgs)
+	realResult := result.(*auth.AuthServiceAddUserResult)
+	success, err := handler.(auth.AuthService).AddUser(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceAddUserArgs() interface{} {
+	return auth.NewAuthServiceAddUserArgs()
+}
+
+func newAuthServiceAddUserResult() interface{} {
+	return auth.NewAuthServiceAddUserResult()
+}
+
+func deleteUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceDeleteUserArgs)
+	realResult := result.(*auth.AuthServiceDeleteUserResult)
+	success, err := handler.(auth.AuthService).DeleteUser(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newAuthServiceDeleteUserArgs() interface{} {
+	return auth.NewAuthServiceDeleteUserArgs()
+}
+
+func newAuthServiceDeleteUserResult() interface{} {
+	return auth.NewAuthServiceDeleteUserResult()
+}
+
 func updateUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*auth.AuthServiceUpdateUserArgs)
 	realResult := result.(*auth.AuthServiceUpdateUserResult)
@@ -130,22 +187,22 @@ func newAuthServiceUpdateUserResult() interface{} {
 	return auth.NewAuthServiceUpdateUserResult()
 }
 
-func getUserHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*auth.AuthServiceGetUserArgs)
-	realResult := result.(*auth.AuthServiceGetUserResult)
-	success, err := handler.(auth.AuthService).GetUser(ctx, realArg.Req)
+func getUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*auth.AuthServiceGetUsersArgs)
+	realResult := result.(*auth.AuthServiceGetUsersResult)
+	success, err := handler.(auth.AuthService).GetUsers(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newAuthServiceGetUserArgs() interface{} {
-	return auth.NewAuthServiceGetUserArgs()
+func newAuthServiceGetUsersArgs() interface{} {
+	return auth.NewAuthServiceGetUsersArgs()
 }
 
-func newAuthServiceGetUserResult() interface{} {
-	return auth.NewAuthServiceGetUserResult()
+func newAuthServiceGetUsersResult() interface{} {
+	return auth.NewAuthServiceGetUsersResult()
 }
 
 type kClient struct {
@@ -198,6 +255,36 @@ func (p *kClient) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequse
 	return _result.GetSuccess(), nil
 }
 
+func (p *kClient) GetUser(ctx context.Context, req *auth.GetUserRequest) (r *auth.UserInfo, err error) {
+	var _args auth.AuthServiceGetUserArgs
+	_args.Req = req
+	var _result auth.AuthServiceGetUserResult
+	if err = p.c.Call(ctx, "GetUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) AddUser(ctx context.Context, req *auth.AddUserRequest) (r *auth.AddUserResponse, err error) {
+	var _args auth.AuthServiceAddUserArgs
+	_args.Req = req
+	var _result auth.AuthServiceAddUserResult
+	if err = p.c.Call(ctx, "AddUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DeleteUser(ctx context.Context, req *auth.DeleteUserRequest) (r *auth.DeleteUserResponse, err error) {
+	var _args auth.AuthServiceDeleteUserArgs
+	_args.Req = req
+	var _result auth.AuthServiceDeleteUserResult
+	if err = p.c.Call(ctx, "DeleteUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *kClient) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest) (r *auth.UpdateUserResponse, err error) {
 	var _args auth.AuthServiceUpdateUserArgs
 	_args.Req = req
@@ -208,11 +295,11 @@ func (p *kClient) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest) (
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetUser(ctx context.Context, req *auth.GetUserRequest) (r *auth.UserInfo, err error) {
-	var _args auth.AuthServiceGetUserArgs
+func (p *kClient) GetUsers(ctx context.Context, req *auth.GetUsersRequest) (r *auth.GetUsersResponse, err error) {
+	var _args auth.AuthServiceGetUsersArgs
 	_args.Req = req
-	var _result auth.AuthServiceGetUserResult
-	if err = p.c.Call(ctx, "GetUser", &_args, &_result); err != nil {
+	var _result auth.AuthServiceGetUsersResult
+	if err = p.c.Call(ctx, "GetUsers", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -5,7 +5,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 )
@@ -16,6 +15,7 @@ type User struct {
 	AvatarBlobId int64
 	Username     string `gorm:"type:varchar(40)"`
 	OpenID       string `gorm:"column:openid;type:varchar(100);uniqueIndex"`
+	Deleted      gorm.DeletedAt
 }
 
 // BeforeCreate uses snowflake to generate an ID.
@@ -85,25 +85,66 @@ func (m *UserManager) GetUserByOpenId(openID string) (*User, error) {
 func (m *UserManager) GetUserByAccountId(aid int64) (*User, error) {
 	var user User
 	err := m.db.Where(&User{ID: aid}).First(&user).Error
-	if err == gorm.ErrRecordNotFound {
-		return nil, errno.RecordNotFound
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errno.RecordNotFound
+		}
+		return nil, err
 	}
 	return &user, nil
 }
 
 func (m *UserManager) UpdateUser(user *User) error {
+	u := map[string]interface{}{}
 	if user.PhoneNumber != 0 {
-		utils.H{}["phone_number"] = user.PhoneNumber
+		u["phone_number"] = user.PhoneNumber
 	}
 	if user.Username != "" {
-		utils.H{}["username"] = user.Username
+		u["username"] = user.Username
 	}
 	if user.AvatarBlobId != 0 {
-		utils.H{}["avatar_blob_id"] = user.AvatarBlobId
+		u["avatar_blob_id"] = user.AvatarBlobId
 	}
-	err := m.db.Model(&User{ID: user.ID}).Updates(utils.H{}).Error
+	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
 	if err == gorm.ErrRecordNotFound {
 		return errno.RecordNotFound
 	}
 	return err
+}
+
+func (m *UserManager) DeleteUser(aid int64) error {
+	var user User
+	err := m.db.Where(&User{ID: aid}).Delete(&user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *UserManager) GetUsers(pn, ps int64) ([]*User, error) {
+	var users []*User
+	err := m.db.Scopes(Paginate(int(pn), int(ps))).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+// Paginate is responsible for pagination.
+func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if page == 0 {
+			page = 1
+		}
+
+		switch {
+		case pageSize > 100:
+			pageSize = 100
+		case pageSize <= 0:
+			pageSize = 10
+		}
+
+		offset := (page - 1) * pageSize
+		return db.Offset(offset).Limit(pageSize)
+	}
 }

@@ -66,7 +66,7 @@ func TestAuthLifeCycle(t *testing.T) {
 				resp, err := s.UserMysqlManager.CreateUser(&u)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9}]",
+			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
 		},
 		{
 			name: "test get user",
@@ -74,7 +74,7 @@ func TestAuthLifeCycle(t *testing.T) {
 				resp, err := s.GetUserByAccountId(user.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9}]",
+			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
 		},
 		{
 			name: "test update user",
@@ -90,7 +90,7 @@ func TestAuthLifeCycle(t *testing.T) {
 				resp, err := s.GetUserByAccountId(user.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:88888888888 AvatarBlobId:0 Username:new-username OpenID:de73b2ae1a444cd60d81fd986c5a46a9}]",
+			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:88888888888 AvatarBlobId:0 Username:new-username OpenID:de73b2ae1a444cd60d81fd986c5a46a9 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
 		},
 		{
 			name: "test upload avatar",
@@ -99,6 +99,59 @@ func TestAuthLifeCycle(t *testing.T) {
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = UploadAvatarResponse({UploadUrl:upload_url for 1024})]",
+		},
+		{
+			name: "add user",
+			op: func() string {
+				resp, err := s.AddUser(ctx, &auth.AddUserRequest{
+					AccountId:   1111,
+					Username:    "test-name1",
+					PhoneNumber: 123456789,
+					OpenId:      "its a openid1",
+				})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = <nil>][resp = <nil>]",
+		},
+		{
+			name: "get users",
+			op: func() string {
+				_, err = s.AddUser(ctx, &auth.AddUserRequest{
+					AccountId:   1112,
+					Username:    "test-name2",
+					PhoneNumber: 123456789,
+					OpenId:      "its a openid2",
+				})
+				_, err = s.AddUser(ctx, &auth.AddUserRequest{
+					AccountId:   1113,
+					Username:    "test-name3",
+					PhoneNumber: 123456789,
+					OpenId:      "its a openid3",
+				})
+				if err != nil {
+					fmt.Println(err)
+				}
+				resp, err := s.GetUsers(ctx, &auth.GetUsersRequest{
+					Pn:    1,
+					Psize: 2,
+				})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = <nil>][resp = GetUsersResponse({Users:[User({AccountId:1024 Username:new-username PhoneNumber:88888888888 AvatarBlobId:1024 OpenId:de73b2ae1a444cd60d81fd986c5a46a9}) User({AccountId:1111 Username:test-name1 PhoneNumber:123456789 AvatarBlobId:0 OpenId:75f86dd0bc8ea5f652684a7fd249be66})]})]",
+		},
+		{
+			name: "delete user",
+			op: func() string {
+				_, err := s.DeleteUser(ctx, &auth.DeleteUserRequest{
+					AccountId: 1111,
+				})
+				resp, err := s.GetUsers(ctx, &auth.GetUsersRequest{
+					Pn:    1,
+					Psize: 2,
+				})
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: "[err = <nil>][resp = GetUsersResponse({Users:[User({AccountId:1024 Username:new-username PhoneNumber:88888888888 AvatarBlobId:1024 OpenId:de73b2ae1a444cd60d81fd986c5a46a9}) User({AccountId:1112 Username:test-name2 PhoneNumber:123456789 AvatarBlobId:0 OpenId:6a1dcb6539448b157f5d36085c71d4bc})]})]",
 		},
 		{
 			name: "admin login",

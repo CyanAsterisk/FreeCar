@@ -15,8 +15,11 @@ type Client interface {
 	AdminLogin(ctx context.Context, req *auth.AdminLoginRequest, callOptions ...callopt.Option) (r *auth.AdminLoginResponse, err error)
 	ChangeAdminPassword(ctx context.Context, req *auth.ChangeAdminPasswordRequest, callOptions ...callopt.Option) (r *auth.ChangeAdminPasswordResponse, err error)
 	UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset, callOptions ...callopt.Option) (r *auth.UploadAvatarResponse, err error)
-	UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error)
 	GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error)
+	AddUser(ctx context.Context, req *auth.AddUserRequest, callOptions ...callopt.Option) (r *auth.AddUserResponse, err error)
+	DeleteUser(ctx context.Context, req *auth.DeleteUserRequest, callOptions ...callopt.Option) (r *auth.DeleteUserResponse, err error)
+	UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error)
+	GetUsers(ctx context.Context, req *auth.GetUsersRequest, callOptions ...callopt.Option) (r *auth.GetUsersResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -68,12 +71,27 @@ func (p *kAuthServiceClient) UploadAvatar(ctx context.Context, req *auth.UploadA
 	return p.kClient.UploadAvatar(ctx, req)
 }
 
+func (p *kAuthServiceClient) GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUser(ctx, req)
+}
+
+func (p *kAuthServiceClient) AddUser(ctx context.Context, req *auth.AddUserRequest, callOptions ...callopt.Option) (r *auth.AddUserResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AddUser(ctx, req)
+}
+
+func (p *kAuthServiceClient) DeleteUser(ctx context.Context, req *auth.DeleteUserRequest, callOptions ...callopt.Option) (r *auth.DeleteUserResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.DeleteUser(ctx, req)
+}
+
 func (p *kAuthServiceClient) UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UpdateUser(ctx, req)
 }
 
-func (p *kAuthServiceClient) GetUser(ctx context.Context, req *auth.GetUserRequest, callOptions ...callopt.Option) (r *auth.UserInfo, err error) {
+func (p *kAuthServiceClient) GetUsers(ctx context.Context, req *auth.GetUsersRequest, callOptions ...callopt.Option) (r *auth.GetUsersResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetUser(ctx, req)
+	return p.kClient.GetUsers(ctx, req)
 }

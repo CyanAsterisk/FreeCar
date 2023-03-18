@@ -188,7 +188,8 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 
 // AddUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) AddUser(ctx context.Context, req *auth.AddUserRequest) (resp *auth.AddUserResponse, err error) {
-	err = s.UserMysqlManager.UpdateUser(&mysql.User{
+	_, err = s.UserMysqlManager.CreateUser(&mysql.User{
+		ID:           req.AccountId,
 		PhoneNumber:  req.PhoneNumber,
 		AvatarBlobId: req.AvatarBlobId,
 		Username:     req.Username,
@@ -229,6 +230,7 @@ func (s *AuthServiceImpl) GetUsers(ctx context.Context, req *auth.GetUsersReques
 		uInfo.PhoneNumber = user.PhoneNumber
 		uInfo.AvatarBlobId = user.AvatarBlobId
 		uInfo.OpenId = user.OpenID
+		uInfos = append(uInfos, &uInfo)
 	}
 	return &auth.GetUsersResponse{Users: uInfos}, nil
 }

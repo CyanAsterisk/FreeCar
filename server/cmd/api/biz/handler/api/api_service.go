@@ -533,3 +533,66 @@ func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
 
 	errno.SendResponse(c, errno.Success, resp)
 }
+
+// AddUser .
+// @router /auth [POST]
+func AddUser(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.AddUserRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.AddUser(ctx, &auth.AddUserRequest{
+		AccountId:    req.AccountId,
+		Username:     req.Username,
+		PhoneNumber:  req.PhoneNumber,
+		AvatarBlobId: req.AvatarBlobId,
+		OpenId:       req.OpenId,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// DeleteUser .
+// @router /auth [DELETE]
+func DeleteUser(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteUserRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.DeleteUser(ctx, &auth.DeleteUserRequest{req.AccountId})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetUsers .
+// @router /auth [GET]
+func GetUsers(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetUsersRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.GetUsers(ctx, &auth.GetUsersRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}

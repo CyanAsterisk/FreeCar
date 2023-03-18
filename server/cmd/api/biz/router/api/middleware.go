@@ -169,3 +169,18 @@ func _change_dminpasswordMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func __dduserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getusersMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

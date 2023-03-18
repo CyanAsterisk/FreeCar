@@ -17,11 +17,14 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
+	root.POST("/auth", append(__dduserMw(), api.AddUser)...)
+	root.DELETE("/auth", append(_deleteuserMw(), api.DeleteUser)...)
+	root.GET("/auth", append(_getusersMw(), api.GetUsers)...)
 	root.POST("/car", append(_createcarMw(), api.CreateCar)...)
 	root.GET("/car", append(_getcarMw(), api.GetCar)...)
 	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
-	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
+	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)

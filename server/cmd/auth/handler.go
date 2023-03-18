@@ -37,7 +37,9 @@ type UserMysqlManager interface {
 	CreateUser(user *mysql.User) (*mysql.User, error)
 	GetUserByOpenId(openId string) (*mysql.User, error)
 	GetUserByAccountId(aid int64) (*mysql.User, error)
+	GetUsers(pn, ps int64) ([]*mysql.User, error)
 	UpdateUser(user *mysql.User) error
+	DeleteUser(aid int64) error
 }
 
 type AdminMysqlManager interface {
@@ -186,18 +188,47 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 
 // AddUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) AddUser(ctx context.Context, req *auth.AddUserRequest) (resp *auth.AddUserResponse, err error) {
-	// TODO: Your code here...
+	err = s.UserMysqlManager.UpdateUser(&mysql.User{
+		PhoneNumber:  req.PhoneNumber,
+		AvatarBlobId: req.AvatarBlobId,
+		Username:     req.Username,
+		OpenID:       req.OpenId,
+	})
+	if err != nil {
+		if err == errno.RecordNotFound {
+			return nil, nil
+		}
+		klog.Error("update user error", err)
+		return nil, errno.AuthSrvErr.WithMessage("add user error")
+	}
 	return
 }
 
 // DeleteUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) DeleteUser(ctx context.Context, req *auth.DeleteUserRequest) (resp *auth.DeleteUserResponse, err error) {
-	// TODO: Your code here...
+	err = s.UserMysqlManager.DeleteUser(req.AccountId)
+	if err != nil {
+		klog.Error("delete user error", err)
+		return nil, errno.AuthSrvErr.WithMessage("delete user error")
+	}
 	return
 }
 
 // GetUsers implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetUsers(ctx context.Context, req *auth.GetUsersRequest) (resp *auth.GetUsersResponse, err error) {
-	// TODO: Your code here...
-	return
+	users, err := s.UserMysqlManager.GetUsers(req.Pn, req.Psize)
+	if err != nil {
+		klog.Error("get users error", err)
+		return nil, errno.AuthSrvErr.WithMessage("get users error")
+	}
+	var uInfos []*auth.User
+	for _, user := range users {
+		var uInfo auth.User
+		uInfo.Username = user.Username
+		uInfo.AccountId = user.ID
+		uInfo.PhoneNumber = user.PhoneNumber
+		uInfo.AvatarBlobId = user.AvatarBlobId
+		uInfo.OpenId = user.OpenID
+	}
+	return &auth.GetUsersResponse{Users: uInfos}, nil
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 )
@@ -86,23 +85,27 @@ func (m *UserManager) GetUserByOpenId(openID string) (*User, error) {
 func (m *UserManager) GetUserByAccountId(aid int64) (*User, error) {
 	var user User
 	err := m.db.Where(&User{ID: aid}).First(&user).Error
-	if err == gorm.ErrRecordNotFound {
-		return nil, errno.RecordNotFound
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errno.RecordNotFound
+		}
+		return nil, err
 	}
 	return &user, nil
 }
 
 func (m *UserManager) UpdateUser(user *User) error {
+	u := map[string]interface{}{}
 	if user.PhoneNumber != 0 {
-		utils.H{}["phone_number"] = user.PhoneNumber
+		u["phone_number"] = user.PhoneNumber
 	}
 	if user.Username != "" {
-		utils.H{}["username"] = user.Username
+		u["username"] = user.Username
 	}
 	if user.AvatarBlobId != 0 {
-		utils.H{}["avatar_blob_id"] = user.AvatarBlobId
+		u["avatar_blob_id"] = user.AvatarBlobId
 	}
-	err := m.db.Model(&User{ID: user.ID}).Updates(utils.H{}).Error
+	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
 	if err == gorm.ErrRecordNotFound {
 		return errno.RecordNotFound
 	}
@@ -111,7 +114,7 @@ func (m *UserManager) UpdateUser(user *User) error {
 
 func (m *UserManager) DeleteUser(aid int64) error {
 	var user User
-	err := m.db.Where("account_id", aid).Delete(&user).Error
+	err := m.db.Where(&User{ID: aid}).Delete(&user).Error
 	if err != nil {
 		return err
 	}

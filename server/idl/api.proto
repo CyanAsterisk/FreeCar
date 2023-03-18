@@ -63,6 +63,14 @@ message UserInfo{
   string avatar_url = 4;
 }
 
+message User{
+  int64 account_id = 1;
+  string username = 2;
+  int64 phone_number = 3;
+  int64 avatar_blob_id = 4;
+  string open_id = 5;
+}
+
 message EUserInfo{
   int32 code = 1;
   UserInfo data = 2;
@@ -84,6 +92,48 @@ message EUpdateUserResponse{
   UpdateUserResponse data = 2;
   string message = 3;
 }
+
+message AddUserRequest{
+  int64 account_id = 1;
+  string username = 2;
+  int64 phone_number = 3;
+  int64 avatar_blob_id = 4;
+  string open_id = 5;
+}
+
+message AddUserResponse{
+}
+
+message EAddUserResponse{
+  int32 code = 1;
+  string message = 2;
+}
+
+message DeleteUserRequest{
+  int64 account_id = 1;
+}
+
+message DeleteUserResponse{
+}
+
+message EDeleteUserResponse{
+  int32 code = 1;
+  string message = 2;
+}
+
+message GetUsersRequest{
+}
+
+message GetUsersResponse{
+  repeated User users = 1;
+}
+
+message EGetUsersResponse{
+  int32 code = 1;
+  GetUsersResponse data = 2;
+  string message = 3;
+}
+
 message UploadAvatarRequest{}
 
 message UploadAvatarResponse{
@@ -321,6 +371,9 @@ service apiService {
   rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {option (api.get) = "/auth/info";}
   rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/auth/info";}
   rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
+  rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/auth";}
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {option (api.delete) = "/auth";}
+  rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {option (api.get) = "/auth";}
 
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}

@@ -32,6 +32,14 @@ struct UserInfo{
     4: string avatar_url;
 }
 
+struct User{
+    1: i64 account_id;
+    2: string username;
+    3: i64 phone_number;
+    4: i64 avatar_blob_id;
+    5: string open_id;
+}
+
 struct GetUserRequest{
     1: i64 accont_id;
 }
@@ -48,7 +56,8 @@ struct AddUserRequest{
     1: i64 account_id;
     2: string username;
     3: i64 phone_number;
-    4: string avatar_url
+    4: i64 avatar_blob_id;
+    5: string open_id;
 }
 
 struct AddUserResponse{}
@@ -74,7 +83,7 @@ struct GetUsersRequest{
 }
 
 struct GetUsersResponse{
-    1: list<UserInfo> users;
+    1: list<User> users;
 }
 
 service AuthService {

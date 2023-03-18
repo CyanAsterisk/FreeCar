@@ -183,3 +183,21 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 	}
 	return
 }
+
+// AddUser implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) AddUser(ctx context.Context, req *auth.AddUserRequest) (resp *auth.AddUserResponse, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// DeleteUser implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) DeleteUser(ctx context.Context, req *auth.DeleteUserRequest) (resp *auth.DeleteUserResponse, err error) {
+	// TODO: Your code here...
+	return
+}
+
+// GetUsers implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetUsers(ctx context.Context, req *auth.GetUsersRequest) (resp *auth.GetUsersResponse, err error) {
+	// TODO: Your code here...
+	return
+}

@@ -106,10 +106,10 @@ func TestCreateTrip(t *testing.T) {
 				t.Errorf("error creating trip: %v", err)
 				return
 			}
-			if res.Id != cc.tripID {
-				t.Errorf("incorrect id;want %q,got %q", cc.tripID, res.Id)
+			if res.TripEntity.Id != cc.tripID {
+				t.Errorf("incorrect id;want %q,got %q", cc.tripID, res.TripEntity.Id)
 			}
-			b, err := json.Marshal(res.Trip)
+			b, err := json.Marshal(res.TripEntity.Trip)
 			if err != nil {
 				t.Errorf("cannot marshall response:%v", err)
 			}
@@ -168,7 +168,7 @@ func TestTripLifecycle(t *testing.T) {
 				if err != nil {
 					return nil, err
 				}
-				return e.Trip, nil
+				return e.TripEntity.Trip, nil
 			},
 			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"end":null,"status":1,"identity_id":""}`,
 		},
@@ -176,7 +176,7 @@ func TestTripLifecycle(t *testing.T) {
 			name: "update_trip",
 			now:  20000,
 			op: func() (*trip.Trip, error) {
-				return s.UpdateTrip(c, &trip.UpdateTripRequest{
+				resp, err := s.UpdateTrip(c, &trip.UpdateTripRequest{
 					Id: tid.String(),
 					Current: &trip.Location{
 						Latitude:  28.234234,
@@ -184,6 +184,7 @@ func TestTripLifecycle(t *testing.T) {
 					},
 					AccountId: int64(aid1),
 				})
+				return resp.Trip, err
 			},
 			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":3857,"km_driven":305.0839256834663,"poi_name":"信科大厦","timestamp_sec":20000},"end":null,"status":1,"identity_id":""}`,
 		},
@@ -191,11 +192,12 @@ func TestTripLifecycle(t *testing.T) {
 			name: "finish_trip",
 			now:  30000,
 			op: func() (*trip.Trip, error) {
-				return s.UpdateTrip(c, &trip.UpdateTripRequest{
+				resp, err := s.UpdateTrip(c, &trip.UpdateTripRequest{
 					Id:        tid.String(),
 					EndTrip:   true,
 					AccountId: int64(aid1),
 				})
+				return resp.Trip, err
 			},
 			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"end":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"status":2,"identity_id":""}`,
 		},
@@ -203,10 +205,11 @@ func TestTripLifecycle(t *testing.T) {
 			name: "query_trip",
 			now:  40000,
 			op: func() (*trip.Trip, error) {
-				return s.GetTrip(c, &trip.GetTripRequest{
+				resp, err := s.GetTrip(c, &trip.GetTripRequest{
 					Id:        tid.String(),
 					AccountId: int64(aid1),
 				})
+				return resp.Trip, err
 			},
 			want: `{"account_id":123,"car_id":"car1","start":{"location":{"latitude":32.123,"longitude":114.2525},"fee_cent":0,"km_driven":0,"poi_name":"兴业苑5舍","timestamp_sec":10000},"current":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"end":{"location":{"latitude":28.234234,"longitude":123.243255},"fee_cent":7542,"km_driven":538.6937581015429,"poi_name":"信科大厦","timestamp_sec":30000},"status":2,"identity_id":""}`,
 		},

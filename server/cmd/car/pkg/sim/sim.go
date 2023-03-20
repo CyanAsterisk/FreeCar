@@ -49,7 +49,7 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 			if err != nil {
 				klog.Fatalf("create cars error: %s", err.Error())
 			}
-			cars = append(cars, res)
+			cars = append(cars, res.CarEntity)
 		}
 	}
 	klog.Infof("Running car simulations. car_count = %d", len(cars))

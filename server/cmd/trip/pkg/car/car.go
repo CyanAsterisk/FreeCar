@@ -16,15 +16,15 @@ type Manager struct {
 
 // Verify verifies car status.
 func (m *Manager) Verify(c context.Context, cid id.CarID, aid id.AccountID) error {
-	carClient, err := m.CarService.GetCar(c, &car.GetCarRequest{
+	resp, err := m.CarService.GetCar(c, &car.GetCarRequest{
 		Id:        cid.String(),
 		AccountId: int64(aid),
 	})
 	if err != nil {
 		return fmt.Errorf("cannot get car: %v", err)
 	}
-	if carClient.Status != car.CarStatus_LOCKED {
-		return fmt.Errorf("cannot unlock;car status is %v", carClient.Status)
+	if resp.Car.Status != car.CarStatus_LOCKED {
+		return fmt.Errorf("cannot unlock;car status is %v", resp.Car.Status)
 	}
 	return nil
 }

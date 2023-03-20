@@ -274,7 +274,7 @@ func (p *kClient) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequse
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetUser(ctx context.Context, req *auth.GetUserRequest) (r *auth.UserInfo, err error) {
+func (p *kClient) GetUser(ctx context.Context, req *auth.GetUserRequest) (r *auth.GetUserInfoResponse, err error) {
 	var _args auth.AuthServiceGetUserArgs
 	_args.Req = req
 	var _result auth.AuthServiceGetUserResult

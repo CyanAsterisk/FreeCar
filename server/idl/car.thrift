@@ -1,4 +1,5 @@
 namespace go car
+include "base.thrift"
 
 struct CarEntity{
     1: string id
@@ -37,9 +38,19 @@ struct CreateCarRequest{
      2: string plate_num
 }
 
+struct CreateCarResponse{
+    1: base.BaseResponse base_resp
+    2: CarEntity car_entity
+}
+
 struct GetCarRequest{
     1: i64 account_id
     2: string id
+}
+
+struct GetCarResponse{
+    1: base.BaseResponse base_resp
+    2: Car car
 }
 
 struct GetCarsRequest{
@@ -47,7 +58,8 @@ struct GetCarsRequest{
 }
 
 struct GetCarsResponse{
-    1: list<CarEntity> cars
+    1: base.BaseResponse base_resp
+    2: list<CarEntity> cars
 }
 
 struct LockCarRequest{
@@ -55,7 +67,9 @@ struct LockCarRequest{
     2: string id
 }
 
-struct LockCarResponse{}
+struct LockCarResponse{
+    1: base.BaseResponse base_resp
+}
 
 struct UnlockCarRequest{
     1: string id
@@ -64,7 +78,9 @@ struct UnlockCarRequest{
     4: string trip_id
 }
 
-struct UnlockCarResponse{}
+struct UnlockCarResponse{
+    1: base.BaseResponse base_resp
+}
 
 struct UpdateCarRequest{
     1: string id
@@ -74,11 +90,13 @@ struct UpdateCarRequest{
     5: double power
 }
 
-struct UpdateCarResponse{}
+struct UpdateCarResponse{
+    1: base.BaseResponse base_resp
+}
 
 service CarService {
-    CarEntity CreateCar (1:CreateCarRequest req)
-    Car GetCar(1: GetCarRequest req)
+    CreateCarResponse CreateCar (1:CreateCarRequest req)
+    GetCarResponse GetCar(1: GetCarRequest req)
     GetCarsResponse GetCars(1: GetCarsRequest req)
     LockCarResponse LockCar (1:LockCarRequest req)
     UnlockCarResponse UnlockCar(1:UnlockCarRequest req)

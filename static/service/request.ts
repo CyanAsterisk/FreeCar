@@ -81,6 +81,7 @@ export namespace FreeCar {
             }
             wx.request({
                 url: serverAddr + o.path,
+                enableHttp2: true,
                 method: o.method,
                 data:decamelizeKeysDeep(o.data),
                 header,

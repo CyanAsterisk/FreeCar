@@ -19,15 +19,15 @@ type Manager struct {
 // Verify verifies account identity.
 func (m *Manager) Verify(c context.Context, aid id.AccountID) (id.IdentityID, error) {
 	nilID := id.IdentityID("")
-	p, err := m.ProfileService.GetProfile(c, &profile.GetProfileRequest{AccountId: int64(aid)})
+	resp, err := m.ProfileService.GetProfile(c, &profile.GetProfileRequest{AccountId: int64(aid)})
 	if err != nil {
 		return nilID, fmt.Errorf("cannot get profile: %v", err)
 	}
-	if p.IdentityStatus != profile.IdentityStatus_VERIFIED {
+	if resp.Profile.IdentityStatus != profile.IdentityStatus_VERIFIED {
 		return nilID, fmt.Errorf("invalid identity status")
 	}
 
-	b, err := sonic.Marshal(p.Identity)
+	b, err := sonic.Marshal(resp.Profile.Identity)
 	if err != nil {
 		return nilID, fmt.Errorf("cannot marshal identity:%v", err)
 	}

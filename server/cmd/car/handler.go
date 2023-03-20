@@ -38,22 +38,26 @@ type MongoManager interface {
 }
 
 // CreateCar implements the CarServiceImpl interface.
-func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarRequest) (*car.CarEntity, error) {
+func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarRequest) (resp *car.CreateCarResponse, err error) {
 	cr, err := s.MongoManager.CreateCar(ctx, req.PlateNum)
 	if err != nil {
 		return nil, errno.CarSrvErr.WithMessage("create car err")
 	}
-	return &car.CarEntity{
+
+	resp.CarEntity = &car.CarEntity{
 		Id:  cr.ID.Hex(),
 		Car: cr.Car,
-	}, nil
+	}
+	return resp, nil
 }
 
 // GetCar implements the CarServiceImpl interface.
-func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*car.Car, error) {
-	cn, err := s.RedisManager.GetCar(ctx, id.CarID(req.Id))
+func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (resp *car.GetCarResponse, err error) {
+	resp = new(car.GetCarResponse)
+	en, err := s.RedisManager.GetCar(ctx, id.CarID(req.Id))
 	if err == nil {
-		return cn.Car, nil
+		resp.Car = en.Car
+		return resp, nil
 	}
 	if err != errno.RecordNotFound {
 		klog.Errorf("get car cache err", err)
@@ -65,7 +69,8 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (*c
 	if err := s.RedisManager.InsertCar(context.Background(), id.CarID(cr.ID.Hex()), cr.Car); err != nil {
 		klog.Errorf("create cache record err", err)
 	}
-	return cr.Car, nil
+	resp.Car = cr.Car
+	return resp, nil
 }
 
 // GetCars implements the CarServiceImpl interface.

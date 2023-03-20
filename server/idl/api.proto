@@ -6,13 +6,20 @@ option go_package = "server/cmd/api";
 
 import "hz.proto";
 
+message BaseResponse{
+  int64 status_code = 1;
+  string status_msg = 2;
+}
+
 message LoginRequest {
   string code = 1[(api.vd) = "len($) > 0"];
 }
 
+
 message LoginResponse {
-  string token = 1;
-  int64 expired_at = 2[(api.body) = "expired_at"];
+  BaseResponse base_resp = 1;
+  string token = 2;
+  int64 expired_at = 3[(api.body) = "expired_at"];
 }
 
 message ELoginResponse{
@@ -27,8 +34,9 @@ message AdminLoginRequest {
 }
 
 message AdminLoginResponse {
-  string token = 1;
-  int64 expired_at = 2[(api.body) = "expired_at"];
+  BaseResponse base_resp = 1;
+  string token = 2;
+  int64 expired_at = 3[(api.body) = "expired_at"];
 }
 
 message EAdminLoginResponse{
@@ -43,6 +51,7 @@ message ChangeAdminPasswordRequest {
 }
 
 message ChangeAdminPasswordResponse {
+  BaseResponse base_resp = 1;
 }
 
 message EChangeAdminPasswordResponse {
@@ -63,6 +72,7 @@ message UserInfo{
   string avatar_url = 4;
 }
 
+
 message User{
   int64 account_id = 1;
   string username = 2;
@@ -79,12 +89,18 @@ message EUserInfo{
 
 message GetUserInfoRequest{}
 
+message GetUserInfoResponse{
+  BaseResponse base_resp = 1;
+  UserInfo user_info = 2;
+}
+
 message UpdateUserRequest{
   string username = 1;
   int64 phone_number = 2;
 }
 
 message UpdateUserResponse{
+  BaseResponse base_resp = 1;
 }
 
 message EUpdateUserResponse{
@@ -102,6 +118,7 @@ message AddUserRequest{
 }
 
 message AddUserResponse{
+  BaseResponse base_resp = 1;
 }
 
 message EAddUserResponse{
@@ -114,6 +131,7 @@ message DeleteUserRequest{
 }
 
 message DeleteUserResponse{
+  BaseResponse base_resp = 1;
 }
 
 message EDeleteUserResponse{
@@ -125,7 +143,8 @@ message GetUsersRequest{
 }
 
 message GetUsersResponse{
-  repeated User users = 1;
+  BaseResponse base_resp = 1;
+  repeated User users = 2;
 }
 
 message EGetUsersResponse{
@@ -137,7 +156,8 @@ message EGetUsersResponse{
 message UploadAvatarRequest{}
 
 message UploadAvatarResponse{
-  string upload_url = 1;
+  BaseResponse base_resp = 1;
+  string upload_url = 2;
 }
 
 message EUploadAvatarResponse{
@@ -150,6 +170,7 @@ message CarEntity {
   string id = 1;
   Car car = 2;
 }
+
 
 message ECarEntity{
   int32 code = 1;
@@ -193,15 +214,25 @@ message CreateCarRequest {
   string plate_num = 6[(api.body) = "plate_num"];
 }
 
+message CreateCarResponse{
+  BaseResponse base_resp = 1;
+  CarEntity car_entity = 2;
+}
+
 message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
+}
+message GetCarResponse{
+  BaseResponse base_resp = 1;
+  Car car = 2;
 }
 
 message GetCarsRequest{
 }
 
 message GetCarsResponse{
-  repeated CarEntity cars = 1;
+  BaseResponse base_resp = 1;
+  repeated CarEntity cars = 2;
 }
 
 message EGetCarsResponse{
@@ -257,18 +288,27 @@ message CreateTripRequest {
   string avatar_url = 3[(api.body) = "avatar_url"];
 }
 
+message CreateTripResponse{
+  BaseResponse base_resp = 1;
+  TripEntity trip_entity = 2;
+}
 
 message GetTripRequest{
   string id = 1[(api.vd) = "len($) > 0"];
 }
 
+message GetTripResponse{
+  BaseResponse base_resp = 1;
+  Trip trip = 2;
+}
 
 message GetTripsRequest{
   TripStatus status = 1;
 }
 
 message GetTripsResponse{
-  repeated TripEntity trips = 1;
+  BaseResponse base_resp = 1;
+  repeated TripEntity trips = 2;
 }
 
 
@@ -282,6 +322,11 @@ message UpdateTripRequest{
   string id = 1;
   Location current = 2;
   bool end_trip = 3[(api.body) = "end_trip"];
+}
+
+message UpdateTripResponse{
+  BaseResponse base_resp = 1;
+  Trip trip = 2;
 }
 
 enum Gender {
@@ -322,17 +367,32 @@ message EIdentity {
 
 message GetProfileRequest {}
 
+message GetProfileResponse{
+  BaseResponse base_resp = 1;
+  Profile profile = 2;
+}
 
 message SubmitProfileRequest {
   Identity identity = 2;
 }
 
+message SubmitProfileResponse{
+  BaseResponse base_resp = 1;
+  Profile profile = 2;
+}
+
 message ClearProfileRequest {}
+
+message ClearProfileResponse{
+  BaseResponse base_resp = 1;
+  Profile profile = 2;
+}
 
 message GetProfilePhotoRequest {}
 
 message GetProfilePhotoResponse {
-  string url = 1;
+  BaseResponse base_resp = 1;
+  string url = 2;
 }
 
 message EGetProfilePhotoResponse {
@@ -345,7 +405,8 @@ message EGetProfilePhotoResponse {
 message CreateProfilePhotoRequest {}
 
 message CreateProfilePhotoResponse {
-  string upload_url = 1[(api.body) = "upload_url"];
+  BaseResponse base_resp = 1;
+  string upload_url = 2[(api.body) = "upload_url"];
 }
 
 message ECreateProfilePhotoResponse {
@@ -356,9 +417,16 @@ message ECreateProfilePhotoResponse {
 
 message CompleteProfilePhotoRequest {}
 
+message CompleteProfilePhotoResponse{
+  BaseResponse base_resp = 1;
+  Identity identity = 2;
+}
+
 message ClearProfilePhotoRequest {}
 
-message ClearProfilePhotoResponse {}
+message ClearProfilePhotoResponse {
+  BaseResponse base_resp = 1;
+}
 
 message EClearProfilePhotoResponse {
   int32 code = 1;
@@ -368,7 +436,7 @@ message EClearProfilePhotoResponse {
 
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/auth/login";}
-  rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {option (api.get) = "/auth/info";}
+  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/auth/info";}
   rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/auth/info";}
   rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
   rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/auth";}
@@ -378,21 +446,21 @@ service apiService {
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}
 
-  rpc CreateCar (CreateCarRequest) returns (CarEntity) {option (api.post) = "/car";}
-  rpc GetCar (GetCarRequest) returns (Car) {option (api.get) = "/car";}
-  rpc GetCars (GetCarsRequest) returns (GetCarsRequest) {option (api.get) = "/cars";}
+  rpc CreateCar (CreateCarRequest) returns (CreateCarResponse) {option (api.post) = "/car";}
+  rpc GetCar (GetCarRequest) returns (GetCarResponse) {option (api.get) = "/car";}
+  rpc GetCars (GetCarsRequest) returns (GetCarsResponse) {option (api.get) = "/cars";}
 
-  rpc GetProfile (GetProfileRequest) returns (Profile) {option (api.get) = "/profile";}
-  rpc SubmitProfile (SubmitProfileRequest) returns (Profile) {option (api.post) = "/profile";}
-  rpc ClearProfile (ClearProfileRequest) returns (Profile) {option (api.delete) = "/profile";}
+  rpc GetProfile (GetProfileRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/profile";}
+  rpc SubmitProfile (SubmitProfileRequest) returns (SubmitProfileResponse) {option (api.post) = "/profile";}
+  rpc ClearProfile (ClearProfileRequest) returns (ClearProfileResponse) {option (api.delete) = "/profile";}
 
   rpc GetProfilePhoto (GetProfilePhotoRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/profile/photo";}
   rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/profile/photo";}
-  rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (Identity) {option (api.post) = "/profile/photo/complete";}
+  rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (CompleteProfilePhotoResponse) {option (api.post) = "/profile/photo/complete";}
   rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/profile/photo";}
 
-  rpc CreateTrip (CreateTripRequest) returns (TripEntity) {option (api.post) = "/trip";}
-  rpc GetTrip(GetTripRequest) returns (Trip) {option (api.get) = "/trip/:id";}
+  rpc CreateTrip (CreateTripRequest) returns (CreateTripResponse) {option (api.post) = "/trip";}
+  rpc GetTrip(GetTripRequest) returns (GetTripResponse) {option (api.get) = "/trip/:id";}
   rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/trips";}
-  rpc UpdateTrip (UpdateTripRequest) returns (Trip) {option (api.put) = "/trip/:id";}
+  rpc UpdateTrip (UpdateTripRequest) returns (UpdateTripResponse) {option (api.put) = "/trip/:id";}
 }

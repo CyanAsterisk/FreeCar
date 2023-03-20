@@ -1,4 +1,5 @@
 namespace go profile
+include "base.thrift"
 
 // Profile Service
 enum Gender {
@@ -29,44 +30,69 @@ struct GetProfileRequest {
   1: i64 account_id
 }
 
+struct GetProfileResponse{
+    1: base.BaseResponse base_resp
+    2: Profile profile
+}
+
 struct SubmitProfileRequest {
   1: i64 account_id
   2: Identity identity
+}
+
+struct SubmitProfileResponse{
+    1: base.BaseResponse base_resp
+    2: Profile profile
 }
 
 struct ClearProfileRequest {
   1: i64 account_id
 }
 
+struct ClearProfileResponse{
+    1: base.BaseResponse base_resp
+    2: Profile profile
+}
+
 struct GetProfilePhotoRequest {
   1: i64 account_id
 }
 struct GetProfilePhotoResponse {
-  1: string url
+  1: base.BaseResponse base_resp
+  2: string url
 }
 
 struct CreateProfilePhotoRequest {
   1: i64 account_id
 }
 struct CreateProfilePhotoResponse {
-  1: string upload_url
+  1: base.BaseResponse base_resp
+  2: string upload_url
 }
 
 struct CompleteProfilePhotoRequest {
   1: i64 account_id
 }
+
+struct CompleteProfilePhotoResponse{
+     1: base.BaseResponse base_resp
+     2: Identity identity
+}
+
 struct ClearProfilePhotoRequest {
   1: i64 account_id
 }
-struct ClearProfilePhotoResponse {}
+struct ClearProfilePhotoResponse {
+     1: base.BaseResponse base_resp
+}
 
 service ProfileService {
-  Profile GetProfile(1: GetProfileRequest req)
-  Profile SubmitProfile(1: SubmitProfileRequest req)
-  Profile ClearProfile(1: ClearProfileRequest req)
+  GetProfileResponse GetProfile(1: GetProfileRequest req)
+  SubmitProfileResponse SubmitProfile(1: SubmitProfileRequest req)
+  ClearProfileResponse ClearProfile(1: ClearProfileRequest req)
 
   GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req)
   CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req)
-  Identity CompleteProfilePhoto(1: CompleteProfilePhotoRequest req)
+  CompleteProfilePhotoResponse CompleteProfilePhoto(1: CompleteProfilePhotoRequest req)
   ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req)
 }

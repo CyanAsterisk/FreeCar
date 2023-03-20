@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
 )
@@ -841,6 +842,245 @@ func (p *GetProfileRequest) Field1DeepEqual(src int64) bool {
 	return true
 }
 
+type GetProfileResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Profile  *Profile           `thrift:"profile,2" frugal:"2,default,Profile" json:"profile"`
+}
+
+func NewGetProfileResponse() *GetProfileResponse {
+	return &GetProfileResponse{}
+}
+
+func (p *GetProfileResponse) InitDefault() {
+	*p = GetProfileResponse{}
+}
+
+var GetProfileResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetProfileResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetProfileResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var GetProfileResponse_Profile_DEFAULT *Profile
+
+func (p *GetProfileResponse) GetProfile() (v *Profile) {
+	if !p.IsSetProfile() {
+		return GetProfileResponse_Profile_DEFAULT
+	}
+	return p.Profile
+}
+func (p *GetProfileResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *GetProfileResponse) SetProfile(val *Profile) {
+	p.Profile = val
+}
+
+var fieldIDToName_GetProfileResponse = map[int16]string{
+	1: "base_resp",
+	2: "profile",
+}
+
+func (p *GetProfileResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetProfileResponse) IsSetProfile() bool {
+	return p.Profile != nil
+}
+
+func (p *GetProfileResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetProfileResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetProfileResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetProfileResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Profile = NewProfile()
+	if err := p.Profile.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetProfileResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetProfileResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetProfileResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetProfileResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("profile", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Profile.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *GetProfileResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetProfileResponse(%+v)", *p)
+}
+
+func (p *GetProfileResponse) DeepEqual(ano *GetProfileResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Profile) {
+		return false
+	}
+	return true
+}
+
+func (p *GetProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetProfileResponse) Field2DeepEqual(src *Profile) bool {
+
+	if !p.Profile.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type SubmitProfileRequest struct {
 	AccountId int64     `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 	Identity  *Identity `thrift:"identity,2" frugal:"2,default,Identity" json:"identity"`
@@ -1072,6 +1312,245 @@ func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
 	return true
 }
 
+type SubmitProfileResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Profile  *Profile           `thrift:"profile,2" frugal:"2,default,Profile" json:"profile"`
+}
+
+func NewSubmitProfileResponse() *SubmitProfileResponse {
+	return &SubmitProfileResponse{}
+}
+
+func (p *SubmitProfileResponse) InitDefault() {
+	*p = SubmitProfileResponse{}
+}
+
+var SubmitProfileResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *SubmitProfileResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return SubmitProfileResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var SubmitProfileResponse_Profile_DEFAULT *Profile
+
+func (p *SubmitProfileResponse) GetProfile() (v *Profile) {
+	if !p.IsSetProfile() {
+		return SubmitProfileResponse_Profile_DEFAULT
+	}
+	return p.Profile
+}
+func (p *SubmitProfileResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *SubmitProfileResponse) SetProfile(val *Profile) {
+	p.Profile = val
+}
+
+var fieldIDToName_SubmitProfileResponse = map[int16]string{
+	1: "base_resp",
+	2: "profile",
+}
+
+func (p *SubmitProfileResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *SubmitProfileResponse) IsSetProfile() bool {
+	return p.Profile != nil
+}
+
+func (p *SubmitProfileResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SubmitProfileResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SubmitProfileResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *SubmitProfileResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Profile = NewProfile()
+	if err := p.Profile.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *SubmitProfileResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("SubmitProfileResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SubmitProfileResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SubmitProfileResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("profile", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Profile.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *SubmitProfileResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SubmitProfileResponse(%+v)", *p)
+}
+
+func (p *SubmitProfileResponse) DeepEqual(ano *SubmitProfileResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Profile) {
+		return false
+	}
+	return true
+}
+
+func (p *SubmitProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *SubmitProfileResponse) Field2DeepEqual(src *Profile) bool {
+
+	if !p.Profile.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type ClearProfileRequest struct {
 	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
@@ -1231,6 +1710,245 @@ func (p *ClearProfileRequest) DeepEqual(ano *ClearProfileRequest) bool {
 func (p *ClearProfileRequest) Field1DeepEqual(src int64) bool {
 
 	if p.AccountId != src {
+		return false
+	}
+	return true
+}
+
+type ClearProfileResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Profile  *Profile           `thrift:"profile,2" frugal:"2,default,Profile" json:"profile"`
+}
+
+func NewClearProfileResponse() *ClearProfileResponse {
+	return &ClearProfileResponse{}
+}
+
+func (p *ClearProfileResponse) InitDefault() {
+	*p = ClearProfileResponse{}
+}
+
+var ClearProfileResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *ClearProfileResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return ClearProfileResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var ClearProfileResponse_Profile_DEFAULT *Profile
+
+func (p *ClearProfileResponse) GetProfile() (v *Profile) {
+	if !p.IsSetProfile() {
+		return ClearProfileResponse_Profile_DEFAULT
+	}
+	return p.Profile
+}
+func (p *ClearProfileResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *ClearProfileResponse) SetProfile(val *Profile) {
+	p.Profile = val
+}
+
+var fieldIDToName_ClearProfileResponse = map[int16]string{
+	1: "base_resp",
+	2: "profile",
+}
+
+func (p *ClearProfileResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *ClearProfileResponse) IsSetProfile() bool {
+	return p.Profile != nil
+}
+
+func (p *ClearProfileResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ClearProfileResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ClearProfileResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *ClearProfileResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Profile = NewProfile()
+	if err := p.Profile.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *ClearProfileResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ClearProfileResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ClearProfileResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ClearProfileResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("profile", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Profile.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ClearProfileResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ClearProfileResponse(%+v)", *p)
+}
+
+func (p *ClearProfileResponse) DeepEqual(ano *ClearProfileResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Profile) {
+		return false
+	}
+	return true
+}
+
+func (p *ClearProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *ClearProfileResponse) Field2DeepEqual(src *Profile) bool {
+
+	if !p.Profile.DeepEqual(src) {
 		return false
 	}
 	return true
@@ -1401,7 +2119,8 @@ func (p *GetProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetProfilePhotoResponse struct {
-	Url string `thrift:"url,1" frugal:"1,default,string" json:"url"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Url      string             `thrift:"url,2" frugal:"2,default,string" json:"url"`
 }
 
 func NewGetProfilePhotoResponse() *GetProfilePhotoResponse {
@@ -1412,15 +2131,32 @@ func (p *GetProfilePhotoResponse) InitDefault() {
 	*p = GetProfilePhotoResponse{}
 }
 
+var GetProfilePhotoResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetProfilePhotoResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetProfilePhotoResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
 func (p *GetProfilePhotoResponse) GetUrl() (v string) {
 	return p.Url
+}
+func (p *GetProfilePhotoResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
 }
 func (p *GetProfilePhotoResponse) SetUrl(val string) {
 	p.Url = val
 }
 
 var fieldIDToName_GetProfilePhotoResponse = map[int16]string{
-	1: "url",
+	1: "base_resp",
+	2: "url",
+}
+
+func (p *GetProfilePhotoResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
 }
 
 func (p *GetProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -1443,8 +2179,18 @@ func (p *GetProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.STRUCT {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -1483,6 +2229,14 @@ ReadStructEndError:
 }
 
 func (p *GetProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetProfilePhotoResponse) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
@@ -1499,6 +2253,10 @@ func (p *GetProfilePhotoResponse) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 
@@ -1521,10 +2279,10 @@ WriteStructEndError:
 }
 
 func (p *GetProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("url", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Url); err != nil {
+	if err := p.BaseResp.Write(oprot); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1535,6 +2293,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetProfilePhotoResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("url", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Url); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *GetProfilePhotoResponse) String() string {
@@ -1550,13 +2325,23 @@ func (p *GetProfilePhotoResponse) DeepEqual(ano *GetProfilePhotoResponse) bool {
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.Url) {
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Url) {
 		return false
 	}
 	return true
 }
 
-func (p *GetProfilePhotoResponse) Field1DeepEqual(src string) bool {
+func (p *GetProfilePhotoResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetProfilePhotoResponse) Field2DeepEqual(src string) bool {
 
 	if strings.Compare(p.Url, src) != 0 {
 		return false
@@ -1729,7 +2514,8 @@ func (p *CreateProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type CreateProfilePhotoResponse struct {
-	UploadUrl string `thrift:"upload_url,1" frugal:"1,default,string" json:"upload_url"`
+	BaseResp  *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	UploadUrl string             `thrift:"upload_url,2" frugal:"2,default,string" json:"upload_url"`
 }
 
 func NewCreateProfilePhotoResponse() *CreateProfilePhotoResponse {
@@ -1740,15 +2526,32 @@ func (p *CreateProfilePhotoResponse) InitDefault() {
 	*p = CreateProfilePhotoResponse{}
 }
 
+var CreateProfilePhotoResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *CreateProfilePhotoResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return CreateProfilePhotoResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
 func (p *CreateProfilePhotoResponse) GetUploadUrl() (v string) {
 	return p.UploadUrl
+}
+func (p *CreateProfilePhotoResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
 }
 func (p *CreateProfilePhotoResponse) SetUploadUrl(val string) {
 	p.UploadUrl = val
 }
 
 var fieldIDToName_CreateProfilePhotoResponse = map[int16]string{
-	1: "upload_url",
+	1: "base_resp",
+	2: "upload_url",
+}
+
+func (p *CreateProfilePhotoResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
 }
 
 func (p *CreateProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -1771,8 +2574,18 @@ func (p *CreateProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.STRUCT {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -1811,6 +2624,14 @@ ReadStructEndError:
 }
 
 func (p *CreateProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CreateProfilePhotoResponse) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
@@ -1827,6 +2648,10 @@ func (p *CreateProfilePhotoResponse) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 
@@ -1849,10 +2674,10 @@ WriteStructEndError:
 }
 
 func (p *CreateProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("upload_url", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UploadUrl); err != nil {
+	if err := p.BaseResp.Write(oprot); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1863,6 +2688,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CreateProfilePhotoResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("upload_url", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.UploadUrl); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *CreateProfilePhotoResponse) String() string {
@@ -1878,13 +2720,23 @@ func (p *CreateProfilePhotoResponse) DeepEqual(ano *CreateProfilePhotoResponse) 
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.UploadUrl) {
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.UploadUrl) {
 		return false
 	}
 	return true
 }
 
-func (p *CreateProfilePhotoResponse) Field1DeepEqual(src string) bool {
+func (p *CreateProfilePhotoResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *CreateProfilePhotoResponse) Field2DeepEqual(src string) bool {
 
 	if strings.Compare(p.UploadUrl, src) != 0 {
 		return false
@@ -2056,6 +2908,245 @@ func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 	return true
 }
 
+type CompleteProfilePhotoResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Identity *Identity          `thrift:"identity,2" frugal:"2,default,Identity" json:"identity"`
+}
+
+func NewCompleteProfilePhotoResponse() *CompleteProfilePhotoResponse {
+	return &CompleteProfilePhotoResponse{}
+}
+
+func (p *CompleteProfilePhotoResponse) InitDefault() {
+	*p = CompleteProfilePhotoResponse{}
+}
+
+var CompleteProfilePhotoResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *CompleteProfilePhotoResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return CompleteProfilePhotoResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var CompleteProfilePhotoResponse_Identity_DEFAULT *Identity
+
+func (p *CompleteProfilePhotoResponse) GetIdentity() (v *Identity) {
+	if !p.IsSetIdentity() {
+		return CompleteProfilePhotoResponse_Identity_DEFAULT
+	}
+	return p.Identity
+}
+func (p *CompleteProfilePhotoResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *CompleteProfilePhotoResponse) SetIdentity(val *Identity) {
+	p.Identity = val
+}
+
+var fieldIDToName_CompleteProfilePhotoResponse = map[int16]string{
+	1: "base_resp",
+	2: "identity",
+}
+
+func (p *CompleteProfilePhotoResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *CompleteProfilePhotoResponse) IsSetIdentity() bool {
+	return p.Identity != nil
+}
+
+func (p *CompleteProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CompleteProfilePhotoResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CompleteProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CompleteProfilePhotoResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Identity = NewIdentity()
+	if err := p.Identity.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CompleteProfilePhotoResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("CompleteProfilePhotoResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CompleteProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CompleteProfilePhotoResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("identity", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Identity.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *CompleteProfilePhotoResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CompleteProfilePhotoResponse(%+v)", *p)
+}
+
+func (p *CompleteProfilePhotoResponse) DeepEqual(ano *CompleteProfilePhotoResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Identity) {
+		return false
+	}
+	return true
+}
+
+func (p *CompleteProfilePhotoResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *CompleteProfilePhotoResponse) Field2DeepEqual(src *Identity) bool {
+
+	if !p.Identity.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type ClearProfilePhotoRequest struct {
 	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 }
@@ -2221,6 +3312,7 @@ func (p *ClearProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 }
 
 type ClearProfilePhotoResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
 }
 
 func NewClearProfilePhotoResponse() *ClearProfilePhotoResponse {
@@ -2231,7 +3323,25 @@ func (p *ClearProfilePhotoResponse) InitDefault() {
 	*p = ClearProfilePhotoResponse{}
 }
 
-var fieldIDToName_ClearProfilePhotoResponse = map[int16]string{}
+var ClearProfilePhotoResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *ClearProfilePhotoResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return ClearProfilePhotoResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+func (p *ClearProfilePhotoResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+
+var fieldIDToName_ClearProfilePhotoResponse = map[int16]string{
+	1: "base_resp",
+}
+
+func (p *ClearProfilePhotoResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
 
 func (p *ClearProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
 
@@ -2250,8 +3360,22 @@ func (p *ClearProfilePhotoResponse) Read(iprot thrift.TProtocol) (err error) {
 		if fieldTypeId == thrift.STOP {
 			break
 		}
-		if err = iprot.Skip(fieldTypeId); err != nil {
-			goto SkipFieldTypeError
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		}
 
 		if err = iprot.ReadFieldEnd(); err != nil {
@@ -2267,8 +3391,10 @@ ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-SkipFieldTypeError:
-	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ClearProfilePhotoResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
 ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
@@ -2276,11 +3402,24 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
+func (p *ClearProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *ClearProfilePhotoResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
 	if err = oprot.WriteStructBegin("ClearProfilePhotoResponse"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
 
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
@@ -2292,10 +3431,29 @@ func (p *ClearProfilePhotoResponse) Write(oprot thrift.TProtocol) (err error) {
 	return nil
 WriteStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
 WriteFieldStopError:
 	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
 WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ClearProfilePhotoResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
 func (p *ClearProfilePhotoResponse) String() string {
@@ -2311,21 +3469,32 @@ func (p *ClearProfilePhotoResponse) DeepEqual(ano *ClearProfilePhotoResponse) bo
 	} else if p == nil || ano == nil {
 		return false
 	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	return true
+}
+
+func (p *ClearProfilePhotoResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
 	return true
 }
 
 type ProfileService interface {
-	GetProfile(ctx context.Context, req *GetProfileRequest) (r *Profile, err error)
+	GetProfile(ctx context.Context, req *GetProfileRequest) (r *GetProfileResponse, err error)
 
-	SubmitProfile(ctx context.Context, req *SubmitProfileRequest) (r *Profile, err error)
+	SubmitProfile(ctx context.Context, req *SubmitProfileRequest) (r *SubmitProfileResponse, err error)
 
-	ClearProfile(ctx context.Context, req *ClearProfileRequest) (r *Profile, err error)
+	ClearProfile(ctx context.Context, req *ClearProfileRequest) (r *ClearProfileResponse, err error)
 
 	GetProfilePhoto(ctx context.Context, req *GetProfilePhotoRequest) (r *GetProfilePhotoResponse, err error)
 
 	CreateProfilePhoto(ctx context.Context, req *CreateProfilePhotoRequest) (r *CreateProfilePhotoResponse, err error)
 
-	CompleteProfilePhoto(ctx context.Context, req *CompleteProfilePhotoRequest) (r *Identity, err error)
+	CompleteProfilePhoto(ctx context.Context, req *CompleteProfilePhotoRequest) (r *CompleteProfilePhotoResponse, err error)
 
 	ClearProfilePhoto(ctx context.Context, req *ClearProfilePhotoRequest) (r *ClearProfilePhotoResponse, err error)
 }
@@ -2356,7 +3525,7 @@ func (p *ProfileServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *ProfileServiceClient) GetProfile(ctx context.Context, req *GetProfileRequest) (r *Profile, err error) {
+func (p *ProfileServiceClient) GetProfile(ctx context.Context, req *GetProfileRequest) (r *GetProfileResponse, err error) {
 	var _args ProfileServiceGetProfileArgs
 	_args.Req = req
 	var _result ProfileServiceGetProfileResult
@@ -2365,7 +3534,7 @@ func (p *ProfileServiceClient) GetProfile(ctx context.Context, req *GetProfileRe
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ProfileServiceClient) SubmitProfile(ctx context.Context, req *SubmitProfileRequest) (r *Profile, err error) {
+func (p *ProfileServiceClient) SubmitProfile(ctx context.Context, req *SubmitProfileRequest) (r *SubmitProfileResponse, err error) {
 	var _args ProfileServiceSubmitProfileArgs
 	_args.Req = req
 	var _result ProfileServiceSubmitProfileResult
@@ -2374,7 +3543,7 @@ func (p *ProfileServiceClient) SubmitProfile(ctx context.Context, req *SubmitPro
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ProfileServiceClient) ClearProfile(ctx context.Context, req *ClearProfileRequest) (r *Profile, err error) {
+func (p *ProfileServiceClient) ClearProfile(ctx context.Context, req *ClearProfileRequest) (r *ClearProfileResponse, err error) {
 	var _args ProfileServiceClearProfileArgs
 	_args.Req = req
 	var _result ProfileServiceClearProfileResult
@@ -2401,7 +3570,7 @@ func (p *ProfileServiceClient) CreateProfilePhoto(ctx context.Context, req *Crea
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ProfileServiceClient) CompleteProfilePhoto(ctx context.Context, req *CompleteProfilePhotoRequest) (r *Identity, err error) {
+func (p *ProfileServiceClient) CompleteProfilePhoto(ctx context.Context, req *CompleteProfilePhotoRequest) (r *CompleteProfilePhotoResponse, err error) {
 	var _args ProfileServiceCompleteProfilePhotoArgs
 	_args.Req = req
 	var _result ProfileServiceCompleteProfilePhotoResult
@@ -2486,7 +3655,7 @@ func (p *profileServiceProcessorGetProfile) Process(ctx context.Context, seqId i
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ProfileServiceGetProfileResult{}
-	var retval *Profile
+	var retval *GetProfileResponse
 	if retval, err2 = p.handler.GetProfile(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetProfile: "+err2.Error())
 		oprot.WriteMessageBegin("GetProfile", thrift.EXCEPTION, seqId)
@@ -2534,7 +3703,7 @@ func (p *profileServiceProcessorSubmitProfile) Process(ctx context.Context, seqI
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ProfileServiceSubmitProfileResult{}
-	var retval *Profile
+	var retval *SubmitProfileResponse
 	if retval, err2 = p.handler.SubmitProfile(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SubmitProfile: "+err2.Error())
 		oprot.WriteMessageBegin("SubmitProfile", thrift.EXCEPTION, seqId)
@@ -2582,7 +3751,7 @@ func (p *profileServiceProcessorClearProfile) Process(ctx context.Context, seqId
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ProfileServiceClearProfileResult{}
-	var retval *Profile
+	var retval *ClearProfileResponse
 	if retval, err2 = p.handler.ClearProfile(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ClearProfile: "+err2.Error())
 		oprot.WriteMessageBegin("ClearProfile", thrift.EXCEPTION, seqId)
@@ -2726,7 +3895,7 @@ func (p *profileServiceProcessorCompleteProfilePhoto) Process(ctx context.Contex
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := ProfileServiceCompleteProfilePhotoResult{}
-	var retval *Identity
+	var retval *CompleteProfilePhotoResponse
 	if retval, err2 = p.handler.CompleteProfilePhoto(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing CompleteProfilePhoto: "+err2.Error())
 		oprot.WriteMessageBegin("CompleteProfilePhoto", thrift.EXCEPTION, seqId)
@@ -2976,7 +4145,7 @@ func (p *ProfileServiceGetProfileArgs) Field1DeepEqual(src *GetProfileRequest) b
 }
 
 type ProfileServiceGetProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
+	Success *GetProfileResponse `thrift:"success,0,optional" frugal:"0,optional,GetProfileResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceGetProfileResult() *ProfileServiceGetProfileResult {
@@ -2987,16 +4156,16 @@ func (p *ProfileServiceGetProfileResult) InitDefault() {
 	*p = ProfileServiceGetProfileResult{}
 }
 
-var ProfileServiceGetProfileResult_Success_DEFAULT *Profile
+var ProfileServiceGetProfileResult_Success_DEFAULT *GetProfileResponse
 
-func (p *ProfileServiceGetProfileResult) GetSuccess() (v *Profile) {
+func (p *ProfileServiceGetProfileResult) GetSuccess() (v *GetProfileResponse) {
 	if !p.IsSetSuccess() {
 		return ProfileServiceGetProfileResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ProfileServiceGetProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
+	p.Success = x.(*GetProfileResponse)
 }
 
 var fieldIDToName_ProfileServiceGetProfileResult = map[int16]string{
@@ -3067,7 +4236,7 @@ ReadStructEndError:
 }
 
 func (p *ProfileServiceGetProfileResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewProfile()
+	p.Success = NewGetProfileResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -3141,7 +4310,7 @@ func (p *ProfileServiceGetProfileResult) DeepEqual(ano *ProfileServiceGetProfile
 	return true
 }
 
-func (p *ProfileServiceGetProfileResult) Field0DeepEqual(src *Profile) bool {
+func (p *ProfileServiceGetProfileResult) Field0DeepEqual(src *GetProfileResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -3322,7 +4491,7 @@ func (p *ProfileServiceSubmitProfileArgs) Field1DeepEqual(src *SubmitProfileRequ
 }
 
 type ProfileServiceSubmitProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
+	Success *SubmitProfileResponse `thrift:"success,0,optional" frugal:"0,optional,SubmitProfileResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceSubmitProfileResult() *ProfileServiceSubmitProfileResult {
@@ -3333,16 +4502,16 @@ func (p *ProfileServiceSubmitProfileResult) InitDefault() {
 	*p = ProfileServiceSubmitProfileResult{}
 }
 
-var ProfileServiceSubmitProfileResult_Success_DEFAULT *Profile
+var ProfileServiceSubmitProfileResult_Success_DEFAULT *SubmitProfileResponse
 
-func (p *ProfileServiceSubmitProfileResult) GetSuccess() (v *Profile) {
+func (p *ProfileServiceSubmitProfileResult) GetSuccess() (v *SubmitProfileResponse) {
 	if !p.IsSetSuccess() {
 		return ProfileServiceSubmitProfileResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ProfileServiceSubmitProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
+	p.Success = x.(*SubmitProfileResponse)
 }
 
 var fieldIDToName_ProfileServiceSubmitProfileResult = map[int16]string{
@@ -3413,7 +4582,7 @@ ReadStructEndError:
 }
 
 func (p *ProfileServiceSubmitProfileResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewProfile()
+	p.Success = NewSubmitProfileResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -3487,7 +4656,7 @@ func (p *ProfileServiceSubmitProfileResult) DeepEqual(ano *ProfileServiceSubmitP
 	return true
 }
 
-func (p *ProfileServiceSubmitProfileResult) Field0DeepEqual(src *Profile) bool {
+func (p *ProfileServiceSubmitProfileResult) Field0DeepEqual(src *SubmitProfileResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -3668,7 +4837,7 @@ func (p *ProfileServiceClearProfileArgs) Field1DeepEqual(src *ClearProfileReques
 }
 
 type ProfileServiceClearProfileResult struct {
-	Success *Profile `thrift:"success,0,optional" frugal:"0,optional,Profile" json:"success,omitempty"`
+	Success *ClearProfileResponse `thrift:"success,0,optional" frugal:"0,optional,ClearProfileResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceClearProfileResult() *ProfileServiceClearProfileResult {
@@ -3679,16 +4848,16 @@ func (p *ProfileServiceClearProfileResult) InitDefault() {
 	*p = ProfileServiceClearProfileResult{}
 }
 
-var ProfileServiceClearProfileResult_Success_DEFAULT *Profile
+var ProfileServiceClearProfileResult_Success_DEFAULT *ClearProfileResponse
 
-func (p *ProfileServiceClearProfileResult) GetSuccess() (v *Profile) {
+func (p *ProfileServiceClearProfileResult) GetSuccess() (v *ClearProfileResponse) {
 	if !p.IsSetSuccess() {
 		return ProfileServiceClearProfileResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ProfileServiceClearProfileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Profile)
+	p.Success = x.(*ClearProfileResponse)
 }
 
 var fieldIDToName_ProfileServiceClearProfileResult = map[int16]string{
@@ -3759,7 +4928,7 @@ ReadStructEndError:
 }
 
 func (p *ProfileServiceClearProfileResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewProfile()
+	p.Success = NewClearProfileResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -3833,7 +5002,7 @@ func (p *ProfileServiceClearProfileResult) DeepEqual(ano *ProfileServiceClearPro
 	return true
 }
 
-func (p *ProfileServiceClearProfileResult) Field0DeepEqual(src *Profile) bool {
+func (p *ProfileServiceClearProfileResult) Field0DeepEqual(src *ClearProfileResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -4706,7 +5875,7 @@ func (p *ProfileServiceCompleteProfilePhotoArgs) Field1DeepEqual(src *CompletePr
 }
 
 type ProfileServiceCompleteProfilePhotoResult struct {
-	Success *Identity `thrift:"success,0,optional" frugal:"0,optional,Identity" json:"success,omitempty"`
+	Success *CompleteProfilePhotoResponse `thrift:"success,0,optional" frugal:"0,optional,CompleteProfilePhotoResponse" json:"success,omitempty"`
 }
 
 func NewProfileServiceCompleteProfilePhotoResult() *ProfileServiceCompleteProfilePhotoResult {
@@ -4717,16 +5886,16 @@ func (p *ProfileServiceCompleteProfilePhotoResult) InitDefault() {
 	*p = ProfileServiceCompleteProfilePhotoResult{}
 }
 
-var ProfileServiceCompleteProfilePhotoResult_Success_DEFAULT *Identity
+var ProfileServiceCompleteProfilePhotoResult_Success_DEFAULT *CompleteProfilePhotoResponse
 
-func (p *ProfileServiceCompleteProfilePhotoResult) GetSuccess() (v *Identity) {
+func (p *ProfileServiceCompleteProfilePhotoResult) GetSuccess() (v *CompleteProfilePhotoResponse) {
 	if !p.IsSetSuccess() {
 		return ProfileServiceCompleteProfilePhotoResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *ProfileServiceCompleteProfilePhotoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Identity)
+	p.Success = x.(*CompleteProfilePhotoResponse)
 }
 
 var fieldIDToName_ProfileServiceCompleteProfilePhotoResult = map[int16]string{
@@ -4797,7 +5966,7 @@ ReadStructEndError:
 }
 
 func (p *ProfileServiceCompleteProfilePhotoResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewIdentity()
+	p.Success = NewCompleteProfilePhotoResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -4871,7 +6040,7 @@ func (p *ProfileServiceCompleteProfilePhotoResult) DeepEqual(ano *ProfileService
 	return true
 }
 
-func (p *ProfileServiceCompleteProfilePhotoResult) Field0DeepEqual(src *Identity) bool {
+func (p *ProfileServiceCompleteProfilePhotoResult) Field0DeepEqual(src *CompleteProfilePhotoResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

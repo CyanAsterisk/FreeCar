@@ -17,28 +17,26 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
+	root.POST("/auth", append(__dduserMw(), api.AddUser)...)
 	root.DELETE("/auth", append(_deleteuserMw(), api.DeleteUser)...)
+	root.GET("/auth", append(_getusersMw(), api.GetUsers)...)
 	root.POST("/car", append(_createcarMw(), api.CreateCar)...)
 	root.GET("/car", append(_getcarMw(), api.GetCar)...)
 	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
-	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
+	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)
 		_admin.POST("/login", append(__dminloginMw(), api.AdminLogin)...)
 		_admin.POST("/password", append(_change_dminpasswordMw(), api.ChangeAdminPassword)...)
 	}
-	root.POST("/auth", append(_authMw(), api.AddUser)...)
-	_auth := root.Group("/auth", _authMw()...)
-	_auth.GET("/all", append(_get_llusersMw(), api.GetAllUsers)...)
-	_auth.GET("/some", append(_getsomeusersMw(), api.GetSomeUsers)...)
 	{
-		_auth0 := root.Group("/auth", _auth0Mw()...)
-		_auth0.POST("/avatar", append(_upload_vatarMw(), api.UploadAvatar)...)
-		_auth0.GET("/info", append(_getuserinfoMw(), api.GetUserInfo)...)
-		_auth0.POST("/info", append(_updateuserinfoMw(), api.UpdateUserInfo)...)
-		_auth0.POST("/login", append(_loginMw(), api.Login)...)
+		_auth := root.Group("/auth", _authMw()...)
+		_auth.POST("/avatar", append(_upload_vatarMw(), api.UploadAvatar)...)
+		_auth.GET("/info", append(_getuserinfoMw(), api.GetUserInfo)...)
+		_auth.POST("/info", append(_updateuserinfoMw(), api.UpdateUserInfo)...)
+		_auth.POST("/login", append(_loginMw(), api.Login)...)
 	}
 	root.GET("/profile", append(_profileMw(), api.GetProfile)...)
 	_profile := root.Group("/profile", _profileMw()...)

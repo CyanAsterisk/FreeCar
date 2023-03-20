@@ -114,44 +114,14 @@ func TestAuthLifeCycle(t *testing.T) {
 			want: "[err = <nil>][resp = <nil>]",
 		},
 		{
-			name: "get users",
+			name: "test delete user",
 			op: func() string {
-				_, err = s.AddUser(ctx, &auth.AddUserRequest{
-					AccountId:   1112,
-					Username:    "test-name2",
-					PhoneNumber: 123456789,
-					OpenId:      "its a openid2",
-				})
-				_, err = s.AddUser(ctx, &auth.AddUserRequest{
-					AccountId:   1113,
-					Username:    "test-name3",
-					PhoneNumber: 123456789,
-					OpenId:      "its a openid3",
-				})
-				if err != nil {
-					fmt.Println(err)
-				}
-				resp, err := s.GetUsers(ctx, &auth.GetUsersRequest{
-					Pn:    1,
-					Psize: 2,
-				})
-				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
-			},
-			want: "[err = <nil>][resp = GetUsersResponse({Users:[User({AccountId:1024 Username:new-username PhoneNumber:88888888888 AvatarBlobId:1024 OpenId:de73b2ae1a444cd60d81fd986c5a46a9}) User({AccountId:1111 Username:test-name1 PhoneNumber:123456789 AvatarBlobId:0 OpenId:75f86dd0bc8ea5f652684a7fd249be66})]})]",
-		},
-		{
-			name: "delete user",
-			op: func() string {
-				_, err := s.DeleteUser(ctx, &auth.DeleteUserRequest{
+				resp, err := s.DeleteUser(ctx, &auth.DeleteUserRequest{
 					AccountId: 1111,
 				})
-				resp, err := s.GetUsers(ctx, &auth.GetUsersRequest{
-					Pn:    1,
-					Psize: 2,
-				})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = GetUsersResponse({Users:[User({AccountId:1024 Username:new-username PhoneNumber:88888888888 AvatarBlobId:1024 OpenId:de73b2ae1a444cd60d81fd986c5a46a9}) User({AccountId:1112 Username:test-name2 PhoneNumber:123456789 AvatarBlobId:0 OpenId:6a1dcb6539448b157f5d36085c71d4bc})]})]",
+			want: "[err = <nil>][resp = <nil>]",
 		},
 		{
 			name: "admin login",

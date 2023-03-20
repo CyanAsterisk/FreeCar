@@ -184,3 +184,18 @@ func _getusersMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _get_llusersMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getsomeusersMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _auth0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

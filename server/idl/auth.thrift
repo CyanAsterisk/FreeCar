@@ -77,12 +77,15 @@ struct UpdateUserRequest{
 
 struct UpdateUserResponse{}
 
-struct GetUsersRequest{
-    1: i64 pn;
-    2: i64 psize;
+struct GetSomeUsersRequest{}
+
+struct GetSomeUsersResponse{
+    1: list<User> users;
 }
 
-struct GetUsersResponse{
+struct GetAllUsersRequest{}
+
+struct GetAllUsersResponse{
     1: list<User> users;
 }
 
@@ -96,5 +99,6 @@ service AuthService {
     AddUserResponse AddUser (1: AddUserRequest req)
     DeleteUserResponse DeleteUser (1: DeleteUserRequest req)
     UpdateUserResponse UpdateUser (1: UpdateUserRequest req)
-    GetUsersResponse GetUsers (1:GetUsersRequest req)
+    GetSomeUsersResponse GetSomeUsers (1:GetSomeUsersRequest req)
+    GetAllUsersResponse GetAllUsers (1:GetAllUsersRequest req)
 }

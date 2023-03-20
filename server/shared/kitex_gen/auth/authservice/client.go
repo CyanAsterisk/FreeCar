@@ -19,7 +19,8 @@ type Client interface {
 	AddUser(ctx context.Context, req *auth.AddUserRequest, callOptions ...callopt.Option) (r *auth.AddUserResponse, err error)
 	DeleteUser(ctx context.Context, req *auth.DeleteUserRequest, callOptions ...callopt.Option) (r *auth.DeleteUserResponse, err error)
 	UpdateUser(ctx context.Context, req *auth.UpdateUserRequest, callOptions ...callopt.Option) (r *auth.UpdateUserResponse, err error)
-	GetUsers(ctx context.Context, req *auth.GetUsersRequest, callOptions ...callopt.Option) (r *auth.GetUsersResponse, err error)
+	GetSomeUsers(ctx context.Context, req *auth.GetSomeUsersRequest, callOptions ...callopt.Option) (r *auth.GetSomeUsersResponse, err error)
+	GetAllUsers(ctx context.Context, req *auth.GetAllUsersRequest, callOptions ...callopt.Option) (r *auth.GetAllUsersResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -91,7 +92,12 @@ func (p *kAuthServiceClient) UpdateUser(ctx context.Context, req *auth.UpdateUse
 	return p.kClient.UpdateUser(ctx, req)
 }
 
-func (p *kAuthServiceClient) GetUsers(ctx context.Context, req *auth.GetUsersRequest, callOptions ...callopt.Option) (r *auth.GetUsersResponse, err error) {
+func (p *kAuthServiceClient) GetSomeUsers(ctx context.Context, req *auth.GetSomeUsersRequest, callOptions ...callopt.Option) (r *auth.GetSomeUsersResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetUsers(ctx, req)
+	return p.kClient.GetSomeUsers(ctx, req)
+}
+
+func (p *kAuthServiceClient) GetAllUsers(ctx context.Context, req *auth.GetAllUsersRequest, callOptions ...callopt.Option) (r *auth.GetAllUsersResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetAllUsers(ctx, req)
 }

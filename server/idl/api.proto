@@ -121,16 +121,29 @@ message EDeleteUserResponse{
   string message = 2;
 }
 
-message GetUsersRequest{
+message GetSomeUsersRequest{
 }
 
-message GetUsersResponse{
+message GetSomeUsersResponse{
   repeated User users = 1;
 }
 
-message EGetUsersResponse{
+message EGetSomeUsersResponse{
   int32 code = 1;
-  GetUsersResponse data = 2;
+  GetSomeUsersResponse data = 2;
+  string message = 3;
+}
+
+message GetAllUsersRequest{
+}
+
+message GetAllUsersResponse{
+  repeated User users = 1;
+}
+
+message EGetAllUsersResponse{
+  int32 code = 1;
+  GetAllUsersResponse data = 2;
   string message = 3;
 }
 
@@ -373,7 +386,8 @@ service apiService {
   rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
   rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/auth";}
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {option (api.delete) = "/auth";}
-  rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {option (api.get) = "/auth";}
+  rpc GetSomeUsers (GetSomeUsersRequest) returns (GetSomeUsersResponse) {option (api.get) = "/auth/some";}
+  rpc GetAllUsers (GetAllUsersRequest) returns (GetAllUsersResponse) {option (api.get) = "/auth/all";}
 
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}

@@ -578,17 +578,36 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	errno.SendResponse(c, errno.Success, resp)
 }
 
-// GetUsers .
-// @router /auth [GET]
-func GetUsers(ctx context.Context, c *app.RequestContext) {
+// GetSomeUsers .
+// @router /auth/some [GET]
+func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.GetUsersRequest
+	var req api.GetSomeUsersRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.GetUsers(ctx, &auth.GetUsersRequest{})
+	resp, err := config.GlobalAuthClient.GetSomeUsers(ctx, &auth.GetSomeUsersRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllUsers .
+// @router /auth/all [GET]
+func GetAllUsers(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllUsersRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.GetAllUsers(ctx, &auth.GetAllUsersRequest{})
 	if err != nil {
 		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
 		return

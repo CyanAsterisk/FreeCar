@@ -11,10 +11,10 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	CreateTrip(ctx context.Context, req *trip.CreateTripRequest, callOptions ...callopt.Option) (r *trip.TripEntity, err error)
-	GetTrip(ctx context.Context, req *trip.GetTripRequest, callOptions ...callopt.Option) (r *trip.Trip, err error)
+	CreateTrip(ctx context.Context, req *trip.CreateTripRequest, callOptions ...callopt.Option) (r *trip.CreateTripResponse, err error)
+	GetTrip(ctx context.Context, req *trip.GetTripRequest, callOptions ...callopt.Option) (r *trip.GetTripResponse, err error)
 	GetTrips(ctx context.Context, req *trip.GetTripsRequest, callOptions ...callopt.Option) (r *trip.GetTripsResponse, err error)
-	UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest, callOptions ...callopt.Option) (r *trip.Trip, err error)
+	UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest, callOptions ...callopt.Option) (r *trip.UpdateTripResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -46,12 +46,12 @@ type kTripServiceClient struct {
 	*kClient
 }
 
-func (p *kTripServiceClient) CreateTrip(ctx context.Context, req *trip.CreateTripRequest, callOptions ...callopt.Option) (r *trip.TripEntity, err error) {
+func (p *kTripServiceClient) CreateTrip(ctx context.Context, req *trip.CreateTripRequest, callOptions ...callopt.Option) (r *trip.CreateTripResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CreateTrip(ctx, req)
 }
 
-func (p *kTripServiceClient) GetTrip(ctx context.Context, req *trip.GetTripRequest, callOptions ...callopt.Option) (r *trip.Trip, err error) {
+func (p *kTripServiceClient) GetTrip(ctx context.Context, req *trip.GetTripRequest, callOptions ...callopt.Option) (r *trip.GetTripResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetTrip(ctx, req)
 }
@@ -61,7 +61,7 @@ func (p *kTripServiceClient) GetTrips(ctx context.Context, req *trip.GetTripsReq
 	return p.kClient.GetTrips(ctx, req)
 }
 
-func (p *kTripServiceClient) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest, callOptions ...callopt.Option) (r *trip.Trip, err error) {
+func (p *kTripServiceClient) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest, callOptions ...callopt.Option) (r *trip.UpdateTripResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UpdateTrip(ctx, req)
 }

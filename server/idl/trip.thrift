@@ -1,4 +1,5 @@
 namespace go trip
+include "base.thrift"
 
 // Trip Service
 struct Location {
@@ -42,9 +43,19 @@ struct CreateTripRequest {
   4: i64 account_id
 }
 
+struct CreateTripResponse{
+     1: base.BaseResponse base_resp
+     2: TripEntity trip_entity
+}
+
 struct GetTripRequest {
   1: string id
   2: i64 account_id
+}
+
+struct GetTripResponse{
+     1: base.BaseResponse base_resp
+     2: Trip trip
 }
 
 struct GetTripsRequest {
@@ -53,7 +64,8 @@ struct GetTripsRequest {
 }
 
 struct GetTripsResponse {
-  1: list<TripEntity> trips
+  1: base.BaseResponse base_resp
+  2: list<TripEntity> trips
 }
 
 struct UpdateTripRequest {
@@ -63,9 +75,14 @@ struct UpdateTripRequest {
   4: i64 account_id
 }
 
+struct UpdateTripResponse{
+     1: base.BaseResponse base_resp
+     2: Trip trip
+}
+
 service TripService {
-  TripEntity CreateTrip(1: CreateTripRequest req)
-  Trip GetTrip(1: GetTripRequest req)
+  CreateTripResponse CreateTrip(1: CreateTripRequest req)
+  GetTripResponse GetTrip(1: GetTripRequest req)
   GetTripsResponse GetTrips (1: GetTripsRequest req)
-  Trip UpdateTrip(1: UpdateTripRequest req)
+  UpdateTripResponse UpdateTrip(1: UpdateTripRequest req)
 }

@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 	"net"
 	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/wechat"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"

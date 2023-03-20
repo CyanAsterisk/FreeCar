@@ -48,11 +48,13 @@ type LicenseManager interface {
 }
 
 // GetProfile implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetProfileRequest) (resp *profile.Profile, err error) {
+func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetProfileRequest) (resp *profile.GetProfileResponse, err error) {
+	resp = new(profile.GetProfileResponse)
 	aid := id.AccountID(req.AccountId)
 	pv, err := s.RedisManager.GetProfile(ctx, aid)
 	if err == nil {
-		return pv, nil
+		resp.Profile = pv
+		return resp, nil
 	}
 	if err != errno.RecordNotFound {
 		klog.Error("get profile cache error", err)
@@ -70,11 +72,14 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 			klog.Error("get profile error", err)
 		}
 	}()
-	return pr.Profile, nil
+
+	resp.Profile = pr.Profile
+	return resp, nil
 }
 
 // SubmitProfile implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest) (resp *profile.Profile, err error) {
+func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest) (resp *profile.SubmitProfileResponse, err error) {
+	resp = new(profile.SubmitProfileResponse)
 	aid := id.AccountID(req.AccountId)
 	if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
 		klog.Error("cannot remove profile in redis", err)
@@ -107,11 +112,14 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 			klog.Error("cannot verify identity", err)
 		}
 	}()
-	return p, nil
+
+	resp.Profile = p
+	return resp, nil
 }
 
 // ClearProfile implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (resp *profile.Profile, err error) {
+func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (resp *profile.ClearProfileResponse, err error) {
+	resp = new(profile.ClearProfileResponse)
 	aid := id.AccountID(req.AccountId)
 	p := &profile.Profile{}
 	err = s.RedisManager.RemoveProfile(ctx, aid)
@@ -124,7 +132,8 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 		klog.Error("cannot update profile", err)
 		return nil, errno.ProfileSrvErr.WithMessage("clear profile error")
 	}
-	return p, nil
+	resp.Profile = p
+	return resp, nil
 }
 
 // GetProfilePhoto implements the ProfileServiceImpl interface.
@@ -186,7 +195,7 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 }
 
 // CompleteProfilePhoto implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (resp *profile.Identity, err error) {
+func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (resp *profile.CompleteProfilePhotoResponse, err error) {
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
@@ -212,7 +221,9 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		klog.Error("cannot get license info", err)
 		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
 	}
-	return info, nil
+
+	resp.Identity = info
+	return resp, nil
 }
 
 // ClearProfilePhoto implements the ProfileServiceImpl interface.

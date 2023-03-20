@@ -1,4 +1,5 @@
 namespace go blob
+include "base.thrift"
 
 struct CreateBlobRequest {
     1: i64 account_id
@@ -6,8 +7,9 @@ struct CreateBlobRequest {
 }
 
 struct CreateBlobResponse {
-    1: i64 id
-    2: string upload_url
+    1: base.BaseResponse base_resp
+    2: i64 id
+    3: string upload_url
 }
 
 struct GetBlobURLRequest {
@@ -16,7 +18,8 @@ struct GetBlobURLRequest {
 }
 
 struct GetBlobURLResponse {
-    1: string url
+    1: base.BaseResponse base_resp
+    2: string url
 }
 
 service BlobService {

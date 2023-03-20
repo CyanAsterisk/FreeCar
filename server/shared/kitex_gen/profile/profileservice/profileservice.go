@@ -177,7 +177,7 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) GetProfile(ctx context.Context, req *profile.GetProfileRequest) (r *profile.Profile, err error) {
+func (p *kClient) GetProfile(ctx context.Context, req *profile.GetProfileRequest) (r *profile.GetProfileResponse, err error) {
 	var _args profile.ProfileServiceGetProfileArgs
 	_args.Req = req
 	var _result profile.ProfileServiceGetProfileResult
@@ -187,7 +187,7 @@ func (p *kClient) GetProfile(ctx context.Context, req *profile.GetProfileRequest
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest) (r *profile.Profile, err error) {
+func (p *kClient) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest) (r *profile.SubmitProfileResponse, err error) {
 	var _args profile.ProfileServiceSubmitProfileArgs
 	_args.Req = req
 	var _result profile.ProfileServiceSubmitProfileResult
@@ -197,7 +197,7 @@ func (p *kClient) SubmitProfile(ctx context.Context, req *profile.SubmitProfileR
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (r *profile.Profile, err error) {
+func (p *kClient) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (r *profile.ClearProfileResponse, err error) {
 	var _args profile.ProfileServiceClearProfileArgs
 	_args.Req = req
 	var _result profile.ProfileServiceClearProfileResult
@@ -227,7 +227,7 @@ func (p *kClient) CreateProfilePhoto(ctx context.Context, req *profile.CreatePro
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (r *profile.Identity, err error) {
+func (p *kClient) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (r *profile.CompleteProfilePhotoResponse, err error) {
 	var _args profile.ProfileServiceCompleteProfilePhotoArgs
 	_args.Req = req
 	var _result profile.ProfileServiceCompleteProfilePhotoResult

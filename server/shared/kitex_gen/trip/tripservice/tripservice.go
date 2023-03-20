@@ -120,7 +120,7 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (r *trip.TripEntity, err error) {
+func (p *kClient) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (r *trip.CreateTripResponse, err error) {
 	var _args trip.TripServiceCreateTripArgs
 	_args.Req = req
 	var _result trip.TripServiceCreateTripResult
@@ -130,7 +130,7 @@ func (p *kClient) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetTrip(ctx context.Context, req *trip.GetTripRequest) (r *trip.Trip, err error) {
+func (p *kClient) GetTrip(ctx context.Context, req *trip.GetTripRequest) (r *trip.GetTripResponse, err error) {
 	var _args trip.TripServiceGetTripArgs
 	_args.Req = req
 	var _result trip.TripServiceGetTripResult
@@ -150,7 +150,7 @@ func (p *kClient) GetTrips(ctx context.Context, req *trip.GetTripsRequest) (r *t
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (r *trip.Trip, err error) {
+func (p *kClient) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (r *trip.UpdateTripResponse, err error) {
 	var _args trip.TripServiceUpdateTripArgs
 	_args.Req = req
 	var _result trip.TripServiceUpdateTripResult

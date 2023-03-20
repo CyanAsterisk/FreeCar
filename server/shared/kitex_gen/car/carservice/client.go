@@ -11,8 +11,8 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	CreateCar(ctx context.Context, req *car.CreateCarRequest, callOptions ...callopt.Option) (r *car.CarEntity, err error)
-	GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.Car, err error)
+	CreateCar(ctx context.Context, req *car.CreateCarRequest, callOptions ...callopt.Option) (r *car.CreateCarResponse, err error)
+	GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error)
 	GetCars(ctx context.Context, req *car.GetCarsRequest, callOptions ...callopt.Option) (r *car.GetCarsResponse, err error)
 	LockCar(ctx context.Context, req *car.LockCarRequest, callOptions ...callopt.Option) (r *car.LockCarResponse, err error)
 	UnlockCar(ctx context.Context, req *car.UnlockCarRequest, callOptions ...callopt.Option) (r *car.UnlockCarResponse, err error)
@@ -48,12 +48,12 @@ type kCarServiceClient struct {
 	*kClient
 }
 
-func (p *kCarServiceClient) CreateCar(ctx context.Context, req *car.CreateCarRequest, callOptions ...callopt.Option) (r *car.CarEntity, err error) {
+func (p *kCarServiceClient) CreateCar(ctx context.Context, req *car.CreateCarRequest, callOptions ...callopt.Option) (r *car.CreateCarResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CreateCar(ctx, req)
 }
 
-func (p *kCarServiceClient) GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.Car, err error) {
+func (p *kCarServiceClient) GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetCar(ctx, req)
 }

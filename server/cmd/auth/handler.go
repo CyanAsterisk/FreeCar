@@ -159,7 +159,7 @@ func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequ
 }
 
 // GetUser implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.UserInfo, err error) {
+func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.GetUserInfoResponse, err error) {
 	user, err := s.UserMysqlManager.GetUserByAccountId(req.AccontId)
 	if err != nil {
 		if err == errno.RecordNotFound {
@@ -168,7 +168,7 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 		klog.Error("get user by accountId err", err)
 		return nil, errno.AuthSrvErr.WithMessage("get user by accountId err")
 	}
-	resp = &auth.UserInfo{
+	resp.UserInfo = &auth.UserInfo{
 		AccountId:   user.ID,
 		Username:    user.Username,
 		PhoneNumber: user.PhoneNumber,
@@ -182,7 +182,7 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
-		resp.AvatarUrl = res.Url
+		resp.UserInfo.AvatarUrl = res.Url
 	}
 	return
 }

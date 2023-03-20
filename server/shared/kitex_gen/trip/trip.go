@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
 )
@@ -1811,6 +1812,245 @@ func (p *CreateTripRequest) Field4DeepEqual(src int64) bool {
 	return true
 }
 
+type CreateTripResponse struct {
+	BaseResp   *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	TripEntity *TripEntity        `thrift:"trip_entity,2" frugal:"2,default,TripEntity" json:"trip_entity"`
+}
+
+func NewCreateTripResponse() *CreateTripResponse {
+	return &CreateTripResponse{}
+}
+
+func (p *CreateTripResponse) InitDefault() {
+	*p = CreateTripResponse{}
+}
+
+var CreateTripResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *CreateTripResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return CreateTripResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var CreateTripResponse_TripEntity_DEFAULT *TripEntity
+
+func (p *CreateTripResponse) GetTripEntity() (v *TripEntity) {
+	if !p.IsSetTripEntity() {
+		return CreateTripResponse_TripEntity_DEFAULT
+	}
+	return p.TripEntity
+}
+func (p *CreateTripResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *CreateTripResponse) SetTripEntity(val *TripEntity) {
+	p.TripEntity = val
+}
+
+var fieldIDToName_CreateTripResponse = map[int16]string{
+	1: "base_resp",
+	2: "trip_entity",
+}
+
+func (p *CreateTripResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *CreateTripResponse) IsSetTripEntity() bool {
+	return p.TripEntity != nil
+}
+
+func (p *CreateTripResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CreateTripResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CreateTripResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CreateTripResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.TripEntity = NewTripEntity()
+	if err := p.TripEntity.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CreateTripResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("CreateTripResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CreateTripResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CreateTripResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("trip_entity", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.TripEntity.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *CreateTripResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CreateTripResponse(%+v)", *p)
+}
+
+func (p *CreateTripResponse) DeepEqual(ano *CreateTripResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.TripEntity) {
+		return false
+	}
+	return true
+}
+
+func (p *CreateTripResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *CreateTripResponse) Field2DeepEqual(src *TripEntity) bool {
+
+	if !p.TripEntity.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type GetTripRequest struct {
 	Id        string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	AccountId int64  `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
@@ -2029,6 +2269,245 @@ func (p *GetTripRequest) Field1DeepEqual(src string) bool {
 func (p *GetTripRequest) Field2DeepEqual(src int64) bool {
 
 	if p.AccountId != src {
+		return false
+	}
+	return true
+}
+
+type GetTripResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trip     *Trip              `thrift:"trip,2" frugal:"2,default,Trip" json:"trip"`
+}
+
+func NewGetTripResponse() *GetTripResponse {
+	return &GetTripResponse{}
+}
+
+func (p *GetTripResponse) InitDefault() {
+	*p = GetTripResponse{}
+}
+
+var GetTripResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetTripResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetTripResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var GetTripResponse_Trip_DEFAULT *Trip
+
+func (p *GetTripResponse) GetTrip() (v *Trip) {
+	if !p.IsSetTrip() {
+		return GetTripResponse_Trip_DEFAULT
+	}
+	return p.Trip
+}
+func (p *GetTripResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *GetTripResponse) SetTrip(val *Trip) {
+	p.Trip = val
+}
+
+var fieldIDToName_GetTripResponse = map[int16]string{
+	1: "base_resp",
+	2: "trip",
+}
+
+func (p *GetTripResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetTripResponse) IsSetTrip() bool {
+	return p.Trip != nil
+}
+
+func (p *GetTripResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetTripResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetTripResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetTripResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Trip = NewTrip()
+	if err := p.Trip.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetTripResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetTripResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetTripResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetTripResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("trip", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Trip.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *GetTripResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetTripResponse(%+v)", *p)
+}
+
+func (p *GetTripResponse) DeepEqual(ano *GetTripResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Trip) {
+		return false
+	}
+	return true
+}
+
+func (p *GetTripResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetTripResponse) Field2DeepEqual(src *Trip) bool {
+
+	if !p.Trip.DeepEqual(src) {
 		return false
 	}
 	return true
@@ -2258,7 +2737,8 @@ func (p *GetTripsRequest) Field2DeepEqual(src int64) bool {
 }
 
 type GetTripsResponse struct {
-	Trips []*TripEntity `thrift:"trips,1" frugal:"1,default,list<TripEntity>" json:"trips"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trips    []*TripEntity      `thrift:"trips,2" frugal:"2,default,list<TripEntity>" json:"trips"`
 }
 
 func NewGetTripsResponse() *GetTripsResponse {
@@ -2269,15 +2749,32 @@ func (p *GetTripsResponse) InitDefault() {
 	*p = GetTripsResponse{}
 }
 
+var GetTripsResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetTripsResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetTripsResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
 func (p *GetTripsResponse) GetTrips() (v []*TripEntity) {
 	return p.Trips
+}
+func (p *GetTripsResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
 }
 func (p *GetTripsResponse) SetTrips(val []*TripEntity) {
 	p.Trips = val
 }
 
 var fieldIDToName_GetTripsResponse = map[int16]string{
-	1: "trips",
+	1: "base_resp",
+	2: "trips",
+}
+
+func (p *GetTripsResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
 }
 
 func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -2300,8 +2797,18 @@ func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.LIST {
+			if fieldTypeId == thrift.STRUCT {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -2340,6 +2847,14 @@ ReadStructEndError:
 }
 
 func (p *GetTripsResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetTripsResponse) ReadField2(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return err
@@ -2369,6 +2884,10 @@ func (p *GetTripsResponse) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 1
 			goto WriteFieldError
 		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
 
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
@@ -2389,7 +2908,24 @@ WriteStructEndError:
 }
 
 func (p *GetTripsResponse) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("trips", thrift.LIST, 1); err != nil {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetTripsResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("trips", thrift.LIST, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Trips)); err != nil {
@@ -2408,9 +2944,9 @@ func (p *GetTripsResponse) writeField1(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *GetTripsResponse) String() string {
@@ -2426,13 +2962,23 @@ func (p *GetTripsResponse) DeepEqual(ano *GetTripsResponse) bool {
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.Trips) {
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Trips) {
 		return false
 	}
 	return true
 }
 
-func (p *GetTripsResponse) Field1DeepEqual(src []*TripEntity) bool {
+func (p *GetTripsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetTripsResponse) Field2DeepEqual(src []*TripEntity) bool {
 
 	if len(p.Trips) != len(src) {
 		return false
@@ -2795,14 +3341,253 @@ func (p *UpdateTripRequest) Field4DeepEqual(src int64) bool {
 	return true
 }
 
-type TripService interface {
-	CreateTrip(ctx context.Context, req *CreateTripRequest) (r *TripEntity, err error)
+type UpdateTripResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trip     *Trip              `thrift:"trip,2" frugal:"2,default,Trip" json:"trip"`
+}
 
-	GetTrip(ctx context.Context, req *GetTripRequest) (r *Trip, err error)
+func NewUpdateTripResponse() *UpdateTripResponse {
+	return &UpdateTripResponse{}
+}
+
+func (p *UpdateTripResponse) InitDefault() {
+	*p = UpdateTripResponse{}
+}
+
+var UpdateTripResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *UpdateTripResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return UpdateTripResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+var UpdateTripResponse_Trip_DEFAULT *Trip
+
+func (p *UpdateTripResponse) GetTrip() (v *Trip) {
+	if !p.IsSetTrip() {
+		return UpdateTripResponse_Trip_DEFAULT
+	}
+	return p.Trip
+}
+func (p *UpdateTripResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *UpdateTripResponse) SetTrip(val *Trip) {
+	p.Trip = val
+}
+
+var fieldIDToName_UpdateTripResponse = map[int16]string{
+	1: "base_resp",
+	2: "trip",
+}
+
+func (p *UpdateTripResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *UpdateTripResponse) IsSetTrip() bool {
+	return p.Trip != nil
+}
+
+func (p *UpdateTripResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UpdateTripResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *UpdateTripResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *UpdateTripResponse) ReadField2(iprot thrift.TProtocol) error {
+	p.Trip = NewTrip()
+	if err := p.Trip.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *UpdateTripResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("UpdateTripResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *UpdateTripResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *UpdateTripResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("trip", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Trip.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *UpdateTripResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UpdateTripResponse(%+v)", *p)
+}
+
+func (p *UpdateTripResponse) DeepEqual(ano *UpdateTripResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Trip) {
+		return false
+	}
+	return true
+}
+
+func (p *UpdateTripResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *UpdateTripResponse) Field2DeepEqual(src *Trip) bool {
+
+	if !p.Trip.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type TripService interface {
+	CreateTrip(ctx context.Context, req *CreateTripRequest) (r *CreateTripResponse, err error)
+
+	GetTrip(ctx context.Context, req *GetTripRequest) (r *GetTripResponse, err error)
 
 	GetTrips(ctx context.Context, req *GetTripsRequest) (r *GetTripsResponse, err error)
 
-	UpdateTrip(ctx context.Context, req *UpdateTripRequest) (r *Trip, err error)
+	UpdateTrip(ctx context.Context, req *UpdateTripRequest) (r *UpdateTripResponse, err error)
 }
 
 type TripServiceClient struct {
@@ -2831,7 +3616,7 @@ func (p *TripServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *TripServiceClient) CreateTrip(ctx context.Context, req *CreateTripRequest) (r *TripEntity, err error) {
+func (p *TripServiceClient) CreateTrip(ctx context.Context, req *CreateTripRequest) (r *CreateTripResponse, err error) {
 	var _args TripServiceCreateTripArgs
 	_args.Req = req
 	var _result TripServiceCreateTripResult
@@ -2840,7 +3625,7 @@ func (p *TripServiceClient) CreateTrip(ctx context.Context, req *CreateTripReque
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *TripServiceClient) GetTrip(ctx context.Context, req *GetTripRequest) (r *Trip, err error) {
+func (p *TripServiceClient) GetTrip(ctx context.Context, req *GetTripRequest) (r *GetTripResponse, err error) {
 	var _args TripServiceGetTripArgs
 	_args.Req = req
 	var _result TripServiceGetTripResult
@@ -2858,7 +3643,7 @@ func (p *TripServiceClient) GetTrips(ctx context.Context, req *GetTripsRequest) 
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *TripServiceClient) UpdateTrip(ctx context.Context, req *UpdateTripRequest) (r *Trip, err error) {
+func (p *TripServiceClient) UpdateTrip(ctx context.Context, req *UpdateTripRequest) (r *UpdateTripResponse, err error) {
 	var _args TripServiceUpdateTripArgs
 	_args.Req = req
 	var _result TripServiceUpdateTripResult
@@ -2931,7 +3716,7 @@ func (p *tripServiceProcessorCreateTrip) Process(ctx context.Context, seqId int3
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := TripServiceCreateTripResult{}
-	var retval *TripEntity
+	var retval *CreateTripResponse
 	if retval, err2 = p.handler.CreateTrip(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing CreateTrip: "+err2.Error())
 		oprot.WriteMessageBegin("CreateTrip", thrift.EXCEPTION, seqId)
@@ -2979,7 +3764,7 @@ func (p *tripServiceProcessorGetTrip) Process(ctx context.Context, seqId int32, 
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := TripServiceGetTripResult{}
-	var retval *Trip
+	var retval *GetTripResponse
 	if retval, err2 = p.handler.GetTrip(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetTrip: "+err2.Error())
 		oprot.WriteMessageBegin("GetTrip", thrift.EXCEPTION, seqId)
@@ -3075,7 +3860,7 @@ func (p *tripServiceProcessorUpdateTrip) Process(ctx context.Context, seqId int3
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := TripServiceUpdateTripResult{}
-	var retval *Trip
+	var retval *UpdateTripResponse
 	if retval, err2 = p.handler.UpdateTrip(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateTrip: "+err2.Error())
 		oprot.WriteMessageBegin("UpdateTrip", thrift.EXCEPTION, seqId)
@@ -3277,7 +4062,7 @@ func (p *TripServiceCreateTripArgs) Field1DeepEqual(src *CreateTripRequest) bool
 }
 
 type TripServiceCreateTripResult struct {
-	Success *TripEntity `thrift:"success,0,optional" frugal:"0,optional,TripEntity" json:"success,omitempty"`
+	Success *CreateTripResponse `thrift:"success,0,optional" frugal:"0,optional,CreateTripResponse" json:"success,omitempty"`
 }
 
 func NewTripServiceCreateTripResult() *TripServiceCreateTripResult {
@@ -3288,16 +4073,16 @@ func (p *TripServiceCreateTripResult) InitDefault() {
 	*p = TripServiceCreateTripResult{}
 }
 
-var TripServiceCreateTripResult_Success_DEFAULT *TripEntity
+var TripServiceCreateTripResult_Success_DEFAULT *CreateTripResponse
 
-func (p *TripServiceCreateTripResult) GetSuccess() (v *TripEntity) {
+func (p *TripServiceCreateTripResult) GetSuccess() (v *CreateTripResponse) {
 	if !p.IsSetSuccess() {
 		return TripServiceCreateTripResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *TripServiceCreateTripResult) SetSuccess(x interface{}) {
-	p.Success = x.(*TripEntity)
+	p.Success = x.(*CreateTripResponse)
 }
 
 var fieldIDToName_TripServiceCreateTripResult = map[int16]string{
@@ -3368,7 +4153,7 @@ ReadStructEndError:
 }
 
 func (p *TripServiceCreateTripResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewTripEntity()
+	p.Success = NewCreateTripResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -3442,7 +4227,7 @@ func (p *TripServiceCreateTripResult) DeepEqual(ano *TripServiceCreateTripResult
 	return true
 }
 
-func (p *TripServiceCreateTripResult) Field0DeepEqual(src *TripEntity) bool {
+func (p *TripServiceCreateTripResult) Field0DeepEqual(src *CreateTripResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -3623,7 +4408,7 @@ func (p *TripServiceGetTripArgs) Field1DeepEqual(src *GetTripRequest) bool {
 }
 
 type TripServiceGetTripResult struct {
-	Success *Trip `thrift:"success,0,optional" frugal:"0,optional,Trip" json:"success,omitempty"`
+	Success *GetTripResponse `thrift:"success,0,optional" frugal:"0,optional,GetTripResponse" json:"success,omitempty"`
 }
 
 func NewTripServiceGetTripResult() *TripServiceGetTripResult {
@@ -3634,16 +4419,16 @@ func (p *TripServiceGetTripResult) InitDefault() {
 	*p = TripServiceGetTripResult{}
 }
 
-var TripServiceGetTripResult_Success_DEFAULT *Trip
+var TripServiceGetTripResult_Success_DEFAULT *GetTripResponse
 
-func (p *TripServiceGetTripResult) GetSuccess() (v *Trip) {
+func (p *TripServiceGetTripResult) GetSuccess() (v *GetTripResponse) {
 	if !p.IsSetSuccess() {
 		return TripServiceGetTripResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *TripServiceGetTripResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Trip)
+	p.Success = x.(*GetTripResponse)
 }
 
 var fieldIDToName_TripServiceGetTripResult = map[int16]string{
@@ -3714,7 +4499,7 @@ ReadStructEndError:
 }
 
 func (p *TripServiceGetTripResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewTrip()
+	p.Success = NewGetTripResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -3788,7 +4573,7 @@ func (p *TripServiceGetTripResult) DeepEqual(ano *TripServiceGetTripResult) bool
 	return true
 }
 
-func (p *TripServiceGetTripResult) Field0DeepEqual(src *Trip) bool {
+func (p *TripServiceGetTripResult) Field0DeepEqual(src *GetTripResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -4315,7 +5100,7 @@ func (p *TripServiceUpdateTripArgs) Field1DeepEqual(src *UpdateTripRequest) bool
 }
 
 type TripServiceUpdateTripResult struct {
-	Success *Trip `thrift:"success,0,optional" frugal:"0,optional,Trip" json:"success,omitempty"`
+	Success *UpdateTripResponse `thrift:"success,0,optional" frugal:"0,optional,UpdateTripResponse" json:"success,omitempty"`
 }
 
 func NewTripServiceUpdateTripResult() *TripServiceUpdateTripResult {
@@ -4326,16 +5111,16 @@ func (p *TripServiceUpdateTripResult) InitDefault() {
 	*p = TripServiceUpdateTripResult{}
 }
 
-var TripServiceUpdateTripResult_Success_DEFAULT *Trip
+var TripServiceUpdateTripResult_Success_DEFAULT *UpdateTripResponse
 
-func (p *TripServiceUpdateTripResult) GetSuccess() (v *Trip) {
+func (p *TripServiceUpdateTripResult) GetSuccess() (v *UpdateTripResponse) {
 	if !p.IsSetSuccess() {
 		return TripServiceUpdateTripResult_Success_DEFAULT
 	}
 	return p.Success
 }
 func (p *TripServiceUpdateTripResult) SetSuccess(x interface{}) {
-	p.Success = x.(*Trip)
+	p.Success = x.(*UpdateTripResponse)
 }
 
 var fieldIDToName_TripServiceUpdateTripResult = map[int16]string{
@@ -4406,7 +5191,7 @@ ReadStructEndError:
 }
 
 func (p *TripServiceUpdateTripResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewTrip()
+	p.Success = NewUpdateTripResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
@@ -4480,7 +5265,7 @@ func (p *TripServiceUpdateTripResult) DeepEqual(ano *TripServiceUpdateTripResult
 	return true
 }
 
-func (p *TripServiceUpdateTripResult) Field0DeepEqual(src *Trip) bool {
+func (p *TripServiceUpdateTripResult) Field0DeepEqual(src *UpdateTripResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

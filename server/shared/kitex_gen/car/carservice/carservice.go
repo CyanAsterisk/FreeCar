@@ -158,7 +158,7 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) CreateCar(ctx context.Context, req *car.CreateCarRequest) (r *car.CarEntity, err error) {
+func (p *kClient) CreateCar(ctx context.Context, req *car.CreateCarRequest) (r *car.CreateCarResponse, err error) {
 	var _args car.CarServiceCreateCarArgs
 	_args.Req = req
 	var _result car.CarServiceCreateCarResult
@@ -168,7 +168,7 @@ func (p *kClient) CreateCar(ctx context.Context, req *car.CreateCarRequest) (r *
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetCar(ctx context.Context, req *car.GetCarRequest) (r *car.Car, err error) {
+func (p *kClient) GetCar(ctx context.Context, req *car.GetCarRequest) (r *car.GetCarResponse, err error) {
 	var _args car.CarServiceGetCarArgs
 	_args.Req = req
 	var _result car.CarServiceGetCarResult

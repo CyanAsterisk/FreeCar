@@ -1,11 +1,13 @@
 namespace go auth
+include "base.thrift"
 
 struct LoginRequest {
     1: string code
 }
 
 struct LoginResponse {
-    1: i64 account_id
+    1: base.BaseResponse base_resp
+    2: i64 account_id
 }
 
 struct AdminLoginRequest {
@@ -14,7 +16,8 @@ struct AdminLoginRequest {
 }
 
 struct AdminLoginResponse {
-    1: i64 account_id
+    1: base.BaseResponse base_resp
+    2: i64 account_id
 }
 
 struct ChangeAdminPasswordRequest {
@@ -23,13 +26,20 @@ struct ChangeAdminPasswordRequest {
     3: string new_password
 }
 
-struct ChangeAdminPasswordResponse {}
+struct ChangeAdminPasswordResponse {
+    1: base.BaseResponse base_resp
+}
 
 struct UserInfo{
     1: i64 account_id;
     2: string username;
     3: i64 phone_number;
     4: string avatar_url;
+}
+
+struct GetUserInfoResponse{
+    1: base.BaseResponse base_resp
+    2: UserInfo user_info
 }
 
 struct User{
@@ -49,7 +59,8 @@ struct UploadAvatarRequset{
 }
 
 struct UploadAvatarResponse{
-    1: string upload_url;
+    1: base.BaseResponse base_resp
+    2: string upload_url;
 }
 
 struct AddUserRequest{
@@ -60,13 +71,17 @@ struct AddUserRequest{
     5: string open_id;
 }
 
-struct AddUserResponse{}
+struct AddUserResponse{
+    1: base.BaseResponse base_resp
+}
 
 struct DeleteUserRequest{
     1: i64 account_id;
 }
 
-struct DeleteUserResponse{}
+struct DeleteUserResponse{
+    1: base.BaseResponse base_resp
+}
 
 struct UpdateUserRequest{
     1: i64 account_id;
@@ -75,7 +90,9 @@ struct UpdateUserRequest{
     4: string avatar_url
 }
 
-struct UpdateUserResponse{}
+struct UpdateUserResponse{
+    1: base.BaseResponse base_resp
+}
 
 struct GetSomeUsersRequest{}
 
@@ -86,7 +103,8 @@ struct GetSomeUsersResponse{
 struct GetAllUsersRequest{}
 
 struct GetAllUsersResponse{
-    1: list<User> users;
+    1: base.BaseResponse base_resp
+    2: list<User> users;
 }
 
 service AuthService {
@@ -94,7 +112,7 @@ service AuthService {
     AdminLoginResponse AdminLogin(1: AdminLoginRequest req)
     ChangeAdminPasswordResponse ChangeAdminPassword(1: ChangeAdminPasswordRequest req)
     UploadAvatarResponse UploadAvatar(1: UploadAvatarRequset req)
-    UserInfo GetUser (1: GetUserRequest req)
+    GetUserInfoResponse GetUser (1: GetUserRequest req)
 
     AddUserResponse AddUser (1: AddUserRequest req)
     DeleteUserResponse DeleteUser (1: DeleteUserRequest req)

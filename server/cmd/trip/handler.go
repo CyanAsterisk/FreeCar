@@ -49,7 +49,7 @@ type MongoManager interface {
 }
 
 // CreateTrip implements the TripServiceImpl interface.
-func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (resp *trip.TripEntity, err error) {
+func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (resp *trip.CreateTripResponse, err error) {
 	aid := id.AccountID(req.AccountId)
 	if req.CarId == "" || req.Start == nil {
 		return nil, status.Err(codes.InvalidArgument, "")
@@ -92,20 +92,22 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 		}
 	}()
 
-	return &trip.TripEntity{
+	resp.TripEntity = &trip.TripEntity{
 		Id:   tr.ID.Hex(),
 		Trip: tr.Trip,
-	}, nil
+	}
+	return resp, nil
 }
 
 // GetTrip implements the TripServiceImpl interface.
-func (s *TripServiceImpl) GetTrip(ctx context.Context, req *trip.GetTripRequest) (resp *trip.Trip, err error) {
+func (s *TripServiceImpl) GetTrip(ctx context.Context, req *trip.GetTripRequest) (resp *trip.GetTripResponse, err error) {
 	aid := id.AccountID(req.AccountId)
 	tr, err := s.MongoManager.GetTrip(ctx, id.TripID(req.Id), aid)
 	if err != nil {
 		return nil, status.Err(codes.NotFound, "")
 	}
-	return tr.Trip, nil
+	resp.Trip = tr.Trip
+	return resp, nil
 }
 
 // GetTrips implements the TripServiceImpl interface.
@@ -127,7 +129,7 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 }
 
 // UpdateTrip implements the TripServiceImpl interface.
-func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (resp *trip.Trip, err error) {
+func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (resp *trip.UpdateTripResponse, err error) {
 	aid := id.AccountID(req.AccountId)
 	tid := id.TripID(req.Id)
 	tr, err := s.MongoManager.GetTrip(ctx, tid, aid)
@@ -163,7 +165,9 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 	if err != nil {
 		return nil, status.Err(codes.Aborted, "")
 	}
-	return tr.Trip, nil
+
+	resp.Trip = tr.Trip
+	return resp, nil
 }
 
 var nowFunc = func() int64 {

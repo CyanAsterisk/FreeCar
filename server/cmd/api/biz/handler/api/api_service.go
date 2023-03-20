@@ -72,10 +72,10 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	errno.SendResponse(c, errno.Success, api.UserInfo{
-		AccountId:   resp.AccountId,
-		Username:    resp.Username,
-		AvatarUrl:   resp.AvatarUrl,
-		PhoneNumber: resp.PhoneNumber,
+		AccountId:   resp.UserInfo.AccountId,
+		Username:    resp.UserInfo.Username,
+		AvatarUrl:   resp.UserInfo.AvatarUrl,
+		PhoneNumber: resp.UserInfo.PhoneNumber,
 	})
 }
 
@@ -569,7 +569,7 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.DeleteUser(ctx, &auth.DeleteUserRequest{req.AccountId})
+	resp, err := config.GlobalAuthClient.DeleteUser(ctx, &auth.DeleteUserRequest{AccountId: req.AccountId})
 	if err != nil {
 		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
 		return
@@ -582,7 +582,7 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 // @router /auth/some [GET]
 func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.GetSomeUsersRequest
+	var req api.GetUsersRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.ParamsErr, nil)
@@ -601,7 +601,26 @@ func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 // @router /auth/all [GET]
 func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.GetAllUsersRequest
+	var req api.GetUsersRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalAuthClient.GetAllUsers(ctx, &auth.GetAllUsersRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		return
+	}
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetUsers .
+// @router /auth [GET]
+func GetUsers(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetUsersRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		errno.SendResponse(c, errno.ParamsErr, nil)

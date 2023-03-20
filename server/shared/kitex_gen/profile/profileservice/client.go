@@ -11,12 +11,12 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	GetProfile(ctx context.Context, req *profile.GetProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error)
-	SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error)
-	ClearProfile(ctx context.Context, req *profile.ClearProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error)
+	GetProfile(ctx context.Context, req *profile.GetProfileRequest, callOptions ...callopt.Option) (r *profile.GetProfileResponse, err error)
+	SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest, callOptions ...callopt.Option) (r *profile.SubmitProfileResponse, err error)
+	ClearProfile(ctx context.Context, req *profile.ClearProfileRequest, callOptions ...callopt.Option) (r *profile.ClearProfileResponse, err error)
 	GetProfilePhoto(ctx context.Context, req *profile.GetProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.GetProfilePhotoResponse, err error)
 	CreateProfilePhoto(ctx context.Context, req *profile.CreateProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.CreateProfilePhotoResponse, err error)
-	CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.Identity, err error)
+	CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.CompleteProfilePhotoResponse, err error)
 	ClearProfilePhoto(ctx context.Context, req *profile.ClearProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.ClearProfilePhotoResponse, err error)
 }
 
@@ -49,17 +49,17 @@ type kProfileServiceClient struct {
 	*kClient
 }
 
-func (p *kProfileServiceClient) GetProfile(ctx context.Context, req *profile.GetProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error) {
+func (p *kProfileServiceClient) GetProfile(ctx context.Context, req *profile.GetProfileRequest, callOptions ...callopt.Option) (r *profile.GetProfileResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetProfile(ctx, req)
 }
 
-func (p *kProfileServiceClient) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error) {
+func (p *kProfileServiceClient) SubmitProfile(ctx context.Context, req *profile.SubmitProfileRequest, callOptions ...callopt.Option) (r *profile.SubmitProfileResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.SubmitProfile(ctx, req)
 }
 
-func (p *kProfileServiceClient) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest, callOptions ...callopt.Option) (r *profile.Profile, err error) {
+func (p *kProfileServiceClient) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest, callOptions ...callopt.Option) (r *profile.ClearProfileResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.ClearProfile(ctx, req)
 }
@@ -74,7 +74,7 @@ func (p *kProfileServiceClient) CreateProfilePhoto(ctx context.Context, req *pro
 	return p.kClient.CreateProfilePhoto(ctx, req)
 }
 
-func (p *kProfileServiceClient) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.Identity, err error) {
+func (p *kProfileServiceClient) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.CompleteProfilePhotoResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CompleteProfilePhoto(ctx, req)
 }

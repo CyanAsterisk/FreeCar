@@ -82,7 +82,7 @@ func TestUserLifecycle(t *testing.T) {
 			want: "[err = <nil>][resp = &{ID:1234 PhoneNumber:8888888888 AvatarBlobId:10100101001 Username:new-username OpenID:5cc2876d40c14dcabe891399c4a0422a Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
 		},
 		{
-			name: "get users",
+			name: "get some users",
 			op: func() string {
 				manager.CreateUser(&User{
 					ID:           1235,
@@ -98,14 +98,26 @@ func TestUserLifecycle(t *testing.T) {
 					Username:     "username3",
 					OpenID:       "openID-3",
 				})
-				users, err := manager.GetUsers(1, 2)
+				users, err := manager.GetSomeUsers()
 				resp, _ := sonic.Marshal(users)
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1235,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1235,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":1236,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+		},
+		{
+			name: "get all users",
+			op: func() string {
+				users, err := manager.GetSomeUsers()
+				resp, _ := sonic.Marshal(users)
+				if err != nil {
+					return fmt.Sprintf("[err=%+v]", err)
+				}
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
+			},
+			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1235,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":1236,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
 		},
 		{
 			name: "delete user",
@@ -128,7 +140,7 @@ func TestUserLifecycle(t *testing.T) {
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)
 				}
-				users, err := manager.GetUsers(1, 2)
+				users, err := manager.GetSomeUsers()
 				resp, _ := sonic.Marshal(users)
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)

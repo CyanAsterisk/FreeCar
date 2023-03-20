@@ -121,9 +121,18 @@ func (m *UserManager) DeleteUser(aid int64) error {
 	return nil
 }
 
-func (m *UserManager) GetUsers(pn, ps int64) ([]*User, error) {
+func (m *UserManager) GetAllUsers() ([]*User, error) {
 	var users []*User
-	err := m.db.Scopes(Paginate(int(pn), int(ps))).Find(&users).Error
+	err := m.db.Model(&User{}).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (m *UserManager) GetSomeUsers() ([]*User, error) {
+	var users []*User
+	err := m.db.Scopes(Paginate(1, 10)).Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
@@ -136,14 +145,12 @@ func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 		if page == 0 {
 			page = 1
 		}
-
 		switch {
 		case pageSize > 100:
 			pageSize = 100
 		case pageSize <= 0:
 			pageSize = 10
 		}
-
 		offset := (page - 1) * pageSize
 		return db.Offset(offset).Limit(pageSize)
 	}

@@ -37,7 +37,8 @@ type UserMysqlManager interface {
 	CreateUser(user *mysql.User) (*mysql.User, error)
 	GetUserByOpenId(openId string) (*mysql.User, error)
 	GetUserByAccountId(aid int64) (*mysql.User, error)
-	GetUsers(pn, ps int64) ([]*mysql.User, error)
+	GetSomeUsers() ([]*mysql.User, error)
+	GetAllUsers() ([]*mysql.User, error)
 	UpdateUser(user *mysql.User) error
 	DeleteUser(aid int64) error
 }
@@ -215,9 +216,9 @@ func (s *AuthServiceImpl) DeleteUser(ctx context.Context, req *auth.DeleteUserRe
 	return
 }
 
-// GetUsers implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) GetUsers(ctx context.Context, req *auth.GetUsersRequest) (resp *auth.GetUsersResponse, err error) {
-	users, err := s.UserMysqlManager.GetUsers(req.Pn, req.Psize)
+// GetSomeUsers implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetSomeUsers(ctx context.Context, req *auth.GetSomeUsersRequest) (resp *auth.GetSomeUsersResponse, err error) {
+	users, err := s.UserMysqlManager.GetSomeUsers()
 	if err != nil {
 		klog.Error("get users error", err)
 		return nil, errno.AuthSrvErr.WithMessage("get users error")
@@ -232,5 +233,25 @@ func (s *AuthServiceImpl) GetUsers(ctx context.Context, req *auth.GetUsersReques
 		uInfo.OpenId = user.OpenID
 		uInfos = append(uInfos, &uInfo)
 	}
-	return &auth.GetUsersResponse{Users: uInfos}, nil
+	return &auth.GetSomeUsersResponse{Users: uInfos}, nil
+}
+
+// GetAllUsers implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) GetAllUsers(ctx context.Context, req *auth.GetAllUsersRequest) (resp *auth.GetAllUsersResponse, err error) {
+	users, err := s.UserMysqlManager.GetAllUsers()
+	if err != nil {
+		klog.Error("get users error", err)
+		return nil, errno.AuthSrvErr.WithMessage("get users error")
+	}
+	var uInfos []*auth.User
+	for _, user := range users {
+		var uInfo auth.User
+		uInfo.Username = user.Username
+		uInfo.AccountId = user.ID
+		uInfo.PhoneNumber = user.PhoneNumber
+		uInfo.AvatarBlobId = user.AvatarBlobId
+		uInfo.OpenId = user.OpenID
+		uInfos = append(uInfos, &uInfo)
+	}
+	return &auth.GetAllUsersResponse{Users: uInfos}, nil
 }

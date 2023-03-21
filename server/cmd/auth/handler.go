@@ -8,10 +8,9 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/codes"
-	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/status"
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.
@@ -58,64 +57,82 @@ type BlobManager interface {
 
 // Login implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) Login(_ context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
+	resp = new(auth.LoginResponse)
 	// Resolve code to openID.
 	openID := s.OpenIDResolver.Resolve(req.Code)
 	if openID == "" {
-		return nil, errno.AuthSrvErr.WithMessage("bad open id")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("bad open id"))
+		return resp, nil
 	}
 
 	user, err := s.UserMysqlManager.GetUserByOpenId(openID)
 	if err != nil {
 		if err != errno.RecordNotFound {
 			klog.Error("get user by open id err", err)
-			return nil, errno.AuthSrvErr.WithMessage("")
+			resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+			return resp, nil
 		}
 		user, err = s.UserMysqlManager.CreateUser(&mysql.User{OpenID: openID})
 		if err != nil {
 			klog.Error("create user err", err)
-			return nil, errno.AuthSrvErr
+			resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+			return resp, nil
 		}
 	}
-	return &auth.LoginResponse{AccountId: user.ID}, nil
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	resp.AccountId = user.ID
+	return resp, nil
 }
 
 // AdminLogin implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) AdminLogin(_ context.Context, req *auth.AdminLoginRequest) (resp *auth.AdminLoginResponse, err error) {
+	resp = new(auth.AdminLoginResponse)
 	admin, err := s.AdminMysqlManager.GetAdminByName(req.Username)
 	if err != nil {
 		klog.Error("get password by name err", err)
-		return nil, errno.AuthSrvErr.WithMessage("login error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("login error"))
+		return resp, nil
 	}
 	cryPassword := s.EncryptPassword(req.Password)
 	if admin.Password != cryPassword {
 		klog.Infof("%s login err", req.Username)
-		return nil, errno.AuthSrvErr.WithMessage("wrong username or password")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("wrong username or password"))
+		return resp, nil
 	}
-	return &auth.AdminLoginResponse{AccountId: admin.ID}, nil
+
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	resp.AccountId = admin.ID
+	return resp, nil
 }
 
 // ChangeAdminPassword implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) ChangeAdminPassword(_ context.Context, req *auth.ChangeAdminPasswordRequest) (resp *auth.ChangeAdminPasswordResponse, err error) {
+	resp = new(auth.ChangeAdminPasswordResponse)
 	admin, err := s.AdminMysqlManager.GetAdminByAccountId(req.AccountId)
 	if err != nil {
 		klog.Error("get password by aid err", err)
-		return nil, errno.AuthSrvErr.WithMessage("change password error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("change password error"))
+		return resp, nil
 	}
 	cryPassword := s.EncryptManager.EncryptPassword(req.OldPassword)
 	if admin.Password != cryPassword {
 		klog.Infof("%s change password err", admin.Username)
-		return nil, errno.AuthSrvErr.WithMessage("wrong password")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("wrong password"))
+		return resp, nil
 	}
 	err = s.UpdateAdminPassword(req.AccountId, req.NewPassword_)
 	if err != nil {
 		klog.Error("update password err", err)
-		return nil, errno.AuthSrvErr.WithMessage("change password error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("change password error"))
+		return resp, nil
 	}
-	return &auth.ChangeAdminPasswordResponse{}, nil
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // UploadAvatar implements the AuthServiceImpl interface.
-func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (*auth.UploadAvatarResponse, error) {
+func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvatarRequset) (resp *auth.UploadAvatarResponse, err error) {
+	resp = new(auth.UploadAvatarResponse)
 	aid := req.AccountId
 	br, err := s.BlobManager.CreateBlob(ctx, &blob.CreateBlobRequest{
 		AccountId:           aid,
@@ -123,7 +140,8 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 	})
 	if err != nil {
 		klog.Error("cannot create blob", err)
-		return nil, status.Err(codes.Aborted, "")
+		resp.BaseResp = tools.BuildBaseResp(errno.BlobSrvErr)
+		return resp, nil
 	}
 
 	if err = s.UserMysqlManager.UpdateUser(&mysql.User{
@@ -134,15 +152,18 @@ func (s *AuthServiceImpl) UploadAvatar(ctx context.Context, req *auth.UploadAvat
 			return nil, errno.RecordNotFound
 		}
 		klog.Error("update user blob id error", err)
-		return nil, errno.AuthSrvErr.WithMessage("upload avatar error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("upload avatar error\""))
+		return resp, nil
 	}
-	return &auth.UploadAvatarResponse{
-		UploadUrl: br.UploadUrl,
-	}, nil
+
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	resp.UploadUrl = br.UploadUrl
+	return resp, nil
 }
 
 // UpdateUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequest) (resp *auth.UpdateUserResponse, err error) {
+	resp = new(auth.UpdateUserResponse)
 	err = s.UserMysqlManager.UpdateUser(&mysql.User{
 		ID:          req.AccountId,
 		PhoneNumber: req.PhoneNumber,
@@ -150,23 +171,30 @@ func (s *AuthServiceImpl) UpdateUser(_ context.Context, req *auth.UpdateUserRequ
 	})
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return nil, errno.RecordNotFound
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
 		}
 		klog.Error("update user error", err)
-		return nil, errno.AuthSrvErr.WithMessage("update user info error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+		return resp, nil
 	}
-	return
+
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // GetUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest) (resp *auth.GetUserInfoResponse, err error) {
+	resp = new(auth.GetUserInfoResponse)
 	user, err := s.UserMysqlManager.GetUserByAccountId(req.AccontId)
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return nil, errno.RecordNotFound
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
 		}
 		klog.Error("get user by accountId err", err)
-		return nil, errno.AuthSrvErr.WithMessage("get user by accountId err")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+		return resp, nil
 	}
 	resp.UserInfo = &auth.UserInfo{
 		AccountId:   user.ID,
@@ -180,11 +208,15 @@ func (s *AuthServiceImpl) GetUser(ctx context.Context, req *auth.GetUserRequest)
 			TimeoutSec: int32(5 * time.Second.Seconds()),
 		})
 		if err != nil {
-			return nil, status.Errorf(codes.Internal, err.Error())
+			klog.Error("get blob url err", err)
+			resp.BaseResp = tools.BuildBaseResp(errno.BlobSrvErr)
+			return resp, nil
 		}
 		resp.UserInfo.AvatarUrl = res.Url
 	}
-	return
+
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // AddUser implements the AuthServiceImpl interface.
@@ -198,30 +230,38 @@ func (s *AuthServiceImpl) AddUser(ctx context.Context, req *auth.AddUserRequest)
 	})
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return nil, nil
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
 		}
 		klog.Error("update user error", err)
-		return nil, errno.AuthSrvErr.WithMessage("add user error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+		return resp, nil
 	}
-	return
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // DeleteUser implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) DeleteUser(ctx context.Context, req *auth.DeleteUserRequest) (resp *auth.DeleteUserResponse, err error) {
+	resp = new(auth.DeleteUserResponse)
 	err = s.UserMysqlManager.DeleteUser(req.AccountId)
 	if err != nil {
 		klog.Error("delete user error", err)
-		return nil, errno.AuthSrvErr.WithMessage("delete user error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("delete user err"))
+		return resp, nil
 	}
-	return
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // GetSomeUsers implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetSomeUsers(ctx context.Context, req *auth.GetSomeUsersRequest) (resp *auth.GetSomeUsersResponse, err error) {
+	resp = new(auth.GetSomeUsersResponse)
 	users, err := s.UserMysqlManager.GetSomeUsers()
 	if err != nil {
 		klog.Error("get users error", err)
-		return nil, errno.AuthSrvErr.WithMessage("get users error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr)
+		return resp, nil
 	}
 	var uInfos []*auth.User
 	for _, user := range users {
@@ -233,15 +273,20 @@ func (s *AuthServiceImpl) GetSomeUsers(ctx context.Context, req *auth.GetSomeUse
 		uInfo.OpenId = user.OpenID
 		uInfos = append(uInfos, &uInfo)
 	}
-	return &auth.GetSomeUsersResponse{Users: uInfos}, nil
+
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	resp.Users = uInfos
+	return resp, nil
 }
 
 // GetAllUsers implements the AuthServiceImpl interface.
 func (s *AuthServiceImpl) GetAllUsers(ctx context.Context, req *auth.GetAllUsersRequest) (resp *auth.GetAllUsersResponse, err error) {
+	resp = new(auth.GetAllUsersResponse)
 	users, err := s.UserMysqlManager.GetAllUsers()
 	if err != nil {
 		klog.Error("get users error", err)
-		return nil, errno.AuthSrvErr.WithMessage("get users error")
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthSrvErr.WithMessage("get users error"))
+		return resp, nil
 	}
 	var uInfos []*auth.User
 	for _, user := range users {
@@ -253,5 +298,7 @@ func (s *AuthServiceImpl) GetAllUsers(ctx context.Context, req *auth.GetAllUsers
 		uInfo.OpenId = user.OpenID
 		uInfos = append(uInfos, &uInfo)
 	}
-	return &auth.GetAllUsersResponse{Users: uInfos}, nil
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	resp.Users = uInfos
+	return resp, nil
 }

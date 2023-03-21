@@ -97,7 +97,8 @@ struct UpdateUserResponse{
 struct GetSomeUsersRequest{}
 
 struct GetSomeUsersResponse{
-    1: list<User> users;
+    1: base.BaseResponse base_resp
+    2: list<User> users;
 }
 
 struct GetAllUsersRequest{}

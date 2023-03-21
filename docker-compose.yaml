@@ -32,7 +32,7 @@ services:
       TZ: Asia/Shanghai
     volumes:
       - ./data/data/redis:/data
-      - ./data/logs:/logs
+      - ./data/logs/redis:/logs
     command: redis-server --requirepass freecar
 
   minio:
@@ -49,16 +49,16 @@ services:
       - "9001:9001"
     restart: always
 
-  # Nacos
-  nacos:
-    image: "nacos/nacos-server:v2.1.2-slim"
+  # Consul
+  consul:
+    image: consul:latest
+    command: agent -dev -client=0.0.0.0
     ports:
-      - "8848:8848"
-    environment:
-      - MODE=standalone
-      - JVM_XMS=512m
-      - JVM_XMX=512m
-      - JVM_XMN=256m
+      - "8500:8500"
+      - "8300:8300"
+      - "8301:8301"
+      - "8302:8302"
+      - "8600:8600/udp"
 
   # RabbitMQ
   rabbitmq:

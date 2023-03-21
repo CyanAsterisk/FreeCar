@@ -3,11 +3,12 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
-	"testing"
 )
 
 func TestProfileLifeCycle(t *testing.T) {

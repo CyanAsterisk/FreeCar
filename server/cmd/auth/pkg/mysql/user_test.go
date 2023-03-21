@@ -2,10 +2,10 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/bytedance/sonic"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
+	"github.com/bytedance/sonic"
 )
 
 func TestUserLifecycle(t *testing.T) {

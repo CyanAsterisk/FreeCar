@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 	"strconv"
 	"testing"
+
+	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"

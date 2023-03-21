@@ -51,7 +51,8 @@ func TestCarLifeCycle(t *testing.T) {
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, cars)
 			},
 			want: "[err = <nil>][resp = [{IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf10\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-0})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf11\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-1})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf12\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-2})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf13\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-3})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf14\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-4})}]]",
-		}, {
+		},
+		{
 			name: "get car",
 			op: func() string {
 				resp, err := manager.GetCar(ctx, "640dc5f80dfe5ce3e4d8cf10")

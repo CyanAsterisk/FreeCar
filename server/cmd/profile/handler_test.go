@@ -211,8 +211,7 @@ func (b *TestBlobManager) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRe
 	}, nil
 }
 
-type TestLicenseManager struct {
-}
+type TestLicenseManager struct{}
 
 func (m *TestLicenseManager) GetLicenseInfo(_ string) (*profile.Identity, error) {
 	return &profile.Identity{

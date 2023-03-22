@@ -45,6 +45,8 @@ type MongoManager interface {
 	CreateTrip(c context.Context, trip *trip.Trip) (*mongo.TripRecord, error)
 	GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*mongo.TripRecord, error)
 	GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*mongo.TripRecord, error)
+	GetTripsByLimit(c context.Context, limit int64) ([]*mongo.TripRecord, error)
+	DeleteTrip(c context.Context, id id.TripID) error
 	UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error
 }
 
@@ -145,7 +147,7 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 		})
 	}
 	resp.BaseResp = tools.BuildBaseResp(nil)
-	return res, nil
+	return resp, nil
 }
 
 // UpdateTrip implements the TripServiceImpl interface.
@@ -201,6 +203,72 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	resp.Trip = tr.Trip
+	return resp, nil
+}
+
+// GetAllTrips implements the TripServiceImpl interface.
+func (s *TripServiceImpl) GetAllTrips(ctx context.Context, req *trip.GetAllTripsRequest) (resp *trip.GetAllTripsResponse, err error) {
+	resp = new(trip.GetAllTripsResponse)
+	trips, err := s.MongoManager.GetTripsByLimit(ctx, -1)
+	if err != nil {
+		klog.Error("cannot get trips", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
+		return resp, nil
+	}
+	res := &trip.GetAllTripsResponse{}
+	for _, tr := range trips {
+		res.Trips = append(res.Trips, &trip.TripEntity{
+			Id:   tr.ID.Hex(),
+			Trip: tr.Trip,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// GetSomeTrips implements the TripServiceImpl interface.
+func (s *TripServiceImpl) GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsRequest) (resp *trip.GetSomeTripsResponse, err error) {
+	resp = new(trip.GetSomeTripsResponse)
+	trips, err := s.MongoManager.GetTripsByLimit(ctx, 20)
+	if err != nil {
+		klog.Error("cannot get trips", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
+		return resp, nil
+	}
+	res := &trip.GetSomeTripsResponse{}
+	for _, tr := range trips {
+		res.Trips = append(res.Trips, &trip.TripEntity{
+			Id:   tr.ID.Hex(),
+			Trip: tr.Trip,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// EditTrip implements the TripServiceImpl interface.
+func (s *TripServiceImpl) EditTrip(ctx context.Context, req *trip.EditTripRequest) (resp *trip.EditTripResponse, err error) {
+	resp = new(trip.EditTripResponse)
+	err = s.MongoManager.UpdateTrip(ctx, id.TripID(req.TripEntity.Id), id.AccountID(req.TripEntity.Trip.AccountId), time.Now().UnixNano(), req.TripEntity.Trip)
+	if err != nil {
+		klog.Error("cannot edit trip", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("edit trip err"))
+		return resp, nil
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// DeleteTrip implements the TripServiceImpl interface.
+func (s *TripServiceImpl) DeleteTrip(ctx context.Context, req *trip.DeleteTripRequest) (resp *trip.DeleteTripResponse, err error) {
+	resp = new(trip.DeleteTripResponse)
+	err = s.MongoManager.DeleteTrip(ctx, id.TripID(req.Id))
+	if err != nil {
+		klog.Error("cannot delete trip", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("delete trip err"))
+		return resp, nil
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 

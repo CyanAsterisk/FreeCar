@@ -19,10 +19,14 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "TripService"
 	handlerType := (*trip.TripService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"CreateTrip": kitex.NewMethodInfo(createTripHandler, newTripServiceCreateTripArgs, newTripServiceCreateTripResult, false),
-		"GetTrip":    kitex.NewMethodInfo(getTripHandler, newTripServiceGetTripArgs, newTripServiceGetTripResult, false),
-		"GetTrips":   kitex.NewMethodInfo(getTripsHandler, newTripServiceGetTripsArgs, newTripServiceGetTripsResult, false),
-		"UpdateTrip": kitex.NewMethodInfo(updateTripHandler, newTripServiceUpdateTripArgs, newTripServiceUpdateTripResult, false),
+		"CreateTrip":   kitex.NewMethodInfo(createTripHandler, newTripServiceCreateTripArgs, newTripServiceCreateTripResult, false),
+		"GetTrip":      kitex.NewMethodInfo(getTripHandler, newTripServiceGetTripArgs, newTripServiceGetTripResult, false),
+		"GetTrips":     kitex.NewMethodInfo(getTripsHandler, newTripServiceGetTripsArgs, newTripServiceGetTripsResult, false),
+		"UpdateTrip":   kitex.NewMethodInfo(updateTripHandler, newTripServiceUpdateTripArgs, newTripServiceUpdateTripResult, false),
+		"GetAllTrips":  kitex.NewMethodInfo(getAllTripsHandler, newTripServiceGetAllTripsArgs, newTripServiceGetAllTripsResult, false),
+		"GetSomeTrips": kitex.NewMethodInfo(getSomeTripsHandler, newTripServiceGetSomeTripsArgs, newTripServiceGetSomeTripsResult, false),
+		"EditTrip":     kitex.NewMethodInfo(editTripHandler, newTripServiceEditTripArgs, newTripServiceEditTripResult, false),
+		"DeleteTrip":   kitex.NewMethodInfo(deleteTripHandler, newTripServiceDeleteTripArgs, newTripServiceDeleteTripResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "trip",
@@ -110,6 +114,78 @@ func newTripServiceUpdateTripResult() interface{} {
 	return trip.NewTripServiceUpdateTripResult()
 }
 
+func getAllTripsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*trip.TripServiceGetAllTripsArgs)
+	realResult := result.(*trip.TripServiceGetAllTripsResult)
+	success, err := handler.(trip.TripService).GetAllTrips(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newTripServiceGetAllTripsArgs() interface{} {
+	return trip.NewTripServiceGetAllTripsArgs()
+}
+
+func newTripServiceGetAllTripsResult() interface{} {
+	return trip.NewTripServiceGetAllTripsResult()
+}
+
+func getSomeTripsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*trip.TripServiceGetSomeTripsArgs)
+	realResult := result.(*trip.TripServiceGetSomeTripsResult)
+	success, err := handler.(trip.TripService).GetSomeTrips(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newTripServiceGetSomeTripsArgs() interface{} {
+	return trip.NewTripServiceGetSomeTripsArgs()
+}
+
+func newTripServiceGetSomeTripsResult() interface{} {
+	return trip.NewTripServiceGetSomeTripsResult()
+}
+
+func editTripHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*trip.TripServiceEditTripArgs)
+	realResult := result.(*trip.TripServiceEditTripResult)
+	success, err := handler.(trip.TripService).EditTrip(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newTripServiceEditTripArgs() interface{} {
+	return trip.NewTripServiceEditTripArgs()
+}
+
+func newTripServiceEditTripResult() interface{} {
+	return trip.NewTripServiceEditTripResult()
+}
+
+func deleteTripHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*trip.TripServiceDeleteTripArgs)
+	realResult := result.(*trip.TripServiceDeleteTripResult)
+	success, err := handler.(trip.TripService).DeleteTrip(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newTripServiceDeleteTripArgs() interface{} {
+	return trip.NewTripServiceDeleteTripArgs()
+}
+
+func newTripServiceDeleteTripResult() interface{} {
+	return trip.NewTripServiceDeleteTripResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -155,6 +231,46 @@ func (p *kClient) UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest) (
 	_args.Req = req
 	var _result trip.TripServiceUpdateTripResult
 	if err = p.c.Call(ctx, "UpdateTrip", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetAllTrips(ctx context.Context, req *trip.GetAllTripsRequest) (r *trip.GetAllTripsResponse, err error) {
+	var _args trip.TripServiceGetAllTripsArgs
+	_args.Req = req
+	var _result trip.TripServiceGetAllTripsResult
+	if err = p.c.Call(ctx, "GetAllTrips", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsRequest) (r *trip.GetSomeTripsResponse, err error) {
+	var _args trip.TripServiceGetSomeTripsArgs
+	_args.Req = req
+	var _result trip.TripServiceGetSomeTripsResult
+	if err = p.c.Call(ctx, "GetSomeTrips", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) EditTrip(ctx context.Context, req *trip.EditTripRequest) (r *trip.EditTripResponse, err error) {
+	var _args trip.TripServiceEditTripArgs
+	_args.Req = req
+	var _result trip.TripServiceEditTripResult
+	if err = p.c.Call(ctx, "EditTrip", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DeleteTrip(ctx context.Context, req *trip.DeleteTripRequest) (r *trip.DeleteTripResponse, err error) {
+	var _args trip.TripServiceDeleteTripArgs
+	_args.Req = req
+	var _result trip.TripServiceDeleteTripResult
+	if err = p.c.Call(ctx, "DeleteTrip", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

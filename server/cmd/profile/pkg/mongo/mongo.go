@@ -54,10 +54,32 @@ func (m *Manager) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecor
 	return &pr, nil
 }
 
-// GetProfiles gets cars.
+// GetProfiles gets profiles.
 func (m *Manager) GetProfiles(c context.Context, limit int64) ([]*ProfileRecord, error) {
 	filter := bson.M{}
 	opt := options.Find().SetLimit(limit)
+	res, err := m.col.Find(c, filter, opt)
+	if err != nil {
+		return nil, err
+	}
+	var pfs []*ProfileRecord
+	for res.Next(c) {
+		var pr ProfileRecord
+		err := res.Decode(&pr)
+		if err != nil {
+			return nil, err
+		}
+		pfs = append(pfs, &pr)
+	}
+	return pfs, nil
+}
+
+// GetPendingProfiles gets peding profiles.
+func (m *Manager) GetPendingProfiles(c context.Context) ([]*ProfileRecord, error) {
+	filter := bson.M{
+		identityStatusField: profile.IdentityStatus_PENDING,
+	}
+	opt := options.Find()
 	res, err := m.col.Find(c, filter, opt)
 	if err != nil {
 		return nil, err

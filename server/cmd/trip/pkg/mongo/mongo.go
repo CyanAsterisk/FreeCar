@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
@@ -107,6 +108,45 @@ func (m *Manager) GetTrips(c context.Context, accountID id.AccountID, status tri
 		trips = append(trips, &tripRc)
 	}
 	return trips, nil
+}
+
+// GetAllTrips gets trips by limit.
+func (m *Manager) GetTripsByLimit(c context.Context, limit int64) ([]*TripRecord, error) {
+	filter := bson.M{}
+	opt := options.Find().SetLimit(limit)
+	res, err := m.col.Find(c, filter, opt)
+	if err != nil {
+		return nil, err
+	}
+	var ts []*TripRecord
+	for res.Next(c) {
+		var tr TripRecord
+		err := res.Decode(&tr)
+		if err != nil {
+			return nil, err
+		}
+		ts = append(ts, &tr)
+	}
+	return ts, nil
+}
+
+// DeleteTrip deletes trip by id.
+func (m *Manager) DeleteTrip(c context.Context, id id.TripID) error {
+	objID, err := objid.FromID(id)
+	if err != nil {
+		return err
+	}
+	filter := bson.M{
+		mgutil.IDFieldName: objID,
+	}
+	result, err := m.col.DeleteOne(c, filter)
+	if err != nil {
+		return err
+	}
+	if result.DeletedCount == 0 {
+		return errno.RecordNotFound
+	}
+	return nil
 }
 
 // UpdateTrip updates a trip.

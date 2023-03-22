@@ -80,9 +80,44 @@ struct UpdateTripResponse{
      2: Trip trip
 }
 
+struct DeleteTripRequest {
+  1: string id
+}
+
+struct DeleteTripResponse{
+     1: base.BaseResponse base_resp
+}
+
+struct EditTripRequest {
+  1: TripEntity trip_entity
+}
+
+struct EditTripResponse{
+     1: base.BaseResponse base_resp
+}
+
+struct GetAllTripsRequest {}
+
+struct GetAllTripsResponse {
+  1: base.BaseResponse base_resp
+  2: list<TripEntity> trips
+}
+
+struct GetSomeTripsRequest {}
+
+struct GetSomeTripsResponse {
+  1: base.BaseResponse base_resp
+  2: list<TripEntity> trips
+}
+
 service TripService {
   CreateTripResponse CreateTrip(1: CreateTripRequest req)
   GetTripResponse GetTrip(1: GetTripRequest req)
   GetTripsResponse GetTrips (1: GetTripsRequest req)
   UpdateTripResponse UpdateTrip(1: UpdateTripRequest req)
+
+  GetAllTripsResponse GetAllTrips(1: GetAllTripsRequest req)
+  GetSomeTripsResponse GetSomeTrips (1: GetSomeTripsRequest req)
+  EditTripResponse EditTrip (1: EditTripRequest req)
+  DeleteTripResponse DeleteTrip(1: DeleteTripRequest req)
 }

@@ -43,7 +43,7 @@ func TestCarLifeCycle(t *testing.T) {
 		{
 			name: "get cars",
 			op: func() string {
-				resp, err := manager.GetCars(ctx)
+				resp, err := manager.GetCars(ctx, -1)
 				var cars []CarRecord
 				for _, c := range resp {
 					cars = append(cars, *c)

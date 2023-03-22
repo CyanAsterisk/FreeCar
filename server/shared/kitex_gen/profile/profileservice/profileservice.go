@@ -22,6 +22,10 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"GetProfile":           kitex.NewMethodInfo(getProfileHandler, newProfileServiceGetProfileArgs, newProfileServiceGetProfileResult, false),
 		"SubmitProfile":        kitex.NewMethodInfo(submitProfileHandler, newProfileServiceSubmitProfileArgs, newProfileServiceSubmitProfileResult, false),
 		"ClearProfile":         kitex.NewMethodInfo(clearProfileHandler, newProfileServiceClearProfileArgs, newProfileServiceClearProfileResult, false),
+		"GetAllProfile":        kitex.NewMethodInfo(getAllProfileHandler, newProfileServiceGetAllProfileArgs, newProfileServiceGetAllProfileResult, false),
+		"GetSomeProfile":       kitex.NewMethodInfo(getSomeProfileHandler, newProfileServiceGetSomeProfileArgs, newProfileServiceGetSomeProfileResult, false),
+		"UpdateProfile":        kitex.NewMethodInfo(updateProfileHandler, newProfileServiceUpdateProfileArgs, newProfileServiceUpdateProfileResult, false),
+		"DeleteProfile":        kitex.NewMethodInfo(deleteProfileHandler, newProfileServiceDeleteProfileArgs, newProfileServiceDeleteProfileResult, false),
 		"GetProfilePhoto":      kitex.NewMethodInfo(getProfilePhotoHandler, newProfileServiceGetProfilePhotoArgs, newProfileServiceGetProfilePhotoResult, false),
 		"CreateProfilePhoto":   kitex.NewMethodInfo(createProfilePhotoHandler, newProfileServiceCreateProfilePhotoArgs, newProfileServiceCreateProfilePhotoResult, false),
 		"CompleteProfilePhoto": kitex.NewMethodInfo(completeProfilePhotoHandler, newProfileServiceCompleteProfilePhotoArgs, newProfileServiceCompleteProfilePhotoResult, false),
@@ -93,6 +97,78 @@ func newProfileServiceClearProfileArgs() interface{} {
 
 func newProfileServiceClearProfileResult() interface{} {
 	return profile.NewProfileServiceClearProfileResult()
+}
+
+func getAllProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*profile.ProfileServiceGetAllProfileArgs)
+	realResult := result.(*profile.ProfileServiceGetAllProfileResult)
+	success, err := handler.(profile.ProfileService).GetAllProfile(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newProfileServiceGetAllProfileArgs() interface{} {
+	return profile.NewProfileServiceGetAllProfileArgs()
+}
+
+func newProfileServiceGetAllProfileResult() interface{} {
+	return profile.NewProfileServiceGetAllProfileResult()
+}
+
+func getSomeProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*profile.ProfileServiceGetSomeProfileArgs)
+	realResult := result.(*profile.ProfileServiceGetSomeProfileResult)
+	success, err := handler.(profile.ProfileService).GetSomeProfile(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newProfileServiceGetSomeProfileArgs() interface{} {
+	return profile.NewProfileServiceGetSomeProfileArgs()
+}
+
+func newProfileServiceGetSomeProfileResult() interface{} {
+	return profile.NewProfileServiceGetSomeProfileResult()
+}
+
+func updateProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*profile.ProfileServiceUpdateProfileArgs)
+	realResult := result.(*profile.ProfileServiceUpdateProfileResult)
+	success, err := handler.(profile.ProfileService).UpdateProfile(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newProfileServiceUpdateProfileArgs() interface{} {
+	return profile.NewProfileServiceUpdateProfileArgs()
+}
+
+func newProfileServiceUpdateProfileResult() interface{} {
+	return profile.NewProfileServiceUpdateProfileResult()
+}
+
+func deleteProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*profile.ProfileServiceDeleteProfileArgs)
+	realResult := result.(*profile.ProfileServiceDeleteProfileResult)
+	success, err := handler.(profile.ProfileService).DeleteProfile(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newProfileServiceDeleteProfileArgs() interface{} {
+	return profile.NewProfileServiceDeleteProfileArgs()
+}
+
+func newProfileServiceDeleteProfileResult() interface{} {
+	return profile.NewProfileServiceDeleteProfileResult()
 }
 
 func getProfilePhotoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -202,6 +278,46 @@ func (p *kClient) ClearProfile(ctx context.Context, req *profile.ClearProfileReq
 	_args.Req = req
 	var _result profile.ProfileServiceClearProfileResult
 	if err = p.c.Call(ctx, "ClearProfile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetAllProfile(ctx context.Context, req *profile.GetAllProfileRequest) (r *profile.GetAllProfileResponse, err error) {
+	var _args profile.ProfileServiceGetAllProfileArgs
+	_args.Req = req
+	var _result profile.ProfileServiceGetAllProfileResult
+	if err = p.c.Call(ctx, "GetAllProfile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest) (r *profile.GetSomeProfileResponse, err error) {
+	var _args profile.ProfileServiceGetSomeProfileArgs
+	_args.Req = req
+	var _result profile.ProfileServiceGetSomeProfileResult
+	if err = p.c.Call(ctx, "GetSomeProfile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest) (r *profile.UpdateProfileResponse, err error) {
+	var _args profile.ProfileServiceUpdateProfileArgs
+	_args.Req = req
+	var _result profile.ProfileServiceUpdateProfileResult
+	if err = p.c.Call(ctx, "UpdateProfile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DeleteProfile(ctx context.Context, req *profile.DeleteProfileRequest) (r *profile.DeleteProfileResponse, err error) {
+	var _args profile.ProfileServiceDeleteProfileArgs
+	_args.Req = req
+	var _result profile.ProfileServiceDeleteProfileResult
+	if err = p.c.Call(ctx, "DeleteProfile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

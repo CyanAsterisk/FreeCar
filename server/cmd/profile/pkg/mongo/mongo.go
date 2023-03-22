@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
@@ -53,6 +54,26 @@ func (m *Manager) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecor
 	return &pr, nil
 }
 
+// GetProfiles gets cars.
+func (m *Manager) GetProfiles(c context.Context, limit int64) ([]*ProfileRecord, error) {
+	filter := bson.M{}
+	opt := options.Find().SetLimit(limit)
+	res, err := m.col.Find(c, filter, opt)
+	if err != nil {
+		return nil, err
+	}
+	var pfs []*ProfileRecord
+	for res.Next(c) {
+		var pr ProfileRecord
+		err := res.Decode(&pr)
+		if err != nil {
+			return nil, err
+		}
+		pfs = append(pfs, &pr)
+	}
+	return pfs, nil
+}
+
 // UpdateProfile updates profile for an account.
 func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
 	filter := bson.M{
@@ -81,6 +102,25 @@ func (m *Manager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id
 		photoBlobIDField: bid.Int64(),
 	}), options.Update().SetUpsert(true))
 	return err
+}
+
+// DeleteProfile delete profile
+func (m *Manager) DeleteProfile(c context.Context, aid id.AccountID) error {
+	objID, err := objid.FromID(aid)
+	if err != nil {
+		return err
+	}
+	filter := bson.M{
+		mgutil.IDFieldName: objID,
+	}
+	result, err := m.col.DeleteOne(c, filter)
+	if err != nil {
+		return err
+	}
+	if result.DeletedCount == 0 {
+		return errno.RecordNotFound
+	}
+	return nil
 }
 
 func byAccountID(aid id.AccountID) bson.M {

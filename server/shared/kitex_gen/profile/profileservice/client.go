@@ -16,7 +16,6 @@ type Client interface {
 	ClearProfile(ctx context.Context, req *profile.ClearProfileRequest, callOptions ...callopt.Option) (r *profile.ClearProfileResponse, err error)
 	GetAllProfile(ctx context.Context, req *profile.GetAllProfileRequest, callOptions ...callopt.Option) (r *profile.GetAllProfileResponse, err error)
 	GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest, callOptions ...callopt.Option) (r *profile.GetSomeProfileResponse, err error)
-	GetPendingProfile(ctx context.Context, req *profile.GetPendingProfileRequest, callOptions ...callopt.Option) (r *profile.GetPendingProfileResponse, err error)
 	UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest, callOptions ...callopt.Option) (r *profile.UpdateProfileResponse, err error)
 	DeleteProfile(ctx context.Context, req *profile.DeleteProfileRequest, callOptions ...callopt.Option) (r *profile.DeleteProfileResponse, err error)
 	GetProfilePhoto(ctx context.Context, req *profile.GetProfilePhotoRequest, callOptions ...callopt.Option) (r *profile.GetProfilePhotoResponse, err error)
@@ -77,11 +76,6 @@ func (p *kProfileServiceClient) GetAllProfile(ctx context.Context, req *profile.
 func (p *kProfileServiceClient) GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest, callOptions ...callopt.Option) (r *profile.GetSomeProfileResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetSomeProfile(ctx, req)
-}
-
-func (p *kProfileServiceClient) GetPendingProfile(ctx context.Context, req *profile.GetPendingProfileRequest, callOptions ...callopt.Option) (r *profile.GetPendingProfileResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetPendingProfile(ctx, req)
 }
 
 func (p *kProfileServiceClient) UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest, callOptions ...callopt.Option) (r *profile.UpdateProfileResponse, err error) {

@@ -26,7 +26,6 @@ type ProfileServiceImpl struct {
 type MongoManager interface {
 	GetProfile(context.Context, id.AccountID) (*mongo.ProfileRecord, error)
 	GetProfiles(c context.Context, limit int64) ([]*mongo.ProfileRecord, error)
-	GetPendingProfiles(c context.Context) ([]*mongo.ProfileRecord, error)
 	DeleteProfile(context.Context, id.AccountID) error
 	UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error
 	UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error
@@ -101,6 +100,22 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 		klog.Error("cannot update profile", err)
 		return nil, errno.ProfileSrvErr.WithMessage("submit profile error")
 	}
+	go func() {
+		time.Sleep(3 * time.Second)
+		if err := s.RedisManager.RemoveProfile(context.Background(), aid); err != nil {
+			klog.Error("clear cache error", err)
+			return
+		}
+		err = s.MongoManager.UpdateProfile(context.Background(), aid,
+			profile.IdentityStatus_PENDING, &profile.Profile{
+				Identity:       req.Identity,
+				IdentityStatus: profile.IdentityStatus_VERIFIED,
+			})
+		if err != nil {
+			klog.Error("cannot verify identity", err)
+		}
+	}()
+
 	resp.Profile = p
 	return resp, nil
 }
@@ -310,30 +325,6 @@ func (s *ProfileServiceImpl) DeleteProfile(ctx context.Context, req *profile.Del
 			resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("delete profile err"))
 		}
 		return resp, nil
-	}
-	resp.BaseResp = tools.BuildBaseResp(nil)
-	return resp, nil
-}
-
-// GetPendingProfile implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) GetPendingProfile(ctx context.Context, req *profile.GetPendingProfileRequest) (resp *profile.GetPendingProfileResponse, err error) {
-	resp = new(profile.GetPendingProfileResponse)
-	prs, err := s.MongoManager.GetPendingProfiles(ctx)
-	if err != nil {
-		if err == errno.RecordNotFound {
-			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
-			return resp, nil
-		}
-		klog.Error("get profile error", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile error"))
-		return resp, nil
-	}
-	for _, pr := range prs {
-		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
-			AccountId:   pr.AccountID,
-			PhotoBlobId: pr.PhotoBlobID,
-			Profile:     pr.Profile,
-		})
 	}
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil

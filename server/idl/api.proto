@@ -446,14 +446,14 @@ message EClearProfilePhotoResponse {
 }
 
 service apiService {
-  rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/auth/login";}
-  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/auth/info";}
-  rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/auth/info";}
-  rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/auth/avatar";}
-  rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/auth";}
-  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {option (api.delete) = "/auth";}
-  rpc GetSomeUsers (GetSomeUsersRequest) returns (GetSomeUsersResponse) {option (api.get) = "/auth/some";}
-  rpc GetAllUsers (GetAllUsersRequest) returns (GetAllUsersResponse) {option (api.get) = "/auth/all";}
+  rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/user/login";}
+  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/user/info";}
+  rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/user/info";}
+  rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/user/avatar";}
+  rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/user";}
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {option (api.delete) = "/user";}
+  rpc GetSomeUsers (GetSomeUsersRequest) returns (GetSomeUsersResponse) {option (api.get) = "/user/some";}
+  rpc GetAllUsers (GetAllUsersRequest) returns (GetAllUsersResponse) {option (api.get) = "/user/all";}
 
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}

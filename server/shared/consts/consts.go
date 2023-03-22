@@ -8,7 +8,7 @@ const (
 	ID         = "id"
 
 	ApiConfigPath     = "./server/cmd/api/config.yaml"
-	AuthConfigPath    = "./server/cmd/auth/config.yaml"
+	UserConfigPath    = "./server/cmd/user/config.yaml"
 	BlobConfigPath    = "./server/cmd/blob/config.yaml"
 	CarConfigPath     = "./server/cmd/car/config.yaml"
 	ProfileConfigPath = "./server/cmd/profile/config.yaml"

@@ -5,7 +5,7 @@
 **Request**
 
 ```shell
-curl --location --request POST '127.0.0.1:9900/auth/login' \
+curl --location --request POST '127.0.0.1:9900/user/login' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "code":"123456789"

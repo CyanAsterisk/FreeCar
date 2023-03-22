@@ -10,17 +10,17 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )
 
 // Login .
-// @router /auth/login [POST]
+// @router /user/login [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.LoginRequest
@@ -30,9 +30,9 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	// rpc to get accountID
-	resp, err := config.GlobalAuthClient.Login(ctx, &auth.LoginRequest{Code: req.Code})
+	resp, err := config.GlobalUserClient.Login(ctx, &user.LoginRequest{Code: req.Code})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	// create a JWT
@@ -58,7 +58,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetUserInfo .
-// @router /auth/info [GET]
+// @router /user/info [GET]
 func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
@@ -66,9 +66,9 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := config.GlobalAuthClient.GetUser(ctx, &auth.GetUserRequest{AccontId: aid.(int64)})
+	resp, err := config.GlobalUserClient.GetUser(ctx, &user.GetUserRequest{AccontId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	errno.SendResponse(c, errno.Success, api.UserInfo{
@@ -80,7 +80,7 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 }
 
 // UpdateUserInfo .
-// @router /auth/info [POST]
+// @router /user/info [POST]
 func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.UpdateUserRequest
@@ -95,20 +95,20 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	_, err = config.GlobalAuthClient.UpdateUser(ctx, &auth.UpdateUserRequest{
+	_, err = config.GlobalUserClient.UpdateUser(ctx, &user.UpdateUserRequest{
 		AccountId:   aid.(int64),
 		Username:    req.Username,
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	errno.SendResponse(c, errno.Success, api.UpdateUserResponse{})
 }
 
 // UploadAvatar .
-// @router /auth/avatar [POST]
+// @router /user/avatar [POST]
 func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
@@ -117,9 +117,9 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := config.GlobalAuthClient.UploadAvatar(ctx, &auth.UploadAvatarRequset{AccountId: aid.(int64)})
+	resp, err := config.GlobalUserClient.UploadAvatar(ctx, &user.UploadAvatarRequset{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	errno.SendResponse(c, errno.Success, api.UploadAvatarResponse{UploadUrl: resp.UploadUrl})
@@ -479,9 +479,9 @@ func AdminLogin(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	// rpc to get accountID
-	resp, err := config.GlobalAuthClient.AdminLogin(ctx, &auth.AdminLoginRequest{Username: req.Username, Password: req.Password})
+	resp, err := config.GlobalUserClient.AdminLogin(ctx, &user.AdminLoginRequest{Username: req.Username, Password: req.Password})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	// create a JWT
@@ -521,13 +521,13 @@ func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.ChangeAdminPassword(ctx, &auth.ChangeAdminPasswordRequest{
+	resp, err := config.GlobalUserClient.ChangeAdminPassword(ctx, &user.ChangeAdminPasswordRequest{
 		AccountId:    aid.(int64),
 		OldPassword:  req.OldPassword,
 		NewPassword_: req.NewPassword,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
@@ -535,7 +535,7 @@ func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
 }
 
 // AddUser .
-// @router /auth [POST]
+// @router /user [POST]
 func AddUser(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.AddUserRequest
@@ -544,7 +544,7 @@ func AddUser(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.AddUser(ctx, &auth.AddUserRequest{
+	resp, err := config.GlobalUserClient.AddUser(ctx, &user.AddUserRequest{
 		AccountId:    req.AccountId,
 		Username:     req.Username,
 		PhoneNumber:  req.PhoneNumber,
@@ -552,7 +552,7 @@ func AddUser(ctx context.Context, c *app.RequestContext) {
 		OpenId:       req.OpenId,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
@@ -560,7 +560,7 @@ func AddUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // DeleteUser .
-// @router /auth [DELETE]
+// @router /user [DELETE]
 func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.DeleteUserRequest
@@ -569,9 +569,9 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.DeleteUser(ctx, &auth.DeleteUserRequest{AccountId: req.AccountId})
+	resp, err := config.GlobalUserClient.DeleteUser(ctx, &user.DeleteUserRequest{AccountId: req.AccountId})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
@@ -579,7 +579,7 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetSomeUsers .
-// @router /auth/some [GET]
+// @router /user/some [GET]
 func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetSomeUsersRequest
@@ -588,9 +588,9 @@ func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.GetSomeUsers(ctx, &auth.GetSomeUsersRequest{})
+	resp, err := config.GlobalUserClient.GetSomeUsers(ctx, &user.GetSomeUsersRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
@@ -598,7 +598,7 @@ func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 }
 
 // GetAllUsers .
-// @router /auth/all [GET]
+// @router /user/all [GET]
 func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req api.GetAllUsersRequest
@@ -607,9 +607,9 @@ func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.ParamsErr, nil)
 		return
 	}
-	resp, err := config.GlobalAuthClient.GetAllUsers(ctx, &auth.GetAllUsersRequest{})
+	resp, err := config.GlobalUserClient.GetAllUsers(ctx, &user.GetAllUsersRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCAuthSrvErr, nil)
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 

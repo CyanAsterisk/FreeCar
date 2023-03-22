@@ -35,7 +35,7 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 | Catalog | Introduce                                          |
 |---------|----------------------------------------------------|
 | API     | Hertz-based Gateway Service                        |
-| Auth    | User Authentication Service                        |
+| User    | User Authentication Service                        |
 | Blob    | Services Related to Pictures and Tencent Cloud COS |
 | Car     | Car Service                                        |
 | Profile | Profile and Picture Recognition Services           |
@@ -76,7 +76,7 @@ make api
 ### Start Microservices
 
 ```shell
-make auth
+make user
 make blob
 make car
 make profile
@@ -117,7 +117,7 @@ customized [api annotations](https://www.cloudwego.io/zh/docs/hertz/tutorials/to
 Sample code:
 
 ```thrift
-namespace go auth
+namespace go user
 
 struct LoginRequest {
      1: string code
@@ -127,7 +127,7 @@ struct LoginResponse {
      1: i64 accountID
 }
 
-service AuthService {
+service UserService {
      LoginResponse Login(1: LoginRequest req)
 }
 ```
@@ -141,13 +141,13 @@ Execute under the new service directory, only need to change the service name an
 ##### Server
 
 ```shell
-kitex -service auth -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
+kitex -service user -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
 ```
 
 ##### Client
 
 ```shell
-kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
+kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
 ```
 
 Note:
@@ -183,20 +183,20 @@ under `server/cmd`.
 
 #### Config
 
-Refer to `server/cmd/auth/config` for the configuration structure of microservices.
+Refer to `server/cmd/user/config` for the configuration structure of microservices.
 
 #### Global
 
-Refer to `server/cmd/auth/global` to provide globally callable methods for microservices.
+Refer to `server/cmd/user/global` to provide globally callable methods for microservices.
 
 #### Initialize
 
-Refer to `server/cmd/auth/initialize` to provide the initialization function of the necessary components, among
+Refer to `server/cmd/user/initialize` to provide the initialization function of the necessary components, among
 which `nacos.go` `flag.go` `logger.go` are required.
 
 #### Tool
 
-Refer to `server/cmd/auth/tool` to provide tool functions for microservices, where `port.go` is required.
+Refer to `server/cmd/user/tool` to provide tool functions for microservices, where `port.go` is required.
 
 #### API
 

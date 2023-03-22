@@ -8,10 +8,10 @@ start:
 stop:
 	docker-compose down
 
-# run the auth
-.PHONY: auth
-auth:
-	go run ./server/cmd/auth
+# run the user
+.PHONY: user
+user:
+	go run ./server/cmd/user
 
 # run the blob
 .PHONY: blob

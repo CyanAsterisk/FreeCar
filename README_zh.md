@@ -35,7 +35,7 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 | 目录      | 介绍                    |
 |---------|-----------------------|
 | API     | 基于 Hertz 的网关服务        |
-| Auth    | 用户认证服务                |
+| User    | 用户认证服务                |
 | Blob    | 与图片和 Minio 对象存储 相关的服务 |
 | Car     | 汽车服务                  |
 | Profile | 主页与图片识别服务             |
@@ -76,7 +76,7 @@ make api
 ### 启动微服务
 
 ```shell
-make auth
+make user
 make blob
 make car
 make profile
@@ -115,7 +115,7 @@ make trip
 示例代码：
 
 ```thrift
-namespace go auth
+namespace go user
 
 struct LoginRequest {
     1: string code
@@ -125,7 +125,7 @@ struct LoginResponse {
     1: i64 accountID
 }
 
-service AuthService {
+service UserService {
     LoginResponse Login(1: LoginRequest req)
 }
 ```
@@ -139,13 +139,13 @@ service AuthService {
 ##### 服务端
 
 ```shell
-kitex -service auth -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
+kitex -service user -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
 ```
 
 ##### 客户端
 
 ```shell
-kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/auth.thrift
+kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
 ```
 
 注意项：
@@ -178,19 +178,19 @@ hz update -I -idl ./../../idl/api.proto
 
 #### Config
 
-参考 `server/cmd/auth/config`，为微服务的配置结构体。
+参考 `server/cmd/user/config`，为微服务的配置结构体。
 
 #### Global
 
-参考 `server/cmd/auth/global`，为微服务提供可全局调用的方法。
+参考 `server/cmd/user/global`，为微服务提供可全局调用的方法。
 
 #### Initialize
 
-参考 `server/cmd/auth/initialize`，提供必要组件的初始化功能，其中 `nacos.go` `flag.go` `logger.go` 为必须项。
+参考 `server/cmd/user/initialize`，提供必要组件的初始化功能，其中 `nacos.go` `flag.go` `logger.go` 为必须项。
 
 #### Tool
 
-参考 `server/cmd/auth/tool`，提供微服务的工具函数，其中 `port.go` 为必须项。
+参考 `server/cmd/user/tool`，提供微服务的工具函数，其中 `port.go` 为必须项。
 
 #### API
 

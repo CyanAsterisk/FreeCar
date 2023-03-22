@@ -20,7 +20,7 @@ type ServerConfig struct {
 	Port           int          `mapstructure:"port" json:"port"`
 	JWTInfo        JWTConfig    `mapstructure:"jwt" json:"jwt"`
 	OtelInfo       OtelConfig   `mapstructure:"otel" json:"otel"`
-	AuthSrvInfo    RPCSrvConfig `mapstructure:"auth_srv" json:"auth_srv"`
+	UserSrvInfo    RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 	CarSrvInfo     RPCSrvConfig `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo RPCSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`
 	TripSrvInfo    RPCSrvConfig `mapstructure:"trip_srv" json:"trip_srv"`

@@ -6,16 +6,15 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
-
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 	"github.com/cloudwego/kitex/client/callopt"
 )
 
-func TestAuthLifeCycle(t *testing.T) {
+func TestUserLifeCycle(t *testing.T) {
 	ctx := context.Background()
 	mysqlCleanUp, mysqlDb, err := test.RunWithMySQLInDocker(t)
 	defer mysqlCleanUp()
@@ -25,7 +24,7 @@ func TestAuthLifeCycle(t *testing.T) {
 	}
 
 	salt := "test-salt"
-	s := AuthServiceImpl{
+	s := UserServiceImpl{
 		OpenIDResolver:    &TestOpenIDResolver{suffix: "test-openId"},
 		EncryptManager:    &TestEncryptManager{testSalt: salt},
 		UserMysqlManager:  mysql.NewUserManager(mysqlDb, salt),
@@ -33,7 +32,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		BlobManager:       &TestBlobManager{idForCreate: 1024},
 	}
 
-	user := mysql.User{
+	usr := mysql.User{
 		ID:           1024,
 		PhoneNumber:  0,
 		AvatarBlobId: 0,
@@ -55,7 +54,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "new user login",
 			op: func() string {
-				_, err := s.Login(ctx, &auth.LoginRequest{Code: "1234"})
+				_, err := s.Login(ctx, &user.LoginRequest{Code: "1234"})
 				return fmt.Sprintf("[err = %+v]", err)
 			},
 			want: "[err = <nil>]",
@@ -63,7 +62,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "create a custom account",
 			op: func() string {
-				u := user
+				u := usr
 				resp, err := s.UserMysqlManager.CreateUser(&u)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
@@ -72,7 +71,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "test get user",
 			op: func() string {
-				resp, err := s.GetUserByAccountId(user.ID)
+				resp, err := s.GetUserByAccountId(usr.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:0 AvatarBlobId:0 Username:username OpenID:de73b2ae1a444cd60d81fd986c5a46a9 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
@@ -80,7 +79,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "test update user",
 			op: func() string {
-				_, err := s.UpdateUser(ctx, &auth.UpdateUserRequest{
+				_, err := s.UpdateUser(ctx, &user.UpdateUserRequest{
 					AccountId:   1024,
 					Username:    "new-username",
 					PhoneNumber: 88888888888,
@@ -88,7 +87,7 @@ func TestAuthLifeCycle(t *testing.T) {
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)
 				}
-				resp, err := s.GetUserByAccountId(user.ID)
+				resp, err := s.GetUserByAccountId(usr.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = &{ID:1024 PhoneNumber:88888888888 AvatarBlobId:0 Username:new-username OpenID:de73b2ae1a444cd60d81fd986c5a46a9 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
@@ -96,7 +95,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "test upload avatar",
 			op: func() string {
-				resp, err := s.UploadAvatar(ctx, &auth.UploadAvatarRequset{AccountId: user.ID})
+				resp, err := s.UploadAvatar(ctx, &user.UploadAvatarRequset{AccountId: usr.ID})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = UploadAvatarResponse({UploadUrl:upload_url for 1024})]",
@@ -104,7 +103,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "add user",
 			op: func() string {
-				resp, err := s.AddUser(ctx, &auth.AddUserRequest{
+				resp, err := s.AddUser(ctx, &user.AddUserRequest{
 					AccountId:   1111,
 					Username:    "test-name1",
 					PhoneNumber: 123456789,
@@ -117,7 +116,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "test delete user",
 			op: func() string {
-				resp, err := s.DeleteUser(ctx, &auth.DeleteUserRequest{
+				resp, err := s.DeleteUser(ctx, &user.DeleteUserRequest{
 					AccountId: 1111,
 				})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
@@ -127,7 +126,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "admin login",
 			op: func() string {
-				_, err := s.AdminLogin(ctx, &auth.AdminLoginRequest{Username: admin.Username, Password: "123456"})
+				_, err := s.AdminLogin(ctx, &user.AdminLoginRequest{Username: admin.Username, Password: "123456"})
 				return fmt.Sprintf("[err = %+v]", err)
 			},
 			want: "[err = <nil>]",
@@ -135,7 +134,7 @@ func TestAuthLifeCycle(t *testing.T) {
 		{
 			name: "admin change password",
 			op: func() string {
-				_, err := s.ChangeAdminPassword(ctx, &auth.ChangeAdminPasswordRequest{
+				_, err := s.ChangeAdminPassword(ctx, &user.ChangeAdminPasswordRequest{
 					AccountId:    admin.ID,
 					OldPassword:  "123456",
 					NewPassword_: "654321",

@@ -1,5 +1,5 @@
 import { ProfileService } from "../../service/profile"
-import { AuthService } from "../../service/auth"
+import { AuthService } from "../../service/user"
 import { api } from "../../service/codegen/api_pb"
 import { FreeCar } from "../../service/request"
 

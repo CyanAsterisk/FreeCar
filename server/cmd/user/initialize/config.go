@@ -4,7 +4,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/bytedance/sonic"
@@ -16,7 +16,7 @@ import (
 // InitConfig to init consul config server
 func InitConfig() {
 	v := viper.New()
-	v.SetConfigFile(consts.AuthConfigPath)
+	v.SetConfigFile(consts.UserConfigPath)
 	if err := v.ReadInConfig(); err != nil {
 		hlog.Fatalf("read viper config failed: %s", err.Error())
 	}

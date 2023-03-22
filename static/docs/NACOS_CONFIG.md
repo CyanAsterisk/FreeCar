@@ -13,8 +13,8 @@ _api => API_GROUP_
   "otel": {
     "endpoint": ":4317"
   },
-  "auth_srv": {
-    "name": "auth_srv"
+  "user_srv": {
+    "name": "user_srv"
   },
   "car_srv": {
     "name": "car_srv"
@@ -28,11 +28,11 @@ _api => API_GROUP_
 }
 ```
 
-_auth_srv => AUTH_GROUP_
+_user_srv => AUTH_GROUP_
 
 ```json
 {
-  "name": "auth_srv",
+  "name": "user_srv",
   "host": "your host",
   "mysql": {
     "host": "127.0.0.1",

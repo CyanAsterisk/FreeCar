@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
@@ -24,6 +25,8 @@ type ProfileServiceImpl struct {
 // MongoManager defines the mongoDB server
 type MongoManager interface {
 	GetProfile(context.Context, id.AccountID) (*mongo.ProfileRecord, error)
+	GetProfiles(c context.Context, limit int64) ([]*mongo.ProfileRecord, error)
+	DeleteProfile(context.Context, id.AccountID) error
 	UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error
 	UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error
 }
@@ -239,4 +242,90 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 		return nil, errno.ProfileSrvErr.WithMessage("clear profile photo error")
 	}
 	return &profile.ClearProfilePhotoResponse{}, nil
+}
+
+// GetAllProfile implements the ProfileServiceImpl interface.
+func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.GetAllProfileRequest) (resp *profile.GetAllProfileResponse, err error) {
+	resp = new(profile.GetAllProfileResponse)
+	prs, err := s.MongoManager.GetProfiles(ctx, -1)
+	if err != nil {
+		if err == errno.RecordNotFound {
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
+		}
+		klog.Error("get profile error", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile error"))
+		return resp, nil
+	}
+	for _, pr := range prs {
+		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
+			AccountId:   pr.AccountID,
+			PhotoBlobId: pr.PhotoBlobID,
+			Profile:     pr.Profile,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// GetSomeProfile implements the ProfileServiceImpl interface.
+func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest) (resp *profile.GetSomeProfileResponse, err error) {
+	resp = new(profile.GetSomeProfileResponse)
+	prs, err := s.MongoManager.GetProfiles(ctx, 20)
+	if err != nil {
+		if err == errno.RecordNotFound {
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
+		}
+		klog.Error("get profile error", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile error"))
+		return resp, nil
+	}
+	for _, pr := range prs {
+		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
+			AccountId:   pr.AccountID,
+			PhotoBlobId: pr.PhotoBlobID,
+			Profile:     pr.Profile,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// UpdateProfile implements the ProfileServiceImpl interface.
+func (s *ProfileServiceImpl) UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest) (resp *profile.UpdateProfileResponse, err error) {
+	resp = new(profile.UpdateProfileResponse)
+	aid := id.AccountID(req.AccountId)
+	p := &profile.Profile{
+		Identity:       req.Profile.Identity,
+		IdentityStatus: req.Profile.IdentityStatus,
+	}
+	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
+	if err != nil {
+		if err == errno.RecordAlreadyExist {
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordAlreadyExist)
+			return resp, nil
+		}
+		klog.Error("cannot update profile", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("update profile error"))
+		return resp, nil
+	}
+	return resp, nil
+}
+
+// DeleteProfile implements the ProfileServiceImpl interface.
+func (s *ProfileServiceImpl) DeleteProfile(ctx context.Context, req *profile.DeleteProfileRequest) (resp *profile.DeleteProfileResponse, err error) {
+	resp = new(profile.DeleteProfileResponse)
+	err = s.MongoManager.DeleteProfile(ctx, id.AccountID(req.AccountId))
+	if err != nil {
+		if err == errno.RecordNotFound {
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+		} else {
+			klog.Errorf("delete profile err", err)
+			resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("delete profile err"))
+		}
+		return resp, nil
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }

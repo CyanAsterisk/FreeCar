@@ -14,6 +14,12 @@ enum IdentityStatus {
   VERIFIED = 2,
 }
 
+struct ProfileRecord {
+    1: i64 account_id
+    2: i64 photo_blob_id
+    3: Profile profile
+}
+
 struct Profile {
   1: Identity identity
   2: IdentityStatus identity_status
@@ -33,6 +39,37 @@ struct GetProfileRequest {
 struct GetProfileResponse{
     1: base.BaseResponse base_resp
     2: Profile profile
+}
+
+struct GetAllProfileRequest {}
+
+struct GetAllProfileResponse{
+    1: base.BaseResponse base_resp
+    2: list<ProfileRecord> profile
+}
+
+struct GetSomeProfileRequest {}
+
+struct GetSomeProfileResponse{
+    1: base.BaseResponse base_resp
+    2: list<ProfileRecord> profile
+}
+
+struct UpdateProfileRequest {
+  1: i64 account_id
+  2: Profile profile
+}
+
+struct UpdateProfileResponse{
+    1: base.BaseResponse base_resp
+}
+
+struct DeleteProfileRequest {
+  1: i64 account_id
+}
+
+struct DeleteProfileResponse{
+    1: base.BaseResponse base_resp
 }
 
 struct SubmitProfileRequest {
@@ -57,6 +94,7 @@ struct ClearProfileResponse{
 struct GetProfilePhotoRequest {
   1: i64 account_id
 }
+
 struct GetProfilePhotoResponse {
   1: base.BaseResponse base_resp
   2: string url
@@ -82,6 +120,7 @@ struct CompleteProfilePhotoResponse{
 struct ClearProfilePhotoRequest {
   1: i64 account_id
 }
+
 struct ClearProfilePhotoResponse {
      1: base.BaseResponse base_resp
 }
@@ -90,6 +129,11 @@ service ProfileService {
   GetProfileResponse GetProfile(1: GetProfileRequest req)
   SubmitProfileResponse SubmitProfile(1: SubmitProfileRequest req)
   ClearProfileResponse ClearProfile(1: ClearProfileRequest req)
+
+  GetAllProfileResponse GetAllProfile(1: GetAllProfileRequest req)
+  GetSomeProfileResponse GetSomeProfile(1: GetSomeProfileRequest req)
+  UpdateProfileResponse UpdateProfile(1: UpdateProfileRequest req)
+  DeleteProfileResponse DeleteProfile(1: DeleteProfileRequest req)
 
   GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req)
   CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req)

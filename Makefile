@@ -8,12 +8,6 @@ start:
 stop:
 	docker-compose down
 
-# migrate mysql database
-.PHONY: migrate
-migrate:
-	go run server/cmd/auth/model/migrate/main.go
-	go run server/cmd/blob/model/migrate/main.go
-
 # run the auth
 .PHONY: auth
 auth:

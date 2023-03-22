@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"github.com/bytedance/sonic"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -99,6 +100,28 @@ func TestProfileLifeCycle(t *testing.T) {
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = <nil>][resp = &{AccountID:1024 Profile:Profile({Identity:Identity({LicNumber:10000000001 Name:FreeCar Gender:MALE BirthDateMillis:1676323213}) IdentityStatus:VERIFIED}) PhotoBlobID:200000002}]",
+		},
+		{
+			name: "get profiles",
+			op: func() string {
+				prs, err := manager.GetProfiles(ctx, -1)
+				if err != nil {
+					return fmt.Sprintf("[err = %+v]", err)
+				}
+				resp, _ := sonic.MarshalString(prs)
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: `[err = <nil>][resp = [{"AccountID":1024,"Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":200000002}]]`,
+		},
+		{
+			name: "delete profile",
+			op: func() string {
+				//err := manager.DeleteProfile(ctx, id.AccountID(1001))
+				prs, err := manager.GetProfiles(ctx, -1)
+				resp, _ := sonic.MarshalString(prs)
+				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
+			},
+			want: `[err = <nil>][resp = [{"AccountID":1024,"Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":200000002}]]`,
 		},
 	}
 

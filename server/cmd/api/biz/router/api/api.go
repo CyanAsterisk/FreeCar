@@ -17,28 +17,17 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
-	root.DELETE("/car", append(_deletecarMw(), api.DeleteCar)...)
+	root.POST("/car", append(_createcarMw(), api.CreateCar)...)
 	root.GET("/car", append(_getcarMw(), api.GetCar)...)
 	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
 	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
-	root.POST("/trip", append(_tripMw(), api.CreateTrip)...)
-	_trip := root.Group("/trip", _tripMw()...)
-	_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	root.DELETE("/user", append(_deleteuserMw(), api.DeleteUser)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)
 		_admin.POST("/login", append(__dminloginMw(), api.AdminLogin)...)
 		_admin.POST("/password", append(_change_dminpasswordMw(), api.ChangeAdminPassword)...)
-	}
-	root.POST("/car", append(_carMw(), api.CreateCar)...)
-	_car := root.Group("/car", _carMw()...)
-	_car.POST("/update", append(_updatecarMw(), api.UpdateCar)...)
-	{
-		_cars := root.Group("/cars", _carsMw()...)
-		_cars.GET("/all", append(_get_llcarsMw(), api.GetAllCars)...)
-		_cars.GET("/some", append(_getsomecarsMw(), api.GetSomeCars)...)
 	}
 	root.GET("/profile", append(_profileMw(), api.GetProfile)...)
 	_profile := root.Group("/profile", _profileMw()...)
@@ -47,27 +36,10 @@ func Register(r *server.Hertz) {
 	_profile.GET("/photo", append(_photoMw(), api.GetProfilePhoto)...)
 	_photo := _profile.Group("/photo", _photoMw()...)
 	_photo.POST("/complete", append(_completeprofilephotoMw(), api.CompleteProfilePhoto)...)
-	root.DELETE("/profile", append(_profile0Mw(), api.DeleteProfile)...)
-	_profile0 := root.Group("/profile", _profile0Mw()...)
-	_profile0.GET("/pending", append(_getpendingprofileMw(), api.GetPendingProfile)...)
-	_profile0.POST("/update", append(_updateprofileMw(), api.UpdateProfile)...)
-	{
-		_profiles := root.Group("/profiles", _profilesMw()...)
-		_profiles.GET("/all", append(_get_llprofileMw(), api.GetAllProfile)...)
-		_profiles.GET("/some", append(_getsomeprofileMw(), api.GetSomeProfile)...)
-	}
-	root.DELETE("/trip", append(_trip0Mw(), api.DeleteTrip)...)
-	_trip0 := root.Group("/trip", _trip0Mw()...)
-	_trip0.GET("/:id", append(_gettripMw(), api.GetTrip)...)
-	{
-		_trip1 := root.Group("/trip", _trip1Mw()...)
-		_trip1.POST("/edit", append(_edittripMw(), api.EditTrip)...)
-	}
-	{
-		_trips := root.Group("/trips", _tripsMw()...)
-		_trips.GET("/all", append(_get_lltripsMw(), api.GetAllTrips)...)
-		_trips.GET("/some", append(_getsometripsMw(), api.GetSomeTrips)...)
-	}
+	root.POST("/trip", append(_tripMw(), api.CreateTrip)...)
+	_trip := root.Group("/trip", _tripMw()...)
+	_trip.GET("/:id", append(_gettripMw(), api.GetTrip)...)
+	_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
 	root.POST("/user", append(_userMw(), api.AddUser)...)
 	_user := root.Group("/user", _userMw()...)
 	_user.GET("/all", append(_get_llusersMw(), api.GetAllUsers)...)

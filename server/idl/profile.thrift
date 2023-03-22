@@ -55,6 +55,13 @@ struct GetSomeProfileResponse{
     2: list<ProfileRecord> profile
 }
 
+struct GetPendingProfileRequest {}
+
+struct GetPendingProfileResponse{
+    1: base.BaseResponse base_resp
+    2: list<ProfileRecord> profile
+}
+
 struct UpdateProfileRequest {
   1: i64 account_id
   2: Profile profile
@@ -132,6 +139,7 @@ service ProfileService {
 
   GetAllProfileResponse GetAllProfile(1: GetAllProfileRequest req)
   GetSomeProfileResponse GetSomeProfile(1: GetSomeProfileRequest req)
+  GetPendingProfileResponse GetPendingProfile(1: GetPendingProfileRequest req)
   UpdateProfileResponse UpdateProfile(1: UpdateProfileRequest req)
   DeleteProfileResponse DeleteProfile(1: DeleteProfileRequest req)
 

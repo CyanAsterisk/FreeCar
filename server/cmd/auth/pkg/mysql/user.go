@@ -132,7 +132,7 @@ func (m *UserManager) GetAllUsers() ([]*User, error) {
 
 func (m *UserManager) GetSomeUsers() ([]*User, error) {
 	var users []*User
-	err := m.db.Scopes(Paginate(1, 10)).Find(&users).Error
+	err := m.db.Scopes(Paginate(1, consts.LimitOfSomeUsers)).Find(&users).Error
 	if err != nil {
 		return nil, err
 	}

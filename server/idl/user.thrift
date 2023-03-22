@@ -1,4 +1,4 @@
-namespace go auth
+namespace go user
 include "base.thrift"
 
 struct LoginRequest {
@@ -108,7 +108,7 @@ struct GetAllUsersResponse{
     2: list<User> users;
 }
 
-service AuthService {
+service UserService {
     LoginResponse Login(1: LoginRequest req)
     AdminLoginResponse AdminLogin(1: AdminLoginRequest req)
     ChangeAdminPasswordResponse ChangeAdminPassword(1: ChangeAdminPasswordRequest req)

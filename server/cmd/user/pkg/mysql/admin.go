@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"

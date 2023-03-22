@@ -5,7 +5,7 @@ export namespace AuthService {
     export function getUserInfo(): Promise<api.IEUserInfo> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'GET',
-            path: '/auth/info',
+            path: '/user/info',
             respMarshaller: api.EUserInfo.fromObject,
         })
     }
@@ -13,7 +13,7 @@ export namespace AuthService {
     export function updateUserInfo(req :api.IUpdateUserRequest): Promise<api.IEUpdateUserResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/auth/info',
+            path: '/user/info',
             data: req,
             respMarshaller: api.EUpdateUserResponse.fromObject
         })
@@ -22,7 +22,7 @@ export namespace AuthService {
     export function uploadAvatar(): Promise<api.IEUploadAvatarResponse> {
         return FreeCar.sendRequestWithAuthRetry({
             method: 'POST',
-            path: '/auth/avatar',
+            path: '/user/avatar',
             respMarshaller: api.EUploadAvatarResponse.fromObject
         })
     }

@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
@@ -53,7 +53,7 @@ func NewUserManager(db *gorm.DB, salt string) *UserManager {
 
 func (m *UserManager) CreateUser(user *User) (*User, error) {
 	if user.OpenID == "" {
-		return nil, errno.AuthSrvErr.WithMessage("openId not set")
+		return nil, errno.UserSrvErr.WithMessage("openId not set")
 	}
 	if _, err := m.GetUserByOpenId(user.OpenID); err == nil {
 		return nil, errno.RecordAlreadyExist
@@ -132,7 +132,7 @@ func (m *UserManager) GetAllUsers() ([]*User, error) {
 
 func (m *UserManager) GetSomeUsers() ([]*User, error) {
 	var users []*User
-	err := m.db.Scopes(Paginate(1, 10)).Find(&users).Error
+	err := m.db.Scopes(Paginate(1, consts.LimitOfSomeUsers)).Find(&users).Error
 	if err != nil {
 		return nil, err
 	}

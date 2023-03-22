@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/mysql"

@@ -4,7 +4,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"

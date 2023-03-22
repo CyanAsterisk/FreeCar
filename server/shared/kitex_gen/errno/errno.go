@@ -17,8 +17,8 @@ const (
 	Err_AuthorizeFail      Err = 10002
 	Err_TooManyRequest     Err = 10003
 	Err_ServiceErr         Err = 20000
-	Err_RPCAuthSrvErr      Err = 30000
-	Err_AuthSrvErr         Err = 30001
+	Err_RPCUserSrvErr      Err = 30000
+	Err_UserSrvErr         Err = 30001
 	Err_RPCBlobSrvErr      Err = 40000
 	Err_BlobSrvErr         Err = 40001
 	Err_RPCCarSrvErr       Err = 50000
@@ -46,10 +46,10 @@ func (p Err) String() string {
 		return "TooManyRequest"
 	case Err_ServiceErr:
 		return "ServiceErr"
-	case Err_RPCAuthSrvErr:
-		return "RPCAuthSrvErr"
-	case Err_AuthSrvErr:
-		return "AuthSrvErr"
+	case Err_RPCUserSrvErr:
+		return "RPCUserSrvErr"
+	case Err_UserSrvErr:
+		return "UserSrvErr"
 	case Err_RPCBlobSrvErr:
 		return "RPCBlobSrvErr"
 	case Err_BlobSrvErr:
@@ -90,10 +90,10 @@ func ErrFromString(s string) (Err, error) {
 		return Err_TooManyRequest, nil
 	case "ServiceErr":
 		return Err_ServiceErr, nil
-	case "RPCAuthSrvErr":
-		return Err_RPCAuthSrvErr, nil
-	case "AuthSrvErr":
-		return Err_AuthSrvErr, nil
+	case "RPCUserSrvErr":
+		return Err_RPCUserSrvErr, nil
+	case "UserSrvErr":
+		return Err_UserSrvErr, nil
 	case "RPCBlobSrvErr":
 		return Err_RPCBlobSrvErr, nil
 	case "BlobSrvErr":

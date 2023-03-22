@@ -2,7 +2,7 @@ package rpc
 
 // Init rpc service
 func Init() {
-	initAuth()
+	initUser()
 	initCar()
 	initProfile()
 	initTrip()

@@ -8,21 +8,11 @@ const (
 	ID         = "id"
 
 	ApiConfigPath     = "./server/cmd/api/config.yaml"
-	AuthConfigPath    = "./server/cmd/auth/config.yaml"
+	UserConfigPath    = "./server/cmd/user/config.yaml"
 	BlobConfigPath    = "./server/cmd/blob/config.yaml"
 	CarConfigPath     = "./server/cmd/car/config.yaml"
 	ProfileConfigPath = "./server/cmd/profile/config.yaml"
 	TripConfigPath    = "./server/cmd/trip/config.yaml"
-
-	ApiGroup    = "API_GROUP"
-	AuthGroup   = "AUTH_GROUP"
-	BlobGroup   = "BLOB_GROUP"
-	CarGroup    = "CAR_GROUP"
-	RentalGroup = "RENTAL_GROUP"
-
-	NacosLogDir   = "tmp/nacos/log"
-	NacosCacheDir = "tmp/nacos/cache"
-	NacosLogLevel = "debug"
 
 	HlogFilePath = "./tmp/hlog/logs/"
 	KlogFilePath = "./tmp/klog/logs/"
@@ -76,10 +66,14 @@ const (
 	RedisBlobClientDB    = 2
 	RedisCarClientDB     = 3
 
-	NacosSnowflakeNode = 1
 	UserSnowflakeNode  = 2
 	BlobSnowflakeNode  = 3
 	AdminSnowflakeNode = 4
+
+	LimitOfSomeCars     = 10
+	LimitOfSomeTrips    = 10
+	LimitOfSomeProfiles = 10
+	LimitOfSomeUsers    = 10
 
 	OCRUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/driving_license"
 )

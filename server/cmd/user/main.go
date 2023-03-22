@@ -5,13 +5,13 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/config"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/initialize"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/md5"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/mysql"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/auth/pkg/wechat"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/wechat"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user/userservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -38,7 +38,7 @@ func main() {
 	blobClient := initialize.InitBlob()
 
 	// Create new server.
-	srv := authservice.NewServer(&AuthServiceImpl{
+	srv := userservice.NewServer(&UserServiceImpl{
 		OpenIDResolver: &wechat.AuthServiceImpl{
 			AppID:     config.GlobalServerConfig.WXInfo.AppId,
 			AppSecret: config.GlobalServerConfig.WXInfo.AppSecret,

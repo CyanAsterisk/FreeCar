@@ -53,7 +53,7 @@ export namespace FreeCar {
         const wxResp = await wxLogin()
         const resp = await sendRequest<api.ILoginRequest, api.IELoginResponse> ({
             method: 'POST',
-            path: '/auth/login',
+            path: '/user/login',
             data: {
                 code: wxResp.code,
             },

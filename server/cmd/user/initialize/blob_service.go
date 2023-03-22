@@ -1,11 +1,12 @@
-package rpc
+package initialize
 
 import (
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/auth/authservice"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
@@ -15,34 +16,34 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
-func initAuth() {
+// InitBlob to init blob service
+func InitBlob() blobservice.Client {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		config.GlobalConsulConfig.Host,
 		config.GlobalConsulConfig.Port))
 	if err != nil {
-		klog.Fatalf("new consul client failed: %s", err.Error())
+		hlog.Fatalf("new nacos client failed: %s", err.Error())
 	}
-	// init OpenTelemetry
 	provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(config.GlobalServerConfig.AuthSrvInfo.Name),
+		provider.WithServiceName(config.GlobalServerConfig.BlobSrvInfo.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 
 	// create a new client
-	c, err := authservice.NewClient(
-		config.GlobalServerConfig.AuthSrvInfo.Name,
+	c, err := blobservice.NewClient(
+		config.GlobalServerConfig.BlobSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.AuthSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.BlobSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	config.GlobalAuthClient = c
+	return c
 }

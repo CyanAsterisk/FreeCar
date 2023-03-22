@@ -7,7 +7,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
 
-func TestAuthLifeCycle(t *testing.T) {
+func TestUserLifeCycle(t *testing.T) {
 	cleanUp, db, err := test.RunWithMySQLInDocker(t)
 	defer cleanUp()
 	if err != nil {

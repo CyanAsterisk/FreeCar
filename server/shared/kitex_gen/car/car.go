@@ -2565,6 +2565,426 @@ func (p *GetCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
 	return true
 }
 
+type GetAllCarsRequest struct {
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+}
+
+func NewGetAllCarsRequest() *GetAllCarsRequest {
+	return &GetAllCarsRequest{}
+}
+
+func (p *GetAllCarsRequest) InitDefault() {
+	*p = GetAllCarsRequest{}
+}
+
+func (p *GetAllCarsRequest) GetAccountId() (v int64) {
+	return p.AccountId
+}
+func (p *GetAllCarsRequest) SetAccountId(val int64) {
+	p.AccountId = val
+}
+
+var fieldIDToName_GetAllCarsRequest = map[int16]string{
+	1: "account_id",
+}
+
+func (p *GetAllCarsRequest) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetAllCarsRequest[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetAllCarsRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.AccountId = v
+	}
+	return nil
+}
+
+func (p *GetAllCarsRequest) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetAllCarsRequest"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetAllCarsRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.AccountId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetAllCarsRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetAllCarsRequest(%+v)", *p)
+}
+
+func (p *GetAllCarsRequest) DeepEqual(ano *GetAllCarsRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.AccountId) {
+		return false
+	}
+	return true
+}
+
+func (p *GetAllCarsRequest) Field1DeepEqual(src int64) bool {
+
+	if p.AccountId != src {
+		return false
+	}
+	return true
+}
+
+type GetAllCarsResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Cars     []*CarEntity       `thrift:"cars,2" frugal:"2,default,list<CarEntity>" json:"cars"`
+}
+
+func NewGetAllCarsResponse() *GetAllCarsResponse {
+	return &GetAllCarsResponse{}
+}
+
+func (p *GetAllCarsResponse) InitDefault() {
+	*p = GetAllCarsResponse{}
+}
+
+var GetAllCarsResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetAllCarsResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetAllCarsResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *GetAllCarsResponse) GetCars() (v []*CarEntity) {
+	return p.Cars
+}
+func (p *GetAllCarsResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *GetAllCarsResponse) SetCars(val []*CarEntity) {
+	p.Cars = val
+}
+
+var fieldIDToName_GetAllCarsResponse = map[int16]string{
+	1: "base_resp",
+	2: "cars",
+}
+
+func (p *GetAllCarsResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetAllCarsResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetAllCarsResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetAllCarsResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetAllCarsResponse) ReadField2(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	p.Cars = make([]*CarEntity, 0, size)
+	for i := 0; i < size; i++ {
+		_elem := NewCarEntity()
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		p.Cars = append(p.Cars, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetAllCarsResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetAllCarsResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetAllCarsResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetAllCarsResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("cars", thrift.LIST, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Cars)); err != nil {
+		return err
+	}
+	for _, v := range p.Cars {
+		if err := v.Write(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteListEnd(); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *GetAllCarsResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetAllCarsResponse(%+v)", *p)
+}
+
+func (p *GetAllCarsResponse) DeepEqual(ano *GetAllCarsResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Cars) {
+		return false
+	}
+	return true
+}
+
+func (p *GetAllCarsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetAllCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
+
+	if len(p.Cars) != len(src) {
+		return false
+	}
+	for i, v := range p.Cars {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
+	}
+	return true
+}
+
 type LockCarRequest struct {
 	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
 	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
@@ -4061,12 +4481,1238 @@ func (p *UpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	return true
 }
 
+type AdminUpdateCarRequest struct {
+	Id  string `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	Car *Car   `thrift:"car,2" frugal:"2,default,Car" json:"car"`
+}
+
+func NewAdminUpdateCarRequest() *AdminUpdateCarRequest {
+	return &AdminUpdateCarRequest{}
+}
+
+func (p *AdminUpdateCarRequest) InitDefault() {
+	*p = AdminUpdateCarRequest{}
+}
+
+func (p *AdminUpdateCarRequest) GetId() (v string) {
+	return p.Id
+}
+
+var AdminUpdateCarRequest_Car_DEFAULT *Car
+
+func (p *AdminUpdateCarRequest) GetCar() (v *Car) {
+	if !p.IsSetCar() {
+		return AdminUpdateCarRequest_Car_DEFAULT
+	}
+	return p.Car
+}
+func (p *AdminUpdateCarRequest) SetId(val string) {
+	p.Id = val
+}
+func (p *AdminUpdateCarRequest) SetCar(val *Car) {
+	p.Car = val
+}
+
+var fieldIDToName_AdminUpdateCarRequest = map[int16]string{
+	1: "id",
+	2: "car",
+}
+
+func (p *AdminUpdateCarRequest) IsSetCar() bool {
+	return p.Car != nil
+}
+
+func (p *AdminUpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminUpdateCarRequest[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *AdminUpdateCarRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Id = v
+	}
+	return nil
+}
+
+func (p *AdminUpdateCarRequest) ReadField2(iprot thrift.TProtocol) error {
+	p.Car = NewCar()
+	if err := p.Car.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *AdminUpdateCarRequest) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminUpdateCarRequest"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminUpdateCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Id); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminUpdateCarRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("car", thrift.STRUCT, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Car.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminUpdateCarRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminUpdateCarRequest(%+v)", *p)
+}
+
+func (p *AdminUpdateCarRequest) DeepEqual(ano *AdminUpdateCarRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Id) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Car) {
+		return false
+	}
+	return true
+}
+
+func (p *AdminUpdateCarRequest) Field1DeepEqual(src string) bool {
+
+	if strings.Compare(p.Id, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *AdminUpdateCarRequest) Field2DeepEqual(src *Car) bool {
+
+	if !p.Car.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type AdminUpdateCarResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+}
+
+func NewAdminUpdateCarResponse() *AdminUpdateCarResponse {
+	return &AdminUpdateCarResponse{}
+}
+
+func (p *AdminUpdateCarResponse) InitDefault() {
+	*p = AdminUpdateCarResponse{}
+}
+
+var AdminUpdateCarResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *AdminUpdateCarResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return AdminUpdateCarResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+func (p *AdminUpdateCarResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+
+var fieldIDToName_AdminUpdateCarResponse = map[int16]string{
+	1: "base_resp",
+}
+
+func (p *AdminUpdateCarResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *AdminUpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminUpdateCarResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *AdminUpdateCarResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *AdminUpdateCarResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminUpdateCarResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminUpdateCarResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminUpdateCarResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminUpdateCarResponse(%+v)", *p)
+}
+
+func (p *AdminUpdateCarResponse) DeepEqual(ano *AdminUpdateCarResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	return true
+}
+
+func (p *AdminUpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type GetSomeCarsRequest struct {
+	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+}
+
+func NewGetSomeCarsRequest() *GetSomeCarsRequest {
+	return &GetSomeCarsRequest{}
+}
+
+func (p *GetSomeCarsRequest) InitDefault() {
+	*p = GetSomeCarsRequest{}
+}
+
+func (p *GetSomeCarsRequest) GetAccountId() (v int64) {
+	return p.AccountId
+}
+func (p *GetSomeCarsRequest) SetAccountId(val int64) {
+	p.AccountId = val
+}
+
+var fieldIDToName_GetSomeCarsRequest = map[int16]string{
+	1: "account_id",
+}
+
+func (p *GetSomeCarsRequest) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetSomeCarsRequest[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetSomeCarsRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.AccountId = v
+	}
+	return nil
+}
+
+func (p *GetSomeCarsRequest) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetSomeCarsRequest"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetSomeCarsRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.AccountId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetSomeCarsRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetSomeCarsRequest(%+v)", *p)
+}
+
+func (p *GetSomeCarsRequest) DeepEqual(ano *GetSomeCarsRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.AccountId) {
+		return false
+	}
+	return true
+}
+
+func (p *GetSomeCarsRequest) Field1DeepEqual(src int64) bool {
+
+	if p.AccountId != src {
+		return false
+	}
+	return true
+}
+
+type GetSomeCarsResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Cars     []*CarEntity       `thrift:"cars,2" frugal:"2,default,list<CarEntity>" json:"cars"`
+}
+
+func NewGetSomeCarsResponse() *GetSomeCarsResponse {
+	return &GetSomeCarsResponse{}
+}
+
+func (p *GetSomeCarsResponse) InitDefault() {
+	*p = GetSomeCarsResponse{}
+}
+
+var GetSomeCarsResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *GetSomeCarsResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return GetSomeCarsResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *GetSomeCarsResponse) GetCars() (v []*CarEntity) {
+	return p.Cars
+}
+func (p *GetSomeCarsResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+func (p *GetSomeCarsResponse) SetCars(val []*CarEntity) {
+	p.Cars = val
+}
+
+var fieldIDToName_GetSomeCarsResponse = map[int16]string{
+	1: "base_resp",
+	2: "cars",
+}
+
+func (p *GetSomeCarsResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetSomeCarsResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.LIST {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetSomeCarsResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetSomeCarsResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetSomeCarsResponse) ReadField2(iprot thrift.TProtocol) error {
+	_, size, err := iprot.ReadListBegin()
+	if err != nil {
+		return err
+	}
+	p.Cars = make([]*CarEntity, 0, size)
+	for i := 0; i < size; i++ {
+		_elem := NewCarEntity()
+		if err := _elem.Read(iprot); err != nil {
+			return err
+		}
+
+		p.Cars = append(p.Cars, _elem)
+	}
+	if err := iprot.ReadListEnd(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *GetSomeCarsResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetSomeCarsResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetSomeCarsResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetSomeCarsResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("cars", thrift.LIST, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Cars)); err != nil {
+		return err
+	}
+	for _, v := range p.Cars {
+		if err := v.Write(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteListEnd(); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *GetSomeCarsResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetSomeCarsResponse(%+v)", *p)
+}
+
+func (p *GetSomeCarsResponse) DeepEqual(ano *GetSomeCarsResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Cars) {
+		return false
+	}
+	return true
+}
+
+func (p *GetSomeCarsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+func (p *GetSomeCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
+
+	if len(p.Cars) != len(src) {
+		return false
+	}
+	for i, v := range p.Cars {
+		_src := src[i]
+		if !v.DeepEqual(_src) {
+			return false
+		}
+	}
+	return true
+}
+
+type DeleteCarRequest struct {
+	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
+}
+
+func NewDeleteCarRequest() *DeleteCarRequest {
+	return &DeleteCarRequest{}
+}
+
+func (p *DeleteCarRequest) InitDefault() {
+	*p = DeleteCarRequest{}
+}
+
+func (p *DeleteCarRequest) GetAccountId() (v int64) {
+	return p.AccountId
+}
+
+func (p *DeleteCarRequest) GetId() (v string) {
+	return p.Id
+}
+func (p *DeleteCarRequest) SetAccountId(val int64) {
+	p.AccountId = val
+}
+func (p *DeleteCarRequest) SetId(val string) {
+	p.Id = val
+}
+
+var fieldIDToName_DeleteCarRequest = map[int16]string{
+	1: "account_id",
+	2: "id",
+}
+
+func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DeleteCarRequest[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *DeleteCarRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.AccountId = v
+	}
+	return nil
+}
+
+func (p *DeleteCarRequest) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Id = v
+	}
+	return nil
+}
+
+func (p *DeleteCarRequest) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DeleteCarRequest"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *DeleteCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.AccountId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *DeleteCarRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Id); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *DeleteCarRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("DeleteCarRequest(%+v)", *p)
+}
+
+func (p *DeleteCarRequest) DeepEqual(ano *DeleteCarRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.AccountId) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Id) {
+		return false
+	}
+	return true
+}
+
+func (p *DeleteCarRequest) Field1DeepEqual(src int64) bool {
+
+	if p.AccountId != src {
+		return false
+	}
+	return true
+}
+func (p *DeleteCarRequest) Field2DeepEqual(src string) bool {
+
+	if strings.Compare(p.Id, src) != 0 {
+		return false
+	}
+	return true
+}
+
+type DeleteCarResponse struct {
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+}
+
+func NewDeleteCarResponse() *DeleteCarResponse {
+	return &DeleteCarResponse{}
+}
+
+func (p *DeleteCarResponse) InitDefault() {
+	*p = DeleteCarResponse{}
+}
+
+var DeleteCarResponse_BaseResp_DEFAULT *base.BaseResponse
+
+func (p *DeleteCarResponse) GetBaseResp() (v *base.BaseResponse) {
+	if !p.IsSetBaseResp() {
+		return DeleteCarResponse_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+func (p *DeleteCarResponse) SetBaseResp(val *base.BaseResponse) {
+	p.BaseResp = val
+}
+
+var fieldIDToName_DeleteCarResponse = map[int16]string{
+	1: "base_resp",
+}
+
+func (p *DeleteCarResponse) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *DeleteCarResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_DeleteCarResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *DeleteCarResponse) ReadField1(iprot thrift.TProtocol) error {
+	p.BaseResp = base.NewBaseResponse()
+	if err := p.BaseResp.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *DeleteCarResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("DeleteCarResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *DeleteCarResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base_resp", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.BaseResp.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *DeleteCarResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("DeleteCarResponse(%+v)", *p)
+}
+
+func (p *DeleteCarResponse) DeepEqual(ano *DeleteCarResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.BaseResp) {
+		return false
+	}
+	return true
+}
+
+func (p *DeleteCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
+
+	if !p.BaseResp.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type CarService interface {
 	CreateCar(ctx context.Context, req *CreateCarRequest) (r *CreateCarResponse, err error)
 
-	GetCar(ctx context.Context, req *GetCarRequest) (r *GetCarResponse, err error)
+	DeleteCar(ctx context.Context, req *DeleteCarRequest) (r *DeleteCarResponse, err error)
+
+	AdminUpdateCar(ctx context.Context, req *AdminUpdateCarRequest) (r *AdminUpdateCarResponse, err error)
+
+	GetSomeCars(ctx context.Context, req *GetSomeCarsRequest) (r *GetSomeCarsResponse, err error)
+
+	GetAllCars(ctx context.Context, req *GetAllCarsRequest) (r *GetAllCarsResponse, err error)
 
 	GetCars(ctx context.Context, req *GetCarsRequest) (r *GetCarsResponse, err error)
+
+	GetCar(ctx context.Context, req *GetCarRequest) (r *GetCarResponse, err error)
 
 	LockCar(ctx context.Context, req *LockCarRequest) (r *LockCarResponse, err error)
 
@@ -4110,11 +5756,38 @@ func (p *CarServiceClient) CreateCar(ctx context.Context, req *CreateCarRequest)
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *CarServiceClient) GetCar(ctx context.Context, req *GetCarRequest) (r *GetCarResponse, err error) {
-	var _args CarServiceGetCarArgs
+func (p *CarServiceClient) DeleteCar(ctx context.Context, req *DeleteCarRequest) (r *DeleteCarResponse, err error) {
+	var _args CarServiceDeleteCarArgs
 	_args.Req = req
-	var _result CarServiceGetCarResult
-	if err = p.Client_().Call(ctx, "GetCar", &_args, &_result); err != nil {
+	var _result CarServiceDeleteCarResult
+	if err = p.Client_().Call(ctx, "DeleteCar", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *CarServiceClient) AdminUpdateCar(ctx context.Context, req *AdminUpdateCarRequest) (r *AdminUpdateCarResponse, err error) {
+	var _args CarServiceAdminUpdateCarArgs
+	_args.Req = req
+	var _result CarServiceAdminUpdateCarResult
+	if err = p.Client_().Call(ctx, "AdminUpdateCar", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *CarServiceClient) GetSomeCars(ctx context.Context, req *GetSomeCarsRequest) (r *GetSomeCarsResponse, err error) {
+	var _args CarServiceGetSomeCarsArgs
+	_args.Req = req
+	var _result CarServiceGetSomeCarsResult
+	if err = p.Client_().Call(ctx, "GetSomeCars", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *CarServiceClient) GetAllCars(ctx context.Context, req *GetAllCarsRequest) (r *GetAllCarsResponse, err error) {
+	var _args CarServiceGetAllCarsArgs
+	_args.Req = req
+	var _result CarServiceGetAllCarsResult
+	if err = p.Client_().Call(ctx, "GetAllCars", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -4124,6 +5797,15 @@ func (p *CarServiceClient) GetCars(ctx context.Context, req *GetCarsRequest) (r 
 	_args.Req = req
 	var _result CarServiceGetCarsResult
 	if err = p.Client_().Call(ctx, "GetCars", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *CarServiceClient) GetCar(ctx context.Context, req *GetCarRequest) (r *GetCarResponse, err error) {
+	var _args CarServiceGetCarArgs
+	_args.Req = req
+	var _result CarServiceGetCarResult
+	if err = p.Client_().Call(ctx, "GetCar", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -4177,8 +5859,12 @@ func (p *CarServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunctio
 func NewCarServiceProcessor(handler CarService) *CarServiceProcessor {
 	self := &CarServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self.AddToProcessorMap("CreateCar", &carServiceProcessorCreateCar{handler: handler})
-	self.AddToProcessorMap("GetCar", &carServiceProcessorGetCar{handler: handler})
+	self.AddToProcessorMap("DeleteCar", &carServiceProcessorDeleteCar{handler: handler})
+	self.AddToProcessorMap("AdminUpdateCar", &carServiceProcessorAdminUpdateCar{handler: handler})
+	self.AddToProcessorMap("GetSomeCars", &carServiceProcessorGetSomeCars{handler: handler})
+	self.AddToProcessorMap("GetAllCars", &carServiceProcessorGetAllCars{handler: handler})
 	self.AddToProcessorMap("GetCars", &carServiceProcessorGetCars{handler: handler})
+	self.AddToProcessorMap("GetCar", &carServiceProcessorGetCar{handler: handler})
 	self.AddToProcessorMap("LockCar", &carServiceProcessorLockCar{handler: handler})
 	self.AddToProcessorMap("UnlockCar", &carServiceProcessorUnlockCar{handler: handler})
 	self.AddToProcessorMap("UpdateCar", &carServiceProcessorUpdateCar{handler: handler})
@@ -4250,16 +5936,16 @@ func (p *carServiceProcessorCreateCar) Process(ctx context.Context, seqId int32,
 	return true, err
 }
 
-type carServiceProcessorGetCar struct {
+type carServiceProcessorDeleteCar struct {
 	handler CarService
 }
 
-func (p *carServiceProcessorGetCar) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := CarServiceGetCarArgs{}
+func (p *carServiceProcessorDeleteCar) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := CarServiceDeleteCarArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("GetCar", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("DeleteCar", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4268,11 +5954,11 @@ func (p *carServiceProcessorGetCar) Process(ctx context.Context, seqId int32, ip
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := CarServiceGetCarResult{}
-	var retval *GetCarResponse
-	if retval, err2 = p.handler.GetCar(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetCar: "+err2.Error())
-		oprot.WriteMessageBegin("GetCar", thrift.EXCEPTION, seqId)
+	result := CarServiceDeleteCarResult{}
+	var retval *DeleteCarResponse
+	if retval, err2 = p.handler.DeleteCar(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing DeleteCar: "+err2.Error())
+		oprot.WriteMessageBegin("DeleteCar", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4280,7 +5966,151 @@ func (p *carServiceProcessorGetCar) Process(ctx context.Context, seqId int32, ip
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("GetCar", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("DeleteCar", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type carServiceProcessorAdminUpdateCar struct {
+	handler CarService
+}
+
+func (p *carServiceProcessorAdminUpdateCar) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := CarServiceAdminUpdateCarArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("AdminUpdateCar", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := CarServiceAdminUpdateCarResult{}
+	var retval *AdminUpdateCarResponse
+	if retval, err2 = p.handler.AdminUpdateCar(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing AdminUpdateCar: "+err2.Error())
+		oprot.WriteMessageBegin("AdminUpdateCar", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("AdminUpdateCar", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type carServiceProcessorGetSomeCars struct {
+	handler CarService
+}
+
+func (p *carServiceProcessorGetSomeCars) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := CarServiceGetSomeCarsArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("GetSomeCars", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := CarServiceGetSomeCarsResult{}
+	var retval *GetSomeCarsResponse
+	if retval, err2 = p.handler.GetSomeCars(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetSomeCars: "+err2.Error())
+		oprot.WriteMessageBegin("GetSomeCars", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("GetSomeCars", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type carServiceProcessorGetAllCars struct {
+	handler CarService
+}
+
+func (p *carServiceProcessorGetAllCars) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := CarServiceGetAllCarsArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("GetAllCars", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := CarServiceGetAllCarsResult{}
+	var retval *GetAllCarsResponse
+	if retval, err2 = p.handler.GetAllCars(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetAllCars: "+err2.Error())
+		oprot.WriteMessageBegin("GetAllCars", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("GetAllCars", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -4329,6 +6159,54 @@ func (p *carServiceProcessorGetCars) Process(ctx context.Context, seqId int32, i
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("GetCars", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type carServiceProcessorGetCar struct {
+	handler CarService
+}
+
+func (p *carServiceProcessorGetCar) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := CarServiceGetCarArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("GetCar", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := CarServiceGetCarResult{}
+	var retval *GetCarResponse
+	if retval, err2 = p.handler.GetCar(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetCar: "+err2.Error())
+		oprot.WriteMessageBegin("GetCar", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("GetCar", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -4836,39 +6714,39 @@ func (p *CarServiceCreateCarResult) Field0DeepEqual(src *CreateCarResponse) bool
 	return true
 }
 
-type CarServiceGetCarArgs struct {
-	Req *GetCarRequest `thrift:"req,1" frugal:"1,default,GetCarRequest" json:"req"`
+type CarServiceDeleteCarArgs struct {
+	Req *DeleteCarRequest `thrift:"req,1" frugal:"1,default,DeleteCarRequest" json:"req"`
 }
 
-func NewCarServiceGetCarArgs() *CarServiceGetCarArgs {
-	return &CarServiceGetCarArgs{}
+func NewCarServiceDeleteCarArgs() *CarServiceDeleteCarArgs {
+	return &CarServiceDeleteCarArgs{}
 }
 
-func (p *CarServiceGetCarArgs) InitDefault() {
-	*p = CarServiceGetCarArgs{}
+func (p *CarServiceDeleteCarArgs) InitDefault() {
+	*p = CarServiceDeleteCarArgs{}
 }
 
-var CarServiceGetCarArgs_Req_DEFAULT *GetCarRequest
+var CarServiceDeleteCarArgs_Req_DEFAULT *DeleteCarRequest
 
-func (p *CarServiceGetCarArgs) GetReq() (v *GetCarRequest) {
+func (p *CarServiceDeleteCarArgs) GetReq() (v *DeleteCarRequest) {
 	if !p.IsSetReq() {
-		return CarServiceGetCarArgs_Req_DEFAULT
+		return CarServiceDeleteCarArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *CarServiceGetCarArgs) SetReq(val *GetCarRequest) {
+func (p *CarServiceDeleteCarArgs) SetReq(val *DeleteCarRequest) {
 	p.Req = val
 }
 
-var fieldIDToName_CarServiceGetCarArgs = map[int16]string{
+var fieldIDToName_CarServiceDeleteCarArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *CarServiceGetCarArgs) IsSetReq() bool {
+func (p *CarServiceDeleteCarArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *CarServiceGetCarArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -4917,7 +6795,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetCarArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceDeleteCarArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -4927,17 +6805,17 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *CarServiceGetCarArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.Req = NewGetCarRequest()
+func (p *CarServiceDeleteCarArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewDeleteCarRequest()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *CarServiceGetCarArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("GetCar_args"); err != nil {
+	if err = oprot.WriteStructBegin("DeleteCar_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -4964,7 +6842,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *CarServiceGetCarArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -4981,14 +6859,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *CarServiceGetCarArgs) String() string {
+func (p *CarServiceDeleteCarArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("CarServiceGetCarArgs(%+v)", *p)
+	return fmt.Sprintf("CarServiceDeleteCarArgs(%+v)", *p)
 }
 
-func (p *CarServiceGetCarArgs) DeepEqual(ano *CarServiceGetCarArgs) bool {
+func (p *CarServiceDeleteCarArgs) DeepEqual(ano *CarServiceDeleteCarArgs) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -5000,7 +6878,7 @@ func (p *CarServiceGetCarArgs) DeepEqual(ano *CarServiceGetCarArgs) bool {
 	return true
 }
 
-func (p *CarServiceGetCarArgs) Field1DeepEqual(src *GetCarRequest) bool {
+func (p *CarServiceDeleteCarArgs) Field1DeepEqual(src *DeleteCarRequest) bool {
 
 	if !p.Req.DeepEqual(src) {
 		return false
@@ -5008,39 +6886,39 @@ func (p *CarServiceGetCarArgs) Field1DeepEqual(src *GetCarRequest) bool {
 	return true
 }
 
-type CarServiceGetCarResult struct {
-	Success *GetCarResponse `thrift:"success,0,optional" frugal:"0,optional,GetCarResponse" json:"success,omitempty"`
+type CarServiceDeleteCarResult struct {
+	Success *DeleteCarResponse `thrift:"success,0,optional" frugal:"0,optional,DeleteCarResponse" json:"success,omitempty"`
 }
 
-func NewCarServiceGetCarResult() *CarServiceGetCarResult {
-	return &CarServiceGetCarResult{}
+func NewCarServiceDeleteCarResult() *CarServiceDeleteCarResult {
+	return &CarServiceDeleteCarResult{}
 }
 
-func (p *CarServiceGetCarResult) InitDefault() {
-	*p = CarServiceGetCarResult{}
+func (p *CarServiceDeleteCarResult) InitDefault() {
+	*p = CarServiceDeleteCarResult{}
 }
 
-var CarServiceGetCarResult_Success_DEFAULT *GetCarResponse
+var CarServiceDeleteCarResult_Success_DEFAULT *DeleteCarResponse
 
-func (p *CarServiceGetCarResult) GetSuccess() (v *GetCarResponse) {
+func (p *CarServiceDeleteCarResult) GetSuccess() (v *DeleteCarResponse) {
 	if !p.IsSetSuccess() {
-		return CarServiceGetCarResult_Success_DEFAULT
+		return CarServiceDeleteCarResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *CarServiceGetCarResult) SetSuccess(x interface{}) {
-	p.Success = x.(*GetCarResponse)
+func (p *CarServiceDeleteCarResult) SetSuccess(x interface{}) {
+	p.Success = x.(*DeleteCarResponse)
 }
 
-var fieldIDToName_CarServiceGetCarResult = map[int16]string{
+var fieldIDToName_CarServiceDeleteCarResult = map[int16]string{
 	0: "success",
 }
 
-func (p *CarServiceGetCarResult) IsSetSuccess() bool {
+func (p *CarServiceDeleteCarResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *CarServiceGetCarResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -5089,7 +6967,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetCarResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceDeleteCarResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -5099,17 +6977,17 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *CarServiceGetCarResult) ReadField0(iprot thrift.TProtocol) error {
-	p.Success = NewGetCarResponse()
+func (p *CarServiceDeleteCarResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewDeleteCarResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *CarServiceGetCarResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("GetCar_result"); err != nil {
+	if err = oprot.WriteStructBegin("DeleteCar_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -5136,7 +7014,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *CarServiceGetCarResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *CarServiceDeleteCarResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -5155,14 +7033,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *CarServiceGetCarResult) String() string {
+func (p *CarServiceDeleteCarResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("CarServiceGetCarResult(%+v)", *p)
+	return fmt.Sprintf("CarServiceDeleteCarResult(%+v)", *p)
 }
 
-func (p *CarServiceGetCarResult) DeepEqual(ano *CarServiceGetCarResult) bool {
+func (p *CarServiceDeleteCarResult) DeepEqual(ano *CarServiceDeleteCarResult) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -5174,7 +7052,1045 @@ func (p *CarServiceGetCarResult) DeepEqual(ano *CarServiceGetCarResult) bool {
 	return true
 }
 
-func (p *CarServiceGetCarResult) Field0DeepEqual(src *GetCarResponse) bool {
+func (p *CarServiceDeleteCarResult) Field0DeepEqual(src *DeleteCarResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceAdminUpdateCarArgs struct {
+	Req *AdminUpdateCarRequest `thrift:"req,1" frugal:"1,default,AdminUpdateCarRequest" json:"req"`
+}
+
+func NewCarServiceAdminUpdateCarArgs() *CarServiceAdminUpdateCarArgs {
+	return &CarServiceAdminUpdateCarArgs{}
+}
+
+func (p *CarServiceAdminUpdateCarArgs) InitDefault() {
+	*p = CarServiceAdminUpdateCarArgs{}
+}
+
+var CarServiceAdminUpdateCarArgs_Req_DEFAULT *AdminUpdateCarRequest
+
+func (p *CarServiceAdminUpdateCarArgs) GetReq() (v *AdminUpdateCarRequest) {
+	if !p.IsSetReq() {
+		return CarServiceAdminUpdateCarArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *CarServiceAdminUpdateCarArgs) SetReq(val *AdminUpdateCarRequest) {
+	p.Req = val
+}
+
+var fieldIDToName_CarServiceAdminUpdateCarArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *CarServiceAdminUpdateCarArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CarServiceAdminUpdateCarArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceAdminUpdateCarArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewAdminUpdateCarRequest()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceAdminUpdateCarArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminUpdateCar_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceAdminUpdateCarArgs(%+v)", *p)
+}
+
+func (p *CarServiceAdminUpdateCarArgs) DeepEqual(ano *CarServiceAdminUpdateCarArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceAdminUpdateCarArgs) Field1DeepEqual(src *AdminUpdateCarRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceAdminUpdateCarResult struct {
+	Success *AdminUpdateCarResponse `thrift:"success,0,optional" frugal:"0,optional,AdminUpdateCarResponse" json:"success,omitempty"`
+}
+
+func NewCarServiceAdminUpdateCarResult() *CarServiceAdminUpdateCarResult {
+	return &CarServiceAdminUpdateCarResult{}
+}
+
+func (p *CarServiceAdminUpdateCarResult) InitDefault() {
+	*p = CarServiceAdminUpdateCarResult{}
+}
+
+var CarServiceAdminUpdateCarResult_Success_DEFAULT *AdminUpdateCarResponse
+
+func (p *CarServiceAdminUpdateCarResult) GetSuccess() (v *AdminUpdateCarResponse) {
+	if !p.IsSetSuccess() {
+		return CarServiceAdminUpdateCarResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *CarServiceAdminUpdateCarResult) SetSuccess(x interface{}) {
+	p.Success = x.(*AdminUpdateCarResponse)
+}
+
+var fieldIDToName_CarServiceAdminUpdateCarResult = map[int16]string{
+	0: "success",
+}
+
+func (p *CarServiceAdminUpdateCarResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CarServiceAdminUpdateCarResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceAdminUpdateCarResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewAdminUpdateCarResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceAdminUpdateCarResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminUpdateCar_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *CarServiceAdminUpdateCarResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceAdminUpdateCarResult(%+v)", *p)
+}
+
+func (p *CarServiceAdminUpdateCarResult) DeepEqual(ano *CarServiceAdminUpdateCarResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceAdminUpdateCarResult) Field0DeepEqual(src *AdminUpdateCarResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetSomeCarsArgs struct {
+	Req *GetSomeCarsRequest `thrift:"req,1" frugal:"1,default,GetSomeCarsRequest" json:"req"`
+}
+
+func NewCarServiceGetSomeCarsArgs() *CarServiceGetSomeCarsArgs {
+	return &CarServiceGetSomeCarsArgs{}
+}
+
+func (p *CarServiceGetSomeCarsArgs) InitDefault() {
+	*p = CarServiceGetSomeCarsArgs{}
+}
+
+var CarServiceGetSomeCarsArgs_Req_DEFAULT *GetSomeCarsRequest
+
+func (p *CarServiceGetSomeCarsArgs) GetReq() (v *GetSomeCarsRequest) {
+	if !p.IsSetReq() {
+		return CarServiceGetSomeCarsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *CarServiceGetSomeCarsArgs) SetReq(val *GetSomeCarsRequest) {
+	p.Req = val
+}
+
+var fieldIDToName_CarServiceGetSomeCarsArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *CarServiceGetSomeCarsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CarServiceGetSomeCarsArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetSomeCarsArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewGetSomeCarsRequest()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetSomeCarsArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetSomeCars_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetSomeCarsArgs(%+v)", *p)
+}
+
+func (p *CarServiceGetSomeCarsArgs) DeepEqual(ano *CarServiceGetSomeCarsArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetSomeCarsArgs) Field1DeepEqual(src *GetSomeCarsRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetSomeCarsResult struct {
+	Success *GetSomeCarsResponse `thrift:"success,0,optional" frugal:"0,optional,GetSomeCarsResponse" json:"success,omitempty"`
+}
+
+func NewCarServiceGetSomeCarsResult() *CarServiceGetSomeCarsResult {
+	return &CarServiceGetSomeCarsResult{}
+}
+
+func (p *CarServiceGetSomeCarsResult) InitDefault() {
+	*p = CarServiceGetSomeCarsResult{}
+}
+
+var CarServiceGetSomeCarsResult_Success_DEFAULT *GetSomeCarsResponse
+
+func (p *CarServiceGetSomeCarsResult) GetSuccess() (v *GetSomeCarsResponse) {
+	if !p.IsSetSuccess() {
+		return CarServiceGetSomeCarsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *CarServiceGetSomeCarsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetSomeCarsResponse)
+}
+
+var fieldIDToName_CarServiceGetSomeCarsResult = map[int16]string{
+	0: "success",
+}
+
+func (p *CarServiceGetSomeCarsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CarServiceGetSomeCarsResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetSomeCarsResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewGetSomeCarsResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetSomeCarsResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetSomeCars_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *CarServiceGetSomeCarsResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetSomeCarsResult(%+v)", *p)
+}
+
+func (p *CarServiceGetSomeCarsResult) DeepEqual(ano *CarServiceGetSomeCarsResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetSomeCarsResult) Field0DeepEqual(src *GetSomeCarsResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetAllCarsArgs struct {
+	Req *GetAllCarsRequest `thrift:"req,1" frugal:"1,default,GetAllCarsRequest" json:"req"`
+}
+
+func NewCarServiceGetAllCarsArgs() *CarServiceGetAllCarsArgs {
+	return &CarServiceGetAllCarsArgs{}
+}
+
+func (p *CarServiceGetAllCarsArgs) InitDefault() {
+	*p = CarServiceGetAllCarsArgs{}
+}
+
+var CarServiceGetAllCarsArgs_Req_DEFAULT *GetAllCarsRequest
+
+func (p *CarServiceGetAllCarsArgs) GetReq() (v *GetAllCarsRequest) {
+	if !p.IsSetReq() {
+		return CarServiceGetAllCarsArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *CarServiceGetAllCarsArgs) SetReq(val *GetAllCarsRequest) {
+	p.Req = val
+}
+
+var fieldIDToName_CarServiceGetAllCarsArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *CarServiceGetAllCarsArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CarServiceGetAllCarsArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetAllCarsArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewGetAllCarsRequest()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetAllCarsArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetAllCars_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetAllCarsArgs(%+v)", *p)
+}
+
+func (p *CarServiceGetAllCarsArgs) DeepEqual(ano *CarServiceGetAllCarsArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetAllCarsArgs) Field1DeepEqual(src *GetAllCarsRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetAllCarsResult struct {
+	Success *GetAllCarsResponse `thrift:"success,0,optional" frugal:"0,optional,GetAllCarsResponse" json:"success,omitempty"`
+}
+
+func NewCarServiceGetAllCarsResult() *CarServiceGetAllCarsResult {
+	return &CarServiceGetAllCarsResult{}
+}
+
+func (p *CarServiceGetAllCarsResult) InitDefault() {
+	*p = CarServiceGetAllCarsResult{}
+}
+
+var CarServiceGetAllCarsResult_Success_DEFAULT *GetAllCarsResponse
+
+func (p *CarServiceGetAllCarsResult) GetSuccess() (v *GetAllCarsResponse) {
+	if !p.IsSetSuccess() {
+		return CarServiceGetAllCarsResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *CarServiceGetAllCarsResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetAllCarsResponse)
+}
+
+var fieldIDToName_CarServiceGetAllCarsResult = map[int16]string{
+	0: "success",
+}
+
+func (p *CarServiceGetAllCarsResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CarServiceGetAllCarsResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetAllCarsResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewGetAllCarsResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetAllCarsResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetAllCars_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *CarServiceGetAllCarsResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetAllCarsResult(%+v)", *p)
+}
+
+func (p *CarServiceGetAllCarsResult) DeepEqual(ano *CarServiceGetAllCarsResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetAllCarsResult) Field0DeepEqual(src *GetAllCarsResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
@@ -5521,6 +8437,352 @@ func (p *CarServiceGetCarsResult) DeepEqual(ano *CarServiceGetCarsResult) bool {
 }
 
 func (p *CarServiceGetCarsResult) Field0DeepEqual(src *GetCarsResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetCarArgs struct {
+	Req *GetCarRequest `thrift:"req,1" frugal:"1,default,GetCarRequest" json:"req"`
+}
+
+func NewCarServiceGetCarArgs() *CarServiceGetCarArgs {
+	return &CarServiceGetCarArgs{}
+}
+
+func (p *CarServiceGetCarArgs) InitDefault() {
+	*p = CarServiceGetCarArgs{}
+}
+
+var CarServiceGetCarArgs_Req_DEFAULT *GetCarRequest
+
+func (p *CarServiceGetCarArgs) GetReq() (v *GetCarRequest) {
+	if !p.IsSetReq() {
+		return CarServiceGetCarArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *CarServiceGetCarArgs) SetReq(val *GetCarRequest) {
+	p.Req = val
+}
+
+var fieldIDToName_CarServiceGetCarArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *CarServiceGetCarArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CarServiceGetCarArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetCarArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetCarArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewGetCarRequest()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetCarArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetCar_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetCarArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CarServiceGetCarArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetCarArgs(%+v)", *p)
+}
+
+func (p *CarServiceGetCarArgs) DeepEqual(ano *CarServiceGetCarArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetCarArgs) Field1DeepEqual(src *GetCarRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type CarServiceGetCarResult struct {
+	Success *GetCarResponse `thrift:"success,0,optional" frugal:"0,optional,GetCarResponse" json:"success,omitempty"`
+}
+
+func NewCarServiceGetCarResult() *CarServiceGetCarResult {
+	return &CarServiceGetCarResult{}
+}
+
+func (p *CarServiceGetCarResult) InitDefault() {
+	*p = CarServiceGetCarResult{}
+}
+
+var CarServiceGetCarResult_Success_DEFAULT *GetCarResponse
+
+func (p *CarServiceGetCarResult) GetSuccess() (v *GetCarResponse) {
+	if !p.IsSetSuccess() {
+		return CarServiceGetCarResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *CarServiceGetCarResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetCarResponse)
+}
+
+var fieldIDToName_CarServiceGetCarResult = map[int16]string{
+	0: "success",
+}
+
+func (p *CarServiceGetCarResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CarServiceGetCarResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarServiceGetCarResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *CarServiceGetCarResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewGetCarResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *CarServiceGetCarResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetCar_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *CarServiceGetCarResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *CarServiceGetCarResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CarServiceGetCarResult(%+v)", *p)
+}
+
+func (p *CarServiceGetCarResult) DeepEqual(ano *CarServiceGetCarResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *CarServiceGetCarResult) Field0DeepEqual(src *GetCarResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

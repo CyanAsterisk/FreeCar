@@ -12,8 +12,12 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	CreateCar(ctx context.Context, req *car.CreateCarRequest, callOptions ...callopt.Option) (r *car.CreateCarResponse, err error)
-	GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error)
+	DeleteCar(ctx context.Context, req *car.DeleteCarRequest, callOptions ...callopt.Option) (r *car.DeleteCarResponse, err error)
+	AdminUpdateCar(ctx context.Context, req *car.AdminUpdateCarRequest, callOptions ...callopt.Option) (r *car.AdminUpdateCarResponse, err error)
+	GetSomeCars(ctx context.Context, req *car.GetSomeCarsRequest, callOptions ...callopt.Option) (r *car.GetSomeCarsResponse, err error)
+	GetAllCars(ctx context.Context, req *car.GetAllCarsRequest, callOptions ...callopt.Option) (r *car.GetAllCarsResponse, err error)
 	GetCars(ctx context.Context, req *car.GetCarsRequest, callOptions ...callopt.Option) (r *car.GetCarsResponse, err error)
+	GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error)
 	LockCar(ctx context.Context, req *car.LockCarRequest, callOptions ...callopt.Option) (r *car.LockCarResponse, err error)
 	UnlockCar(ctx context.Context, req *car.UnlockCarRequest, callOptions ...callopt.Option) (r *car.UnlockCarResponse, err error)
 	UpdateCar(ctx context.Context, req *car.UpdateCarRequest, callOptions ...callopt.Option) (r *car.UpdateCarResponse, err error)
@@ -53,14 +57,34 @@ func (p *kCarServiceClient) CreateCar(ctx context.Context, req *car.CreateCarReq
 	return p.kClient.CreateCar(ctx, req)
 }
 
-func (p *kCarServiceClient) GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error) {
+func (p *kCarServiceClient) DeleteCar(ctx context.Context, req *car.DeleteCarRequest, callOptions ...callopt.Option) (r *car.DeleteCarResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.GetCar(ctx, req)
+	return p.kClient.DeleteCar(ctx, req)
+}
+
+func (p *kCarServiceClient) AdminUpdateCar(ctx context.Context, req *car.AdminUpdateCarRequest, callOptions ...callopt.Option) (r *car.AdminUpdateCarResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AdminUpdateCar(ctx, req)
+}
+
+func (p *kCarServiceClient) GetSomeCars(ctx context.Context, req *car.GetSomeCarsRequest, callOptions ...callopt.Option) (r *car.GetSomeCarsResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetSomeCars(ctx, req)
+}
+
+func (p *kCarServiceClient) GetAllCars(ctx context.Context, req *car.GetAllCarsRequest, callOptions ...callopt.Option) (r *car.GetAllCarsResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetAllCars(ctx, req)
 }
 
 func (p *kCarServiceClient) GetCars(ctx context.Context, req *car.GetCarsRequest, callOptions ...callopt.Option) (r *car.GetCarsResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetCars(ctx, req)
+}
+
+func (p *kCarServiceClient) GetCar(ctx context.Context, req *car.GetCarRequest, callOptions ...callopt.Option) (r *car.GetCarResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetCar(ctx, req)
 }
 
 func (p *kCarServiceClient) LockCar(ctx context.Context, req *car.LockCarRequest, callOptions ...callopt.Option) (r *car.LockCarResponse, err error) {

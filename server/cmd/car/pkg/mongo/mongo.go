@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
@@ -21,6 +22,7 @@ const (
 	positionField = carField + ".position"
 	tripIDField   = carField + ".tripid"
 	powerField    = carField + ".power"
+	plateNumField = carField + ".platenum"
 	initLatitude  = 29.5
 	initLongitude = 106.6
 )
@@ -74,13 +76,13 @@ func (m *Manager) GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 }
 
 // GetCars gets cars.
-func (m *Manager) GetCars(c context.Context) ([]*CarRecord, error) {
+func (m *Manager) GetCars(c context.Context, limit int64) ([]*CarRecord, error) {
 	filter := bson.M{}
-	res, err := m.col.Find(c, filter, options.Find())
+	opt := options.Find().SetLimit(limit)
+	res, err := m.col.Find(c, filter, opt)
 	if err != nil {
 		return nil, err
 	}
-
 	var cars []*CarRecord
 	for res.Next(c) {
 		var cr CarRecord
@@ -102,6 +104,7 @@ type CarUpdate struct {
 	Power        float64
 	UpdateTripID bool
 	TripID       id.TripID
+	PlateNum     string
 }
 
 // UpdateCar updates a car. If status is specified,
@@ -136,10 +139,32 @@ func (m *Manager) UpdateCar(c context.Context, id id.CarID, status car.CarStatus
 	if update.Power > 0 {
 		u[powerField] = update.Power
 	}
+
+	if update.PlateNum != "" {
+		u[plateNumField] = update.PlateNum
+	}
 	res := m.col.FindOneAndUpdate(c, filter, mgutil.Set(u),
 		options.FindOneAndUpdate().SetReturnDocument(options.After))
 
 	return convertSingleResult(res)
+}
+
+func (m *Manager) DeleteCar(c context.Context, id id.CarID) error {
+	objID, err := objid.FromID(id)
+	if err != nil {
+		return err
+	}
+	filter := bson.M{
+		mgutil.IDFieldName: objID,
+	}
+	result, err := m.col.DeleteOne(c, filter)
+	if err != nil {
+		return err
+	}
+	if result.DeletedCount == 0 {
+		return errno.RecordNotFound
+	}
+	return nil
 }
 
 func convertSingleResult(res *mongo.SingleResult) (*CarRecord, error) {

@@ -19,12 +19,16 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "CarService"
 	handlerType := (*car.CarService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"CreateCar": kitex.NewMethodInfo(createCarHandler, newCarServiceCreateCarArgs, newCarServiceCreateCarResult, false),
-		"GetCar":    kitex.NewMethodInfo(getCarHandler, newCarServiceGetCarArgs, newCarServiceGetCarResult, false),
-		"GetCars":   kitex.NewMethodInfo(getCarsHandler, newCarServiceGetCarsArgs, newCarServiceGetCarsResult, false),
-		"LockCar":   kitex.NewMethodInfo(lockCarHandler, newCarServiceLockCarArgs, newCarServiceLockCarResult, false),
-		"UnlockCar": kitex.NewMethodInfo(unlockCarHandler, newCarServiceUnlockCarArgs, newCarServiceUnlockCarResult, false),
-		"UpdateCar": kitex.NewMethodInfo(updateCarHandler, newCarServiceUpdateCarArgs, newCarServiceUpdateCarResult, false),
+		"CreateCar":      kitex.NewMethodInfo(createCarHandler, newCarServiceCreateCarArgs, newCarServiceCreateCarResult, false),
+		"DeleteCar":      kitex.NewMethodInfo(deleteCarHandler, newCarServiceDeleteCarArgs, newCarServiceDeleteCarResult, false),
+		"AdminUpdateCar": kitex.NewMethodInfo(adminUpdateCarHandler, newCarServiceAdminUpdateCarArgs, newCarServiceAdminUpdateCarResult, false),
+		"GetSomeCars":    kitex.NewMethodInfo(getSomeCarsHandler, newCarServiceGetSomeCarsArgs, newCarServiceGetSomeCarsResult, false),
+		"GetAllCars":     kitex.NewMethodInfo(getAllCarsHandler, newCarServiceGetAllCarsArgs, newCarServiceGetAllCarsResult, false),
+		"GetCars":        kitex.NewMethodInfo(getCarsHandler, newCarServiceGetCarsArgs, newCarServiceGetCarsResult, false),
+		"GetCar":         kitex.NewMethodInfo(getCarHandler, newCarServiceGetCarArgs, newCarServiceGetCarResult, false),
+		"LockCar":        kitex.NewMethodInfo(lockCarHandler, newCarServiceLockCarArgs, newCarServiceLockCarResult, false),
+		"UnlockCar":      kitex.NewMethodInfo(unlockCarHandler, newCarServiceUnlockCarArgs, newCarServiceUnlockCarResult, false),
+		"UpdateCar":      kitex.NewMethodInfo(updateCarHandler, newCarServiceUpdateCarArgs, newCarServiceUpdateCarResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "car",
@@ -58,22 +62,76 @@ func newCarServiceCreateCarResult() interface{} {
 	return car.NewCarServiceCreateCarResult()
 }
 
-func getCarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*car.CarServiceGetCarArgs)
-	realResult := result.(*car.CarServiceGetCarResult)
-	success, err := handler.(car.CarService).GetCar(ctx, realArg.Req)
+func deleteCarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*car.CarServiceDeleteCarArgs)
+	realResult := result.(*car.CarServiceDeleteCarResult)
+	success, err := handler.(car.CarService).DeleteCar(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newCarServiceGetCarArgs() interface{} {
-	return car.NewCarServiceGetCarArgs()
+func newCarServiceDeleteCarArgs() interface{} {
+	return car.NewCarServiceDeleteCarArgs()
 }
 
-func newCarServiceGetCarResult() interface{} {
-	return car.NewCarServiceGetCarResult()
+func newCarServiceDeleteCarResult() interface{} {
+	return car.NewCarServiceDeleteCarResult()
+}
+
+func adminUpdateCarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*car.CarServiceAdminUpdateCarArgs)
+	realResult := result.(*car.CarServiceAdminUpdateCarResult)
+	success, err := handler.(car.CarService).AdminUpdateCar(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newCarServiceAdminUpdateCarArgs() interface{} {
+	return car.NewCarServiceAdminUpdateCarArgs()
+}
+
+func newCarServiceAdminUpdateCarResult() interface{} {
+	return car.NewCarServiceAdminUpdateCarResult()
+}
+
+func getSomeCarsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*car.CarServiceGetSomeCarsArgs)
+	realResult := result.(*car.CarServiceGetSomeCarsResult)
+	success, err := handler.(car.CarService).GetSomeCars(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newCarServiceGetSomeCarsArgs() interface{} {
+	return car.NewCarServiceGetSomeCarsArgs()
+}
+
+func newCarServiceGetSomeCarsResult() interface{} {
+	return car.NewCarServiceGetSomeCarsResult()
+}
+
+func getAllCarsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*car.CarServiceGetAllCarsArgs)
+	realResult := result.(*car.CarServiceGetAllCarsResult)
+	success, err := handler.(car.CarService).GetAllCars(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newCarServiceGetAllCarsArgs() interface{} {
+	return car.NewCarServiceGetAllCarsArgs()
+}
+
+func newCarServiceGetAllCarsResult() interface{} {
+	return car.NewCarServiceGetAllCarsResult()
 }
 
 func getCarsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -92,6 +150,24 @@ func newCarServiceGetCarsArgs() interface{} {
 
 func newCarServiceGetCarsResult() interface{} {
 	return car.NewCarServiceGetCarsResult()
+}
+
+func getCarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*car.CarServiceGetCarArgs)
+	realResult := result.(*car.CarServiceGetCarResult)
+	success, err := handler.(car.CarService).GetCar(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newCarServiceGetCarArgs() interface{} {
+	return car.NewCarServiceGetCarArgs()
+}
+
+func newCarServiceGetCarResult() interface{} {
+	return car.NewCarServiceGetCarResult()
 }
 
 func lockCarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -168,11 +244,41 @@ func (p *kClient) CreateCar(ctx context.Context, req *car.CreateCarRequest) (r *
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) GetCar(ctx context.Context, req *car.GetCarRequest) (r *car.GetCarResponse, err error) {
-	var _args car.CarServiceGetCarArgs
+func (p *kClient) DeleteCar(ctx context.Context, req *car.DeleteCarRequest) (r *car.DeleteCarResponse, err error) {
+	var _args car.CarServiceDeleteCarArgs
 	_args.Req = req
-	var _result car.CarServiceGetCarResult
-	if err = p.c.Call(ctx, "GetCar", &_args, &_result); err != nil {
+	var _result car.CarServiceDeleteCarResult
+	if err = p.c.Call(ctx, "DeleteCar", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) AdminUpdateCar(ctx context.Context, req *car.AdminUpdateCarRequest) (r *car.AdminUpdateCarResponse, err error) {
+	var _args car.CarServiceAdminUpdateCarArgs
+	_args.Req = req
+	var _result car.CarServiceAdminUpdateCarResult
+	if err = p.c.Call(ctx, "AdminUpdateCar", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetSomeCars(ctx context.Context, req *car.GetSomeCarsRequest) (r *car.GetSomeCarsResponse, err error) {
+	var _args car.CarServiceGetSomeCarsArgs
+	_args.Req = req
+	var _result car.CarServiceGetSomeCarsResult
+	if err = p.c.Call(ctx, "GetSomeCars", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetAllCars(ctx context.Context, req *car.GetAllCarsRequest) (r *car.GetAllCarsResponse, err error) {
+	var _args car.CarServiceGetAllCarsArgs
+	_args.Req = req
+	var _result car.CarServiceGetAllCarsResult
+	if err = p.c.Call(ctx, "GetAllCars", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -183,6 +289,16 @@ func (p *kClient) GetCars(ctx context.Context, req *car.GetCarsRequest) (r *car.
 	_args.Req = req
 	var _result car.CarServiceGetCarsResult
 	if err = p.c.Call(ctx, "GetCars", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetCar(ctx context.Context, req *car.GetCarRequest) (r *car.GetCarResponse, err error) {
+	var _args car.CarServiceGetCarArgs
+	_args.Req = req
+	var _result car.CarServiceGetCarResult
+	if err = p.c.Call(ctx, "GetCar", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

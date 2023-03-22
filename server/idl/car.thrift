@@ -62,6 +62,15 @@ struct GetCarsResponse{
     2: list<CarEntity> cars
 }
 
+struct GetAllCarsRequest{
+     1: i64 account_id
+}
+
+struct GetAllCarsResponse{
+    1: base.BaseResponse base_resp
+    2: list<CarEntity> cars
+}
+
 struct LockCarRequest{
     1: i64 account_id
     2: string id
@@ -94,11 +103,50 @@ struct UpdateCarResponse{
     1: base.BaseResponse base_resp
 }
 
+struct AdminUpdateCarRequest{
+    1: string id
+    2: Car car
+}
+
+struct AdminUpdateCarResponse{
+    1: base.BaseResponse base_resp
+}
+
+
+struct GetSomeCarsRequest{
+   1: i64 account_id
+}
+
+struct GetSomeCarsResponse{
+     1: base.BaseResponse base_resp
+     2: list<CarEntity> cars
+}
+
+struct DeleteCarRequest{
+     1: i64 account_id
+     2: string id
+}
+
+struct DeleteCarResponse{
+     1: base.BaseResponse base_resp
+}
+
 service CarService {
+    // for back-stage management
     CreateCarResponse CreateCar (1:CreateCarRequest req)
-    GetCarResponse GetCar(1: GetCarRequest req)
+    DeleteCarResponse  DeleteCar (1: DeleteCarRequest req)
+    AdminUpdateCarResponse AdminUpdateCar (1: AdminUpdateCarRequest req)
+    GetSomeCarsResponse GetSomeCars (1:GetSomeCarsRequest req)
+    GetAllCarsResponse GetAllCars(1: GetAllCarsRequest req)
+
+    // for mini-program
     GetCarsResponse GetCars(1: GetCarsRequest req)
+    GetCarResponse GetCar(1: GetCarRequest req)
+
+    // for trip service
     LockCarResponse LockCar (1:LockCarRequest req)
     UnlockCarResponse UnlockCar(1:UnlockCarRequest req)
+
+    // for firmware in car
     UpdateCarResponse UpdateCar(1: UpdateCarRequest req)
 }

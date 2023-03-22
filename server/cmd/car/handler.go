@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -34,7 +35,8 @@ type RedisManager interface {
 type MongoManager interface {
 	CreateCar(c context.Context, plateNum string) (*mongo.CarRecord, error)
 	GetCar(c context.Context, id id.CarID) (*mongo.CarRecord, error)
-	GetCars(c context.Context) ([]*mongo.CarRecord, error)
+	GetCars(c context.Context, limit int64) ([]*mongo.CarRecord, error)
+	DeleteCar(c context.Context, id id.CarID) error
 	UpdateCar(c context.Context, id id.CarID, status car.CarStatus, update *mongo.CarUpdate) (*mongo.CarRecord, error)
 }
 
@@ -82,7 +84,7 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (re
 // GetCars implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (resp *car.GetCarsResponse, err error) {
 	resp = new(car.GetCarsResponse)
-	cars, err := s.MongoManager.GetCars(ctx)
+	cars, err := s.MongoManager.GetCars(ctx, -1)
 	if err != nil {
 		klog.Errorf("cannot get cars: %s", err.Error())
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get cars err"))
@@ -180,4 +182,95 @@ func (s *CarServiceImpl) publish(c context.Context, cr *mongo.CarRecord) {
 	if err != nil {
 		klog.Warn("cannot publish", err.Error())
 	}
+}
+
+// DeleteCar implements the CarServiceImpl interface.
+func (s *CarServiceImpl) DeleteCar(ctx context.Context, req *car.DeleteCarRequest) (resp *car.DeleteCarResponse, err error) {
+	resp = new(car.DeleteCarResponse)
+	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
+		klog.Error("remove cache error")
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
+		return resp, nil
+	}
+	err = s.MongoManager.DeleteCar(ctx, id.CarID(req.Id))
+	if err != nil {
+		if err == errno.RecordNotFound {
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+		} else {
+			klog.Errorf("delete car err", err)
+			resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("delete car err"))
+		}
+		return resp, nil
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// AdminUpdateCar implements the CarServiceImpl interface.
+func (s *CarServiceImpl) AdminUpdateCar(ctx context.Context, req *car.AdminUpdateCarRequest) (resp *car.AdminUpdateCarResponse, err error) {
+	resp = new(car.AdminUpdateCarResponse)
+	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
+		klog.Error("remove cache error")
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
+		return resp, nil
+	}
+
+	update := &mongo.CarUpdate{
+		Status:   req.Car.Status,
+		Position: req.Car.Position,
+		Driver:   req.Car.Driver,
+		Power:    req.Car.Power,
+		TripID:   id.TripID(req.Car.TripId),
+		PlateNum: req.Car.PlateNum,
+	}
+	if req.Car.TripId != "" {
+		update.UpdateTripID = true
+	}
+	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_CS_NOT_SPECIFIED, update)
+	if err != nil {
+		klog.Error("update car err")
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car err"))
+		return resp, nil
+	}
+	s.publish(ctx, cr)
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// GetSomeCars implements the CarServiceImpl interface.
+func (s *CarServiceImpl) GetSomeCars(ctx context.Context, req *car.GetSomeCarsRequest) (resp *car.GetSomeCarsResponse, err error) {
+	resp = new(car.GetSomeCarsResponse)
+	cars, err := s.MongoManager.GetCars(ctx, consts.LimitOfSomeCars)
+	if err != nil {
+		klog.Errorf("cannot get cars: %s", err.Error())
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get some cars err"))
+		return resp, nil
+	}
+	for _, cr := range cars {
+		resp.Cars = append(resp.Cars, &car.CarEntity{
+			Id:  cr.ID.Hex(),
+			Car: cr.Car,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
+}
+
+// GetAllCars implements the CarServiceImpl interface.
+func (s *CarServiceImpl) GetAllCars(ctx context.Context, req *car.GetAllCarsRequest) (resp *car.GetAllCarsResponse, err error) {
+	resp = new(car.GetAllCarsResponse)
+	cars, err := s.MongoManager.GetCars(ctx, -1)
+	if err != nil {
+		klog.Errorf("cannot get cars: %s", err.Error())
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get cars err"))
+		return resp, nil
+	}
+	for _, cr := range cars {
+		resp.Cars = append(resp.Cars, &car.CarEntity{
+			Id:  cr.ID.Hex(),
+			Car: cr.Car,
+		})
+	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }

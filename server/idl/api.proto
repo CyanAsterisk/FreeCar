@@ -479,6 +479,50 @@ message EClearProfilePhotoResponse {
   string message = 3;
 }
 
+message DeleteProfileRequest{
+  int64 account_id = 1;
+}
+
+message DeleteProfileResponse{
+  BaseResponse base_resp = 1;
+}
+
+message UpdateProfileRequest{
+  int64 account_id = 1;
+  Profile profile = 2;
+}
+
+message UpdateProfileResponse{
+  BaseResponse base_resp = 1;
+}
+
+message GetPendingProfileRequest{
+
+}
+
+message GetPendingProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
+message GetAllProfileRequest{
+
+}
+
+message GetAllProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
+message GetSomeProfileRequest{
+
+}
+
+message GetSomeProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/user/login";}
   rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/user/info";}
@@ -503,6 +547,14 @@ service apiService {
   rpc GetCar (GetCarRequest) returns (GetCarResponse) {option (api.get) = "/car";}
   rpc GetCars (GetCarsRequest) returns (GetCarsResponse) {option (api.get) = "/cars";}
 
+  // for back-stage management
+  rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileResponse) {option (api.delete) = "/profile";}
+  rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileResponse) {option (api.post)="/profile/update";}
+  rpc GetPendingProfile (GetPendingProfileRequest) returns (GetPendingProfileResponse) {option (api.get)="/profile/pending";}
+  rpc GetAllProfile (GetAllProfileRequest) returns (GetAllProfileResponse) {option (api.get)="/profiles/all";}
+  rpc GetSomeProfile (GetSomeProfileRequest) returns (GetSomeProfileResponse) {option (api.get)="/profiles/some";}
+
+  // for mini-program
   rpc GetProfile (GetProfileRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/profile";}
   rpc SubmitProfile (SubmitProfileRequest) returns (SubmitProfileResponse) {option (api.post) = "/profile";}
   rpc ClearProfile (ClearProfileRequest) returns (ClearProfileResponse) {option (api.delete) = "/profile";}

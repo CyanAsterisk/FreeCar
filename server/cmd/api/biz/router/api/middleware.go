@@ -239,3 +239,38 @@ func _getsomecarsMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _profile0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _completeprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updateprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _profilesMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _get_llprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getsomeprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getpendingprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

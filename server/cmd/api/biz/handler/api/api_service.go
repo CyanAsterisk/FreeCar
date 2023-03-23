@@ -707,3 +707,104 @@ func GetAllCars(ctx context.Context, c *app.RequestContext) {
 	}
 	errno.SendResponse(c, errno.Success, resp)
 }
+
+// DeleteProfile .
+// @router /profile [DELETE]
+func DeleteProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.DeleteProfile(ctx, &profile.DeleteProfileRequest{AccountId: req.AccountId})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+	return
+}
+
+// UpdateProfile .
+// @router /profile/update [POST]
+func UpdateProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.UpdateProfile(ctx, &profile.UpdateProfileRequest{
+		AccountId: req.AccountId,
+		Profile: &profile.Profile{
+			Identity: &profile.Identity{
+				LicNumber:       req.Profile.Identity.LicNumber,
+				Name:            req.Profile.Identity.Name,
+				Gender:          profile.Gender(req.Profile.Identity.Gender),
+				BirthDateMillis: req.Profile.Identity.BirthDateMillis,
+			},
+			IdentityStatus: profile.IdentityStatus(req.Profile.IdentityStatus),
+		},
+	})
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllProfile .
+// @router /profiles/all [GET]
+func GetAllProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, err)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.GetAllProfile(ctx, &profile.GetAllProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeProfile .
+// @router /profiles/some [GET]
+func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, err)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.GetSomeProfile(ctx, &profile.GetSomeProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetPendingProfile .
+// @router /profile/pending [GET]
+func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetPendingProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalProfileClient.GetPendingProfile(ctx, &profile.GetPendingProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ServiceErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}

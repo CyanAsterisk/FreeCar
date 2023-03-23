@@ -44,6 +44,15 @@ func Register(r *server.Hertz) {
 	_profile.GET("/photo", append(_photoMw(), api.GetProfilePhoto)...)
 	_photo := _profile.Group("/photo", _photoMw()...)
 	_photo.POST("/complete", append(_completeprofilephotoMw(), api.CompleteProfilePhoto)...)
+	root.DELETE("/profile", append(_profile0Mw(), api.DeleteProfile)...)
+	_profile0 := root.Group("/profile", _profile0Mw()...)
+	_profile0.GET("/pending", append(_getpendingprofileMw(), api.GetPendingProfile)...)
+	_profile0.POST("/update", append(_updateprofileMw(), api.UpdateProfile)...)
+	{
+		_profiles := root.Group("/profiles", _profilesMw()...)
+		_profiles.GET("/all", append(_get_llprofileMw(), api.GetAllProfile)...)
+		_profiles.GET("/some", append(_getsomeprofileMw(), api.GetSomeProfile)...)
+	}
 	root.POST("/trip", append(_tripMw(), api.CreateTrip)...)
 	_trip := root.Group("/trip", _tripMw()...)
 	_trip.GET("/:id", append(_gettripMw(), api.GetTrip)...)

@@ -615,3 +615,95 @@ func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 
 	errno.SendResponse(c, errno.Success, resp)
 }
+
+// DeleteCar .
+// @router /car [DELETE]
+func DeleteCar(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteCarRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalCarClient.DeleteCar(ctx, &car.DeleteCarRequest{
+		Id: req.Id,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+
+}
+
+// UpdateCar .
+// @router /car/update [POST]
+func UpdateCar(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateCarRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.AdminUpdateCar(ctx, &car.AdminUpdateCarRequest{
+		Id: req.Id,
+		Car: &car.Car{
+			Status: car.CarStatus(req.Car.Status),
+			Driver: &car.Driver{
+				Id:        req.Car.Driver.Id,
+				AvatarUrl: req.Car.Driver.AvatarUrl,
+			},
+			Position: &car.Location{
+				Latitude:  req.Car.Position.Latitude,
+				Longitude: req.Car.Position.Longitude,
+			},
+			TripId:   req.Car.TripId,
+			Power:    float64(req.Car.Power),
+			PlateNum: req.Car.PlateNum,
+		},
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeCars .
+// @router /cars/some [GET]
+func GetSomeCars(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeCarsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.GetSomeCars(ctx, &car.GetSomeCarsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllCars .
+// @router /cars/all [GET]
+func GetAllCars(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllCarsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.GetAllCars(ctx, &car.GetAllCarsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}

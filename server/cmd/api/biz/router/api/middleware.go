@@ -209,3 +209,33 @@ func _user0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _deletecarMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _carMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatecarMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _carsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _get_llcarsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getsomecarsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

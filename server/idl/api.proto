@@ -198,7 +198,7 @@ enum CarStatus {
 }
 
 message Driver {
-  string id = 1;
+  int64 id = 1;
   string avatar_url = 2[(api.body) = "avatar_url"];
 }
 
@@ -230,9 +230,43 @@ message CreateCarResponse{
   CarEntity car_entity = 2;
 }
 
+message DeleteCarRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+}
+
+message DeleteCarResponse{
+  BaseResponse base_resp = 1;
+}
+
+message UpdateCarRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+  Car car = 2;
+}
+
+message UpdateCarResponse{
+  BaseResponse base_resp = 1;
+}
+
+message GetAllCarsRequest{
+}
+
+message GetAllCarsResponse{
+  BaseResponse base_resp = 1;
+  repeated CarEntity cars = 2;
+}
+
+message GetSomeCarsRequest{
+}
+
+message GetSomeCarsResponse{
+  BaseResponse base_resp = 1;
+  repeated CarEntity cars = 2;
+}
+
 message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
 }
+
 message GetCarResponse{
   BaseResponse base_resp = 1;
   Car car = 2;
@@ -445,6 +479,86 @@ message EClearProfilePhotoResponse {
   string message = 3;
 }
 
+message DeleteProfileRequest{
+  int64 account_id = 1;
+}
+
+message DeleteProfileResponse{
+  BaseResponse base_resp = 1;
+}
+
+message UpdateProfileRequest{
+  int64 account_id = 1;
+  Profile profile = 2;
+}
+
+message UpdateProfileResponse{
+  BaseResponse base_resp = 1;
+}
+
+message GetPendingProfileRequest{
+
+}
+
+message GetPendingProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
+message GetAllProfileRequest{
+
+}
+
+message GetAllProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
+message GetSomeProfileRequest{
+
+}
+
+message GetSomeProfileResponse{
+  BaseResponse base_resp = 1;
+  repeated Profile profile = 2;
+}
+
+message GetAllTripsRequest{
+
+}
+
+message GetAllTripsResponse{
+  BaseResponse base_resp = 1;
+  repeated TripEntity trips = 2;
+}
+
+message GetSomeTripsRequest{
+
+}
+
+message GetSomeTripsResponse{
+  BaseResponse base_resp = 1;
+  repeated TripEntity trips = 2;
+}
+
+message EditTripRequest{
+  TripEntity trip_entity = 1;
+}
+
+message EditTripResponse{
+  BaseResponse base_resp = 1;
+}
+
+
+message DeleteTripRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+}
+
+message DeleteTripResponse{
+  BaseResponse base_resp = 1;
+}
+
+
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/user/login";}
   rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/user/info";}
@@ -458,10 +572,25 @@ service apiService {
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}
 
+  // for back-stage management
   rpc CreateCar (CreateCarRequest) returns (CreateCarResponse) {option (api.post) = "/car";}
+  rpc DeleteCar (DeleteCarRequest) returns (DeleteCarResponse) {option (api.delete) = "/car";}
+  rpc UpdateCar (UpdateCarRequest) returns (UpdateCarResponse) {option (api.post)="/car/update";}
+  rpc GetSomeCars (GetSomeCarsRequest) returns (GetSomeCarsResponse) {option (api.get)="/cars/some";}
+  rpc GetAllCars (GetAllCarsRequest) returns (GetAllCarsResponse) {option (api.get)="/cars/all";}
+
+  // for mini-program
   rpc GetCar (GetCarRequest) returns (GetCarResponse) {option (api.get) = "/car";}
   rpc GetCars (GetCarsRequest) returns (GetCarsResponse) {option (api.get) = "/cars";}
 
+  // for back-stage management
+  rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileResponse) {option (api.delete) = "/profile";}
+  rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileResponse) {option (api.post)="/profile/update";}
+  rpc GetPendingProfile (GetPendingProfileRequest) returns (GetPendingProfileResponse) {option (api.get)="/profile/pending";}
+  rpc GetAllProfile (GetAllProfileRequest) returns (GetAllProfileResponse) {option (api.get)="/profiles/all";}
+  rpc GetSomeProfile (GetSomeProfileRequest) returns (GetSomeProfileResponse) {option (api.get)="/profiles/some";}
+
+  // for mini-program
   rpc GetProfile (GetProfileRequest) returns (GetProfilePhotoResponse) {option (api.get) = "/profile";}
   rpc SubmitProfile (SubmitProfileRequest) returns (SubmitProfileResponse) {option (api.post) = "/profile";}
   rpc ClearProfile (ClearProfileRequest) returns (ClearProfileResponse) {option (api.delete) = "/profile";}
@@ -470,6 +599,13 @@ service apiService {
   rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/profile/photo";}
   rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (CompleteProfilePhotoResponse) {option (api.post) = "/profile/photo/complete";}
   rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/profile/photo";}
+
+  // for back-stage management
+  rpc GetAllTrips (GetAllTripsRequest) returns (GetAllTripsResponse) {option (api.get)="/trips/all";}
+  rpc GetSomeTrips (GetSomeTripsRequest) returns (GetSomeTripsResponse) {option (api.get)="/trips/some";}
+  rpc EditTrip (EditTripRequest) returns (EditTripResponse) {option (api.post) = "/trip/edit";}
+  rpc DeleteTrip (DeleteTripRequest) returns (DeleteTripResponse) {option (api.delete) = "/trip";}
+
 
   rpc CreateTrip (CreateTripRequest) returns (CreateTripResponse) {option (api.post) = "/trip";}
   rpc GetTrip(GetTripRequest) returns (GetTripResponse) {option (api.get) = "/trip/:id";}

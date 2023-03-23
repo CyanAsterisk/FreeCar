@@ -83,13 +83,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "todo_force_verify",
 			op: func() string {
-				p := &profile.Profile{
-					Identity: &profile.Identity{
-						Name: "abc",
-					},
-					IdentityStatus: profile.IdentityStatus_VERIFIED,
-				}
-				err = s.UpdateProfile(c, aid, profile.IdentityStatus_PENDING, p)
+				_, err := s.UpdateProfile(c, &profile.UpdateProfileRequest{})
 				return fmt.Sprintf("[err = %+v]", err)
 			},
 			want: "[err = <nil>]",

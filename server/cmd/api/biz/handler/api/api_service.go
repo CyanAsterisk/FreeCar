@@ -8,6 +8,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -613,5 +614,280 @@ func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// DeleteCar .
+// @router /car [DELETE]
+func DeleteCar(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteCarRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalCarClient.DeleteCar(ctx, &car.DeleteCarRequest{
+		Id: req.Id,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+
+}
+
+// UpdateCar .
+// @router /car/update [POST]
+func UpdateCar(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateCarRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.AdminUpdateCar(ctx, &car.AdminUpdateCarRequest{
+		Id: req.Id,
+		Car: &car.Car{
+			Status: car.CarStatus(req.Car.Status),
+			Driver: &car.Driver{
+				Id:        req.Car.Driver.Id,
+				AvatarUrl: req.Car.Driver.AvatarUrl,
+			},
+			Position: &car.Location{
+				Latitude:  req.Car.Position.Latitude,
+				Longitude: req.Car.Position.Longitude,
+			},
+			TripId:   req.Car.TripId,
+			Power:    float64(req.Car.Power),
+			PlateNum: req.Car.PlateNum,
+		},
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeCars .
+// @router /cars/some [GET]
+func GetSomeCars(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeCarsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.GetSomeCars(ctx, &car.GetSomeCarsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllCars .
+// @router /cars/all [GET]
+func GetAllCars(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllCarsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalCarClient.GetAllCars(ctx, &car.GetAllCarsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// DeleteProfile .
+// @router /profile [DELETE]
+func DeleteProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.DeleteProfile(ctx, &profile.DeleteProfileRequest{AccountId: req.AccountId})
+	if err != nil {
+		errno.SendResponse(c, errno.CarSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+	return
+}
+
+// UpdateProfile .
+// @router /profile/update [POST]
+func UpdateProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.UpdateProfile(ctx, &profile.UpdateProfileRequest{
+		AccountId: req.AccountId,
+		Profile: &profile.Profile{
+			Identity: &profile.Identity{
+				LicNumber:       req.Profile.Identity.LicNumber,
+				Name:            req.Profile.Identity.Name,
+				Gender:          profile.Gender(req.Profile.Identity.Gender),
+				BirthDateMillis: req.Profile.Identity.BirthDateMillis,
+			},
+			IdentityStatus: profile.IdentityStatus(req.Profile.IdentityStatus),
+		},
+	})
+
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllProfile .
+// @router /profiles/all [GET]
+func GetAllProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, err)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.GetAllProfile(ctx, &profile.GetAllProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeProfile .
+// @router /profiles/some [GET]
+func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, err)
+		return
+	}
+
+	resp, err := config.GlobalProfileClient.GetSomeProfile(ctx, &profile.GetSomeProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetPendingProfile .
+// @router /profile/pending [GET]
+func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetPendingProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalProfileClient.GetPendingProfile(ctx, &profile.GetPendingProfileRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.ServiceErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllTrips .
+// @router /trips/all [GET]
+func GetAllTrips(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllTripsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.GetAllTrips(ctx, &trip.GetAllTripsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeTrips .
+// @router /trips/some [GET]
+func GetSomeTrips(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeTripsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalTripClient.GetSomeTrips(ctx, &trip.GetSomeTripsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// EditTrip .
+// @router /trip/edit [POST]
+func EditTrip(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.EditTripRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.EditTrip(ctx, &trip.EditTripRequest{TripEntity: &trip.TripEntity{
+		Id: req.TripEntity.Id,
+		Trip: &trip.Trip{
+			AccountId:  req.TripEntity.Trip.AccountId,
+			CarId:      req.TripEntity.Trip.CarId,
+			Start:      pkg.ConvertLocationStatus(req.TripEntity.Trip.Start),
+			Current:    pkg.ConvertLocationStatus(req.TripEntity.Trip.Current),
+			End:        pkg.ConvertLocationStatus(req.TripEntity.Trip.End),
+			Status:     trip.TripStatus(req.TripEntity.Trip.Status),
+			IdentityId: req.TripEntity.Trip.IdentityId,
+		},
+	}})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// DeleteTrip .
+// @router /trip [DELETE]
+func DeleteTrip(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteTripRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.DeleteTrip(ctx, &trip.DeleteTripRequest{Id: req.Id})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+		return
+	}
 	errno.SendResponse(c, errno.Success, resp)
 }

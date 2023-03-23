@@ -274,3 +274,33 @@ func _getpendingprofileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _trip0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _trip1Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _edittripMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _get_lltripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getsometripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

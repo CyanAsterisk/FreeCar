@@ -523,6 +523,42 @@ message GetSomeProfileResponse{
   repeated Profile profile = 2;
 }
 
+message GetAllTripsRequest{
+
+}
+
+message GetAllTripsResponse{
+  BaseResponse base_resp = 1;
+  repeated TripEntity trips = 2;
+}
+
+message GetSomeTripsRequest{
+
+}
+
+message GetSomeTripsResponse{
+  BaseResponse base_resp = 1;
+  repeated TripEntity trips = 2;
+}
+
+message EditTripRequest{
+  TripEntity trip_entity = 1;
+}
+
+message EditTripResponse{
+  BaseResponse base_resp = 1;
+}
+
+
+message DeleteTripRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+}
+
+message DeleteTripResponse{
+  BaseResponse base_resp = 1;
+}
+
+
 service apiService {
   rpc Login (LoginRequest) returns (LoginResponse) {option (api.post) = "/user/login";}
   rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse) {option (api.get) = "/user/info";}
@@ -563,6 +599,13 @@ service apiService {
   rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {option (api.post) = "/profile/photo";}
   rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (CompleteProfilePhotoResponse) {option (api.post) = "/profile/photo/complete";}
   rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {option (api.delete) = "/profile/photo";}
+
+  // for back-stage management
+  rpc GetAllTrips (GetAllTripsRequest) returns (GetAllTripsResponse) {option (api.get)="/trips/all";}
+  rpc GetSomeTrips (GetSomeTripsRequest) returns (GetSomeTripsResponse) {option (api.get)="/trips/some";}
+  rpc EditTrip (EditTripRequest) returns (EditTripResponse) {option (api.post) = "/trip/edit";}
+  rpc DeleteTrip (DeleteTripRequest) returns (DeleteTripResponse) {option (api.delete) = "/trip";}
+
 
   rpc CreateTrip (CreateTripRequest) returns (CreateTripResponse) {option (api.post) = "/trip";}
   rpc GetTrip(GetTripRequest) returns (GetTripResponse) {option (api.get) = "/trip/:id";}

@@ -17,17 +17,25 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
-	root.POST("/car", append(_createcarMw(), api.CreateCar)...)
 	root.GET("/car", append(_getcarMw(), api.GetCar)...)
+	root.DELETE("/car", append(_deletecarMw(), api.DeleteCar)...)
 	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
-	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
+	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	root.DELETE("/user", append(_deleteuserMw(), api.DeleteUser)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)
 		_admin.POST("/login", append(__dminloginMw(), api.AdminLogin)...)
 		_admin.POST("/password", append(_change_dminpasswordMw(), api.ChangeAdminPassword)...)
+	}
+	root.POST("/car", append(_carMw(), api.CreateCar)...)
+	_car := root.Group("/car", _carMw()...)
+	_car.POST("/update", append(_updatecarMw(), api.UpdateCar)...)
+	{
+		_cars := root.Group("/cars", _carsMw()...)
+		_cars.GET("/all", append(_get_llcarsMw(), api.GetAllCars)...)
+		_cars.GET("/some", append(_getsomecarsMw(), api.GetSomeCars)...)
 	}
 	root.GET("/profile", append(_profileMw(), api.GetProfile)...)
 	_profile := root.Group("/profile", _profileMw()...)

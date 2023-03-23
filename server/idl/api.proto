@@ -198,7 +198,7 @@ enum CarStatus {
 }
 
 message Driver {
-  string id = 1;
+  int64 id = 1;
   string avatar_url = 2[(api.body) = "avatar_url"];
 }
 
@@ -230,9 +230,43 @@ message CreateCarResponse{
   CarEntity car_entity = 2;
 }
 
+message DeleteCarRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+}
+
+message DeleteCarResponse{
+  BaseResponse base_resp = 1;
+}
+
+message UpdateCarRequest{
+  string id = 1[(api.vd) = "len($) > 0"];
+  Car car = 2;
+}
+
+message UpdateCarResponse{
+  BaseResponse base_resp = 1;
+}
+
+message GetAllCarsRequest{
+}
+
+message GetAllCarsResponse{
+  BaseResponse base_resp = 1;
+  repeated CarEntity cars = 2;
+}
+
+message GetSomeCarsRequest{
+}
+
+message GetSomeCarsResponse{
+  BaseResponse base_resp = 1;
+  repeated CarEntity cars = 2;
+}
+
 message GetCarRequest {
   string id = 1[(api.vd) = "len($) > 0"];
 }
+
 message GetCarResponse{
   BaseResponse base_resp = 1;
   Car car = 2;
@@ -458,7 +492,14 @@ service apiService {
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {option (api.post) = "/admin/login";}
   rpc ChangeAdminPassword (ChangeAdminPasswordRequest) returns (ChangeAdminPasswordResponse) {option (api.post) = "/admin/password";}
 
+  // for back-stage management
   rpc CreateCar (CreateCarRequest) returns (CreateCarResponse) {option (api.post) = "/car";}
+  rpc DeleteCar (DeleteCarRequest) returns (DeleteCarResponse) {option (api.delete) = "/car";}
+  rpc UpdateCar (UpdateCarRequest) returns (UpdateCarResponse) {option (api.post)="/car/update";}
+  rpc GetSomeCars (GetSomeCarsRequest) returns (GetSomeCarsResponse) {option (api.get)="/cars/some";}
+  rpc GetAllCars (GetAllCarsRequest) returns (GetAllCarsResponse) {option (api.get)="/cars/all";}
+
+  // for mini-program
   rpc GetCar (GetCarRequest) returns (GetCarResponse) {option (api.get) = "/car";}
   rpc GetCars (GetCarsRequest) returns (GetCarsResponse) {option (api.get) = "/cars";}
 

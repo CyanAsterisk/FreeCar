@@ -17,11 +17,14 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
-	root.GET("/car", append(_getcarMw(), api.GetCar)...)
 	root.DELETE("/car", append(_deletecarMw(), api.DeleteCar)...)
+	root.GET("/car", append(_getcarMw(), api.GetCar)...)
 	root.GET("/cars", append(_getcarsMw(), api.GetCars)...)
-	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
 	root.POST("/profile", append(_submitprofileMw(), api.SubmitProfile)...)
+	root.DELETE("/profile", append(_clearprofileMw(), api.ClearProfile)...)
+	root.POST("/trip", append(_tripMw(), api.CreateTrip)...)
+	_trip := root.Group("/trip", _tripMw()...)
+	_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
 	root.DELETE("/user", append(_deleteuserMw(), api.DeleteUser)...)
 	{
@@ -53,10 +56,18 @@ func Register(r *server.Hertz) {
 		_profiles.GET("/all", append(_get_llprofileMw(), api.GetAllProfile)...)
 		_profiles.GET("/some", append(_getsomeprofileMw(), api.GetSomeProfile)...)
 	}
-	root.POST("/trip", append(_tripMw(), api.CreateTrip)...)
-	_trip := root.Group("/trip", _tripMw()...)
-	_trip.GET("/:id", append(_gettripMw(), api.GetTrip)...)
-	_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
+	root.DELETE("/trip", append(_trip0Mw(), api.DeleteTrip)...)
+	_trip0 := root.Group("/trip", _trip0Mw()...)
+	_trip0.GET("/:id", append(_gettripMw(), api.GetTrip)...)
+	{
+		_trip1 := root.Group("/trip", _trip1Mw()...)
+		_trip1.POST("/edit", append(_edittripMw(), api.EditTrip)...)
+	}
+	{
+		_trips := root.Group("/trips", _tripsMw()...)
+		_trips.GET("/all", append(_get_lltripsMw(), api.GetAllTrips)...)
+		_trips.GET("/some", append(_getsometripsMw(), api.GetSomeTrips)...)
+	}
 	root.POST("/user", append(_userMw(), api.AddUser)...)
 	_user := root.Group("/user", _userMw()...)
 	_user.GET("/all", append(_get_llusersMw(), api.GetAllUsers)...)

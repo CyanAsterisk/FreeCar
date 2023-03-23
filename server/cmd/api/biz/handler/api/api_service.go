@@ -8,6 +8,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -804,6 +805,88 @@ func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
 	resp, err := config.GlobalProfileClient.GetPendingProfile(ctx, &profile.GetPendingProfileRequest{})
 	if err != nil {
 		errno.SendResponse(c, errno.ServiceErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetAllTrips .
+// @router /trips/all [GET]
+func GetAllTrips(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetAllTripsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.GetAllTrips(ctx, &trip.GetAllTripsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// GetSomeTrips .
+// @router /trips/some [GET]
+func GetSomeTrips(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.GetSomeTripsRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	resp, err := config.GlobalTripClient.GetSomeTrips(ctx, &trip.GetSomeTripsRequest{})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// EditTrip .
+// @router /trip/edit [POST]
+func EditTrip(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.EditTripRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.EditTrip(ctx, &trip.EditTripRequest{TripEntity: &trip.TripEntity{
+		Id: req.TripEntity.Id,
+		Trip: &trip.Trip{
+			AccountId:  req.TripEntity.Trip.AccountId,
+			CarId:      req.TripEntity.Trip.CarId,
+			Start:      pkg.ConvertLocationStatus(req.TripEntity.Trip.Start),
+			Current:    pkg.ConvertLocationStatus(req.TripEntity.Trip.Current),
+			End:        pkg.ConvertLocationStatus(req.TripEntity.Trip.End),
+			Status:     trip.TripStatus(req.TripEntity.Trip.Status),
+			IdentityId: req.TripEntity.Trip.IdentityId,
+		},
+	}})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+}
+
+// DeleteTrip .
+// @router /trip [DELETE]
+func DeleteTrip(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.DeleteTripRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalTripClient.DeleteTrip(ctx, &trip.DeleteTripRequest{Id: req.Id})
+	if err != nil {
+		errno.SendResponse(c, errno.TripSrvErr, nil)
 		return
 	}
 	errno.SendResponse(c, errno.Success, resp)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
+	"math"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -232,7 +233,7 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 // GetAllProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.GetAllProfileRequest) (resp *profile.GetAllProfileResponse, err error) {
 	resp = new(profile.GetAllProfileResponse)
-	prs, err := s.MongoManager.GetProfiles(ctx, -1)
+	prs, err := s.MongoManager.GetProfiles(ctx, math.MaxInt64)
 	if err != nil {
 		if err == errno.RecordNotFound {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)

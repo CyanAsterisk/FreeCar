@@ -228,13 +228,15 @@ func _profile0Mw() []app.HandlerFunc {
 }
 
 func _getpendingprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _updateprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _profilesMw() []app.HandlerFunc {

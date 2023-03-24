@@ -715,33 +715,6 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 	return
 }
 
-// UpdateProfile .
-// @router /profile/update [POST]
-func UpdateProfile(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req api.UpdateProfileRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
-		return
-	}
-
-	resp, err := config.GlobalProfileClient.UpdateProfile(ctx, &profile.UpdateProfileRequest{
-		AccountId: req.AccountId,
-		Profile: &profile.Profile{
-			Identity: &profile.Identity{
-				LicNumber:       req.Profile.Identity.LicNumber,
-				Name:            req.Profile.Identity.Name,
-				Gender:          profile.Gender(req.Profile.Identity.Gender),
-				BirthDateMillis: req.Profile.Identity.BirthDateMillis,
-			},
-			IdentityStatus: profile.IdentityStatus(req.Profile.IdentityStatus),
-		},
-	})
-
-	errno.SendResponse(c, errno.Success, resp)
-}
-
 // GetAllProfile .
 // @router /profiles/all [GET]
 func GetAllProfile(ctx context.Context, c *app.RequestContext) {
@@ -847,4 +820,26 @@ func DeleteTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	errno.SendResponse(c, errno.Success, resp)
+}
+
+// CheckProfile .
+// @router /profile/check [POST]
+func CheckProfile(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.CheckProfileRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+	resp, err := config.GlobalProfileClient.CheckProfile(ctx, &profile.CheckProfileRequest{
+		AccountId: req.AccountId,
+		Accept:    req.Accept,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, resp)
+	return
 }

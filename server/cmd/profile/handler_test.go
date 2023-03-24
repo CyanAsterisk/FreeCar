@@ -81,14 +81,6 @@ func TestProfileLifeCycle(t *testing.T) {
 			want: "[err = err_code=80001, err_msg=record already exist][resp = <nil>]",
 		},
 		{
-			name: "todo_force_verify",
-			op: func() string {
-				_, err := s.UpdateProfile(c, &profile.UpdateProfileRequest{})
-				return fmt.Sprintf("[err = %+v]", err)
-			},
-			want: "[err = <nil>]",
-		},
-		{
 			name: "clear",
 			op: func() string {
 				resp, err := s.ClearProfile(c, &profile.ClearProfileRequest{})

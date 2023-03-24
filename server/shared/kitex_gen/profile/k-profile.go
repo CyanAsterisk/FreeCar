@@ -1827,7 +1827,7 @@ func (p *GetPendingProfileResponse) field2Length() int {
 	return l
 }
 
-func (p *UpdateProfileRequest) FastRead(buf []byte) (int, error) {
+func (p *CheckProfileRequest) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -1864,7 +1864,7 @@ func (p *UpdateProfileRequest) FastRead(buf []byte) (int, error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRUCT {
+			if fieldTypeId == thrift.BOOL {
 				l, err = p.FastReadField2(buf[offset:])
 				offset += l
 				if err != nil {
@@ -1903,7 +1903,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UpdateProfileRequest[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CheckProfileRequest[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -1912,7 +1912,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UpdateProfileRequest) FastReadField1(buf []byte) (int, error) {
+func (p *CheckProfileRequest) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
 	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
@@ -1926,27 +1926,28 @@ func (p *UpdateProfileRequest) FastReadField1(buf []byte) (int, error) {
 	return offset, nil
 }
 
-func (p *UpdateProfileRequest) FastReadField2(buf []byte) (int, error) {
+func (p *CheckProfileRequest) FastReadField2(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewProfile()
-	if l, err := tmp.FastRead(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadBool(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
+
+		p.Accept = v
+
 	}
-	p.Profile = tmp
 	return offset, nil
 }
 
 // for compatibility
-func (p *UpdateProfileRequest) FastWrite(buf []byte) int {
+func (p *CheckProfileRequest) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UpdateProfileRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *CheckProfileRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateProfileRequest")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "CheckProfileRequest")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 		offset += p.fastWriteField2(buf[offset:], binaryWriter)
@@ -1956,9 +1957,9 @@ func (p *UpdateProfileRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.
 	return offset
 }
 
-func (p *UpdateProfileRequest) BLength() int {
+func (p *CheckProfileRequest) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UpdateProfileRequest")
+	l += bthrift.Binary.StructBeginLength("CheckProfileRequest")
 	if p != nil {
 		l += p.field1Length()
 		l += p.field2Length()
@@ -1968,7 +1969,7 @@ func (p *UpdateProfileRequest) BLength() int {
 	return l
 }
 
-func (p *UpdateProfileRequest) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *CheckProfileRequest) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "account_id", thrift.I64, 1)
 	offset += bthrift.Binary.WriteI64(buf[offset:], p.AccountId)
@@ -1977,15 +1978,16 @@ func (p *UpdateProfileRequest) fastWriteField1(buf []byte, binaryWriter bthrift.
 	return offset
 }
 
-func (p *UpdateProfileRequest) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *CheckProfileRequest) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "profile", thrift.STRUCT, 2)
-	offset += p.Profile.FastWriteNocopy(buf[offset:], binaryWriter)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "accept", thrift.BOOL, 2)
+	offset += bthrift.Binary.WriteBool(buf[offset:], p.Accept)
+
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
 }
 
-func (p *UpdateProfileRequest) field1Length() int {
+func (p *CheckProfileRequest) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("account_id", thrift.I64, 1)
 	l += bthrift.Binary.I64Length(p.AccountId)
@@ -1994,15 +1996,16 @@ func (p *UpdateProfileRequest) field1Length() int {
 	return l
 }
 
-func (p *UpdateProfileRequest) field2Length() int {
+func (p *CheckProfileRequest) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("profile", thrift.STRUCT, 2)
-	l += p.Profile.BLength()
+	l += bthrift.Binary.FieldBeginLength("accept", thrift.BOOL, 2)
+	l += bthrift.Binary.BoolLength(p.Accept)
+
 	l += bthrift.Binary.FieldEndLength()
 	return l
 }
 
-func (p *UpdateProfileResponse) FastRead(buf []byte) (int, error) {
+func (p *CheckProfileResponse) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -2064,7 +2067,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UpdateProfileResponse[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CheckProfileResponse[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -2073,7 +2076,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UpdateProfileResponse) FastReadField1(buf []byte) (int, error) {
+func (p *CheckProfileResponse) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := base.NewBaseResponse()
@@ -2087,13 +2090,13 @@ func (p *UpdateProfileResponse) FastReadField1(buf []byte) (int, error) {
 }
 
 // for compatibility
-func (p *UpdateProfileResponse) FastWrite(buf []byte) int {
+func (p *CheckProfileResponse) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UpdateProfileResponse) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *CheckProfileResponse) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateProfileResponse")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "CheckProfileResponse")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
@@ -2102,9 +2105,9 @@ func (p *UpdateProfileResponse) FastWriteNocopy(buf []byte, binaryWriter bthrift
 	return offset
 }
 
-func (p *UpdateProfileResponse) BLength() int {
+func (p *CheckProfileResponse) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UpdateProfileResponse")
+	l += bthrift.Binary.StructBeginLength("CheckProfileResponse")
 	if p != nil {
 		l += p.field1Length()
 	}
@@ -2113,7 +2116,7 @@ func (p *UpdateProfileResponse) BLength() int {
 	return l
 }
 
-func (p *UpdateProfileResponse) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *CheckProfileResponse) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "base_resp", thrift.STRUCT, 1)
 	offset += p.BaseResp.FastWriteNocopy(buf[offset:], binaryWriter)
@@ -2121,7 +2124,7 @@ func (p *UpdateProfileResponse) fastWriteField1(buf []byte, binaryWriter bthrift
 	return offset
 }
 
-func (p *UpdateProfileResponse) field1Length() int {
+func (p *CheckProfileResponse) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("base_resp", thrift.STRUCT, 1)
 	l += p.BaseResp.BLength()
@@ -5752,7 +5755,7 @@ func (p *ProfileServiceGetPendingProfileResult) field0Length() int {
 	return l
 }
 
-func (p *ProfileServiceUpdateProfileArgs) FastRead(buf []byte) (int, error) {
+func (p *ProfileServiceCheckProfileArgs) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -5814,7 +5817,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ProfileServiceUpdateProfileArgs[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ProfileServiceCheckProfileArgs[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -5823,10 +5826,10 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ProfileServiceUpdateProfileArgs) FastReadField1(buf []byte) (int, error) {
+func (p *ProfileServiceCheckProfileArgs) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewUpdateProfileRequest()
+	tmp := NewCheckProfileRequest()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
@@ -5837,13 +5840,13 @@ func (p *ProfileServiceUpdateProfileArgs) FastReadField1(buf []byte) (int, error
 }
 
 // for compatibility
-func (p *ProfileServiceUpdateProfileArgs) FastWrite(buf []byte) int {
+func (p *ProfileServiceCheckProfileArgs) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *ProfileServiceUpdateProfileArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ProfileServiceCheckProfileArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateProfile_args")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "CheckProfile_args")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
@@ -5852,9 +5855,9 @@ func (p *ProfileServiceUpdateProfileArgs) FastWriteNocopy(buf []byte, binaryWrit
 	return offset
 }
 
-func (p *ProfileServiceUpdateProfileArgs) BLength() int {
+func (p *ProfileServiceCheckProfileArgs) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UpdateProfile_args")
+	l += bthrift.Binary.StructBeginLength("CheckProfile_args")
 	if p != nil {
 		l += p.field1Length()
 	}
@@ -5863,7 +5866,7 @@ func (p *ProfileServiceUpdateProfileArgs) BLength() int {
 	return l
 }
 
-func (p *ProfileServiceUpdateProfileArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ProfileServiceCheckProfileArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "req", thrift.STRUCT, 1)
 	offset += p.Req.FastWriteNocopy(buf[offset:], binaryWriter)
@@ -5871,7 +5874,7 @@ func (p *ProfileServiceUpdateProfileArgs) fastWriteField1(buf []byte, binaryWrit
 	return offset
 }
 
-func (p *ProfileServiceUpdateProfileArgs) field1Length() int {
+func (p *ProfileServiceCheckProfileArgs) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("req", thrift.STRUCT, 1)
 	l += p.Req.BLength()
@@ -5879,7 +5882,7 @@ func (p *ProfileServiceUpdateProfileArgs) field1Length() int {
 	return l
 }
 
-func (p *ProfileServiceUpdateProfileResult) FastRead(buf []byte) (int, error) {
+func (p *ProfileServiceCheckProfileResult) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -5941,7 +5944,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ProfileServiceUpdateProfileResult[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ProfileServiceCheckProfileResult[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -5950,10 +5953,10 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ProfileServiceUpdateProfileResult) FastReadField0(buf []byte) (int, error) {
+func (p *ProfileServiceCheckProfileResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := NewUpdateProfileResponse()
+	tmp := NewCheckProfileResponse()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
@@ -5964,13 +5967,13 @@ func (p *ProfileServiceUpdateProfileResult) FastReadField0(buf []byte) (int, err
 }
 
 // for compatibility
-func (p *ProfileServiceUpdateProfileResult) FastWrite(buf []byte) int {
+func (p *ProfileServiceCheckProfileResult) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *ProfileServiceUpdateProfileResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ProfileServiceCheckProfileResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UpdateProfile_result")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "CheckProfile_result")
 	if p != nil {
 		offset += p.fastWriteField0(buf[offset:], binaryWriter)
 	}
@@ -5979,9 +5982,9 @@ func (p *ProfileServiceUpdateProfileResult) FastWriteNocopy(buf []byte, binaryWr
 	return offset
 }
 
-func (p *ProfileServiceUpdateProfileResult) BLength() int {
+func (p *ProfileServiceCheckProfileResult) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UpdateProfile_result")
+	l += bthrift.Binary.StructBeginLength("CheckProfile_result")
 	if p != nil {
 		l += p.field0Length()
 	}
@@ -5990,7 +5993,7 @@ func (p *ProfileServiceUpdateProfileResult) BLength() int {
 	return l
 }
 
-func (p *ProfileServiceUpdateProfileResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *ProfileServiceCheckProfileResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	if p.IsSetSuccess() {
 		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "success", thrift.STRUCT, 0)
@@ -6000,7 +6003,7 @@ func (p *ProfileServiceUpdateProfileResult) fastWriteField0(buf []byte, binaryWr
 	return offset
 }
 
-func (p *ProfileServiceUpdateProfileResult) field0Length() int {
+func (p *ProfileServiceCheckProfileResult) field0Length() int {
 	l := 0
 	if p.IsSetSuccess() {
 		l += bthrift.Binary.FieldBeginLength("success", thrift.STRUCT, 0)
@@ -7348,11 +7351,11 @@ func (p *ProfileServiceGetPendingProfileResult) GetResult() interface{} {
 	return p.Success
 }
 
-func (p *ProfileServiceUpdateProfileArgs) GetFirstArgument() interface{} {
+func (p *ProfileServiceCheckProfileArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-func (p *ProfileServiceUpdateProfileResult) GetResult() interface{} {
+func (p *ProfileServiceCheckProfileResult) GetResult() interface{} {
 	return p.Success
 }
 

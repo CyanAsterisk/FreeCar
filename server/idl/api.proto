@@ -487,12 +487,12 @@ message DeleteProfileResponse{
   BaseResponse base_resp = 1;
 }
 
-message UpdateProfileRequest{
+message CheckProfileRequest{
   int64 account_id = 1;
-  Profile profile = 2;
+  bool  accept = 2;
 }
 
-message UpdateProfileResponse{
+message CheckProfileResponse{
   BaseResponse base_resp = 1;
 }
 
@@ -572,7 +572,7 @@ service apiService {
 
   // for back-stage management
   rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileResponse) {option (api.delete) = "/profile/admin";}
-  rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileResponse) {option (api.post)="/profile/update";}
+  rpc CheckProfile (CheckProfileRequest) returns (CheckProfileResponse) {option (api.post)="/profile/check";}
   rpc GetPendingProfile (GetPendingProfileRequest) returns (GetPendingProfileResponse) {option (api.get)="/profile/pending";}
   rpc GetAllProfile (GetAllProfileRequest) returns (GetAllProfileResponse) {option (api.get)="/profiles/all";}
   rpc GetSomeProfile (GetSomeProfileRequest) returns (GetSomeProfileResponse) {option (api.get)="/profiles/some";}

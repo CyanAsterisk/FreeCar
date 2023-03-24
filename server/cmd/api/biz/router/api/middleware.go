@@ -288,3 +288,9 @@ func _deleteprofileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _checkprofileMw() []app.HandlerFunc {
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
+}

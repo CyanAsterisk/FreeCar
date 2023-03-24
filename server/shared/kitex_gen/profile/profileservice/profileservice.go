@@ -25,7 +25,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"GetAllProfile":        kitex.NewMethodInfo(getAllProfileHandler, newProfileServiceGetAllProfileArgs, newProfileServiceGetAllProfileResult, false),
 		"GetSomeProfile":       kitex.NewMethodInfo(getSomeProfileHandler, newProfileServiceGetSomeProfileArgs, newProfileServiceGetSomeProfileResult, false),
 		"GetPendingProfile":    kitex.NewMethodInfo(getPendingProfileHandler, newProfileServiceGetPendingProfileArgs, newProfileServiceGetPendingProfileResult, false),
-		"UpdateProfile":        kitex.NewMethodInfo(updateProfileHandler, newProfileServiceUpdateProfileArgs, newProfileServiceUpdateProfileResult, false),
+		"CheckProfile":         kitex.NewMethodInfo(checkProfileHandler, newProfileServiceCheckProfileArgs, newProfileServiceCheckProfileResult, false),
 		"DeleteProfile":        kitex.NewMethodInfo(deleteProfileHandler, newProfileServiceDeleteProfileArgs, newProfileServiceDeleteProfileResult, false),
 		"GetProfilePhoto":      kitex.NewMethodInfo(getProfilePhotoHandler, newProfileServiceGetProfilePhotoArgs, newProfileServiceGetProfilePhotoResult, false),
 		"CreateProfilePhoto":   kitex.NewMethodInfo(createProfilePhotoHandler, newProfileServiceCreateProfilePhotoArgs, newProfileServiceCreateProfilePhotoResult, false),
@@ -154,22 +154,22 @@ func newProfileServiceGetPendingProfileResult() interface{} {
 	return profile.NewProfileServiceGetPendingProfileResult()
 }
 
-func updateProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*profile.ProfileServiceUpdateProfileArgs)
-	realResult := result.(*profile.ProfileServiceUpdateProfileResult)
-	success, err := handler.(profile.ProfileService).UpdateProfile(ctx, realArg.Req)
+func checkProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*profile.ProfileServiceCheckProfileArgs)
+	realResult := result.(*profile.ProfileServiceCheckProfileResult)
+	success, err := handler.(profile.ProfileService).CheckProfile(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newProfileServiceUpdateProfileArgs() interface{} {
-	return profile.NewProfileServiceUpdateProfileArgs()
+func newProfileServiceCheckProfileArgs() interface{} {
+	return profile.NewProfileServiceCheckProfileArgs()
 }
 
-func newProfileServiceUpdateProfileResult() interface{} {
-	return profile.NewProfileServiceUpdateProfileResult()
+func newProfileServiceCheckProfileResult() interface{} {
+	return profile.NewProfileServiceCheckProfileResult()
 }
 
 func deleteProfileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -332,11 +332,11 @@ func (p *kClient) GetPendingProfile(ctx context.Context, req *profile.GetPending
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest) (r *profile.UpdateProfileResponse, err error) {
-	var _args profile.ProfileServiceUpdateProfileArgs
+func (p *kClient) CheckProfile(ctx context.Context, req *profile.CheckProfileRequest) (r *profile.CheckProfileResponse, err error) {
+	var _args profile.ProfileServiceCheckProfileArgs
 	_args.Req = req
-	var _result profile.ProfileServiceUpdateProfileResult
-	if err = p.c.Call(ctx, "UpdateProfile", &_args, &_result); err != nil {
+	var _result profile.ProfileServiceCheckProfileResult
+	if err = p.c.Call(ctx, "CheckProfile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

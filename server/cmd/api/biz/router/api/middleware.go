@@ -299,3 +299,8 @@ func _getsometripsMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _deleteprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -29,13 +29,6 @@ func rootMw() []app.HandlerFunc {
 	}
 }
 
-func _createcarMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.Recovery(),
-		middleware.JWTAuth(),
-	}
-}
-
 func _getcarMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		middleware.Recovery(),
@@ -156,7 +149,6 @@ func _updateuserinfoMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
 	return nil
 }
 
@@ -166,21 +158,12 @@ func __dminloginMw() []app.HandlerFunc {
 }
 
 func _change_dminpasswordMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func __dduserMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _deleteuserMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _getusersMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
@@ -191,11 +174,6 @@ func _get_llusersMw() []app.HandlerFunc {
 }
 
 func _getsomeusersMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _auth0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
@@ -296,6 +274,11 @@ func _get_lltripsMw() []app.HandlerFunc {
 }
 
 func _getsometripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteprofileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

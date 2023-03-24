@@ -584,7 +584,7 @@ service apiService {
   rpc GetCars (GetCarsRequest) returns (GetCarsResponse) {option (api.get) = "/cars";}
 
   // for back-stage management
-  rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileResponse) {option (api.delete) = "/profile";}
+  rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileResponse) {option (api.delete) = "/profile/admin";}
   rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileResponse) {option (api.post)="/profile/update";}
   rpc GetPendingProfile (GetPendingProfileRequest) returns (GetPendingProfileResponse) {option (api.get)="/profile/pending";}
   rpc GetAllProfile (GetAllProfileRequest) returns (GetAllProfileResponse) {option (api.get)="/profiles/all";}

@@ -1,4 +1,4 @@
-![FreeCar](doc/FreeCar.png)
+![FreeCar](img/FreeCar.png)
 
 [English](README.md) | 中文
 
@@ -8,19 +8,19 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
 ### 调用关系
 
-![call_relations.png](doc/call_relation.png)
+![call_relations.png](img/call_relation.png)
 
 ### 技术架构
 
-![tech_arch](doc/tech_arch.png)
+![tech_arch](img/tech_arch.png)
 
 ### 服务关系
 
-![service_relations.png](doc/service_relations.png)
+![service_relations.png](img/service_relations.png)
 
 ## 页面展示
 
-![display.png](doc/display.png)
+![display.png](img/display.png)
 
 ## 目录介绍
 
@@ -55,9 +55,9 @@ make start
 >
 > 默认命名空间以及配置组等请参考各个 `config.yaml` 配置文件。
 
-![nacos.png](doc/nacos.png)
+![nacos.png](img/nacos.png)
 
-![nacos_registry.png](doc/nacos_registry.png)
+![nacos_registry.png](img/nacos_registry.png)
 
 关于配置中心的详细配置，[详见](docs/NACOS_CONFIG.md)。
 
@@ -87,13 +87,13 @@ make trip
 
 > 在浏览器上访问 `http://127.0.0.1:16686/`
 
-![jaeger.jpg](doc/jaeger.jpg)
+![jaeger.jpg](img/jaeger.jpg)
 
 ### Prometheus
 
 > 在浏览器上访问 `http://127.0.0.1:3000/`
 
-![prometheus.jpg](doc/prometheus.png)
+![prometheus.jpg](img/prometheus.png)
 
 ## API 请求
 

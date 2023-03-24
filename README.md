@@ -1,4 +1,4 @@
-![FreeCar](static/images/doc/FreeCar.png)
+![FreeCar](doc/FreeCar.png)
 
 English | [中文](README_zh.md)
 
@@ -8,19 +8,19 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 ### Call Relations
 
-![call_relations.png](static/images/doc/call_relation.png)
+![call_relations.png](doc/call_relation.png)
 
 ### Technology Architecture
 
-![tech_arch](static/images/doc/tech_arch.png)
+![tech_arch](doc/tech_arch.png)
 
 ### Service Relations
 
-![service_relations.png](static/images/doc/service_relations.png)
+![service_relations.png](doc/service_relations.png)
 
 ## Display
 
-![display.png](static/images/doc/display.png)
+![display.png](doc/display.png)
 
 ## Catalog Introduce
 
@@ -55,11 +55,11 @@ make start
 >
 > For the default namespace and configuration groups, please refer to each `config.yaml` configuration file.
 
-![nacos.png](static/images/doc/nacos.png)
+![nacos.png](doc/nacos.png)
 
-![nacos_registry.png](static/images/doc/nacos_registry.png)
+![nacos_registry.png](doc/nacos_registry.png)
 
-For details on the configuration of the configuration center, see [more](static/docs/NACOS_CONFIG.md).
+For details on the configuration of the configuration center, see [more](docs/NACOS_CONFIG.md).
 
 ### Create Data Table
 
@@ -87,17 +87,17 @@ make trip
 
 > Visit `http://127.0.0.1:16686/` on browser.
 
-![jaeger.jpg](static/images/doc/jaeger.jpg)
+![jaeger.jpg](doc/jaeger.jpg)
 
 ### Prometheus
 
 > Visit `http://127.0.0.1:3000/` on browser.
 
-![prometheus.jpg](static/images/doc/prometheus.png)
+![prometheus.jpg](doc/prometheus.png)
 
 ## API Requests
 
-Sample API request for the project, see [more](static/docs/API_REQUEST.md).
+Sample API request for the project, see [more](docs/API_REQUEST.md).
 
 ## CookBook
 

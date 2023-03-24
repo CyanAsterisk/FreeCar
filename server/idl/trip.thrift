@@ -88,14 +88,6 @@ struct DeleteTripResponse{
      1: base.BaseResponse base_resp
 }
 
-struct EditTripRequest {
-  1: TripEntity trip_entity
-}
-
-struct EditTripResponse{
-     1: base.BaseResponse base_resp
-}
-
 struct GetAllTripsRequest {}
 
 struct GetAllTripsResponse {
@@ -118,6 +110,5 @@ service TripService {
 
   GetAllTripsResponse GetAllTrips(1: GetAllTripsRequest req)
   GetSomeTripsResponse GetSomeTrips (1: GetSomeTripsRequest req)
-  EditTripResponse EditTrip (1: EditTripRequest req)
   DeleteTripResponse DeleteTrip(1: DeleteTripRequest req)
 }

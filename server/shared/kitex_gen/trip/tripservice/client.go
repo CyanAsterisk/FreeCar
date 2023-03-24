@@ -17,7 +17,6 @@ type Client interface {
 	UpdateTrip(ctx context.Context, req *trip.UpdateTripRequest, callOptions ...callopt.Option) (r *trip.UpdateTripResponse, err error)
 	GetAllTrips(ctx context.Context, req *trip.GetAllTripsRequest, callOptions ...callopt.Option) (r *trip.GetAllTripsResponse, err error)
 	GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsRequest, callOptions ...callopt.Option) (r *trip.GetSomeTripsResponse, err error)
-	EditTrip(ctx context.Context, req *trip.EditTripRequest, callOptions ...callopt.Option) (r *trip.EditTripResponse, err error)
 	DeleteTrip(ctx context.Context, req *trip.DeleteTripRequest, callOptions ...callopt.Option) (r *trip.DeleteTripResponse, err error)
 }
 
@@ -78,11 +77,6 @@ func (p *kTripServiceClient) GetAllTrips(ctx context.Context, req *trip.GetAllTr
 func (p *kTripServiceClient) GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsRequest, callOptions ...callopt.Option) (r *trip.GetSomeTripsResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetSomeTrips(ctx, req)
-}
-
-func (p *kTripServiceClient) EditTrip(ctx context.Context, req *trip.EditTripRequest, callOptions ...callopt.Option) (r *trip.EditTripResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.EditTrip(ctx, req)
 }
 
 func (p *kTripServiceClient) DeleteTrip(ctx context.Context, req *trip.DeleteTripRequest, callOptions ...callopt.Option) (r *trip.DeleteTripResponse, err error) {

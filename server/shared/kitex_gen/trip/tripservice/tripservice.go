@@ -25,7 +25,6 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"UpdateTrip":   kitex.NewMethodInfo(updateTripHandler, newTripServiceUpdateTripArgs, newTripServiceUpdateTripResult, false),
 		"GetAllTrips":  kitex.NewMethodInfo(getAllTripsHandler, newTripServiceGetAllTripsArgs, newTripServiceGetAllTripsResult, false),
 		"GetSomeTrips": kitex.NewMethodInfo(getSomeTripsHandler, newTripServiceGetSomeTripsArgs, newTripServiceGetSomeTripsResult, false),
-		"EditTrip":     kitex.NewMethodInfo(editTripHandler, newTripServiceEditTripArgs, newTripServiceEditTripResult, false),
 		"DeleteTrip":   kitex.NewMethodInfo(deleteTripHandler, newTripServiceDeleteTripArgs, newTripServiceDeleteTripResult, false),
 	}
 	extra := map[string]interface{}{
@@ -150,24 +149,6 @@ func newTripServiceGetSomeTripsResult() interface{} {
 	return trip.NewTripServiceGetSomeTripsResult()
 }
 
-func editTripHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*trip.TripServiceEditTripArgs)
-	realResult := result.(*trip.TripServiceEditTripResult)
-	success, err := handler.(trip.TripService).EditTrip(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newTripServiceEditTripArgs() interface{} {
-	return trip.NewTripServiceEditTripArgs()
-}
-
-func newTripServiceEditTripResult() interface{} {
-	return trip.NewTripServiceEditTripResult()
-}
-
 func deleteTripHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*trip.TripServiceDeleteTripArgs)
 	realResult := result.(*trip.TripServiceDeleteTripResult)
@@ -251,16 +232,6 @@ func (p *kClient) GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsReques
 	_args.Req = req
 	var _result trip.TripServiceGetSomeTripsResult
 	if err = p.c.Call(ctx, "GetSomeTrips", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) EditTrip(ctx context.Context, req *trip.EditTripRequest) (r *trip.EditTripResponse, err error) {
-	var _args trip.TripServiceEditTripArgs
-	_args.Req = req
-	var _result trip.TripServiceEditTripResult
-	if err = p.c.Call(ctx, "EditTrip", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

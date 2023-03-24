@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"math"
 	"math/rand"
 	"time"
 
@@ -9,7 +10,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
-	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -54,25 +54,6 @@ type MongoManager interface {
 func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRequest) (resp *trip.CreateTripResponse, err error) {
 	resp = new(trip.CreateTripResponse)
 	aid := id.AccountID(req.AccountId)
-	if req.CarId == "" || req.Start == nil {
-		resp.BaseResp = tools.BuildBaseResp(errno.BadRequest)
-		return resp, nil
-	}
-	// Verify driver's identity.
-	iID, err := s.ProfileManager.Verify(ctx, aid)
-	if err != nil {
-		klog.Error("profile verify err", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.BadRequest.WithMessage("profile verify failed"))
-		return resp, nil
-	}
-	// Check vehicle status.
-	carID := id.CarID(req.CarId)
-	err = s.CarManager.Verify(ctx, carID, aid)
-	if err != nil {
-		klog.Error("car verify err", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.BadRequest.WithMessage("car verify failed"))
-		return resp, nil
-	}
 
 	ls := s.calcCurrentStatus(&trip.LocationStatus{
 		Location:     req.Start,
@@ -80,26 +61,17 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	}, req.Start)
 
 	tr, err := s.MongoManager.CreateTrip(ctx, &trip.Trip{
-		AccountId:  aid.Int64(),
-		CarId:      carID.String(),
-		IdentityId: iID.String(),
-		Status:     trip.TripStatus_IN_PROGRESS,
-		Start:      ls,
-		Current:    ls,
+		AccountId: aid.Int64(),
+
+		Status:  trip.TripStatus_IN_PROGRESS,
+		Start:   ls,
+		Current: ls,
 	})
 	if err != nil {
 		klog.Error("cannot create trip", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("create trip error"))
 		return resp, nil
 	}
-
-	// vehicle unlock
-	go func() {
-		err := s.CarManager.Unlock(context.Background(), carID, aid, objid.ToTripID(tr.ID), req.AvatarUrl)
-		if err != nil {
-			klog.Error("cannot unlock car", err)
-		}
-	}()
 
 	resp.TripEntity = &trip.TripEntity{
 		Id:   tr.ID.Hex(),
@@ -139,13 +111,14 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	res := &trip.GetTripsResponse{}
+	var res []*trip.TripEntity
 	for _, tr := range trips {
-		res.Trips = append(res.Trips, &trip.TripEntity{
+		res = append(res, &trip.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
 	}
+	resp.Trips = res
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
@@ -200,7 +173,6 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("update trip err"))
 		return resp, nil
 	}
-
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	resp.Trip = tr.Trip
 	return resp, nil
@@ -209,19 +181,20 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 // GetAllTrips implements the TripServiceImpl interface.
 func (s *TripServiceImpl) GetAllTrips(ctx context.Context, req *trip.GetAllTripsRequest) (resp *trip.GetAllTripsResponse, err error) {
 	resp = new(trip.GetAllTripsResponse)
-	trips, err := s.MongoManager.GetTripsByLimit(ctx, -1)
+	trips, err := s.MongoManager.GetTripsByLimit(ctx, math.MaxInt64)
 	if err != nil {
 		klog.Error("cannot get trips", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	res := &trip.GetAllTripsResponse{}
+	var res []*trip.TripEntity
 	for _, tr := range trips {
-		res.Trips = append(res.Trips, &trip.TripEntity{
+		res = append(res, &trip.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
 	}
+	resp.Trips = res
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
@@ -235,26 +208,14 @@ func (s *TripServiceImpl) GetSomeTrips(ctx context.Context, req *trip.GetSomeTri
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	res := &trip.GetSomeTripsResponse{}
+	var res []*trip.TripEntity
 	for _, tr := range trips {
-		res.Trips = append(res.Trips, &trip.TripEntity{
+		res = append(res, &trip.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
 	}
-	resp.BaseResp = tools.BuildBaseResp(nil)
-	return resp, nil
-}
-
-// EditTrip implements the TripServiceImpl interface.
-func (s *TripServiceImpl) EditTrip(ctx context.Context, req *trip.EditTripRequest) (resp *trip.EditTripResponse, err error) {
-	resp = new(trip.EditTripResponse)
-	err = s.MongoManager.UpdateTrip(ctx, id.TripID(req.TripEntity.Id), id.AccountID(req.TripEntity.Trip.AccountId), time.Now().UnixNano(), req.TripEntity.Trip)
-	if err != nil {
-		klog.Error("cannot edit trip", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("edit trip err"))
-		return resp, nil
-	}
+	resp.Trips = res
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }

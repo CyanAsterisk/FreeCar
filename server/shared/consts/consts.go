@@ -70,10 +70,10 @@ const (
 	BlobSnowflakeNode  = 3
 	AdminSnowflakeNode = 4
 
-	LimitOfSomeCars     = 10
-	LimitOfSomeTrips    = 10
-	LimitOfSomeProfiles = 10
-	LimitOfSomeUsers    = 10
+	LimitOfSomeCars     = 20
+	LimitOfSomeTrips    = 20
+	LimitOfSomeProfiles = 20
+	LimitOfSomeUsers    = 20
 
 	OCRUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/driving_license"
 )

@@ -221,6 +221,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 
 // AddUser implements the UserServiceImpl interface.
 func (s *UserServiceImpl) AddUser(ctx context.Context, req *user.AddUserRequest) (resp *user.AddUserResponse, err error) {
+	resp = new(user.AddUserResponse)
 	_, err = s.UserMysqlManager.CreateUser(&mysql.User{
 		ID:           req.AccountId,
 		PhoneNumber:  req.PhoneNumber,
@@ -229,11 +230,12 @@ func (s *UserServiceImpl) AddUser(ctx context.Context, req *user.AddUserRequest)
 		OpenID:       req.OpenId,
 	})
 	if err != nil {
-		if err == errno.RecordNotFound {
-			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+		if err == errno.RecordAlreadyExist {
+			klog.Error("add user error", err)
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordAlreadyExist)
 			return resp, nil
 		}
-		klog.Error("update user error", err)
+		klog.Error("add user error", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr)
 		return resp, nil
 	}

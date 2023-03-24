@@ -649,21 +649,8 @@ func UpdateCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	resp, err := config.GlobalCarClient.AdminUpdateCar(ctx, &car.AdminUpdateCarRequest{
-		Id: req.Id,
-		Car: &car.Car{
-			Status: car.CarStatus(req.Car.Status),
-			Driver: &car.Driver{
-				Id:        req.Car.Driver.Id,
-				AvatarUrl: req.Car.Driver.AvatarUrl,
-			},
-			Position: &car.Location{
-				Latitude:  req.Car.Position.Latitude,
-				Longitude: req.Car.Position.Longitude,
-			},
-			TripId:   req.Car.TripId,
-			Power:    float64(req.Car.Power),
-			PlateNum: req.Car.PlateNum,
-		},
+		Id:  req.Id,
+		Car: pkg.ConvertCar(req.Car),
 	})
 	if err != nil {
 		errno.SendResponse(c, errno.CarSrvErr, nil)

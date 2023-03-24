@@ -189,18 +189,21 @@ func _user0Mw() []app.HandlerFunc {
 }
 
 func _deletecarMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _carMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _updatecarMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _carsMw() []app.HandlerFunc {
@@ -214,8 +217,9 @@ func _get_llcarsMw() []app.HandlerFunc {
 }
 
 func _getsomecarsMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _profile0Mw() []app.HandlerFunc {

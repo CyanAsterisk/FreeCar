@@ -43,8 +43,8 @@ func Register(r *server.Hertz) {
 	{
 		_profile := root.Group("/profile", _profileMw()...)
 		_profile.DELETE("/admin", append(_deleteprofileMw(), api.DeleteProfile)...)
+		_profile.POST("/check", append(_checkprofileMw(), api.CheckProfile)...)
 		_profile.GET("/pending", append(_getpendingprofileMw(), api.GetPendingProfile)...)
-		_profile.POST("/update", append(_updateprofileMw(), api.UpdateProfile)...)
 	}
 	root.GET("/profile", append(_profile0Mw(), api.GetProfile)...)
 	_profile0 := root.Group("/profile", _profile0Mw()...)

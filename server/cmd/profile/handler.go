@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
+	"math"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -232,7 +233,7 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 // GetAllProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.GetAllProfileRequest) (resp *profile.GetAllProfileResponse, err error) {
 	resp = new(profile.GetAllProfileResponse)
-	prs, err := s.MongoManager.GetProfiles(ctx, -1)
+	prs, err := s.MongoManager.GetProfiles(ctx, math.MaxInt64)
 	if err != nil {
 		if err == errno.RecordNotFound {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
@@ -277,24 +278,24 @@ func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.Ge
 	return resp, nil
 }
 
-// UpdateProfile implements the ProfileServiceImpl interface.
-func (s *ProfileServiceImpl) UpdateProfile(ctx context.Context, req *profile.UpdateProfileRequest) (resp *profile.UpdateProfileResponse, err error) {
-	resp = new(profile.UpdateProfileResponse)
-	aid := id.AccountID(req.AccountId)
-	p := &profile.Profile{
-		Identity:       req.Profile.Identity,
-		IdentityStatus: req.Profile.IdentityStatus,
+// CheckProfile implements the ProfileServiceImpl interface.
+func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.CheckProfileRequest) (resp *profile.CheckProfileResponse, err error) {
+	resp = new(profile.CheckProfileResponse)
+	pf := new(profile.Profile)
+	if req.Accept {
+		pf.IdentityStatus = profile.IdentityStatus_VERIFIED
+	} else {
+		pf.IdentityStatus = profile.IdentityStatus_AUDITFAILED
 	}
-	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
+	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), profile.IdentityStatus_PENDING, &profile.Profile{
+		IdentityStatus: profile.IdentityStatus_AUDITFAILED,
+	})
 	if err != nil {
-		if err == errno.RecordAlreadyExist {
-			resp.BaseResp = tools.BuildBaseResp(errno.RecordAlreadyExist)
-			return resp, nil
-		}
-		klog.Error("cannot update profile", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("update profile error"))
+		klog.Error("update profile err", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr)
 		return resp, nil
 	}
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 

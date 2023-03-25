@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"math"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -45,6 +46,7 @@ func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarReques
 	resp = new(car.CreateCarResponse)
 	cr, err := s.MongoManager.CreateCar(ctx, req.PlateNum)
 	if err != nil {
+		klog.Error("create car err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("create car err"))
 		return resp, nil
 	}
@@ -106,7 +108,7 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 	resp = new(car.LockCarResponse)
 	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
 		klog.Error("remove car cache err", err)
-		resp.BaseResp = tools.BuildBaseResp(nil)
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("lock car err"))
 		return resp, nil
 	}
 	c, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_UNLOCKED, &mongo.CarUpdate{
@@ -188,7 +190,7 @@ func (s *CarServiceImpl) publish(c context.Context, cr *mongo.CarRecord) {
 func (s *CarServiceImpl) DeleteCar(ctx context.Context, req *car.DeleteCarRequest) (resp *car.DeleteCarResponse, err error) {
 	resp = new(car.DeleteCarResponse)
 	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove cache error")
+		klog.Error("remove cache error", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
 		return resp, nil
 	}
@@ -259,7 +261,7 @@ func (s *CarServiceImpl) GetSomeCars(ctx context.Context, req *car.GetSomeCarsRe
 // GetAllCars implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetAllCars(ctx context.Context, req *car.GetAllCarsRequest) (resp *car.GetAllCarsResponse, err error) {
 	resp = new(car.GetAllCarsResponse)
-	cars, err := s.MongoManager.GetCars(ctx, -1)
+	cars, err := s.MongoManager.GetCars(ctx, math.MaxInt64)
 	if err != nil {
 		klog.Errorf("cannot get cars: %s", err.Error())
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get cars err"))

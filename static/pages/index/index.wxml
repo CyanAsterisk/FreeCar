@@ -1,2 +1,0 @@
-<map id="map" latitude="{{location.latitude}}" longitude="{{location.longitude}}" scale="{{scale}}" setting="{{setting}}" markers="{{markers}}" show-compass="{{true}}"></map>
-<image class="icon" src="/images/shared/location.svg" bindtap="onMyLocationTap"></image>

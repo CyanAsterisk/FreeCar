@@ -26,6 +26,7 @@ func Register(r *server.Hertz) {
 	_trip := root.Group("/trip", _tripMw()...)
 	_trip.PUT("/:id", append(_updatetripMw(), api.UpdateTrip)...)
 	root.GET("/trips", append(_gettripsMw(), api.GetTrips)...)
+	root.PUT("/user", append(_updateuserMw(), api.UpdateUser)...)
 	root.DELETE("/user", append(_deleteuserMw(), api.DeleteUser)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)

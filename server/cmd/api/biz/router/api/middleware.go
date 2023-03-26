@@ -294,3 +294,8 @@ func _checkprofileMw() []app.HandlerFunc {
 		middleware.JWTAuth(),
 	}
 }
+
+func _updateuserMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

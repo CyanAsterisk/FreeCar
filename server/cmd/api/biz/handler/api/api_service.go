@@ -844,3 +844,26 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 	errno.SendResponse(c, errno.Success, resp)
 	return
 }
+
+// UpdateUser .
+// @router /user [PUT]
+func UpdateUser(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.UpdateUserByIDRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		errno.SendResponse(c, errno.ParamsErr, nil)
+		return
+	}
+
+	_, err = config.GlobalUserClient.UpdateUser(ctx, &user.UpdateUserRequest{
+		AccountId:   req.AccountId,
+		Username:    req.Username,
+		PhoneNumber: req.PhoneNumber,
+	})
+	if err != nil {
+		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		return
+	}
+	errno.SendResponse(c, errno.Success, api.UpdateUserByIDResponse{})
+}

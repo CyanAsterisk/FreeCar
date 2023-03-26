@@ -108,6 +108,16 @@ message EUpdateUserResponse{
   string message = 3;
 }
 
+message UpdateUserByIDRequest{
+  string username = 1;
+  int64 phone_number = 2;
+  int64 account_id = 3;
+}
+
+message UpdateUserByIDResponse{
+  BaseResponse base_resp = 1;
+}
+
 message AddUserRequest{
   int64 account_id = 1;
   string username = 2;
@@ -552,6 +562,7 @@ service apiService {
   rpc UpdateUserInfo (UpdateUserRequest) returns (UpdateUserResponse)  {option (api.post) = "/user/info";}
   rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarResponse) {option (api.post) = "/user/avatar";}
   rpc AddUser (AddUserRequest) returns (AddUserResponse) {option (api.post) = "/user";}
+  rpc UpdateUser (UpdateUserByIDRequest) returns (UpdateUserByIDResponse) {option (api.put) = "/user";}
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {option (api.delete) = "/user";}
   rpc GetSomeUsers (GetSomeUsersRequest) returns (GetSomeUsersResponse) {option (api.get) = "/user/some";}
   rpc GetAllUsers (GetAllUsersRequest) returns (GetAllUsersResponse) {option (api.get) = "/user/all";}

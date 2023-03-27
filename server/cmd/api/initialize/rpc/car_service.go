@@ -1,7 +1,9 @@
 package rpc
 
 import (
-	"fmt"
+	"github.com/hashicorp/consul/api"
+	"net"
+	"strconv"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
@@ -17,9 +19,11 @@ import (
 
 func initCar() {
 	// init resolver
-	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
-		config.GlobalConsulConfig.Host,
-		config.GlobalConsulConfig.Port))
+	r, err := consul.NewConsulResolverWithConfig(&api.Config{
+		Address: net.JoinHostPort(
+			config.GlobalConsulConfig.Host,
+			strconv.Itoa(config.GlobalConsulConfig.Port)),
+		Token: config.GlobalConsulConfig.Token})
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}

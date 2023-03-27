@@ -18,6 +18,7 @@ import (
 func InitRegistry() (registry.Registry, *registry.Info) {
 	// build a consul client
 	cfg := api.DefaultConfig()
+	cfg.Token = config.GlobalConsulConfig.Token
 	cfg.Address = net.JoinHostPort(
 		config.GlobalConsulConfig.Host,
 		strconv.Itoa(config.GlobalConsulConfig.Port))

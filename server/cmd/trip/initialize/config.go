@@ -26,6 +26,7 @@ func InitConfig() {
 	hlog.Infof("Config Info: %v", config.GlobalConsulConfig)
 
 	cfg := api.DefaultConfig()
+	cfg.Token = config.GlobalConsulConfig.Token
 	cfg.Address = net.JoinHostPort(
 		config.GlobalConsulConfig.Host,
 		strconv.Itoa(config.GlobalConsulConfig.Port))

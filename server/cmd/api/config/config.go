@@ -5,9 +5,10 @@ type JWTConfig struct {
 }
 
 type ConsulConfig struct {
-	Host string `mapstructure:"host" json:"host"`
-	Port int    `mapstructure:"port" json:"port"`
-	Key  string `mapstructure:"key" json:"key"`
+	Host  string `mapstructure:"host" json:"host"`
+	Port  int    `mapstructure:"port" json:"port"`
+	Key   string `mapstructure:"key" json:"key"`
+	Token string `mapstructure:"token" json:"token"`
 }
 
 type OtelConfig struct {

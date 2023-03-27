@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/ocr"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile/profileservice"
@@ -39,9 +40,10 @@ func main() {
 
 	// Create new server.
 	srv := profileservice.NewServer(&ProfileServiceImpl{
-		MongoManager: mongo.NewManager(mongoDb),
-		RedisManager: redis.NewManager(redisClient),
-		BlobManager:  blobClient,
+		MongoManager:   mongo.NewManager(mongoDb),
+		RedisManager:   redis.NewManager(redisClient),
+		BlobManager:    blobClient,
+		LicenseManager: &ocr.LicenseManager{},
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),

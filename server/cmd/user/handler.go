@@ -65,14 +65,14 @@ func (s *UserServiceImpl) Login(_ context.Context, req *user.LoginRequest) (resp
 		return resp, nil
 	}
 
-	user, err := s.UserMysqlManager.GetUserByOpenId(openID)
+	usr, err := s.UserMysqlManager.GetUserByOpenId(openID)
 	if err != nil {
 		if err != errno.RecordNotFound {
 			klog.Error("get user by open id err", err)
 			resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr)
 			return resp, nil
 		}
-		user, err = s.UserMysqlManager.CreateUser(&mysql.User{OpenID: openID})
+		usr, err = s.UserMysqlManager.CreateUser(&mysql.User{OpenID: openID})
 		if err != nil {
 			klog.Error("create user err", err)
 			resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr)
@@ -80,7 +80,7 @@ func (s *UserServiceImpl) Login(_ context.Context, req *user.LoginRequest) (resp
 		}
 	}
 	resp.BaseResp = tools.BuildBaseResp(nil)
-	resp.AccountId = user.ID
+	resp.AccountId = usr.ID
 	return resp, nil
 }
 

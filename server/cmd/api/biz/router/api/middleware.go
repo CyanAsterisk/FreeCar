@@ -223,8 +223,9 @@ func _getsomecarsMw() []app.HandlerFunc {
 }
 
 func _profile0Mw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+	}
 }
 
 func _getpendingprofileMw() []app.HandlerFunc {

@@ -59,6 +59,7 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 	pv, err := s.RedisManager.GetProfile(ctx, aid)
 	if err == nil {
 		resp.Profile = pv
+		resp.BaseResp = tools.BuildBaseResp(nil)
 		return resp, nil
 	}
 	if err != errno.RecordNotFound {
@@ -67,10 +68,12 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return nil, errno.RecordNotFound
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+			return resp, nil
 		}
 		klog.Error("get profile error", err)
-		return nil, errno.ProfileSrvErr.WithMessage("get profile error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile error"))
+		return resp, nil
 	}
 	go func() {
 		if err = s.RedisManager.InsertProfile(context.Background(), id.AccountID(pr.AccountID), pr.Profile); err != nil {
@@ -79,6 +82,7 @@ func (s *ProfileServiceImpl) GetProfile(ctx context.Context, req *profile.GetPro
 	}()
 
 	resp.Profile = pr.Profile
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 
@@ -87,8 +91,9 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 	resp = new(profile.SubmitProfileResponse)
 	aid := id.AccountID(req.AccountId)
 	if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear cache error"))
 		klog.Error("cannot remove profile in redis", err)
-		return nil, errno.ProfileSrvErr.WithMessage("clear cache error")
+		return resp, nil
 	}
 	p := &profile.Profile{
 		Identity:       req.Identity,
@@ -97,12 +102,15 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
 	if err != nil {
 		if err == errno.RecordAlreadyExist {
-			return nil, errno.RecordAlreadyExist
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordAlreadyExist)
+		} else {
+			klog.Error("cannot update profile", err)
+			resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("submit profile error"))
 		}
-		klog.Error("cannot update profile", err)
-		return nil, errno.ProfileSrvErr.WithMessage("submit profile error")
+		return resp, nil
 	}
 	resp.Profile = p
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 
@@ -114,31 +122,38 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 	err = s.RedisManager.RemoveProfile(ctx, aid)
 	if err != nil {
 		klog.Error("cannot remove profile in redis", err)
-		return nil, errno.ProfileSrvErr.WithMessage("clear cache error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear cache error"))
+		return resp, nil
 	}
 	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_VERIFIED, p)
 	if err != nil {
 		klog.Error("cannot update profile", err)
-		return nil, errno.ProfileSrvErr.WithMessage("clear profile error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
+		return resp, nil
 	}
 	resp.Profile = p
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 
 // GetProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.GetProfilePhotoRequest) (resp *profile.GetProfilePhotoResponse, err error) {
+	resp = new(profile.GetProfilePhotoResponse)
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
 		if err == errno.RecordNotFound {
-			return nil, errno.RecordNotFound
+			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
+		} else {
+			resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile photo error"))
 		}
-		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
+		return resp, nil
 	}
 
 	if pr.PhotoBlobID == 0 {
 		klog.Warn("photo blob id = 0")
-		return nil, errno.RecordNotFound.WithMessage("no profile photo")
+		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
+		return resp, nil
 	}
 
 	br, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
@@ -147,12 +162,13 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 	})
 	if err != nil {
 		klog.Error("cannot get blob", err)
-		return nil, errno.ProfileSrvErr.WithMessage("get profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.BlobSrvErr.WithMessage("get profile photo error"))
+		return resp, nil
 	}
 
-	return &profile.GetProfilePhotoResponse{
-		Url: br.Url,
-	}, nil
+	resp.Url = br.Url
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // CreateProfilePhoto implements the ProfileServiceImpl interface.
@@ -185,16 +201,19 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 
 // CompleteProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *profile.CompleteProfilePhotoRequest) (resp *profile.CompleteProfilePhotoResponse, err error) {
+	resp = new(profile.CompleteProfilePhotoResponse)
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
 		klog.Error("get profile error", err)
-		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("complete profile photo error"))
+		return resp, nil
 	}
 
 	if pr.PhotoBlobID == 0 {
 		klog.Warn("photo blob id = 0")
-		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
+		return resp, nil
 	}
 
 	br, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
@@ -203,31 +222,38 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 	})
 	if err != nil {
 		klog.Error("cannot get blob", err)
-		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("complete profile photo error"))
+		return resp, nil
 	}
 	info, err := s.LicenseManager.GetLicenseInfo(br.Url)
 	if err != nil {
 		klog.Error("cannot get license info", err)
-		return nil, errno.ProfileSrvErr.WithMessage("complete profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("complete profile photo error"))
+		return resp, nil
 	}
 
 	resp.Identity = info
+	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
 
 // ClearProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile.ClearProfilePhotoRequest) (resp *profile.ClearProfilePhotoResponse, err error) {
+	resp = new(profile.ClearProfilePhotoResponse)
 	aid := id.AccountID(req.AccountId)
 	if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
 		klog.Error("cannot remove profile in redis", err)
-		return nil, errno.ProfileSrvErr.WithMessage("clear profile error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
+		return resp, nil
 	}
 	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, 0)
 	if err != nil {
 		klog.Error("cannot clear profile photo", err)
-		return nil, errno.ProfileSrvErr.WithMessage("clear profile photo error")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile photo error"))
+		return resp, nil
 	}
-	return &profile.ClearProfilePhotoResponse{}, nil
+	resp.BaseResp = tools.BuildBaseResp(nil)
+	return resp, nil
 }
 
 // GetAllProfile implements the ProfileServiceImpl interface.
@@ -281,6 +307,12 @@ func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.Ge
 // CheckProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.CheckProfileRequest) (resp *profile.CheckProfileResponse, err error) {
 	resp = new(profile.CheckProfileResponse)
+	err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId))
+	if err != nil {
+		klog.Error("remove cache err")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
+		return resp, nil
+	}
 	pf := new(profile.Profile)
 	if req.Accept {
 		pf.IdentityStatus = profile.IdentityStatus_VERIFIED
@@ -302,6 +334,13 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 // DeleteProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) DeleteProfile(ctx context.Context, req *profile.DeleteProfileRequest) (resp *profile.DeleteProfileResponse, err error) {
 	resp = new(profile.DeleteProfileResponse)
+	err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId))
+	if err != nil {
+		klog.Error("remove cache err")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
+		return resp, nil
+	}
+
 	err = s.MongoManager.DeleteProfile(ctx, id.AccountID(req.AccountId))
 	if err != nil {
 		if err == errno.RecordNotFound {

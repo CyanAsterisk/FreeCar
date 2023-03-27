@@ -4,11 +4,11 @@ package api
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -72,12 +72,7 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, api.UserInfo{
-		AccountId:   resp.UserInfo.AccountId,
-		Username:    resp.UserInfo.Username,
-		AvatarUrl:   resp.UserInfo.AvatarUrl,
-		PhoneNumber: resp.UserInfo.PhoneNumber,
-	})
+	errno.SendResponse(c, errno.Success, resp.UserInfo)
 }
 
 // UpdateUserInfo .
@@ -193,7 +188,7 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse(c, errno.Success, resp.Cars)
 }
 
 // GetProfile .
@@ -213,7 +208,7 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse(c, errno.Success, resp.Profile)
 }
 
 // SubmitProfile .
@@ -271,7 +266,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse(c, errno.Success, resp.Profile)
 }
 
 // GetProfilePhoto .
@@ -289,8 +284,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
-
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse(c, errno.Success, resp.Url)
 }
 
 // CreateProfilePhoto .
@@ -328,7 +322,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse(c, errno.Success, resp.Identity)
 }
 
 // ClearProfilePhoto .

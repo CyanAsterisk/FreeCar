@@ -307,6 +307,12 @@ func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.Ge
 // CheckProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.CheckProfileRequest) (resp *profile.CheckProfileResponse, err error) {
 	resp = new(profile.CheckProfileResponse)
+	err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId))
+	if err != nil {
+		klog.Error("remove cache err")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
+		return resp, nil
+	}
 	pf := new(profile.Profile)
 	if req.Accept {
 		pf.IdentityStatus = profile.IdentityStatus_VERIFIED
@@ -328,6 +334,13 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 // DeleteProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) DeleteProfile(ctx context.Context, req *profile.DeleteProfileRequest) (resp *profile.DeleteProfileResponse, err error) {
 	resp = new(profile.DeleteProfileResponse)
+	err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId))
+	if err != nil {
+		klog.Error("remove cache err")
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
+		return resp, nil
+	}
+
 	err = s.MongoManager.DeleteProfile(ctx, id.AccountID(req.AccountId))
 	if err != nil {
 		if err == errno.RecordNotFound {

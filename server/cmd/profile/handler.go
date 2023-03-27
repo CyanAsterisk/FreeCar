@@ -138,6 +138,7 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 
 // GetProfilePhoto implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.GetProfilePhotoRequest) (resp *profile.GetProfilePhotoResponse, err error) {
+	resp = new(profile.GetProfilePhotoResponse)
 	aid := id.AccountID(req.AccountId)
 	pr, err := s.MongoManager.GetProfile(ctx, aid)
 	if err != nil {
@@ -161,7 +162,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 	})
 	if err != nil {
 		klog.Error("cannot get blob", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("get profile photo error"))
+		resp.BaseResp = tools.BuildBaseResp(errno.BlobSrvErr.WithMessage("get profile photo error"))
 		return resp, nil
 	}
 

@@ -27,12 +27,7 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
 
-	r := consul.NewConsulRegister(consulClient,
-		consul.WithCheck(&api.AgentServiceCheck{
-			Interval:                       consts.ConsulCheckInterval,
-			Timeout:                        consts.ConsulCheckTimeout,
-			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
-		}))
+	r := consul.NewConsulRegister(consulClient)
 
 	// Using snowflake to generate service name.
 	sf, err := snowflake.NewNode(2)

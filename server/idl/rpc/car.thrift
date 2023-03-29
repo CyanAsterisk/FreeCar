@@ -64,7 +64,7 @@ struct UnlockCarResponse {
 struct UpdateCarRequest {
     1: required string id,
     2: required car.CarStatus status,
-    3: required car.Location position,
+    3: required car.Position position,
     4: required i64 account_id,
     5: required double power,
 }

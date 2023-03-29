@@ -18,7 +18,7 @@ struct Driver {
     2: required string avatar_url,
 }
 
-struct Location {
+struct Position {
     1: required double latitude,
     2: required double longitude,
 }
@@ -26,7 +26,7 @@ struct Location {
 struct Car {
     1: required CarStatus status,
     2: required Driver driver,
-    3: required Location position,
+    3: required Position position,
     4: required string trip_id,
     5: required double power,
     6: required string plate_num,

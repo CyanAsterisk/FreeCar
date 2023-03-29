@@ -11,7 +11,7 @@ import (
 
 func ConvertLocationStatus(ls *api.LocationStatus) *trip.LocationStatus {
 	return &trip.LocationStatus{
-		Location:     ConvertLocation(ls.Location),
+		Location:     ConvertTripLocation1(ls.Location),
 		FeeCent:      ls.FeeCent,
 		KmDriven:     ls.KmDriven,
 		PoiName:      ls.PoiName,
@@ -19,7 +19,14 @@ func ConvertLocationStatus(ls *api.LocationStatus) *trip.LocationStatus {
 	}
 }
 
-func ConvertLocation(l *api.Location) *trip.Location {
+func ConvertTripLocation1(l *api.Location) *trip.Location {
+	return &trip.Location{
+		Latitude:  l.Latitude,
+		Longitude: l.Longitude,
+	}
+}
+
+func ConvertTripLocation(l *hbase.Location) *trip.Location {
 	return &trip.Location{
 		Latitude:  l.Latitude,
 		Longitude: l.Longitude,
@@ -70,7 +77,7 @@ func ConvertDriver(d *hbase.Driver) *car.Driver {
 	}
 }
 
-func ConvertCarLocation(l *hbase.Location) *car.Location {
+func ConvertCarLocation(l *hbase.Position) *car.Location {
 	if l == nil {
 		return nil
 	}

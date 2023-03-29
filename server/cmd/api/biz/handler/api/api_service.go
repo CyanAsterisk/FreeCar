@@ -27,13 +27,13 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	var req api.LoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	// rpc to get accountID
 	resp, err := config.GlobalUserClient.Login(ctx, &user.LoginRequest{Code: req.Code})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	// create a JWT
@@ -48,11 +48,11 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		errno.SendResponse(c, errno.ServiceErr, nil)
+		errno.SendResponse1(c, errno.ServiceErr, nil)
 		return
 	}
 	// return token
-	errno.SendResponse(c, errno.Success, api.LoginResponse{
+	errno.SendResponse1(c, errno.Success, api.LoginResponse{
 		Token:     token,
 		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
 	})
@@ -63,16 +63,16 @@ func Login(ctx context.Context, c *app.RequestContext) {
 func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalUserClient.GetUser(ctx, &user.GetUserRequest{AccontId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp.UserInfo)
+	errno.SendResponse1(c, errno.Success, resp.UserInfo)
 }
 
 // UpdateUserInfo .
@@ -82,12 +82,12 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 	var req api.UpdateUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -97,10 +97,10 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, api.UpdateUserResponse{})
+	errno.SendResponse1(c, errno.Success, api.UpdateUserResponse{})
 }
 
 // UploadAvatar .
@@ -109,16 +109,16 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalUserClient.UploadAvatar(ctx, &user.UploadAvatarRequset{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, api.UploadAvatarResponse{UploadUrl: resp.UploadUrl})
+	errno.SendResponse1(c, errno.Success, api.UploadAvatarResponse{UploadUrl: resp.UploadUrl})
 }
 
 // CreateCar .
@@ -128,12 +128,12 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 	var req api.CreateCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -142,10 +142,10 @@ func CreateCar(ctx context.Context, c *app.RequestContext) {
 		PlateNum:  req.PlateNum,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCCarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetCar .
@@ -155,12 +155,12 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	var req api.GetCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -169,10 +169,10 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		Id:        req.Id,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCCarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetCars .
@@ -180,15 +180,15 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 func GetCars(ctx context.Context, c *app.RequestContext) {
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.AuthorizeFail, nil)
+		errno.SendResponse1(c, errno.AuthorizeFail, nil)
 		return
 	}
 	resp, err := config.GlobalCarClient.GetCars(ctx, &car.GetCarsRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCCarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp.Cars)
+	errno.SendResponse1(c, errno.Success, resp.Cars)
 }
 
 // GetProfile .
@@ -198,17 +198,17 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.GetProfile(ctx, &profile.GetProfileRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp.Profile)
+	errno.SendResponse1(c, errno.Success, resp.Profile)
 }
 
 // SubmitProfile .
@@ -218,12 +218,12 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.SubmitProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -237,11 +237,11 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		},
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // ClearProfile .
@@ -251,22 +251,22 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.ClearProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.ClearProfile(ctx, &profile.ClearProfileRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp.Profile)
+	errno.SendResponse1(c, errno.Success, resp.Profile)
 }
 
 // GetProfilePhoto .
@@ -275,16 +275,16 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.GetProfilePhoto(ctx, &profile.GetProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp.Url)
+	errno.SendResponse1(c, errno.Success, resp.Url)
 }
 
 // CreateProfilePhoto .
@@ -293,17 +293,17 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.CreateProfilePhoto(ctx, &profile.CreateProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // CompleteProfilePhoto .
@@ -312,17 +312,17 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.CompleteProfilePhoto(ctx, &profile.CompleteProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp.Identity)
+	errno.SendResponse1(c, errno.Success, resp.Identity)
 }
 
 // ClearProfilePhoto .
@@ -331,17 +331,17 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.ClearProfilePhoto(ctx, &profile.ClearProfilePhotoRequest{AccountId: aid.(int64)})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCProfileSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // CreateTrip .
@@ -351,12 +351,12 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 	var req api.CreateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -370,11 +370,11 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		AccountId: aid.(int64),
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCTripSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCTripSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetTrip .
@@ -384,7 +384,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 	var req api.GetTripRequest
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	req.Id = c.Param("id")
@@ -394,11 +394,11 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 		AccountId: aid.(int64),
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCTripSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCTripSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetTrips .
@@ -408,12 +408,12 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 	var req api.GetTripsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -422,11 +422,11 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		AccountId: aid.(int64),
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCTripSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCTripSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // UpdateTrip .
@@ -436,12 +436,12 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	var req api.UpdateTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	req.Id = c.Param(consts.ID)
@@ -456,11 +456,11 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 		AccountId: aid.(int64),
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCTripSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCTripSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // AdminLogin .
@@ -470,13 +470,13 @@ func AdminLogin(ctx context.Context, c *app.RequestContext) {
 	var req api.AdminLoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	// rpc to get accountID
 	resp, err := config.GlobalUserClient.AdminLogin(ctx, &user.AdminLoginRequest{Username: req.Username, Password: req.Password})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 	// create a JWT
@@ -491,11 +491,11 @@ func AdminLogin(ctx context.Context, c *app.RequestContext) {
 	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		errno.SendResponse(c, errno.ServiceErr, nil)
+		errno.SendResponse1(c, errno.ServiceErr, nil)
 		return
 	}
 	// return token
-	errno.SendResponse(c, errno.Success, api.AdminLoginResponse{
+	errno.SendResponse1(c, errno.Success, api.AdminLoginResponse{
 		Token:     token,
 		ExpiredAt: time.Now().Unix() + consts.ThirtyDays,
 	})
@@ -508,12 +508,12 @@ func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
 	var req api.ChangeAdminPasswordRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	aid, flag := c.Get(consts.AccountID)
 	if !flag {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalUserClient.ChangeAdminPassword(ctx, &user.ChangeAdminPasswordRequest{
@@ -522,11 +522,11 @@ func ChangeAdminPassword(ctx context.Context, c *app.RequestContext) {
 		NewPassword_: req.NewPassword,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // AddUser .
@@ -536,7 +536,7 @@ func AddUser(ctx context.Context, c *app.RequestContext) {
 	var req api.AddUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalUserClient.AddUser(ctx, &user.AddUserRequest{
@@ -547,11 +547,11 @@ func AddUser(ctx context.Context, c *app.RequestContext) {
 		OpenId:       req.OpenId,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // DeleteUser .
@@ -561,16 +561,16 @@ func DeleteUser(ctx context.Context, c *app.RequestContext) {
 	var req api.DeleteUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalUserClient.DeleteUser(ctx, &user.DeleteUserRequest{AccountId: req.AccountId})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetSomeUsers .
@@ -580,16 +580,16 @@ func GetSomeUsers(ctx context.Context, c *app.RequestContext) {
 	var req api.GetSomeUsersRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalUserClient.GetSomeUsers(ctx, &user.GetSomeUsersRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetAllUsers .
@@ -599,16 +599,16 @@ func GetAllUsers(ctx context.Context, c *app.RequestContext) {
 	var req api.GetAllUsersRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalUserClient.GetAllUsers(ctx, &user.GetAllUsersRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
 
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // DeleteCar .
@@ -618,7 +618,7 @@ func DeleteCar(ctx context.Context, c *app.RequestContext) {
 	var req api.DeleteCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -626,10 +626,10 @@ func DeleteCar(ctx context.Context, c *app.RequestContext) {
 		Id: req.Id,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCCarSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCCarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 
 }
 
@@ -640,7 +640,7 @@ func UpdateCar(ctx context.Context, c *app.RequestContext) {
 	var req api.UpdateCarRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalCarClient.AdminUpdateCar(ctx, &car.AdminUpdateCarRequest{
@@ -648,10 +648,10 @@ func UpdateCar(ctx context.Context, c *app.RequestContext) {
 		Car: pkg.ConvertCar1(req.Car),
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.CarSrvErr, nil)
+		errno.SendResponse1(c, errno.CarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetSomeCars .
@@ -661,15 +661,15 @@ func GetSomeCars(ctx context.Context, c *app.RequestContext) {
 	var req api.GetSomeCarsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalCarClient.GetSomeCars(ctx, &car.GetSomeCarsRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.CarSrvErr, nil)
+		errno.SendResponse1(c, errno.CarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetAllCars .
@@ -679,15 +679,15 @@ func GetAllCars(ctx context.Context, c *app.RequestContext) {
 	var req api.GetAllCarsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalCarClient.GetAllCars(ctx, &car.GetAllCarsRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.CarSrvErr, nil)
+		errno.SendResponse1(c, errno.CarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // DeleteProfile .
@@ -697,16 +697,16 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.DeleteProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.DeleteProfile(ctx, &profile.DeleteProfileRequest{AccountId: req.AccountId})
 	if err != nil {
-		errno.SendResponse(c, errno.CarSrvErr, nil)
+		errno.SendResponse1(c, errno.CarSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 	return
 }
 
@@ -717,15 +717,15 @@ func GetAllProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.GetAllProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, err)
+		errno.SendResponse1(c, errno.ParamsErr, err)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.GetAllProfile(ctx, &profile.GetAllProfileRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.ProfileSrvErr, nil)
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetSomeProfile .
@@ -735,15 +735,15 @@ func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.GetSomeProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, err)
+		errno.SendResponse1(c, errno.ParamsErr, err)
 		return
 	}
 
 	resp, err := config.GlobalProfileClient.GetSomeProfile(ctx, &profile.GetSomeProfileRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.ProfileSrvErr, nil)
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetPendingProfile .
@@ -753,15 +753,15 @@ func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.GetPendingProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalProfileClient.GetPendingProfile(ctx, &profile.GetPendingProfileRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.ServiceErr, nil)
+		errno.SendResponse1(c, errno.ServiceErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetAllTrips .
@@ -771,14 +771,14 @@ func GetAllTrips(ctx context.Context, c *app.RequestContext) {
 	var req api.GetAllTripsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalTripClient.GetAllTrips(ctx, &trip.GetAllTripsRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.TripSrvErr, nil)
+		errno.SendResponse1(c, errno.TripSrvErr, nil)
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // GetSomeTrips .
@@ -788,15 +788,15 @@ func GetSomeTrips(ctx context.Context, c *app.RequestContext) {
 	var req api.GetSomeTripsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
 	resp, err := config.GlobalTripClient.GetSomeTrips(ctx, &trip.GetSomeTripsRequest{})
 	if err != nil {
-		errno.SendResponse(c, errno.TripSrvErr, nil)
+		errno.SendResponse1(c, errno.TripSrvErr, nil)
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // DeleteTrip .
@@ -806,15 +806,15 @@ func DeleteTrip(ctx context.Context, c *app.RequestContext) {
 	var req api.DeleteTripRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalTripClient.DeleteTrip(ctx, &trip.DeleteTripRequest{Id: req.Id})
 	if err != nil {
-		errno.SendResponse(c, errno.TripSrvErr, nil)
+		errno.SendResponse1(c, errno.TripSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 }
 
 // CheckProfile .
@@ -824,7 +824,7 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 	var req api.CheckProfileRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 	resp, err := config.GlobalProfileClient.CheckProfile(ctx, &profile.CheckProfileRequest{
@@ -832,10 +832,10 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 		Accept:    req.Accept,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.ProfileSrvErr, nil)
+		errno.SendResponse1(c, errno.ProfileSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, resp)
+	errno.SendResponse1(c, errno.Success, resp)
 	return
 }
 
@@ -846,7 +846,7 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 	var req api.UpdateUserByIDRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		errno.SendResponse(c, errno.ParamsErr, nil)
+		errno.SendResponse1(c, errno.ParamsErr, nil)
 		return
 	}
 
@@ -856,8 +856,8 @@ func UpdateUser(ctx context.Context, c *app.RequestContext) {
 		PhoneNumber: req.PhoneNumber,
 	})
 	if err != nil {
-		errno.SendResponse(c, errno.RPCUserSrvErr, nil)
+		errno.SendResponse1(c, errno.RPCUserSrvErr, nil)
 		return
 	}
-	errno.SendResponse(c, errno.Success, api.UpdateUserByIDResponse{})
+	errno.SendResponse1(c, errno.Success, api.UpdateUserByIDResponse{})
 }

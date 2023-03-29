@@ -470,29 +470,29 @@ func (p *Driver) String() string {
 	return fmt.Sprintf("Driver(%+v)", *p)
 }
 
-type Location struct {
+type Position struct {
 	Latitude  float64 `thrift:"latitude,1,required" form:"latitude,required" json:"latitude,required" query:"latitude,required"`
 	Longitude float64 `thrift:"longitude,2,required" form:"longitude,required" json:"longitude,required" query:"longitude,required"`
 }
 
-func NewLocation() *Location {
-	return &Location{}
+func NewPosition() *Position {
+	return &Position{}
 }
 
-func (p *Location) GetLatitude() (v float64) {
+func (p *Position) GetLatitude() (v float64) {
 	return p.Latitude
 }
 
-func (p *Location) GetLongitude() (v float64) {
+func (p *Position) GetLongitude() (v float64) {
 	return p.Longitude
 }
 
-var fieldIDToName_Location = map[int16]string{
+var fieldIDToName_Position = map[int16]string{
 	1: "latitude",
 	2: "longitude",
 }
 
-func (p *Location) Read(iprot thrift.TProtocol) (err error) {
+func (p *Position) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -564,7 +564,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Location[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Position[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -573,10 +573,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Location[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Position[fieldId]))
 }
 
-func (p *Location) ReadField1(iprot thrift.TProtocol) error {
+func (p *Position) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadDouble(); err != nil {
 		return err
 	} else {
@@ -585,7 +585,7 @@ func (p *Location) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *Location) ReadField2(iprot thrift.TProtocol) error {
+func (p *Position) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadDouble(); err != nil {
 		return err
 	} else {
@@ -594,9 +594,9 @@ func (p *Location) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *Location) Write(oprot thrift.TProtocol) (err error) {
+func (p *Position) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("Location"); err != nil {
+	if err = oprot.WriteStructBegin("Position"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -627,7 +627,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *Location) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *Position) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("latitude", thrift.DOUBLE, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -644,7 +644,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *Location) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *Position) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("longitude", thrift.DOUBLE, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -661,17 +661,17 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *Location) String() string {
+func (p *Position) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("Location(%+v)", *p)
+	return fmt.Sprintf("Position(%+v)", *p)
 }
 
 type Car struct {
 	Status   CarStatus `thrift:"status,1,required" form:"status,required" json:"status,required" query:"status,required"`
 	Driver   *Driver   `thrift:"driver,2,required" form:"driver,required" json:"driver,required" query:"driver,required"`
-	Position *Location `thrift:"position,3,required" form:"position,required" json:"position,required" query:"position,required"`
+	Position *Position `thrift:"position,3,required" form:"position,required" json:"position,required" query:"position,required"`
 	TripID   string    `thrift:"trip_id,4,required" form:"trip_id,required" json:"trip_id,required" query:"trip_id,required"`
 	Power    float64   `thrift:"power,5,required" form:"power,required" json:"power,required" query:"power,required"`
 	PlateNum string    `thrift:"plate_num,6,required" form:"plate_num,required" json:"plate_num,required" query:"plate_num,required"`
@@ -694,9 +694,9 @@ func (p *Car) GetDriver() (v *Driver) {
 	return p.Driver
 }
 
-var Car_Position_DEFAULT *Location
+var Car_Position_DEFAULT *Position
 
-func (p *Car) GetPosition() (v *Location) {
+func (p *Car) GetPosition() (v *Position) {
 	if !p.IsSetPosition() {
 		return Car_Position_DEFAULT
 	}
@@ -902,7 +902,7 @@ func (p *Car) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *Car) ReadField3(iprot thrift.TProtocol) error {
-	p.Position = NewLocation()
+	p.Position = NewPosition()
 	if err := p.Position.Read(iprot); err != nil {
 		return err
 	}

@@ -10,4 +10,4 @@ all:
 	make service=trip generate
 
 errno:
-	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/http/errno.thrift
+	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/base/errno.thrift

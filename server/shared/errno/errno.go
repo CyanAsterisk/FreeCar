@@ -66,3 +66,7 @@ func SendResponse(c *app.RequestContext, err ErrNo, data interface{}) {
 		Data:    data,
 	})
 }
+
+func NewSendResponse(c *app.RequestContext, data interface{}) {
+	c.JSON(consts.StatusOK, data)
+}

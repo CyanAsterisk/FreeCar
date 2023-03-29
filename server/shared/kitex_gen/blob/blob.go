@@ -11,8 +11,8 @@ import (
 )
 
 type CreateBlobRequest struct {
-	AccountId           int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	UploadUrlTimeoutSec int32 `thrift:"upload_url_timeout_sec,2" frugal:"2,default,i32" json:"upload_url_timeout_sec"`
+	AccountId           int64 `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	UploadUrlTimeoutSec int32 `thrift:"upload_url_timeout_sec,2,required" frugal:"2,required,i32" json:"upload_url_timeout_sec"`
 }
 
 func NewCreateBlobRequest() *CreateBlobRequest {
@@ -46,6 +46,8 @@ func (p *CreateBlobRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
+	var issetUploadUrlTimeoutSec bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -66,6 +68,7 @@ func (p *CreateBlobRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -76,6 +79,7 @@ func (p *CreateBlobRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetUploadUrlTimeoutSec = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -95,6 +99,15 @@ func (p *CreateBlobRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetUploadUrlTimeoutSec {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -109,6 +122,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateBlobRequest[fieldId]))
 }
 
 func (p *CreateBlobRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -234,9 +249,9 @@ func (p *CreateBlobRequest) Field2DeepEqual(src int32) bool {
 }
 
 type CreateBlobResponse struct {
-	BaseResp  *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Id        int64              `thrift:"id,2" frugal:"2,default,i64" json:"id"`
-	UploadUrl string             `thrift:"upload_url,3" frugal:"3,default,string" json:"upload_url"`
+	BaseResp  *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Id        int64              `thrift:"id,2,required" frugal:"2,required,i64" json:"id"`
+	UploadUrl string             `thrift:"upload_url,3,required" frugal:"3,required,string" json:"upload_url"`
 }
 
 func NewCreateBlobResponse() *CreateBlobResponse {
@@ -287,6 +302,9 @@ func (p *CreateBlobResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetId bool = false
+	var issetUploadUrl bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -307,6 +325,7 @@ func (p *CreateBlobResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -317,6 +336,7 @@ func (p *CreateBlobResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -327,6 +347,7 @@ func (p *CreateBlobResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetUploadUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -346,6 +367,20 @@ func (p *CreateBlobResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetUploadUrl {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -360,6 +395,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateBlobResponse[fieldId]))
 }
 
 func (p *CreateBlobResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -524,8 +561,8 @@ func (p *CreateBlobResponse) Field3DeepEqual(src string) bool {
 }
 
 type GetBlobURLRequest struct {
-	Id         int64 `thrift:"id,1" frugal:"1,default,i64" json:"id"`
-	TimeoutSec int32 `thrift:"timeout_sec,2" frugal:"2,default,i32" json:"timeout_sec"`
+	Id         int64 `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
+	TimeoutSec int32 `thrift:"timeout_sec,2,required" frugal:"2,required,i32" json:"timeout_sec"`
 }
 
 func NewGetBlobURLRequest() *GetBlobURLRequest {
@@ -559,6 +596,8 @@ func (p *GetBlobURLRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetTimeoutSec bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -579,6 +618,7 @@ func (p *GetBlobURLRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -589,6 +629,7 @@ func (p *GetBlobURLRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetTimeoutSec = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -608,6 +649,15 @@ func (p *GetBlobURLRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetTimeoutSec {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -622,6 +672,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetBlobURLRequest[fieldId]))
 }
 
 func (p *GetBlobURLRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -747,8 +799,8 @@ func (p *GetBlobURLRequest) Field2DeepEqual(src int32) bool {
 }
 
 type GetBlobURLResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Url      string             `thrift:"url,2" frugal:"2,default,string" json:"url"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Url      string             `thrift:"url,2,required" frugal:"2,required,string" json:"url"`
 }
 
 func NewGetBlobURLResponse() *GetBlobURLResponse {
@@ -791,6 +843,8 @@ func (p *GetBlobURLResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetUrl bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -811,6 +865,7 @@ func (p *GetBlobURLResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -821,6 +876,7 @@ func (p *GetBlobURLResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -840,6 +896,15 @@ func (p *GetBlobURLResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetUrl {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -854,6 +919,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetBlobURLResponse[fieldId]))
 }
 
 func (p *GetBlobURLResponse) ReadField1(iprot thrift.TProtocol) error {

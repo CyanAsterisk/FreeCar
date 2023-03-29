@@ -645,7 +645,7 @@ func UpdateCar(ctx context.Context, c *app.RequestContext) {
 	}
 	resp, err := config.GlobalCarClient.AdminUpdateCar(ctx, &car.AdminUpdateCarRequest{
 		Id:  req.Id,
-		Car: pkg.ConvertCar(req.Car),
+		Car: pkg.ConvertCar1(req.Car),
 	})
 	if err != nil {
 		errno.SendResponse(c, errno.CarSrvErr, nil)

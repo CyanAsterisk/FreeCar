@@ -1,6 +1,6 @@
 # eg. make service=video generate
 generate:
-	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/$(service).thrift
+	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/rpc/$(service).thrift
 
 all:
 	make service=user generate
@@ -8,4 +8,6 @@ all:
 	make service=car generate
 	make service=profile generate
 	make service=trip generate
-	make service=errno generate
+
+errno:
+	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/http/errno.thrift

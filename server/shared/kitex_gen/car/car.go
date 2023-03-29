@@ -70,8 +70,8 @@ func (p *CarStatus) Value() (driver.Value, error) {
 }
 
 type CarEntity struct {
-	Id  string `thrift:"id,1" frugal:"1,default,string" json:"id"`
-	Car *Car   `thrift:"car,2" frugal:"2,default,Car" json:"car"`
+	Id  string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Car *Car   `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
 }
 
 func NewCarEntity() *CarEntity {
@@ -114,6 +114,8 @@ func (p *CarEntity) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetCar bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -134,6 +136,7 @@ func (p *CarEntity) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -144,6 +147,7 @@ func (p *CarEntity) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCar = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -163,6 +167,15 @@ func (p *CarEntity) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCar {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -177,6 +190,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CarEntity[fieldId]))
 }
 
 func (p *CarEntity) ReadField1(iprot thrift.TProtocol) error {
@@ -301,8 +316,8 @@ func (p *CarEntity) Field2DeepEqual(src *Car) bool {
 }
 
 type Driver struct {
-	Id        int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
-	AvatarUrl string `thrift:"avatar_url,2" frugal:"2,default,string" json:"avatar_url"`
+	Id        int64  `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
+	AvatarUrl string `thrift:"avatar_url,2,required" frugal:"2,required,string" json:"avatar_url"`
 }
 
 func NewDriver() *Driver {
@@ -336,6 +351,8 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetAvatarUrl bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -356,6 +373,7 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -366,6 +384,7 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAvatarUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -385,6 +404,15 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetAvatarUrl {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -399,6 +427,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Driver[fieldId]))
 }
 
 func (p *Driver) ReadField1(iprot thrift.TProtocol) error {
@@ -524,8 +554,8 @@ func (p *Driver) Field2DeepEqual(src string) bool {
 }
 
 type Location struct {
-	Latitude  float64 `thrift:"latitude,1" frugal:"1,default,double" json:"latitude"`
-	Longitude float64 `thrift:"longitude,2" frugal:"2,default,double" json:"longitude"`
+	Latitude  float64 `thrift:"latitude,1,required" frugal:"1,required,double" json:"latitude"`
+	Longitude float64 `thrift:"longitude,2,required" frugal:"2,required,double" json:"longitude"`
 }
 
 func NewLocation() *Location {
@@ -559,6 +589,8 @@ func (p *Location) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetLatitude bool = false
+	var issetLongitude bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -579,6 +611,7 @@ func (p *Location) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetLatitude = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -589,6 +622,7 @@ func (p *Location) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetLongitude = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -608,6 +642,15 @@ func (p *Location) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetLatitude {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetLongitude {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -622,6 +665,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Location[fieldId]))
 }
 
 func (p *Location) ReadField1(iprot thrift.TProtocol) error {
@@ -747,12 +792,12 @@ func (p *Location) Field2DeepEqual(src float64) bool {
 }
 
 type Car struct {
-	Status   CarStatus `thrift:"status,1" frugal:"1,default,CarStatus" json:"status"`
-	Driver   *Driver   `thrift:"driver,2" frugal:"2,default,Driver" json:"driver"`
-	Position *Location `thrift:"position,3" frugal:"3,default,Location" json:"position"`
-	TripId   string    `thrift:"trip_id,4" frugal:"4,default,string" json:"trip_id"`
-	Power    float64   `thrift:"power,5" frugal:"5,default,double" json:"power"`
-	PlateNum string    `thrift:"plate_num,6" frugal:"6,default,string" json:"plate_num"`
+	Status   CarStatus `thrift:"status,1,required" frugal:"1,required,CarStatus" json:"status"`
+	Driver   *Driver   `thrift:"driver,2,required" frugal:"2,required,Driver" json:"driver"`
+	Position *Location `thrift:"position,3,required" frugal:"3,required,Location" json:"position"`
+	TripId   string    `thrift:"trip_id,4,required" frugal:"4,required,string" json:"trip_id"`
+	Power    float64   `thrift:"power,5,required" frugal:"5,required,double" json:"power"`
+	PlateNum string    `thrift:"plate_num,6,required" frugal:"6,required,string" json:"plate_num"`
 }
 
 func NewCar() *Car {
@@ -836,6 +881,12 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetStatus bool = false
+	var issetDriver bool = false
+	var issetPosition bool = false
+	var issetTripId bool = false
+	var issetPower bool = false
+	var issetPlateNum bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -856,6 +907,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetStatus = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -866,6 +918,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetDriver = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -876,6 +929,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPosition = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -886,6 +940,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetTripId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -896,6 +951,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPower = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -906,6 +962,7 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPlateNum = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -925,6 +982,35 @@ func (p *Car) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetStatus {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetDriver {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPosition {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetTripId {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPower {
+		fieldId = 5
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPlateNum {
+		fieldId = 6
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -939,6 +1025,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Car[fieldId]))
 }
 
 func (p *Car) ReadField1(iprot thrift.TProtocol) error {
@@ -1222,8 +1310,8 @@ func (p *Car) Field6DeepEqual(src string) bool {
 }
 
 type CreateCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	PlateNum  string `thrift:"plate_num,2" frugal:"2,default,string" json:"plate_num"`
+	AccountId int64  `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	PlateNum  string `thrift:"plate_num,2,required" frugal:"2,required,string" json:"plate_num"`
 }
 
 func NewCreateCarRequest() *CreateCarRequest {
@@ -1257,6 +1345,8 @@ func (p *CreateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
+	var issetPlateNum bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1277,6 +1367,7 @@ func (p *CreateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1287,6 +1378,7 @@ func (p *CreateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPlateNum = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1306,6 +1398,15 @@ func (p *CreateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPlateNum {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1320,6 +1421,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateCarRequest[fieldId]))
 }
 
 func (p *CreateCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -1445,8 +1548,8 @@ func (p *CreateCarRequest) Field2DeepEqual(src string) bool {
 }
 
 type CreateCarResponse struct {
-	BaseResp  *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	CarEntity *CarEntity         `thrift:"car_entity,2" frugal:"2,default,CarEntity" json:"car_entity"`
+	BaseResp  *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	CarEntity *CarEntity         `thrift:"car_entity,2,required" frugal:"2,required,CarEntity" json:"car_entity"`
 }
 
 func NewCreateCarResponse() *CreateCarResponse {
@@ -1498,6 +1601,8 @@ func (p *CreateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetCarEntity bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1518,6 +1623,7 @@ func (p *CreateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1528,6 +1634,7 @@ func (p *CreateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCarEntity = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1547,6 +1654,15 @@ func (p *CreateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCarEntity {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1561,6 +1677,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateCarResponse[fieldId]))
 }
 
 func (p *CreateCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -1684,8 +1802,8 @@ func (p *CreateCarResponse) Field2DeepEqual(src *CarEntity) bool {
 }
 
 type GetCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
+	AccountId int64  `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	Id        string `thrift:"id,2,required" frugal:"2,required,string" json:"id"`
 }
 
 func NewGetCarRequest() *GetCarRequest {
@@ -1719,6 +1837,8 @@ func (p *GetCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
+	var issetId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1739,6 +1859,7 @@ func (p *GetCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1749,6 +1870,7 @@ func (p *GetCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1768,6 +1890,15 @@ func (p *GetCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1782,6 +1913,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetCarRequest[fieldId]))
 }
 
 func (p *GetCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -1907,8 +2040,8 @@ func (p *GetCarRequest) Field2DeepEqual(src string) bool {
 }
 
 type GetCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Car      *Car               `thrift:"car,2" frugal:"2,default,Car" json:"car"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Car      *Car               `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
 }
 
 func NewGetCarResponse() *GetCarResponse {
@@ -1960,6 +2093,8 @@ func (p *GetCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetCar bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1980,6 +2115,7 @@ func (p *GetCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1990,6 +2126,7 @@ func (p *GetCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCar = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2009,6 +2146,15 @@ func (p *GetCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCar {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2023,6 +2169,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetCarResponse[fieldId]))
 }
 
 func (p *GetCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -2146,7 +2294,7 @@ func (p *GetCarResponse) Field2DeepEqual(src *Car) bool {
 }
 
 type GetCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
 }
 
 func NewGetCarsRequest() *GetCarsRequest {
@@ -2172,6 +2320,7 @@ func (p *GetCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2192,6 +2341,7 @@ func (p *GetCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2211,6 +2361,10 @@ func (p *GetCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2225,6 +2379,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetCarsRequest[fieldId]))
 }
 
 func (p *GetCarsRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -2310,8 +2466,8 @@ func (p *GetCarsRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetCarsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2" frugal:"2,default,list<CarEntity>" json:"cars"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
 }
 
 func NewGetCarsResponse() *GetCarsResponse {
@@ -2354,6 +2510,8 @@ func (p *GetCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetCars bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2374,6 +2532,7 @@ func (p *GetCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2384,6 +2543,7 @@ func (p *GetCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCars = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2403,6 +2563,15 @@ func (p *GetCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCars {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2417,6 +2586,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetCarsResponse[fieldId]))
 }
 
 func (p *GetCarsResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -2566,7 +2737,7 @@ func (p *GetCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
 }
 
 type GetAllCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
 }
 
 func NewGetAllCarsRequest() *GetAllCarsRequest {
@@ -2592,6 +2763,7 @@ func (p *GetAllCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2612,6 +2784,7 @@ func (p *GetAllCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2631,6 +2804,10 @@ func (p *GetAllCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2645,6 +2822,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetAllCarsRequest[fieldId]))
 }
 
 func (p *GetAllCarsRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -2730,8 +2909,8 @@ func (p *GetAllCarsRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetAllCarsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2" frugal:"2,default,list<CarEntity>" json:"cars"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
 }
 
 func NewGetAllCarsResponse() *GetAllCarsResponse {
@@ -2774,6 +2953,8 @@ func (p *GetAllCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetCars bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2794,6 +2975,7 @@ func (p *GetAllCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2804,6 +2986,7 @@ func (p *GetAllCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCars = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2823,6 +3006,15 @@ func (p *GetAllCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCars {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2837,6 +3029,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetAllCarsResponse[fieldId]))
 }
 
 func (p *GetAllCarsResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -2986,8 +3180,8 @@ func (p *GetAllCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
 }
 
 type LockCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
+	AccountId int64  `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	Id        string `thrift:"id,2,required" frugal:"2,required,string" json:"id"`
 }
 
 func NewLockCarRequest() *LockCarRequest {
@@ -3021,6 +3215,8 @@ func (p *LockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
+	var issetId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3041,6 +3237,7 @@ func (p *LockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3051,6 +3248,7 @@ func (p *LockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3070,6 +3268,15 @@ func (p *LockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -3084,6 +3291,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_LockCarRequest[fieldId]))
 }
 
 func (p *LockCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -3209,7 +3418,7 @@ func (p *LockCarRequest) Field2DeepEqual(src string) bool {
 }
 
 type LockCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
 }
 
 func NewLockCarResponse() *LockCarResponse {
@@ -3244,6 +3453,7 @@ func (p *LockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3264,6 +3474,7 @@ func (p *LockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3283,6 +3494,10 @@ func (p *LockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -3297,6 +3512,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_LockCarResponse[fieldId]))
 }
 
 func (p *LockCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -3381,10 +3598,10 @@ func (p *LockCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type UnlockCarRequest struct {
-	Id        string  `thrift:"id,1" frugal:"1,default,string" json:"id"`
-	AccountId int64   `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
-	Driver    *Driver `thrift:"driver,3" frugal:"3,default,Driver" json:"driver"`
-	TripId    string  `thrift:"trip_id,4" frugal:"4,default,string" json:"trip_id"`
+	Id        string  `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	AccountId int64   `thrift:"account_id,2,required" frugal:"2,required,i64" json:"account_id"`
+	Driver    *Driver `thrift:"driver,3,required" frugal:"3,required,Driver" json:"driver"`
+	TripId    string  `thrift:"trip_id,4,required" frugal:"4,required,string" json:"trip_id"`
 }
 
 func NewUnlockCarRequest() *UnlockCarRequest {
@@ -3443,6 +3660,10 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetAccountId bool = false
+	var issetDriver bool = false
+	var issetTripId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3463,6 +3684,7 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3473,6 +3695,7 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3483,6 +3706,7 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetDriver = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3493,6 +3717,7 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetTripId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3512,6 +3737,25 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetAccountId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetDriver {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetTripId {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -3526,6 +3770,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UnlockCarRequest[fieldId]))
 }
 
 func (p *UnlockCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -3730,7 +3976,7 @@ func (p *UnlockCarRequest) Field4DeepEqual(src string) bool {
 }
 
 type UnlockCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
 }
 
 func NewUnlockCarResponse() *UnlockCarResponse {
@@ -3765,6 +4011,7 @@ func (p *UnlockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3785,6 +4032,7 @@ func (p *UnlockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3804,6 +4052,10 @@ func (p *UnlockCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -3818,6 +4070,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UnlockCarResponse[fieldId]))
 }
 
 func (p *UnlockCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -3902,11 +4156,11 @@ func (p *UnlockCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type UpdateCarRequest struct {
-	Id        string    `thrift:"id,1" frugal:"1,default,string" json:"id"`
-	Status    CarStatus `thrift:"status,2" frugal:"2,default,CarStatus" json:"status"`
-	Position  *Location `thrift:"position,3" frugal:"3,default,Location" json:"position"`
-	AccountId int64     `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
-	Power     float64   `thrift:"power,5" frugal:"5,default,double" json:"power"`
+	Id        string    `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Status    CarStatus `thrift:"status,2,required" frugal:"2,required,CarStatus" json:"status"`
+	Position  *Location `thrift:"position,3,required" frugal:"3,required,Location" json:"position"`
+	AccountId int64     `thrift:"account_id,4,required" frugal:"4,required,i64" json:"account_id"`
+	Power     float64   `thrift:"power,5,required" frugal:"5,required,double" json:"power"`
 }
 
 func NewUpdateCarRequest() *UpdateCarRequest {
@@ -3973,6 +4227,11 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetStatus bool = false
+	var issetPosition bool = false
+	var issetAccountId bool = false
+	var issetPower bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3993,6 +4252,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4003,6 +4263,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetStatus = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4013,6 +4274,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPosition = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4023,6 +4285,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4033,6 +4296,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetPower = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4052,6 +4316,30 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetStatus {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPosition {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetAccountId {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetPower {
+		fieldId = 5
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -4066,6 +4354,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UpdateCarRequest[fieldId]))
 }
 
 func (p *UpdateCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -4310,7 +4600,7 @@ func (p *UpdateCarRequest) Field5DeepEqual(src float64) bool {
 }
 
 type UpdateCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
 }
 
 func NewUpdateCarResponse() *UpdateCarResponse {
@@ -4345,6 +4635,7 @@ func (p *UpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -4365,6 +4656,7 @@ func (p *UpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4384,6 +4676,10 @@ func (p *UpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -4398,6 +4694,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UpdateCarResponse[fieldId]))
 }
 
 func (p *UpdateCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -4482,8 +4780,8 @@ func (p *UpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type AdminUpdateCarRequest struct {
-	Id  string `thrift:"id,1" frugal:"1,default,string" json:"id"`
-	Car *Car   `thrift:"car,2" frugal:"2,default,Car" json:"car"`
+	Id  string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Car *Car   `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
 }
 
 func NewAdminUpdateCarRequest() *AdminUpdateCarRequest {
@@ -4526,6 +4824,8 @@ func (p *AdminUpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
+	var issetCar bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -4546,6 +4846,7 @@ func (p *AdminUpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4556,6 +4857,7 @@ func (p *AdminUpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCar = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4575,6 +4877,15 @@ func (p *AdminUpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCar {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -4589,6 +4900,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminUpdateCarRequest[fieldId]))
 }
 
 func (p *AdminUpdateCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -4713,7 +5026,7 @@ func (p *AdminUpdateCarRequest) Field2DeepEqual(src *Car) bool {
 }
 
 type AdminUpdateCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
 }
 
 func NewAdminUpdateCarResponse() *AdminUpdateCarResponse {
@@ -4748,6 +5061,7 @@ func (p *AdminUpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -4768,6 +5082,7 @@ func (p *AdminUpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4787,6 +5102,10 @@ func (p *AdminUpdateCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -4801,6 +5120,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminUpdateCarResponse[fieldId]))
 }
 
 func (p *AdminUpdateCarResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -4885,7 +5206,7 @@ func (p *AdminUpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type GetSomeCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId int64 `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
 }
 
 func NewGetSomeCarsRequest() *GetSomeCarsRequest {
@@ -4911,6 +5232,7 @@ func (p *GetSomeCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -4931,6 +5253,7 @@ func (p *GetSomeCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -4950,6 +5273,10 @@ func (p *GetSomeCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -4964,6 +5291,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetSomeCarsRequest[fieldId]))
 }
 
 func (p *GetSomeCarsRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -5049,8 +5378,8 @@ func (p *GetSomeCarsRequest) Field1DeepEqual(src int64) bool {
 }
 
 type GetSomeCarsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2" frugal:"2,default,list<CarEntity>" json:"cars"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
 }
 
 func NewGetSomeCarsResponse() *GetSomeCarsResponse {
@@ -5093,6 +5422,8 @@ func (p *GetSomeCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
+	var issetCars bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -5113,6 +5444,7 @@ func (p *GetSomeCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -5123,6 +5455,7 @@ func (p *GetSomeCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCars = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -5142,6 +5475,15 @@ func (p *GetSomeCarsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCars {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -5156,6 +5498,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetSomeCarsResponse[fieldId]))
 }
 
 func (p *GetSomeCarsResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -5305,8 +5649,8 @@ func (p *GetSomeCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
 }
 
 type DeleteCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
+	AccountId int64  `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	Id        string `thrift:"id,2,required" frugal:"2,required,string" json:"id"`
 }
 
 func NewDeleteCarRequest() *DeleteCarRequest {
@@ -5340,6 +5684,8 @@ func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetAccountId bool = false
+	var issetId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -5360,6 +5706,7 @@ func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -5370,6 +5717,7 @@ func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -5389,6 +5737,15 @@ func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetAccountId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -5403,6 +5760,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_DeleteCarRequest[fieldId]))
 }
 
 func (p *DeleteCarRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -5528,7 +5887,7 @@ func (p *DeleteCarRequest) Field2DeepEqual(src string) bool {
 }
 
 type DeleteCarResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
 }
 
 func NewDeleteCarResponse() *DeleteCarResponse {
@@ -5563,6 +5922,7 @@ func (p *DeleteCarResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -5583,6 +5943,7 @@ func (p *DeleteCarResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -5602,6 +5963,10 @@ func (p *DeleteCarResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetBaseResp {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -5616,6 +5981,8 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_DeleteCarResponse[fieldId]))
 }
 
 func (p *DeleteCarResponse) ReadField1(iprot thrift.TProtocol) error {

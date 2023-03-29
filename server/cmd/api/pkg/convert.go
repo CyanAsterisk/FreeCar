@@ -1,6 +1,9 @@
 package pkg
 
 import (
+	hbase "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/base"
+	//"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/server/cmd/api"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
@@ -23,21 +26,21 @@ func ConvertLocation(l *api.Location) *trip.Location {
 	}
 }
 
-func ConvertCar(c *api.Car) *car.Car {
+func ConvertCar1(c *api.Car) *car.Car {
 	if c == nil {
 		return nil
 	}
 	return &car.Car{
 		Status:   car.CarStatus(c.Status),
-		Driver:   ConvertDriver(c.Driver),
-		Position: ConvertCarLocation(c.Position),
+		Driver:   ConvertDriver1(c.Driver),
+		Position: ConvertCarLocation1(c.Position),
 		TripId:   c.TripId,
 		Power:    float64(c.Power),
 		PlateNum: c.PlateNum,
 	}
 }
 
-func ConvertDriver(d *api.Driver) *car.Driver {
+func ConvertDriver1(d *api.Driver) *car.Driver {
 	if d == nil {
 		return nil
 	}
@@ -47,12 +50,46 @@ func ConvertDriver(d *api.Driver) *car.Driver {
 	}
 }
 
-func ConvertCarLocation(l *api.Location) *car.Location {
+func ConvertCarLocation1(l *api.Location) *car.Location {
 	if l == nil {
 		return nil
 	}
 	return &car.Location{
 		Latitude:  l.Latitude,
 		Longitude: l.Longitude,
+	}
+}
+
+func ConvertDriver(d *hbase.Driver) *car.Driver {
+	if d == nil {
+		return nil
+	}
+	return &car.Driver{
+		Id:        d.ID,
+		AvatarUrl: d.AvatarURL,
+	}
+}
+
+func ConvertCarLocation(l *hbase.Location) *car.Location {
+	if l == nil {
+		return nil
+	}
+	return &car.Location{
+		Latitude:  l.Latitude,
+		Longitude: l.Longitude,
+	}
+}
+
+func ConvertCar(c *hbase.Car) *car.Car {
+	if c == nil {
+		return nil
+	}
+	return &car.Car{
+		Status:   car.CarStatus(c.Status),
+		Driver:   ConvertDriver(c.Driver),
+		Position: ConvertCarLocation(c.Position),
+		TripId:   c.TripID,
+		Power:    c.Power,
+		PlateNum: c.PlateNum,
 	}
 }

@@ -603,7 +603,6 @@ service apiService {
   rpc GetSomeTrips (GetSomeTripsRequest) returns (GetSomeTripsResponse) {option (api.get)="/trips/some";}
   rpc DeleteTrip (DeleteTripRequest) returns (DeleteTripResponse) {option (api.delete) = "/trip";}
 
-
   rpc CreateTrip (CreateTripRequest) returns (CreateTripResponse) {option (api.post) = "/trip";}
   rpc GetTrip(GetTripRequest) returns (GetTripResponse) {option (api.get) = "/trip/:id";}
   rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {option (api.get) = "/trips";}

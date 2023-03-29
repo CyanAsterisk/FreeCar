@@ -6,6 +6,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
@@ -196,7 +197,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr)
 		return resp, nil
 	}
-	resp.UserInfo = &user.UserInfo{
+	resp.UserInfo = &base.UserInfo{
 		AccountId:   u.ID,
 		Username:    u.Username,
 		PhoneNumber: u.PhoneNumber,
@@ -265,9 +266,9 @@ func (s *UserServiceImpl) GetSomeUsers(ctx context.Context, req *user.GetSomeUse
 		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr)
 		return resp, nil
 	}
-	var uInfos []*user.User
+	var uInfos []*base.User
 	for _, u := range users {
-		var uInfo user.User
+		var uInfo base.User
 		uInfo.Username = u.Username
 		uInfo.AccountId = u.ID
 		uInfo.PhoneNumber = u.PhoneNumber
@@ -290,9 +291,9 @@ func (s *UserServiceImpl) GetAllUsers(ctx context.Context, req *user.GetAllUsers
 		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr.WithMessage("get users error"))
 		return resp, nil
 	}
-	var uInfos []*user.User
+	var uInfos []*base.User
 	for _, u := range users {
-		var uInfo user.User
+		var uInfo base.User
 		uInfo.Username = u.Username
 		uInfo.AccountId = u.ID
 		uInfo.PhoneNumber = u.PhoneNumber

@@ -24,10 +24,9 @@ type RabbitMqConfig struct {
 }
 
 type ConsulConfig struct {
-	Host  string `mapstructure:"host" json:"host"`
-	Port  int    `mapstructure:"port" json:"port"`
-	Key   string `mapstructure:"key" json:"key"`
-	Token string `mapstructure:"token" json:"token"`
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+	Key  string `mapstructure:"key" json:"key"`
 }
 
 type OtelConfig struct {

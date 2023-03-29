@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"fmt"
+
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car/carservice"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -8,22 +10,17 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/hashicorp/consul/api"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	consul "github.com/kitex-contrib/registry-consul"
-	"net"
-	"strconv"
 )
 
 // InitCar to init car service
 func InitCar() {
 	// init resolver
-	r, err := consul.NewConsulResolverWithConfig(&api.Config{
-		Address: net.JoinHostPort(
-			config.GlobalConsulConfig.Host,
-			strconv.Itoa(config.GlobalConsulConfig.Port)),
-		Token: config.GlobalConsulConfig.Token})
+	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
+		config.GlobalConsulConfig.Host,
+		config.GlobalConsulConfig.Port))
 	if err != nil {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}

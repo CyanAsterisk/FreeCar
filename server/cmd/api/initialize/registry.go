@@ -18,7 +18,6 @@ import (
 func InitRegistry() (registry.Registry, *registry.Info) {
 	// build a consul client
 	cfg := api.DefaultConfig()
-	cfg.Token = config.GlobalConsulConfig.Token
 	cfg.Address = net.JoinHostPort(
 		config.GlobalConsulConfig.Host,
 		strconv.Itoa(config.GlobalConsulConfig.Port))
@@ -27,7 +26,12 @@ func InitRegistry() (registry.Registry, *registry.Info) {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
 
-	r := consul.NewConsulRegister(consulClient)
+	r := consul.NewConsulRegister(consulClient,
+		consul.WithCheck(&api.AgentServiceCheck{
+			Interval:                       consts.ConsulCheckInterval,
+			Timeout:                        consts.ConsulCheckTimeout,
+			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
+		}))
 
 	// Using snowflake to generate service name.
 	sf, err := snowflake.NewNode(2)

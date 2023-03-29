@@ -1,23 +1,123 @@
 namespace go profile
-include "../rpc/profile.thrift"
+
+include "../base/common.thrift"
+include "../base/profile.thrift"
+
+struct GetProfileRequest {
+}
+
+struct GetProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required profile.Profile profile,
+}
+
+struct GetAllProfileRequest {
+}
+
+struct GetAllProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required list<profile.ProfileRecord> profile,
+}
+
+struct GetSomeProfileRequest {
+}
+
+struct GetSomeProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required list<profile.ProfileRecord> profile,
+}
+
+struct GetPendingProfileRequest {
+}
+
+struct GetPendingProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required list<profile.ProfileRecord> profile,
+}
+
+struct CheckProfileRequest {
+    1: required bool accept,
+}
+
+struct CheckProfileResponse {
+    1: required common.BaseResponse base_resp,
+}
+
+struct DeleteProfileRequest {
+    1: required i64 account_id (api.raw="account_id")
+}
+
+struct DeleteProfileResponse {
+    1: required common.BaseResponse base_resp,
+}
+
+struct SubmitProfileRequest {
+    1: required profile.Identity identity (api.raw="identity")
+}
+
+struct SubmitProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required profile.Profile profile,
+}
+
+struct ClearProfileRequest {
+}
+
+struct ClearProfileResponse {
+    1: required common.BaseResponse base_resp,
+    2: required profile.Profile profile,
+}
+
+struct GetProfilePhotoRequest {
+}
+
+struct GetProfilePhotoResponse {
+    1: required common.BaseResponse base_resp,
+    2: required string url,
+}
+
+struct CreateProfilePhotoRequest {
+}
+
+struct CreateProfilePhotoResponse {
+    1: required common.BaseResponse base_resp,
+    2: required string upload_url,
+}
+
+struct CompleteProfilePhotoRequest {
+}
+
+struct CompleteProfilePhotoResponse {
+    1: required common.BaseResponse base_resp,
+    2: required profile.Identity identity,
+}
+
+struct ClearProfilePhotoRequest {
+}
+
+struct ClearProfilePhotoResponse {
+    1: required common.BaseResponse base_resp,
+}
 
 
 service ProfileService{
 
   // for back-stage management
-  profile.GetAllProfileResponse GetAllProfile(1: profile.GetAllProfileRequest req)
-  profile.GetSomeProfileResponse GetSomeProfile(1: profile.GetSomeProfileRequest req)
-  profile.GetPendingProfileResponse GetPendingProfile(1: profile.GetPendingProfileRequest req)
-  profile.CheckProfileResponse CheckProfile(1: profile.CheckProfileRequest req)
-  profile.DeleteProfileResponse DeleteProfile(1: profile.DeleteProfileRequest req)
-
-   profile.GetProfilePhotoResponse GetProfilePhoto(1: profile.GetProfilePhotoRequest req)
-   profile.CreateProfilePhotoResponse CreateProfilePhoto(1: profile.CreateProfilePhotoRequest req)
-   profile.CompleteProfilePhotoResponse CompleteProfilePhoto(1: profile.CompleteProfilePhotoRequest req)
-   profile.ClearProfilePhotoResponse ClearProfilePhoto(1: profile.ClearProfilePhotoRequest req)
+  DeleteProfileResponse DeleteProfile(1: DeleteProfileRequest req) (api.delete="/profile/admin/delete")
+  CheckProfileResponse CheckProfile(1: CheckProfileRequest req) (api.post="/profile/admin/check")
+   GetAllProfileResponse GetAllProfile(1:GetAllProfileRequest req) (api.get="/profile/admin/all")
+   GetSomeProfileResponse GetSomeProfile(1: GetSomeProfileRequest req) (api.get="/profile/admin/some")
+   GetPendingProfileResponse GetPendingProfile(1: GetPendingProfileRequest req) (api.get="/profile/admin/pending")
 
   // for mini-program
-  profile.GetProfileResponse GetProfile(1: profile.GetProfileRequest req)
-  profile.SubmitProfileResponse SubmitProfile(1: profile.SubmitProfileRequest req)
-  profile.ClearProfileResponse ClearProfile(1: profile.ClearProfileRequest req)
+  GetProfileResponse GetProfile(1: GetProfileRequest req) (api.get="/profile/mini/profile")
+  SubmitProfileResponse SubmitProfile(1: SubmitProfileRequest req) (api.post="/profile/mini/profile")
+  ClearProfileResponse ClearProfile(1: ClearProfileRequest req) (api.delete="/profile/mini/profile")
+
+
+  CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req) (api.post="/profile/mini/photo")
+  ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req) (api.delete="/profile/mini/photo")
+  GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req) (api.get="/profile/mini/photo")
+
+  CompleteProfilePhotoResponse CompleteProfilePhoto(1: CompleteProfilePhotoRequest req) (api.get="/profile/mini/complete")
 }

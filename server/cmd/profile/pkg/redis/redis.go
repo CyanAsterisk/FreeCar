@@ -6,7 +6,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/bytedance/sonic"
 	"github.com/go-redis/redis/v8"
 )
@@ -19,7 +19,7 @@ func NewManager(client *redis.Client) *Manager {
 	return &Manager{RedisClient: client}
 }
 
-func (r *Manager) GetProfile(c context.Context, aid id.AccountID) (*profile.Profile, error) {
+func (r *Manager) GetProfile(c context.Context, aid id.AccountID) (*base.Profile, error) {
 	p, err := r.RedisClient.Get(c, aid.String()).Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -27,14 +27,14 @@ func (r *Manager) GetProfile(c context.Context, aid id.AccountID) (*profile.Prof
 		}
 		return nil, err
 	}
-	var pv profile.Profile
+	var pv base.Profile
 	if err = sonic.UnmarshalString(p, &pv); err != nil {
 		return nil, err
 	}
 	return &pv, nil
 }
 
-func (r *Manager) InsertProfile(c context.Context, aid id.AccountID, p *profile.Profile) error {
+func (r *Manager) InsertProfile(c context.Context, aid id.AccountID, p *base.Profile) error {
 	_, err := r.RedisClient.Get(c, aid.String()).Result()
 	if err != redis.Nil {
 		if err == nil {

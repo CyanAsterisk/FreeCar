@@ -8,7 +8,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	car "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
 
@@ -37,7 +37,7 @@ func TestCarLifecycle(t *testing.T) {
 							Id:        int64(2000000 + i),
 							AvatarUrl: fmt.Sprintf("avatarURL-of-driver%d", i),
 						},
-						Position: &car.Location{
+						Position: &car.Position{
 							Latitude:  float64(69 + i),
 							Longitude: float64(120 + i),
 						},

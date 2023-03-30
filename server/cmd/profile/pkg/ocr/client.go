@@ -7,7 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/hertz/pkg/app/client"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -33,7 +33,7 @@ type RequestRes struct {
 	} `json:"words_result"`
 }
 
-func (l *LicenseManager) GetLicenseInfo(url string) (*profile.Identity, error) {
+func (l *LicenseManager) GetLicenseInfo(url string) (*base.Identity, error) {
 	c, err := client.NewClient(client.WithDialer(standard.NewDialer()))
 	if err != nil {
 		hlog.Error("new hertz client error", err)
@@ -52,7 +52,7 @@ func (l *LicenseManager) GetLicenseInfo(url string) (*profile.Identity, error) {
 		hlog.Error("unmarshal license info error", err)
 		return nil, err
 	}
-	var gender profile.Gender
+	var gender base.Gender
 	if res.WordsResult.Gender.Words == "男" {
 		gender = 1
 	} else if res.WordsResult.Gender.Words == "女" {
@@ -61,7 +61,7 @@ func (l *LicenseManager) GetLicenseInfo(url string) (*profile.Identity, error) {
 		gender = 0
 	}
 	birthDateMillis, err := strconv.ParseInt(res.WordsResult.BirthDay.Words, 10, 64)
-	identity := &profile.Identity{
+	identity := &base.Identity{
 		LicNumber:       res.WordsResult.LicenseNum.Words,
 		Name:            res.WordsResult.Name.Words,
 		Gender:          gender,

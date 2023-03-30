@@ -9,6 +9,7 @@ import (
 	redisPkg "github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
@@ -63,7 +64,7 @@ func TestCarUpdate(t *testing.T) {
 				_, err = s.UnlockCar(c, &car.UnlockCarRequest{
 					Id:     carID.String(),
 					TripId: "test-tripId",
-					Driver: &car.Driver{
+					Driver: &base.Driver{
 						Id:        1024,
 						AvatarUrl: "test-avatarURL",
 					},
@@ -77,11 +78,11 @@ func TestCarUpdate(t *testing.T) {
 			op: func() error {
 				_, err = s.UpdateCar(c, &car.UpdateCarRequest{
 					Id: carID.String(),
-					Position: &car.Location{
+					Position: &base.Position{
 						Latitude:  31,
 						Longitude: 121,
 					},
-					Status: car.CarStatus_UNLOCKED,
+					Status: base.CarStatus_UNLOCKED,
 				})
 				return err
 			},
@@ -93,7 +94,7 @@ func TestCarUpdate(t *testing.T) {
 				_, err := s.UnlockCar(c, &car.UnlockCarRequest{
 					Id:     carID.String(),
 					TripId: "bad_trip",
-					Driver: &car.Driver{
+					Driver: &base.Driver{
 						Id:        1111,
 						AvatarUrl: "test_avatar",
 					},
@@ -117,7 +118,7 @@ func TestCarUpdate(t *testing.T) {
 			op: func() error {
 				_, err := s.UpdateCar(c, &car.UpdateCarRequest{
 					Id:     carID.String(),
-					Status: car.CarStatus_LOCKED,
+					Status: base.CarStatus_LOCKED,
 				})
 				return err
 			},
@@ -137,13 +138,13 @@ func TestCarUpdate(t *testing.T) {
 			t.Errorf("%s: operation failed: %v", cc.name, err)
 			continue
 		}
-		car, err := s.GetCar(c, &car.GetCarRequest{
+		cr, err := s.GetCar(c, &car.GetCarRequest{
 			Id: carID.String(),
 		})
 		if err != nil {
 			t.Errorf("%s: cannot get car after operation: %v", cc.name, err)
 		}
-		b, err := json.Marshal(car)
+		b, err := json.Marshal(cr)
 		if err != nil {
 			t.Errorf("%s: failed marshalling response: %v", cc.name, err)
 		}
@@ -156,6 +157,6 @@ func TestCarUpdate(t *testing.T) {
 
 type testPublisher struct{}
 
-func (p *testPublisher) Publish(context.Context, *car.CarEntity) error {
+func (p *testPublisher) Publish(context.Context, *base.CarEntity) error {
 	return nil
 }

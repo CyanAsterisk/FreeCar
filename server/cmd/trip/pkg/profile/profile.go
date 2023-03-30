@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile/profileservice"
 	"github.com/bytedance/sonic"
@@ -23,7 +24,7 @@ func (m *Manager) Verify(c context.Context, aid id.AccountID) (id.IdentityID, er
 	if err != nil {
 		return nilID, fmt.Errorf("cannot get profile: %v", err)
 	}
-	if resp.Profile.IdentityStatus != profile.IdentityStatus_VERIFIED {
+	if resp.Profile.IdentityStatus != base.IdentityStatus_VERIFIED {
 		return nilID, fmt.Errorf("invalid identity status")
 	}
 

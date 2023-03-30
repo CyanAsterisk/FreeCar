@@ -7,7 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	car "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
@@ -65,7 +65,7 @@ func TestCarLifeCycle(t *testing.T) {
 			op: func() string {
 				resp, err := manager.UpdateCar(ctx, "640dc5f80dfe5ce3e4d8cf10", car.CarStatus_LOCKED, &CarUpdate{
 					Status: car.CarStatus_LOCKING,
-					Position: &car.Location{
+					Position: &car.Position{
 						Latitude:  29,
 						Longitude: 120,
 					},

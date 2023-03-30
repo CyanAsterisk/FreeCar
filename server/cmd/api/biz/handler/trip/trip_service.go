@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	kbase "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	ktrip "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -144,7 +145,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err = config.GlobalTripClient.GetTrips(ctx, &ktrip.GetTripsRequest{
-		Status:    ktrip.TripStatus(req.Status),
+		Status:    kbase.TripStatus(req.Status),
 		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
 	if err != nil {

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mq"
-	cartr "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip/tripservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -20,11 +20,11 @@ func RunUpdater(sub mq.Subscriber, ts tripservice.Client) {
 	}
 
 	for car := range ch {
-		if car.Car.Status == cartr.CarStatus_UNLOCKED &&
+		if car.Car.Status == base.CarStatus_UNLOCKED &&
 			car.Car.TripId != "" && car.Car.Driver.Id != 0 {
 			_, err := ts.UpdateTrip(context.Background(), &trip.UpdateTripRequest{
 				Id: car.Car.TripId,
-				Current: &trip.Location{
+				Current: &base.Location{
 					Latitude:  car.Car.Position.Latitude,
 					Longitude: car.Car.Position.Longitude,
 				},

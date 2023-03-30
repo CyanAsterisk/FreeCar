@@ -3,12 +3,12 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/bytedance/sonic"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
 
@@ -21,8 +21,8 @@ func TestProfileLifeCycle(t *testing.T) {
 	}
 
 	aid := id.AccountID(1024)
-	pf := &profile.Profile{
-		Identity: &profile.Identity{
+	pf := &base.Profile{
+		Identity: &base.Identity{
 			LicNumber:       "10000000001",
 			Name:            "FreeCar",
 			Gender:          1,
@@ -65,7 +65,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "submit profile",
 			op: func() string {
-				err := manager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, pf)
+				err := manager.UpdateProfile(ctx, aid, base.IdentityStatus_UNSUBMITTED, pf)
 				if err != nil {
 					return fmt.Sprintf("[err = %+v]", err)
 				}
@@ -77,7 +77,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "submit_again",
 			op: func() string {
-				err := manager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, pf)
+				err := manager.UpdateProfile(ctx, aid, base.IdentityStatus_UNSUBMITTED, pf)
 				if err != nil {
 					return fmt.Sprintf("[err = %+v]", err)
 				}
@@ -89,9 +89,9 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "verify profile",
 			op: func() string {
-				err := manager.UpdateProfile(ctx, aid, profile.IdentityStatus_PENDING, &profile.Profile{
+				err := manager.UpdateProfile(ctx, aid, base.IdentityStatus_PENDING, &base.Profile{
 					Identity:       pf.Identity,
-					IdentityStatus: profile.IdentityStatus_VERIFIED,
+					IdentityStatus: base.IdentityStatus_VERIFIED,
 				})
 				if err != nil {
 					return fmt.Sprintf("[err = %+v]", err)

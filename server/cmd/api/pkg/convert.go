@@ -3,12 +3,10 @@ package pkg
 import (
 	hbase "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/base"
 	kbase "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
-
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 )
 
-func ConvertTripLocation(l *hbase.Location) *trip.Location {
-	return &trip.Location{
+func ConvertTripLocation(l *hbase.Location) *kbase.Location {
+	return &kbase.Location{
 		Latitude:  l.Latitude,
 		Longitude: l.Longitude,
 	}

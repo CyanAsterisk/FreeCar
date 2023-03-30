@@ -4,1040 +4,11 @@ package profile
 
 import (
 	"context"
-	"database/sql"
-	"database/sql/driver"
 	"fmt"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
 )
-
-type Gender int64
-
-const (
-	Gender_G_NOT_SPECIFIED Gender = 0
-	Gender_MALE            Gender = 1
-	Gender_FEMALE          Gender = 2
-)
-
-func (p Gender) String() string {
-	switch p {
-	case Gender_G_NOT_SPECIFIED:
-		return "G_NOT_SPECIFIED"
-	case Gender_MALE:
-		return "MALE"
-	case Gender_FEMALE:
-		return "FEMALE"
-	}
-	return "<UNSET>"
-}
-
-func GenderFromString(s string) (Gender, error) {
-	switch s {
-	case "G_NOT_SPECIFIED":
-		return Gender_G_NOT_SPECIFIED, nil
-	case "MALE":
-		return Gender_MALE, nil
-	case "FEMALE":
-		return Gender_FEMALE, nil
-	}
-	return Gender(0), fmt.Errorf("not a valid Gender string")
-}
-
-func GenderPtr(v Gender) *Gender { return &v }
-func (p *Gender) Scan(value interface{}) (err error) {
-	var result sql.NullInt64
-	err = result.Scan(value)
-	*p = Gender(result.Int64)
-	return
-}
-
-func (p *Gender) Value() (driver.Value, error) {
-	if p == nil {
-		return nil, nil
-	}
-	return int64(*p), nil
-}
-
-type IdentityStatus int64
-
-const (
-	IdentityStatus_UNSUBMITTED IdentityStatus = 0
-	IdentityStatus_PENDING     IdentityStatus = 1
-	IdentityStatus_VERIFIED    IdentityStatus = 2
-	IdentityStatus_AUDITFAILED IdentityStatus = 3
-)
-
-func (p IdentityStatus) String() string {
-	switch p {
-	case IdentityStatus_UNSUBMITTED:
-		return "UNSUBMITTED"
-	case IdentityStatus_PENDING:
-		return "PENDING"
-	case IdentityStatus_VERIFIED:
-		return "VERIFIED"
-	case IdentityStatus_AUDITFAILED:
-		return "AUDITFAILED"
-	}
-	return "<UNSET>"
-}
-
-func IdentityStatusFromString(s string) (IdentityStatus, error) {
-	switch s {
-	case "UNSUBMITTED":
-		return IdentityStatus_UNSUBMITTED, nil
-	case "PENDING":
-		return IdentityStatus_PENDING, nil
-	case "VERIFIED":
-		return IdentityStatus_VERIFIED, nil
-	case "AUDITFAILED":
-		return IdentityStatus_AUDITFAILED, nil
-	}
-	return IdentityStatus(0), fmt.Errorf("not a valid IdentityStatus string")
-}
-
-func IdentityStatusPtr(v IdentityStatus) *IdentityStatus { return &v }
-func (p *IdentityStatus) Scan(value interface{}) (err error) {
-	var result sql.NullInt64
-	err = result.Scan(value)
-	*p = IdentityStatus(result.Int64)
-	return
-}
-
-func (p *IdentityStatus) Value() (driver.Value, error) {
-	if p == nil {
-		return nil, nil
-	}
-	return int64(*p), nil
-}
-
-type ProfileRecord struct {
-	AccountId   int64    `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
-	PhotoBlobId int64    `thrift:"photo_blob_id,2,required" frugal:"2,required,i64" json:"photo_blob_id"`
-	Profile     *Profile `thrift:"profile,3,required" frugal:"3,required,Profile" json:"profile"`
-}
-
-func NewProfileRecord() *ProfileRecord {
-	return &ProfileRecord{}
-}
-
-func (p *ProfileRecord) InitDefault() {
-	*p = ProfileRecord{}
-}
-
-func (p *ProfileRecord) GetAccountId() (v int64) {
-	return p.AccountId
-}
-
-func (p *ProfileRecord) GetPhotoBlobId() (v int64) {
-	return p.PhotoBlobId
-}
-
-var ProfileRecord_Profile_DEFAULT *Profile
-
-func (p *ProfileRecord) GetProfile() (v *Profile) {
-	if !p.IsSetProfile() {
-		return ProfileRecord_Profile_DEFAULT
-	}
-	return p.Profile
-}
-func (p *ProfileRecord) SetAccountId(val int64) {
-	p.AccountId = val
-}
-func (p *ProfileRecord) SetPhotoBlobId(val int64) {
-	p.PhotoBlobId = val
-}
-func (p *ProfileRecord) SetProfile(val *Profile) {
-	p.Profile = val
-}
-
-var fieldIDToName_ProfileRecord = map[int16]string{
-	1: "account_id",
-	2: "photo_blob_id",
-	3: "profile",
-}
-
-func (p *ProfileRecord) IsSetProfile() bool {
-	return p.Profile != nil
-}
-
-func (p *ProfileRecord) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetAccountId bool = false
-	var issetPhotoBlobId bool = false
-	var issetProfile bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetAccountId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetPhotoBlobId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 3:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetProfile = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetAccountId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPhotoBlobId {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetProfile {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ProfileRecord[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ProfileRecord[fieldId]))
-}
-
-func (p *ProfileRecord) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.AccountId = v
-	}
-	return nil
-}
-
-func (p *ProfileRecord) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.PhotoBlobId = v
-	}
-	return nil
-}
-
-func (p *ProfileRecord) ReadField3(iprot thrift.TProtocol) error {
-	p.Profile = NewProfile()
-	if err := p.Profile.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *ProfileRecord) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("ProfileRecord"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *ProfileRecord) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *ProfileRecord) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("photo_blob_id", thrift.I64, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.PhotoBlobId); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *ProfileRecord) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("profile", thrift.STRUCT, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Profile.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *ProfileRecord) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("ProfileRecord(%+v)", *p)
-}
-
-func (p *ProfileRecord) DeepEqual(ano *ProfileRecord) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.AccountId) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.PhotoBlobId) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.Profile) {
-		return false
-	}
-	return true
-}
-
-func (p *ProfileRecord) Field1DeepEqual(src int64) bool {
-
-	if p.AccountId != src {
-		return false
-	}
-	return true
-}
-func (p *ProfileRecord) Field2DeepEqual(src int64) bool {
-
-	if p.PhotoBlobId != src {
-		return false
-	}
-	return true
-}
-func (p *ProfileRecord) Field3DeepEqual(src *Profile) bool {
-
-	if !p.Profile.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
-type Profile struct {
-	Identity       *Identity      `thrift:"identity,1,required" frugal:"1,required,Identity" json:"identity"`
-	IdentityStatus IdentityStatus `thrift:"identity_status,2,required" frugal:"2,required,IdentityStatus" json:"identity_status"`
-}
-
-func NewProfile() *Profile {
-	return &Profile{}
-}
-
-func (p *Profile) InitDefault() {
-	*p = Profile{}
-}
-
-var Profile_Identity_DEFAULT *Identity
-
-func (p *Profile) GetIdentity() (v *Identity) {
-	if !p.IsSetIdentity() {
-		return Profile_Identity_DEFAULT
-	}
-	return p.Identity
-}
-
-func (p *Profile) GetIdentityStatus() (v IdentityStatus) {
-	return p.IdentityStatus
-}
-func (p *Profile) SetIdentity(val *Identity) {
-	p.Identity = val
-}
-func (p *Profile) SetIdentityStatus(val IdentityStatus) {
-	p.IdentityStatus = val
-}
-
-var fieldIDToName_Profile = map[int16]string{
-	1: "identity",
-	2: "identity_status",
-}
-
-func (p *Profile) IsSetIdentity() bool {
-	return p.Identity != nil
-}
-
-func (p *Profile) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetIdentity bool = false
-	var issetIdentityStatus bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetIdentity = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.I32 {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetIdentityStatus = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetIdentity {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetIdentityStatus {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Profile[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Profile[fieldId]))
-}
-
-func (p *Profile) ReadField1(iprot thrift.TProtocol) error {
-	p.Identity = NewIdentity()
-	if err := p.Identity.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *Profile) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return err
-	} else {
-		p.IdentityStatus = IdentityStatus(v)
-	}
-	return nil
-}
-
-func (p *Profile) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Profile"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *Profile) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("identity", thrift.STRUCT, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Identity.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *Profile) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("identity_status", thrift.I32, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI32(int32(p.IdentityStatus)); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *Profile) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("Profile(%+v)", *p)
-}
-
-func (p *Profile) DeepEqual(ano *Profile) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Identity) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.IdentityStatus) {
-		return false
-	}
-	return true
-}
-
-func (p *Profile) Field1DeepEqual(src *Identity) bool {
-
-	if !p.Identity.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-func (p *Profile) Field2DeepEqual(src IdentityStatus) bool {
-
-	if p.IdentityStatus != src {
-		return false
-	}
-	return true
-}
-
-type Identity struct {
-	LicNumber       string `thrift:"lic_number,1,required" frugal:"1,required,string" json:"lic_number"`
-	Name            string `thrift:"name,2,required" frugal:"2,required,string" json:"name"`
-	Gender          Gender `thrift:"gender,3,required" frugal:"3,required,Gender" json:"gender"`
-	BirthDateMillis int64  `thrift:"birth_date_millis,4,required" frugal:"4,required,i64" json:"birth_date_millis"`
-}
-
-func NewIdentity() *Identity {
-	return &Identity{}
-}
-
-func (p *Identity) InitDefault() {
-	*p = Identity{}
-}
-
-func (p *Identity) GetLicNumber() (v string) {
-	return p.LicNumber
-}
-
-func (p *Identity) GetName() (v string) {
-	return p.Name
-}
-
-func (p *Identity) GetGender() (v Gender) {
-	return p.Gender
-}
-
-func (p *Identity) GetBirthDateMillis() (v int64) {
-	return p.BirthDateMillis
-}
-func (p *Identity) SetLicNumber(val string) {
-	p.LicNumber = val
-}
-func (p *Identity) SetName(val string) {
-	p.Name = val
-}
-func (p *Identity) SetGender(val Gender) {
-	p.Gender = val
-}
-func (p *Identity) SetBirthDateMillis(val int64) {
-	p.BirthDateMillis = val
-}
-
-var fieldIDToName_Identity = map[int16]string{
-	1: "lic_number",
-	2: "name",
-	3: "gender",
-	4: "birth_date_millis",
-}
-
-func (p *Identity) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetLicNumber bool = false
-	var issetName bool = false
-	var issetGender bool = false
-	var issetBirthDateMillis bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetLicNumber = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetName = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 3:
-			if fieldTypeId == thrift.I32 {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetGender = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetBirthDateMillis = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetLicNumber {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetName {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetGender {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetBirthDateMillis {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Identity[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Identity[fieldId]))
-}
-
-func (p *Identity) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.LicNumber = v
-	}
-	return nil
-}
-
-func (p *Identity) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Name = v
-	}
-	return nil
-}
-
-func (p *Identity) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return err
-	} else {
-		p.Gender = Gender(v)
-	}
-	return nil
-}
-
-func (p *Identity) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.BirthDateMillis = v
-	}
-	return nil
-}
-
-func (p *Identity) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Identity"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *Identity) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("lic_number", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.LicNumber); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *Identity) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *Identity) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("gender", thrift.I32, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI32(int32(p.Gender)); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *Identity) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("birth_date_millis", thrift.I64, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.BirthDateMillis); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *Identity) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("Identity(%+v)", *p)
-}
-
-func (p *Identity) DeepEqual(ano *Identity) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.LicNumber) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Name) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.Gender) {
-		return false
-	}
-	if !p.Field4DeepEqual(ano.BirthDateMillis) {
-		return false
-	}
-	return true
-}
-
-func (p *Identity) Field1DeepEqual(src string) bool {
-
-	if strings.Compare(p.LicNumber, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field2DeepEqual(src string) bool {
-
-	if strings.Compare(p.Name, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field3DeepEqual(src Gender) bool {
-
-	if p.Gender != src {
-		return false
-	}
-	return true
-}
-func (p *Identity) Field4DeepEqual(src int64) bool {
-
-	if p.BirthDateMillis != src {
-		return false
-	}
-	return true
-}
 
 type GetProfileRequest struct {
 	AccountId int64 `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
@@ -1213,7 +184,7 @@ func (p *GetProfileRequest) Field1DeepEqual(src int64) bool {
 
 type GetProfileResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  *Profile           `thrift:"profile,2,required" frugal:"2,required,Profile" json:"profile"`
+	Profile  *base.Profile      `thrift:"profile,2,required" frugal:"2,required,base.Profile" json:"profile"`
 }
 
 func NewGetProfileResponse() *GetProfileResponse {
@@ -1233,9 +204,9 @@ func (p *GetProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var GetProfileResponse_Profile_DEFAULT *Profile
+var GetProfileResponse_Profile_DEFAULT *base.Profile
 
-func (p *GetProfileResponse) GetProfile() (v *Profile) {
+func (p *GetProfileResponse) GetProfile() (v *base.Profile) {
 	if !p.IsSetProfile() {
 		return GetProfileResponse_Profile_DEFAULT
 	}
@@ -1244,7 +215,7 @@ func (p *GetProfileResponse) GetProfile() (v *Profile) {
 func (p *GetProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetProfileResponse) SetProfile(val *Profile) {
+func (p *GetProfileResponse) SetProfile(val *base.Profile) {
 	p.Profile = val
 }
 
@@ -1354,7 +325,7 @@ func (p *GetProfileResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *GetProfileResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.Profile = NewProfile()
+	p.Profile = base.NewProfile()
 	if err := p.Profile.Read(iprot); err != nil {
 		return err
 	}
@@ -1457,7 +428,7 @@ func (p *GetProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetProfileResponse) Field2DeepEqual(src *Profile) bool {
+func (p *GetProfileResponse) Field2DeepEqual(src *base.Profile) bool {
 
 	if !p.Profile.DeepEqual(src) {
 		return false
@@ -1560,8 +531,8 @@ func (p *GetAllProfileRequest) DeepEqual(ano *GetAllProfileRequest) bool {
 }
 
 type GetAllProfileResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  []*ProfileRecord   `thrift:"profile,2,required" frugal:"2,required,list<ProfileRecord>" json:"profile"`
+	BaseResp *base.BaseResponse    `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Profile  []*base.ProfileRecord `thrift:"profile,2,required" frugal:"2,required,list<base.ProfileRecord>" json:"profile"`
 }
 
 func NewGetAllProfileResponse() *GetAllProfileResponse {
@@ -1581,13 +552,13 @@ func (p *GetAllProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetAllProfileResponse) GetProfile() (v []*ProfileRecord) {
+func (p *GetAllProfileResponse) GetProfile() (v []*base.ProfileRecord) {
 	return p.Profile
 }
 func (p *GetAllProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetAllProfileResponse) SetProfile(val []*ProfileRecord) {
+func (p *GetAllProfileResponse) SetProfile(val []*base.ProfileRecord) {
 	p.Profile = val
 }
 
@@ -1697,9 +668,9 @@ func (p *GetAllProfileResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Profile = make([]*ProfileRecord, 0, size)
+	p.Profile = make([]*base.ProfileRecord, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewProfileRecord()
+		_elem := base.NewProfileRecord()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -1816,7 +787,7 @@ func (p *GetAllProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetAllProfileResponse) Field2DeepEqual(src []*ProfileRecord) bool {
+func (p *GetAllProfileResponse) Field2DeepEqual(src []*base.ProfileRecord) bool {
 
 	if len(p.Profile) != len(src) {
 		return false
@@ -1925,8 +896,8 @@ func (p *GetSomeProfileRequest) DeepEqual(ano *GetSomeProfileRequest) bool {
 }
 
 type GetSomeProfileResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  []*ProfileRecord   `thrift:"profile,2,required" frugal:"2,required,list<ProfileRecord>" json:"profile"`
+	BaseResp *base.BaseResponse    `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Profile  []*base.ProfileRecord `thrift:"profile,2,required" frugal:"2,required,list<base.ProfileRecord>" json:"profile"`
 }
 
 func NewGetSomeProfileResponse() *GetSomeProfileResponse {
@@ -1946,13 +917,13 @@ func (p *GetSomeProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetSomeProfileResponse) GetProfile() (v []*ProfileRecord) {
+func (p *GetSomeProfileResponse) GetProfile() (v []*base.ProfileRecord) {
 	return p.Profile
 }
 func (p *GetSomeProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetSomeProfileResponse) SetProfile(val []*ProfileRecord) {
+func (p *GetSomeProfileResponse) SetProfile(val []*base.ProfileRecord) {
 	p.Profile = val
 }
 
@@ -2062,9 +1033,9 @@ func (p *GetSomeProfileResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Profile = make([]*ProfileRecord, 0, size)
+	p.Profile = make([]*base.ProfileRecord, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewProfileRecord()
+		_elem := base.NewProfileRecord()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -2181,7 +1152,7 @@ func (p *GetSomeProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetSomeProfileResponse) Field2DeepEqual(src []*ProfileRecord) bool {
+func (p *GetSomeProfileResponse) Field2DeepEqual(src []*base.ProfileRecord) bool {
 
 	if len(p.Profile) != len(src) {
 		return false
@@ -2290,8 +1261,8 @@ func (p *GetPendingProfileRequest) DeepEqual(ano *GetPendingProfileRequest) bool
 }
 
 type GetPendingProfileResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  []*ProfileRecord   `thrift:"profile,2,required" frugal:"2,required,list<ProfileRecord>" json:"profile"`
+	BaseResp *base.BaseResponse    `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	Profile  []*base.ProfileRecord `thrift:"profile,2,required" frugal:"2,required,list<base.ProfileRecord>" json:"profile"`
 }
 
 func NewGetPendingProfileResponse() *GetPendingProfileResponse {
@@ -2311,13 +1282,13 @@ func (p *GetPendingProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetPendingProfileResponse) GetProfile() (v []*ProfileRecord) {
+func (p *GetPendingProfileResponse) GetProfile() (v []*base.ProfileRecord) {
 	return p.Profile
 }
 func (p *GetPendingProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetPendingProfileResponse) SetProfile(val []*ProfileRecord) {
+func (p *GetPendingProfileResponse) SetProfile(val []*base.ProfileRecord) {
 	p.Profile = val
 }
 
@@ -2427,9 +1398,9 @@ func (p *GetPendingProfileResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Profile = make([]*ProfileRecord, 0, size)
+	p.Profile = make([]*base.ProfileRecord, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewProfileRecord()
+		_elem := base.NewProfileRecord()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -2546,7 +1517,7 @@ func (p *GetPendingProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool
 	}
 	return true
 }
-func (p *GetPendingProfileResponse) Field2DeepEqual(src []*ProfileRecord) bool {
+func (p *GetPendingProfileResponse) Field2DeepEqual(src []*base.ProfileRecord) bool {
 
 	if len(p.Profile) != len(src) {
 		return false
@@ -3331,8 +2302,8 @@ func (p *DeleteProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type SubmitProfileRequest struct {
-	AccountId int64     `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
-	Identity  *Identity `thrift:"identity,2,required" frugal:"2,required,Identity" json:"identity"`
+	AccountId int64          `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
+	Identity  *base.Identity `thrift:"identity,2,required" frugal:"2,required,base.Identity" json:"identity"`
 }
 
 func NewSubmitProfileRequest() *SubmitProfileRequest {
@@ -3347,9 +2318,9 @@ func (p *SubmitProfileRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 
-var SubmitProfileRequest_Identity_DEFAULT *Identity
+var SubmitProfileRequest_Identity_DEFAULT *base.Identity
 
-func (p *SubmitProfileRequest) GetIdentity() (v *Identity) {
+func (p *SubmitProfileRequest) GetIdentity() (v *base.Identity) {
 	if !p.IsSetIdentity() {
 		return SubmitProfileRequest_Identity_DEFAULT
 	}
@@ -3358,7 +2329,7 @@ func (p *SubmitProfileRequest) GetIdentity() (v *Identity) {
 func (p *SubmitProfileRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
-func (p *SubmitProfileRequest) SetIdentity(val *Identity) {
+func (p *SubmitProfileRequest) SetIdentity(val *base.Identity) {
 	p.Identity = val
 }
 
@@ -3465,7 +2436,7 @@ func (p *SubmitProfileRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *SubmitProfileRequest) ReadField2(iprot thrift.TProtocol) error {
-	p.Identity = NewIdentity()
+	p.Identity = base.NewIdentity()
 	if err := p.Identity.Read(iprot); err != nil {
 		return err
 	}
@@ -3568,7 +2539,7 @@ func (p *SubmitProfileRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
+func (p *SubmitProfileRequest) Field2DeepEqual(src *base.Identity) bool {
 
 	if !p.Identity.DeepEqual(src) {
 		return false
@@ -3578,7 +2549,7 @@ func (p *SubmitProfileRequest) Field2DeepEqual(src *Identity) bool {
 
 type SubmitProfileResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  *Profile           `thrift:"profile,2,required" frugal:"2,required,Profile" json:"profile"`
+	Profile  *base.Profile      `thrift:"profile,2,required" frugal:"2,required,base.Profile" json:"profile"`
 }
 
 func NewSubmitProfileResponse() *SubmitProfileResponse {
@@ -3598,9 +2569,9 @@ func (p *SubmitProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var SubmitProfileResponse_Profile_DEFAULT *Profile
+var SubmitProfileResponse_Profile_DEFAULT *base.Profile
 
-func (p *SubmitProfileResponse) GetProfile() (v *Profile) {
+func (p *SubmitProfileResponse) GetProfile() (v *base.Profile) {
 	if !p.IsSetProfile() {
 		return SubmitProfileResponse_Profile_DEFAULT
 	}
@@ -3609,7 +2580,7 @@ func (p *SubmitProfileResponse) GetProfile() (v *Profile) {
 func (p *SubmitProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *SubmitProfileResponse) SetProfile(val *Profile) {
+func (p *SubmitProfileResponse) SetProfile(val *base.Profile) {
 	p.Profile = val
 }
 
@@ -3719,7 +2690,7 @@ func (p *SubmitProfileResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *SubmitProfileResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.Profile = NewProfile()
+	p.Profile = base.NewProfile()
 	if err := p.Profile.Read(iprot); err != nil {
 		return err
 	}
@@ -3822,7 +2793,7 @@ func (p *SubmitProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *SubmitProfileResponse) Field2DeepEqual(src *Profile) bool {
+func (p *SubmitProfileResponse) Field2DeepEqual(src *base.Profile) bool {
 
 	if !p.Profile.DeepEqual(src) {
 		return false
@@ -4004,7 +2975,7 @@ func (p *ClearProfileRequest) Field1DeepEqual(src int64) bool {
 
 type ClearProfileResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Profile  *Profile           `thrift:"profile,2,required" frugal:"2,required,Profile" json:"profile"`
+	Profile  *base.Profile      `thrift:"profile,2,required" frugal:"2,required,base.Profile" json:"profile"`
 }
 
 func NewClearProfileResponse() *ClearProfileResponse {
@@ -4024,9 +2995,9 @@ func (p *ClearProfileResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var ClearProfileResponse_Profile_DEFAULT *Profile
+var ClearProfileResponse_Profile_DEFAULT *base.Profile
 
-func (p *ClearProfileResponse) GetProfile() (v *Profile) {
+func (p *ClearProfileResponse) GetProfile() (v *base.Profile) {
 	if !p.IsSetProfile() {
 		return ClearProfileResponse_Profile_DEFAULT
 	}
@@ -4035,7 +3006,7 @@ func (p *ClearProfileResponse) GetProfile() (v *Profile) {
 func (p *ClearProfileResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *ClearProfileResponse) SetProfile(val *Profile) {
+func (p *ClearProfileResponse) SetProfile(val *base.Profile) {
 	p.Profile = val
 }
 
@@ -4145,7 +3116,7 @@ func (p *ClearProfileResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *ClearProfileResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.Profile = NewProfile()
+	p.Profile = base.NewProfile()
 	if err := p.Profile.Read(iprot); err != nil {
 		return err
 	}
@@ -4248,7 +3219,7 @@ func (p *ClearProfileResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *ClearProfileResponse) Field2DeepEqual(src *Profile) bool {
+func (p *ClearProfileResponse) Field2DeepEqual(src *base.Profile) bool {
 
 	if !p.Profile.DeepEqual(src) {
 		return false
@@ -5266,7 +4237,7 @@ func (p *CompleteProfilePhotoRequest) Field1DeepEqual(src int64) bool {
 
 type CompleteProfilePhotoResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Identity *Identity          `thrift:"identity,2,required" frugal:"2,required,Identity" json:"identity"`
+	Identity *base.Identity     `thrift:"identity,2,required" frugal:"2,required,base.Identity" json:"identity"`
 }
 
 func NewCompleteProfilePhotoResponse() *CompleteProfilePhotoResponse {
@@ -5286,9 +4257,9 @@ func (p *CompleteProfilePhotoResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var CompleteProfilePhotoResponse_Identity_DEFAULT *Identity
+var CompleteProfilePhotoResponse_Identity_DEFAULT *base.Identity
 
-func (p *CompleteProfilePhotoResponse) GetIdentity() (v *Identity) {
+func (p *CompleteProfilePhotoResponse) GetIdentity() (v *base.Identity) {
 	if !p.IsSetIdentity() {
 		return CompleteProfilePhotoResponse_Identity_DEFAULT
 	}
@@ -5297,7 +4268,7 @@ func (p *CompleteProfilePhotoResponse) GetIdentity() (v *Identity) {
 func (p *CompleteProfilePhotoResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *CompleteProfilePhotoResponse) SetIdentity(val *Identity) {
+func (p *CompleteProfilePhotoResponse) SetIdentity(val *base.Identity) {
 	p.Identity = val
 }
 
@@ -5407,7 +4378,7 @@ func (p *CompleteProfilePhotoResponse) ReadField1(iprot thrift.TProtocol) error 
 }
 
 func (p *CompleteProfilePhotoResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.Identity = NewIdentity()
+	p.Identity = base.NewIdentity()
 	if err := p.Identity.Read(iprot); err != nil {
 		return err
 	}
@@ -5510,7 +4481,7 @@ func (p *CompleteProfilePhotoResponse) Field1DeepEqual(src *base.BaseResponse) b
 	}
 	return true
 }
-func (p *CompleteProfilePhotoResponse) Field2DeepEqual(src *Identity) bool {
+func (p *CompleteProfilePhotoResponse) Field2DeepEqual(src *base.Identity) bool {
 
 	if !p.Identity.DeepEqual(src) {
 		return false

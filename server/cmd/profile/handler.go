@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
@@ -29,15 +30,15 @@ type MongoManager interface {
 	GetProfiles(c context.Context, limit int64) ([]*mongo.ProfileRecord, error)
 	GetPendingProfiles(c context.Context) ([]*mongo.ProfileRecord, error)
 	DeleteProfile(context.Context, id.AccountID) error
-	UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error
+	UpdateProfile(c context.Context, aid id.AccountID, prevState base.IdentityStatus, p *base.Profile) error
 	UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error
 }
 
 // RedisManager defines the redis server
 type RedisManager interface {
-	GetProfile(context.Context, id.AccountID) (*profile.Profile, error)
+	GetProfile(context.Context, id.AccountID) (*base.Profile, error)
 	RemoveProfile(context.Context, id.AccountID) error
-	InsertProfile(context.Context, id.AccountID, *profile.Profile) error
+	InsertProfile(context.Context, id.AccountID, *base.Profile) error
 }
 
 // BlobManager defines the Anti Corruption Layer
@@ -49,7 +50,7 @@ type BlobManager interface {
 
 // LicenseManager gets license info by Baidu OCR Api.
 type LicenseManager interface {
-	GetLicenseInfo(url string) (*profile.Identity, error)
+	GetLicenseInfo(url string) (*base.Identity, error)
 }
 
 // GetProfile implements the ProfileServiceImpl interface.
@@ -95,11 +96,11 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 		klog.Error("cannot remove profile in redis", err)
 		return resp, nil
 	}
-	p := &profile.Profile{
+	p := &base.Profile{
 		Identity:       req.Identity,
-		IdentityStatus: profile.IdentityStatus_PENDING,
+		IdentityStatus: base.IdentityStatus_PENDING,
 	}
-	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_UNSUBMITTED, p)
+	err = s.MongoManager.UpdateProfile(ctx, aid, base.IdentityStatus_UNSUBMITTED, p)
 	if err != nil {
 		if err == errno.RecordAlreadyExist {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordAlreadyExist)
@@ -118,14 +119,14 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.ClearProfileRequest) (resp *profile.ClearProfileResponse, err error) {
 	resp = new(profile.ClearProfileResponse)
 	aid := id.AccountID(req.AccountId)
-	p := &profile.Profile{}
+	p := &base.Profile{}
 	err = s.RedisManager.RemoveProfile(ctx, aid)
 	if err != nil {
 		klog.Error("cannot remove profile in redis", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear cache error"))
 		return resp, nil
 	}
-	err = s.MongoManager.UpdateProfile(ctx, aid, profile.IdentityStatus_VERIFIED, p)
+	err = s.MongoManager.UpdateProfile(ctx, aid, base.IdentityStatus_VERIFIED, p)
 	if err != nil {
 		klog.Error("cannot update profile", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
@@ -270,7 +271,7 @@ func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.Get
 		return resp, nil
 	}
 	for _, pr := range prs {
-		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
+		resp.Profile = append(resp.Profile, &base.ProfileRecord{
 			AccountId:   pr.AccountID,
 			PhotoBlobId: pr.PhotoBlobID,
 			Profile:     pr.Profile,
@@ -294,7 +295,7 @@ func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.Ge
 		return resp, nil
 	}
 	for _, pr := range prs {
-		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
+		resp.Profile = append(resp.Profile, &base.ProfileRecord{
 			AccountId:   pr.AccountID,
 			PhotoBlobId: pr.PhotoBlobID,
 			Profile:     pr.Profile,
@@ -313,14 +314,14 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
 		return resp, nil
 	}
-	pf := new(profile.Profile)
+	pf := new(base.Profile)
 	if req.Accept {
-		pf.IdentityStatus = profile.IdentityStatus_VERIFIED
+		pf.IdentityStatus = base.IdentityStatus_VERIFIED
 	} else {
-		pf.IdentityStatus = profile.IdentityStatus_AUDITFAILED
+		pf.IdentityStatus = base.IdentityStatus_AUDITFAILED
 	}
-	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), profile.IdentityStatus_PENDING, &profile.Profile{
-		IdentityStatus: profile.IdentityStatus_AUDITFAILED,
+	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), base.IdentityStatus_PENDING, &base.Profile{
+		IdentityStatus: base.IdentityStatus_AUDITFAILED,
 	})
 	if err != nil {
 		klog.Error("update profile err", err)
@@ -369,7 +370,7 @@ func (s *ProfileServiceImpl) GetPendingProfile(ctx context.Context, req *profile
 		return resp, nil
 	}
 	for _, pr := range prs {
-		resp.Profile = append(resp.Profile, &profile.ProfileRecord{
+		resp.Profile = append(resp.Profile, &base.ProfileRecord{
 			AccountId:   pr.AccountID,
 			PhotoBlobId: pr.PhotoBlobID,
 			Profile:     pr.Profile,

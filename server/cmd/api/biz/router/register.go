@@ -3,7 +3,6 @@
 package router
 
 import (
-	api "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/api"
 	car "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/car"
 	profile "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/profile"
 	trip "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/trip"
@@ -22,5 +21,4 @@ func GeneratedRegister(r *server.Hertz) {
 
 	user.Register(r)
 
-	api.Register(r)
 }

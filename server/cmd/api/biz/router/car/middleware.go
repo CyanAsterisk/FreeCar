@@ -70,11 +70,6 @@ func _miniMw() []app.HandlerFunc {
 	}
 }
 
-func _car0Mw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _getcarMw() []app.HandlerFunc {
 	// your code...
 	return nil

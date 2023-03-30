@@ -9,6 +9,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -37,17 +38,17 @@ type CarManager interface {
 
 // POIManager resolves POI(Point Of Interest).
 type POIManager interface {
-	Resolve(*trip.Location) (string, error)
+	Resolve(*base.Location) (string, error)
 }
 
 // MongoManager defines the mongoDB server
 type MongoManager interface {
-	CreateTrip(c context.Context, trip *trip.Trip) (*mongo.TripRecord, error)
+	CreateTrip(c context.Context, trip *base.Trip) (*mongo.TripRecord, error)
 	GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*mongo.TripRecord, error)
-	GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*mongo.TripRecord, error)
+	GetTrips(c context.Context, accountID id.AccountID, status base.TripStatus) ([]*mongo.TripRecord, error)
 	GetTripsByLimit(c context.Context, limit int64) ([]*mongo.TripRecord, error)
 	DeleteTrip(c context.Context, id id.TripID) error
-	UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error
+	UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *base.Trip) error
 }
 
 // CreateTrip implements the TripServiceImpl interface.
@@ -55,15 +56,15 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	resp = new(trip.CreateTripResponse)
 	aid := id.AccountID(req.AccountId)
 
-	ls := s.calcCurrentStatus(&trip.LocationStatus{
+	ls := s.calcCurrentStatus(&base.LocationStatus{
 		Location:     req.Start,
 		TimestampSec: nowFunc(),
 	}, req.Start)
 
-	tr, err := s.MongoManager.CreateTrip(ctx, &trip.Trip{
+	tr, err := s.MongoManager.CreateTrip(ctx, &base.Trip{
 		AccountId: aid.Int64(),
 
-		Status:  trip.TripStatus_IN_PROGRESS,
+		Status:  base.TripStatus_IN_PROGRESS,
 		Start:   ls,
 		Current: ls,
 	})
@@ -73,7 +74,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 		return resp, nil
 	}
 
-	resp.TripEntity = &trip.TripEntity{
+	resp.TripEntity = &base.TripEntity{
 		Id:   tr.ID.Hex(),
 		Trip: tr.Trip,
 	}
@@ -111,9 +112,9 @@ func (s *TripServiceImpl) GetTrips(ctx context.Context, req *trip.GetTripsReques
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	var res []*trip.TripEntity
+	var res []*base.TripEntity
 	for _, tr := range trips {
-		res = append(res, &trip.TripEntity{
+		res = append(res, &base.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
@@ -139,7 +140,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 		return resp, nil
 	}
 
-	if tr.Trip.Status == trip.TripStatus_FINISHED {
+	if tr.Trip.Status == base.TripStatus_FINISHED {
 		resp.BaseResp = tools.BuildBaseResp(errno.BadRequest.WithMessage("cannot update a finished trip"))
 		return resp, nil
 	}
@@ -159,7 +160,7 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 
 	if req.EndTrip {
 		tr.Trip.End = tr.Trip.Current
-		tr.Trip.Status = trip.TripStatus_FINISHED
+		tr.Trip.Status = base.TripStatus_FINISHED
 		err = s.CarManager.Lock(ctx, id.CarID(tr.Trip.CarId), aid)
 		if err != nil {
 			klog.Error("lock car err", err)
@@ -187,9 +188,9 @@ func (s *TripServiceImpl) GetAllTrips(ctx context.Context, req *trip.GetAllTrips
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	var res []*trip.TripEntity
+	var res []*base.TripEntity
 	for _, tr := range trips {
-		res = append(res, &trip.TripEntity{
+		res = append(res, &base.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
@@ -208,9 +209,9 @@ func (s *TripServiceImpl) GetSomeTrips(ctx context.Context, req *trip.GetSomeTri
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))
 		return resp, nil
 	}
-	var res []*trip.TripEntity
+	var res []*base.TripEntity
 	for _, tr := range trips {
-		res = append(res, &trip.TripEntity{
+		res = append(res, &base.TripEntity{
 			Id:   tr.ID.Hex(),
 			Trip: tr.Trip,
 		})
@@ -242,7 +243,7 @@ const (
 	kmPerSec    = 0.02
 )
 
-func (s *TripServiceImpl) calcCurrentStatus(last *trip.LocationStatus, cur *trip.Location) *trip.LocationStatus {
+func (s *TripServiceImpl) calcCurrentStatus(last *base.LocationStatus, cur *base.Location) *base.LocationStatus {
 	now := nowFunc()
 	elapsedSec := float64(now - last.TimestampSec)
 	// get start position
@@ -250,7 +251,7 @@ func (s *TripServiceImpl) calcCurrentStatus(last *trip.LocationStatus, cur *trip
 	if err != nil {
 		klog.Info("cannot resolve poi", "location", cur, err)
 	}
-	return &trip.LocationStatus{
+	return &base.LocationStatus{
 		Location:     cur,
 		FeeCent:      last.FeeCent + int32(centsPerSec*elapsedSec*2*rand.Float64()),
 		KmDriven:     last.KmDriven + kmPerSec*elapsedSec*2*rand.Float64(),

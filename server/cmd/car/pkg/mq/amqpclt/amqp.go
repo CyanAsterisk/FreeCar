@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/streadway/amqp"
@@ -32,7 +32,7 @@ func NewPublisher(conn *amqp.Connection, exchange string) (*Publisher, error) {
 }
 
 // Publish publishes a message.
-func (p *Publisher) Publish(_ context.Context, car *car.CarEntity) error {
+func (p *Publisher) Publish(_ context.Context, car *base.CarEntity) error {
 	body, err := sonic.Marshal(car)
 	if err != nil {
 		return fmt.Errorf("cannot marshal: %v", err)
@@ -106,16 +106,16 @@ func (s *Subscriber) SubscribeRaw(_ context.Context) (<-chan amqp.Delivery, func
 }
 
 // Subscribe subscribes and returns a channel with CarEntity data.
-func (s *Subscriber) Subscribe(c context.Context) (chan *car.CarEntity, func(), error) {
+func (s *Subscriber) Subscribe(c context.Context) (chan *base.CarEntity, func(), error) {
 	msgCh, cleanUp, err := s.SubscribeRaw(c)
 	if err != nil {
 		return nil, cleanUp, err
 	}
 
-	carCh := make(chan *car.CarEntity)
+	carCh := make(chan *base.CarEntity)
 	go func() {
 		for msg := range msgCh {
-			var carEn car.CarEntity
+			var carEn base.CarEntity
 			err := sonic.Unmarshal(msg.Body, &carEn)
 			if err != nil {
 				klog.Errorf("cannot unmarshal %s", err.Error())

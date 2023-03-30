@@ -2,13 +2,13 @@ package mongo
 
 import (
 	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -27,9 +27,9 @@ const (
 
 // ProfileRecord defines the profile record in db.
 type ProfileRecord struct {
-	AccountID   int64            `bson:"accountid"`
-	Profile     *profile.Profile `bson:"profile"`
-	PhotoBlobID int64            `bson:"photoblobid"`
+	AccountID   int64         `bson:"accountid"`
+	Profile     *base.Profile `bson:"profile"`
+	PhotoBlobID int64         `bson:"photoblobid"`
 }
 
 // NewManager creates a mongo manager.
@@ -77,7 +77,7 @@ func (m *Manager) GetProfiles(c context.Context, limit int64) ([]*ProfileRecord,
 // GetPendingProfiles gets peding profiles.
 func (m *Manager) GetPendingProfiles(c context.Context) ([]*ProfileRecord, error) {
 	filter := bson.M{
-		identityStatusField: profile.IdentityStatus_PENDING,
+		identityStatusField: base.IdentityStatus_PENDING,
 	}
 	opt := options.Find()
 	res, err := m.col.Find(c, filter, opt)
@@ -97,11 +97,11 @@ func (m *Manager) GetPendingProfiles(c context.Context) ([]*ProfileRecord, error
 }
 
 // UpdateProfile updates profile for an account.
-func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState profile.IdentityStatus, p *profile.Profile) error {
+func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState base.IdentityStatus, p *base.Profile) error {
 	filter := bson.M{
 		identityStatusField: prevState,
 	}
-	if prevState == profile.IdentityStatus_UNSUBMITTED {
+	if prevState == base.IdentityStatus_UNSUBMITTED {
 		filter = mgutil.ZeroOrDoesNotExist(identityStatusField, prevState)
 	}
 	filter[accountIDField] = aid.Int64()

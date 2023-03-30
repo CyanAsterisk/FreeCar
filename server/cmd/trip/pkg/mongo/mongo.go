@@ -3,12 +3,13 @@ package mongo
 import (
 	"context"
 	"fmt"
+
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -25,7 +26,7 @@ const (
 type TripRecord struct {
 	mgutil.IDField        `bson:"inline"`
 	mgutil.UpdatedAtField `bson:"inline"`
-	Trip                  *trip.Trip `bson:"trip"`
+	Trip                  *base.Trip `bson:"trip"`
 }
 
 type Manager struct {
@@ -38,7 +39,7 @@ func NewManager(db *mongo.Database) *Manager {
 }
 
 // CreateTrip creates a trip.
-func (m *Manager) CreateTrip(c context.Context, trip *trip.Trip) (*TripRecord, error) {
+func (m *Manager) CreateTrip(c context.Context, trip *base.Trip) (*TripRecord, error) {
 	r := &TripRecord{
 		Trip: trip,
 	}
@@ -85,11 +86,11 @@ func (m *Manager) GetTrip(c context.Context, id id.TripID, accountID id.AccountI
 
 // GetTrips gets trips for the account by status.
 // If status is not specified, gets all trips for the account.
-func (m *Manager) GetTrips(c context.Context, accountID id.AccountID, status trip.TripStatus) ([]*TripRecord, error) {
+func (m *Manager) GetTrips(c context.Context, accountID id.AccountID, status base.TripStatus) ([]*TripRecord, error) {
 	filter := bson.M{
 		accountIDField: accountID.Int64(),
 	}
-	if status != trip.TripStatus_TS_NOT_SPECIFIED {
+	if status != base.TripStatus_TS_NOT_SPECIFIED {
 		filter[statusField] = status
 	}
 
@@ -150,7 +151,7 @@ func (m *Manager) DeleteTrip(c context.Context, id id.TripID) error {
 }
 
 // UpdateTrip updates a trip.
-func (m *Manager) UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *trip.Trip) error {
+func (m *Manager) UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *base.Trip) error {
 	objID, err := objid.FromID(tid)
 	if err != nil {
 		return fmt.Errorf("invalid id: %v", err)

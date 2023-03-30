@@ -49,7 +49,7 @@ func main() {
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default
 		hertzSentinel.WithServerBlockFallback(func(c context.Context, ctx *app.RequestContext) {
-			errno.SendResponse(ctx, errno.TooManyReqeust, nil)
+			errno.SendResponse1(ctx, errno.TooManyReqeust, nil)
 			ctx.Abort()
 		}),
 	))

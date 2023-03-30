@@ -11,6 +11,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
@@ -36,7 +37,7 @@ func TestCreateTrip(t *testing.T) {
 
 	req := &trip.CreateTripRequest{
 		CarId: "car1",
-		Start: &trip.Location{
+		Start: &base.Location{
 			Latitude:  32.123,
 			Longitude: 114.2525,
 		},
@@ -150,16 +151,16 @@ func TestTripLifecycle(t *testing.T) {
 	cases := []struct {
 		name string
 		now  int64
-		op   func() (*trip.Trip, error)
+		op   func() (*base.Trip, error)
 		want string
 	}{
 		{
 			name: "create_trip",
 			now:  10000,
-			op: func() (*trip.Trip, error) {
+			op: func() (*base.Trip, error) {
 				e, err := s.CreateTrip(c, &trip.CreateTripRequest{
 					CarId: "car1",
-					Start: &trip.Location{
+					Start: &base.Location{
 						Latitude:  32.123,
 						Longitude: 114.2525,
 					},
@@ -175,10 +176,10 @@ func TestTripLifecycle(t *testing.T) {
 		{
 			name: "update_trip",
 			now:  20000,
-			op: func() (*trip.Trip, error) {
+			op: func() (*base.Trip, error) {
 				resp, err := s.UpdateTrip(c, &trip.UpdateTripRequest{
 					Id: tid.String(),
-					Current: &trip.Location{
+					Current: &base.Location{
 						Latitude:  28.234234,
 						Longitude: 123.243255,
 					},
@@ -191,7 +192,7 @@ func TestTripLifecycle(t *testing.T) {
 		{
 			name: "finish_trip",
 			now:  30000,
-			op: func() (*trip.Trip, error) {
+			op: func() (*base.Trip, error) {
 				resp, err := s.UpdateTrip(c, &trip.UpdateTripRequest{
 					Id:        tid.String(),
 					EndTrip:   true,
@@ -204,7 +205,7 @@ func TestTripLifecycle(t *testing.T) {
 		{
 			name: "query_trip",
 			now:  40000,
-			op: func() (*trip.Trip, error) {
+			op: func() (*base.Trip, error) {
 				resp, err := s.GetTrip(c, &trip.GetTripRequest{
 					Id:        tid.String(),
 					AccountId: int64(aid1),

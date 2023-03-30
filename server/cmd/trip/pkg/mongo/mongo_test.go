@@ -7,7 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
@@ -45,10 +45,10 @@ func TestTripLifeCycle(t *testing.T) {
 			op: func() string {
 				mgutil.NewObjIDWithValue(tid)
 				mgutil.SetNextUpdateAt(1678795599000)
-				resp, err := manager.CreateTrip(ctx, &trip.Trip{
+				resp, err := manager.CreateTrip(ctx, &base.Trip{
 					AccountId:  1024,
 					CarId:      "car1-id",
-					Start:      &trip.LocationStatus{},
+					Start:      &base.LocationStatus{},
 					Status:     1,
 					IdentityId: "test-1",
 				})
@@ -60,7 +60,7 @@ func TestTripLifeCycle(t *testing.T) {
 			name: "duplicate create trip",
 			op: func() string {
 				mgutil.NewObjIDWithValue(tid)
-				resp, err := manager.CreateTrip(ctx, &trip.Trip{})
+				resp, err := manager.CreateTrip(ctx, &base.Trip{})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
 			want: "[err = err_code=80001, err_msg=record already exist][resp = <nil>]",
@@ -76,10 +76,10 @@ func TestTripLifeCycle(t *testing.T) {
 		{
 			name: "update trip",
 			op: func() string {
-				err := manager.UpdateTrip(ctx, tid, aid, 1678795599000, &trip.Trip{
+				err := manager.UpdateTrip(ctx, tid, aid, 1678795599000, &base.Trip{
 					AccountId: aid.Int64(),
-					Current: &trip.LocationStatus{
-						Location: &trip.Location{
+					Current: &base.LocationStatus{
+						Location: &base.Location{
 							Latitude:  30,
 							Longitude: 90,
 						},

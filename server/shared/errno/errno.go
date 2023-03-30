@@ -58,11 +58,15 @@ var (
 	DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
 )
 
-// SendResponse pack response
-func SendResponse(c *app.RequestContext, err ErrNo, data interface{}) {
+// SendResponse1 pack response
+func SendResponse1(c *app.RequestContext, err ErrNo, data interface{}) {
 	c.JSON(consts.StatusOK, Response{
 		Code:    err.ErrCode,
 		Message: err.ErrMsg,
 		Data:    data,
 	})
+}
+
+func NewSendResponse(c *app.RequestContext, data interface{}) {
+	c.JSON(consts.StatusOK, data)
 }

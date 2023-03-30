@@ -17,9 +17,9 @@ func customizedRegister(r *server.Hertz) {
 
 	// your code ...
 	r.NoRoute(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 404
-		errno.SendResponse(c, errno.BadRequest, nil)
+		errno.SendResponse1(c, errno.BadRequest, nil)
 	})
 	r.NoMethod(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 405
-		errno.SendResponse(c, errno.BadRequest, nil)
+		errno.SendResponse1(c, errno.BadRequest, nil)
 	})
 }

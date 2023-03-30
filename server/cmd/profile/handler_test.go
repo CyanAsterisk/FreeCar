@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
@@ -59,7 +60,7 @@ func TestProfileLifeCycle(t *testing.T) {
 			op: func() string {
 				resp, err := s.SubmitProfile(c, &profile.SubmitProfileRequest{
 					AccountId: int64(aid),
-					Identity: &profile.Identity{
+					Identity: &base.Identity{
 						Name: "abc",
 					},
 				})
@@ -72,7 +73,7 @@ func TestProfileLifeCycle(t *testing.T) {
 			op: func() string {
 				resp, err := s.SubmitProfile(c, &profile.SubmitProfileRequest{
 					AccountId: int64(aid),
-					Identity: &profile.Identity{
+					Identity: &base.Identity{
 						Name: "abc",
 					},
 				})
@@ -199,8 +200,8 @@ func (b *TestBlobManager) GetBlobURL(ctx context.Context, req *blob.GetBlobURLRe
 
 type TestLicenseManager struct{}
 
-func (m *TestLicenseManager) GetLicenseInfo(_ string) (*profile.Identity, error) {
-	return &profile.Identity{
+func (m *TestLicenseManager) GetLicenseInfo(_ string) (*base.Identity, error) {
+	return &base.Identity{
 		LicNumber:       "100000000001",
 		Name:            "FreeCar",
 		Gender:          1,

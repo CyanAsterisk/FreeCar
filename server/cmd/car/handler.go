@@ -8,6 +8,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -22,13 +23,13 @@ type CarServiceImpl struct {
 
 // Publisher defines the publishing interface.
 type Publisher interface {
-	Publish(context.Context, *car.CarEntity) error
+	Publish(context.Context, *base.CarEntity) error
 }
 
 // RedisManager defines the redis server.
 type RedisManager interface {
-	GetCar(c context.Context, cid id.CarID) (*car.CarEntity, error)
-	InsertCar(c context.Context, cid id.CarID, cr *car.Car) error
+	GetCar(c context.Context, cid id.CarID) (*base.CarEntity, error)
+	InsertCar(c context.Context, cid id.CarID, cr *base.Car) error
 	RemoveCar(c context.Context, cid id.CarID) error
 }
 
@@ -38,7 +39,7 @@ type MongoManager interface {
 	GetCar(c context.Context, id id.CarID) (*mongo.CarRecord, error)
 	GetCars(c context.Context, limit int64) ([]*mongo.CarRecord, error)
 	DeleteCar(c context.Context, id id.CarID) error
-	UpdateCar(c context.Context, id id.CarID, status car.CarStatus, update *mongo.CarUpdate) (*mongo.CarRecord, error)
+	UpdateCar(c context.Context, id id.CarID, status base.CarStatus, update *mongo.CarUpdate) (*mongo.CarRecord, error)
 }
 
 // CreateCar implements the CarServiceImpl interface.
@@ -50,7 +51,7 @@ func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarReques
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("create car err"))
 		return resp, nil
 	}
-	resp.CarEntity = &car.CarEntity{
+	resp.CarEntity = &base.CarEntity{
 		Id:  cr.ID.Hex(),
 		Car: cr.Car,
 	}
@@ -94,7 +95,7 @@ func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (re
 	}
 
 	for _, cr := range cars {
-		resp.Cars = append(resp.Cars, &car.CarEntity{
+		resp.Cars = append(resp.Cars, &base.CarEntity{
 			Id:  cr.ID.Hex(),
 			Car: cr.Car,
 		})
@@ -111,8 +112,8 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("lock car err"))
 		return resp, nil
 	}
-	c, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_UNLOCKED, &mongo.CarUpdate{
-		Status: car.CarStatus_LOCKING,
+	c, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_UNLOCKED, &mongo.CarUpdate{
+		Status: base.CarStatus_LOCKING,
 	})
 	if err != nil {
 		klog.Errorf("update car error", err)
@@ -132,8 +133,8 @@ func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarReques
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("remove cache error"))
 		return resp, nil
 	}
-	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_LOCKED, &mongo.CarUpdate{
-		Status:       car.CarStatus_UNLOCKING,
+	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_LOCKED, &mongo.CarUpdate{
+		Status:       base.CarStatus_UNLOCKING,
 		Driver:       req.Driver,
 		UpdateTripID: true,
 		TripID:       id.TripID(req.TripId),
@@ -161,12 +162,12 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 		Position: req.Position,
 		Power:    req.Power,
 	}
-	if req.Status == car.CarStatus_LOCKED {
-		update.Driver = &car.Driver{}
+	if req.Status == base.CarStatus_LOCKED {
+		update.Driver = &base.Driver{}
 		update.UpdateTripID = true
 		update.TripID = ""
 	}
-	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_CS_NOT_SPECIFIED, update)
+	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_CS_NOT_SPECIFIED, update)
 	if err != nil {
 		klog.Error("update car err")
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car err"))
@@ -177,7 +178,7 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 }
 
 func (s *CarServiceImpl) publish(c context.Context, cr *mongo.CarRecord) {
-	err := s.Publisher.Publish(c, &car.CarEntity{
+	err := s.Publisher.Publish(c, &base.CarEntity{
 		Id:  cr.ID.Hex(),
 		Car: cr.Car,
 	})
@@ -228,7 +229,7 @@ func (s *CarServiceImpl) AdminUpdateCar(ctx context.Context, req *car.AdminUpdat
 	if req.Car.TripId != "" {
 		update.UpdateTripID = true
 	}
-	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), car.CarStatus_CS_NOT_SPECIFIED, update)
+	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_CS_NOT_SPECIFIED, update)
 	if err != nil {
 		klog.Error("update car err")
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car err"))
@@ -249,7 +250,7 @@ func (s *CarServiceImpl) GetSomeCars(ctx context.Context, req *car.GetSomeCarsRe
 		return resp, nil
 	}
 	for _, cr := range cars {
-		resp.Cars = append(resp.Cars, &car.CarEntity{
+		resp.Cars = append(resp.Cars, &base.CarEntity{
 			Id:  cr.ID.Hex(),
 			Car: cr.Car,
 		})
@@ -268,7 +269,7 @@ func (s *CarServiceImpl) GetAllCars(ctx context.Context, req *car.GetAllCarsRequ
 		return resp, nil
 	}
 	for _, cr := range cars {
-		resp.Cars = append(resp.Cars, &car.CarEntity{
+		resp.Cars = append(resp.Cars, &base.CarEntity{
 			Id:  cr.ID.Hex(),
 			Car: cr.Car,
 		})

@@ -7,7 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
 )
 
@@ -20,8 +20,8 @@ func TestProfileLifeCycle(t *testing.T) {
 	}
 
 	aid := id.AccountID(1024)
-	pf := &profile.Profile{
-		Identity: &profile.Identity{
+	pf := &base.Profile{
+		Identity: &base.Identity{
 			LicNumber:       "10000000001",
 			Name:            "FreeCar",
 			Gender:          1,

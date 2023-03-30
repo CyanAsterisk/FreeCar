@@ -100,7 +100,7 @@ service UserService {
     AdminChangePasswordResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/user/admin/password"),
     AddUserResponse AdminAddUser(1: AddUserRequest req) (api.post = "/user/admin/user"),
     DeleteUserResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/user/admin/user"),
-    UpdateUserResponse AdminUpdateUser(1: UpdateUserRequest req) (api.post = "/user/admin/user"),
+    UpdateUserResponse AdminUpdateUser(1: UpdateUserRequest req) (api.put = "/user/admin/user"),
     GetSomeUsersResponse AdminGetSomeUsers(1: GetSomeUsersRequest req) (api.get = "/user/admin/some"),
     GetAllUsersResponse AdminGetAllUsers(1: GetAllUsersRequest req) (api.get = "/user/admin/all"),
     // for mini-program

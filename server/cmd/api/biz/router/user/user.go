@@ -26,7 +26,7 @@ func Register(r *server.Hertz) {
 			_admin.GET("/some", append(__dmingetsomeusersMw(), user.AdminGetSomeUsers)...)
 			_admin.POST("/user", append(__dmin_dduserMw(), user.AdminAddUser)...)
 			_admin.DELETE("/user", append(__dmindeleteuserMw(), user.AdminDeleteUser)...)
-			_admin.POST("/user", append(__dminupdateuserMw(), user.AdminUpdateUser)...)
+			_admin.PUT("/user", append(__dminupdateuserMw(), user.AdminUpdateUser)...)
 		}
 		{
 			_login := _user.Group("/login", _loginMw()...)

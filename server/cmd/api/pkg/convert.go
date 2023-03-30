@@ -2,8 +2,8 @@ package pkg
 
 import (
 	hbase "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/base"
+	kbase "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
 )
 
@@ -14,32 +14,32 @@ func ConvertTripLocation(l *hbase.Location) *trip.Location {
 	}
 }
 
-func ConvertDriver(d *hbase.Driver) *car.Driver {
+func ConvertDriver(d *hbase.Driver) *kbase.Driver {
 	if d == nil {
 		return nil
 	}
-	return &car.Driver{
+	return &kbase.Driver{
 		Id:        d.ID,
 		AvatarUrl: d.AvatarURL,
 	}
 }
 
-func ConvertCarLocation(l *hbase.Position) *car.Location {
+func ConvertCarLocation(l *hbase.Position) *kbase.Position {
 	if l == nil {
 		return nil
 	}
-	return &car.Location{
+	return &kbase.Position{
 		Latitude:  l.Latitude,
 		Longitude: l.Longitude,
 	}
 }
 
-func ConvertCar(c *hbase.Car) *car.Car {
+func ConvertCar(c *hbase.Car) *kbase.Car {
 	if c == nil {
 		return nil
 	}
-	return &car.Car{
-		Status:   car.CarStatus(c.Status),
+	return &kbase.Car{
+		Status:   kbase.CarStatus(c.Status),
 		Driver:   ConvertDriver(c.Driver),
 		Position: ConvertCarLocation(c.Position),
 		TripId:   c.TripID,

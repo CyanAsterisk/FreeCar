@@ -4,1310 +4,11 @@ package car
 
 import (
 	"context"
-	"database/sql"
-	"database/sql/driver"
 	"fmt"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
 )
-
-type CarStatus int64
-
-const (
-	CarStatus_CS_NOT_SPECIFIED CarStatus = 0
-	CarStatus_LOCKED           CarStatus = 1
-	CarStatus_UNLOCKING        CarStatus = 2
-	CarStatus_UNLOCKED         CarStatus = 3
-	CarStatus_LOCKING          CarStatus = 4
-)
-
-func (p CarStatus) String() string {
-	switch p {
-	case CarStatus_CS_NOT_SPECIFIED:
-		return "CS_NOT_SPECIFIED"
-	case CarStatus_LOCKED:
-		return "LOCKED"
-	case CarStatus_UNLOCKING:
-		return "UNLOCKING"
-	case CarStatus_UNLOCKED:
-		return "UNLOCKED"
-	case CarStatus_LOCKING:
-		return "LOCKING"
-	}
-	return "<UNSET>"
-}
-
-func CarStatusFromString(s string) (CarStatus, error) {
-	switch s {
-	case "CS_NOT_SPECIFIED":
-		return CarStatus_CS_NOT_SPECIFIED, nil
-	case "LOCKED":
-		return CarStatus_LOCKED, nil
-	case "UNLOCKING":
-		return CarStatus_UNLOCKING, nil
-	case "UNLOCKED":
-		return CarStatus_UNLOCKED, nil
-	case "LOCKING":
-		return CarStatus_LOCKING, nil
-	}
-	return CarStatus(0), fmt.Errorf("not a valid CarStatus string")
-}
-
-func CarStatusPtr(v CarStatus) *CarStatus { return &v }
-func (p *CarStatus) Scan(value interface{}) (err error) {
-	var result sql.NullInt64
-	err = result.Scan(value)
-	*p = CarStatus(result.Int64)
-	return
-}
-
-func (p *CarStatus) Value() (driver.Value, error) {
-	if p == nil {
-		return nil, nil
-	}
-	return int64(*p), nil
-}
-
-type CarEntity struct {
-	Id  string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	Car *Car   `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
-}
-
-func NewCarEntity() *CarEntity {
-	return &CarEntity{}
-}
-
-func (p *CarEntity) InitDefault() {
-	*p = CarEntity{}
-}
-
-func (p *CarEntity) GetId() (v string) {
-	return p.Id
-}
-
-var CarEntity_Car_DEFAULT *Car
-
-func (p *CarEntity) GetCar() (v *Car) {
-	if !p.IsSetCar() {
-		return CarEntity_Car_DEFAULT
-	}
-	return p.Car
-}
-func (p *CarEntity) SetId(val string) {
-	p.Id = val
-}
-func (p *CarEntity) SetCar(val *Car) {
-	p.Car = val
-}
-
-var fieldIDToName_CarEntity = map[int16]string{
-	1: "id",
-	2: "car",
-}
-
-func (p *CarEntity) IsSetCar() bool {
-	return p.Car != nil
-}
-
-func (p *CarEntity) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetId bool = false
-	var issetCar bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetCar = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetCar {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_CarEntity[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CarEntity[fieldId]))
-}
-
-func (p *CarEntity) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Id = v
-	}
-	return nil
-}
-
-func (p *CarEntity) ReadField2(iprot thrift.TProtocol) error {
-	p.Car = NewCar()
-	if err := p.Car.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *CarEntity) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("CarEntity"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *CarEntity) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Id); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *CarEntity) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("car", thrift.STRUCT, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Car.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *CarEntity) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("CarEntity(%+v)", *p)
-}
-
-func (p *CarEntity) DeepEqual(ano *CarEntity) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Id) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Car) {
-		return false
-	}
-	return true
-}
-
-func (p *CarEntity) Field1DeepEqual(src string) bool {
-
-	if strings.Compare(p.Id, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *CarEntity) Field2DeepEqual(src *Car) bool {
-
-	if !p.Car.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
-type Driver struct {
-	Id        int64  `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
-	AvatarUrl string `thrift:"avatar_url,2,required" frugal:"2,required,string" json:"avatar_url"`
-}
-
-func NewDriver() *Driver {
-	return &Driver{}
-}
-
-func (p *Driver) InitDefault() {
-	*p = Driver{}
-}
-
-func (p *Driver) GetId() (v int64) {
-	return p.Id
-}
-
-func (p *Driver) GetAvatarUrl() (v string) {
-	return p.AvatarUrl
-}
-func (p *Driver) SetId(val int64) {
-	p.Id = val
-}
-func (p *Driver) SetAvatarUrl(val string) {
-	p.AvatarUrl = val
-}
-
-var fieldIDToName_Driver = map[int16]string{
-	1: "id",
-	2: "avatar_url",
-}
-
-func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetId bool = false
-	var issetAvatarUrl bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetAvatarUrl = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAvatarUrl {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Driver[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Driver[fieldId]))
-}
-
-func (p *Driver) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.Id = v
-	}
-	return nil
-}
-
-func (p *Driver) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.AvatarUrl = v
-	}
-	return nil
-}
-
-func (p *Driver) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Driver"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *Driver) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Id); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *Driver) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_url", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.AvatarUrl); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *Driver) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("Driver(%+v)", *p)
-}
-
-func (p *Driver) DeepEqual(ano *Driver) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Id) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.AvatarUrl) {
-		return false
-	}
-	return true
-}
-
-func (p *Driver) Field1DeepEqual(src int64) bool {
-
-	if p.Id != src {
-		return false
-	}
-	return true
-}
-func (p *Driver) Field2DeepEqual(src string) bool {
-
-	if strings.Compare(p.AvatarUrl, src) != 0 {
-		return false
-	}
-	return true
-}
-
-type Location struct {
-	Latitude  float64 `thrift:"latitude,1,required" frugal:"1,required,double" json:"latitude"`
-	Longitude float64 `thrift:"longitude,2,required" frugal:"2,required,double" json:"longitude"`
-}
-
-func NewLocation() *Location {
-	return &Location{}
-}
-
-func (p *Location) InitDefault() {
-	*p = Location{}
-}
-
-func (p *Location) GetLatitude() (v float64) {
-	return p.Latitude
-}
-
-func (p *Location) GetLongitude() (v float64) {
-	return p.Longitude
-}
-func (p *Location) SetLatitude(val float64) {
-	p.Latitude = val
-}
-func (p *Location) SetLongitude(val float64) {
-	p.Longitude = val
-}
-
-var fieldIDToName_Location = map[int16]string{
-	1: "latitude",
-	2: "longitude",
-}
-
-func (p *Location) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetLatitude bool = false
-	var issetLongitude bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetLatitude = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetLongitude = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetLatitude {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetLongitude {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Location[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Location[fieldId]))
-}
-
-func (p *Location) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		p.Latitude = v
-	}
-	return nil
-}
-
-func (p *Location) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		p.Longitude = v
-	}
-	return nil
-}
-
-func (p *Location) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Location"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *Location) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("latitude", thrift.DOUBLE, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteDouble(p.Latitude); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *Location) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("longitude", thrift.DOUBLE, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteDouble(p.Longitude); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *Location) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("Location(%+v)", *p)
-}
-
-func (p *Location) DeepEqual(ano *Location) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Latitude) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Longitude) {
-		return false
-	}
-	return true
-}
-
-func (p *Location) Field1DeepEqual(src float64) bool {
-
-	if p.Latitude != src {
-		return false
-	}
-	return true
-}
-func (p *Location) Field2DeepEqual(src float64) bool {
-
-	if p.Longitude != src {
-		return false
-	}
-	return true
-}
-
-type Car struct {
-	Status   CarStatus `thrift:"status,1,required" frugal:"1,required,CarStatus" json:"status"`
-	Driver   *Driver   `thrift:"driver,2,required" frugal:"2,required,Driver" json:"driver"`
-	Position *Location `thrift:"position,3,required" frugal:"3,required,Location" json:"position"`
-	TripId   string    `thrift:"trip_id,4,required" frugal:"4,required,string" json:"trip_id"`
-	Power    float64   `thrift:"power,5,required" frugal:"5,required,double" json:"power"`
-	PlateNum string    `thrift:"plate_num,6,required" frugal:"6,required,string" json:"plate_num"`
-}
-
-func NewCar() *Car {
-	return &Car{}
-}
-
-func (p *Car) InitDefault() {
-	*p = Car{}
-}
-
-func (p *Car) GetStatus() (v CarStatus) {
-	return p.Status
-}
-
-var Car_Driver_DEFAULT *Driver
-
-func (p *Car) GetDriver() (v *Driver) {
-	if !p.IsSetDriver() {
-		return Car_Driver_DEFAULT
-	}
-	return p.Driver
-}
-
-var Car_Position_DEFAULT *Location
-
-func (p *Car) GetPosition() (v *Location) {
-	if !p.IsSetPosition() {
-		return Car_Position_DEFAULT
-	}
-	return p.Position
-}
-
-func (p *Car) GetTripId() (v string) {
-	return p.TripId
-}
-
-func (p *Car) GetPower() (v float64) {
-	return p.Power
-}
-
-func (p *Car) GetPlateNum() (v string) {
-	return p.PlateNum
-}
-func (p *Car) SetStatus(val CarStatus) {
-	p.Status = val
-}
-func (p *Car) SetDriver(val *Driver) {
-	p.Driver = val
-}
-func (p *Car) SetPosition(val *Location) {
-	p.Position = val
-}
-func (p *Car) SetTripId(val string) {
-	p.TripId = val
-}
-func (p *Car) SetPower(val float64) {
-	p.Power = val
-}
-func (p *Car) SetPlateNum(val string) {
-	p.PlateNum = val
-}
-
-var fieldIDToName_Car = map[int16]string{
-	1: "status",
-	2: "driver",
-	3: "position",
-	4: "trip_id",
-	5: "power",
-	6: "plate_num",
-}
-
-func (p *Car) IsSetDriver() bool {
-	return p.Driver != nil
-}
-
-func (p *Car) IsSetPosition() bool {
-	return p.Position != nil
-}
-
-func (p *Car) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetStatus bool = false
-	var issetDriver bool = false
-	var issetPosition bool = false
-	var issetTripId bool = false
-	var issetPower bool = false
-	var issetPlateNum bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.I32 {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetStatus = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetDriver = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 3:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetPosition = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetTripId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 5:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField5(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetPower = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 6:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField6(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetPlateNum = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetStatus {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetDriver {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPosition {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTripId {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPower {
-		fieldId = 5
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetPlateNum {
-		fieldId = 6
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_Car[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_Car[fieldId]))
-}
-
-func (p *Car) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return err
-	} else {
-		p.Status = CarStatus(v)
-	}
-	return nil
-}
-
-func (p *Car) ReadField2(iprot thrift.TProtocol) error {
-	p.Driver = NewDriver()
-	if err := p.Driver.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *Car) ReadField3(iprot thrift.TProtocol) error {
-	p.Position = NewLocation()
-	if err := p.Position.Read(iprot); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *Car) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.TripId = v
-	}
-	return nil
-}
-
-func (p *Car) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		p.Power = v
-	}
-	return nil
-}
-
-func (p *Car) ReadField6(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.PlateNum = v
-	}
-	return nil
-}
-
-func (p *Car) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Car"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
-			goto WriteFieldError
-		}
-		if err = p.writeField5(oprot); err != nil {
-			fieldId = 5
-			goto WriteFieldError
-		}
-		if err = p.writeField6(oprot); err != nil {
-			fieldId = 6
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *Car) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI32(int32(p.Status)); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *Car) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("driver", thrift.STRUCT, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Driver.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *Car) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("position", thrift.STRUCT, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Position.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *Car) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("trip_id", thrift.STRING, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.TripId); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *Car) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("power", thrift.DOUBLE, 5); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteDouble(p.Power); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
-}
-
-func (p *Car) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("plate_num", thrift.STRING, 6); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.PlateNum); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
-}
-
-func (p *Car) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("Car(%+v)", *p)
-}
-
-func (p *Car) DeepEqual(ano *Car) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Status) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Driver) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.Position) {
-		return false
-	}
-	if !p.Field4DeepEqual(ano.TripId) {
-		return false
-	}
-	if !p.Field5DeepEqual(ano.Power) {
-		return false
-	}
-	if !p.Field6DeepEqual(ano.PlateNum) {
-		return false
-	}
-	return true
-}
-
-func (p *Car) Field1DeepEqual(src CarStatus) bool {
-
-	if p.Status != src {
-		return false
-	}
-	return true
-}
-func (p *Car) Field2DeepEqual(src *Driver) bool {
-
-	if !p.Driver.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-func (p *Car) Field3DeepEqual(src *Location) bool {
-
-	if !p.Position.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-func (p *Car) Field4DeepEqual(src string) bool {
-
-	if strings.Compare(p.TripId, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *Car) Field5DeepEqual(src float64) bool {
-
-	if p.Power != src {
-		return false
-	}
-	return true
-}
-func (p *Car) Field6DeepEqual(src string) bool {
-
-	if strings.Compare(p.PlateNum, src) != 0 {
-		return false
-	}
-	return true
-}
 
 type CreateCarRequest struct {
 	AccountId int64  `thrift:"account_id,1,required" frugal:"1,required,i64" json:"account_id"`
@@ -1549,7 +250,7 @@ func (p *CreateCarRequest) Field2DeepEqual(src string) bool {
 
 type CreateCarResponse struct {
 	BaseResp  *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	CarEntity *CarEntity         `thrift:"car_entity,2,required" frugal:"2,required,CarEntity" json:"car_entity"`
+	CarEntity *base.CarEntity    `thrift:"car_entity,2,required" frugal:"2,required,base.CarEntity" json:"car_entity"`
 }
 
 func NewCreateCarResponse() *CreateCarResponse {
@@ -1569,9 +270,9 @@ func (p *CreateCarResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var CreateCarResponse_CarEntity_DEFAULT *CarEntity
+var CreateCarResponse_CarEntity_DEFAULT *base.CarEntity
 
-func (p *CreateCarResponse) GetCarEntity() (v *CarEntity) {
+func (p *CreateCarResponse) GetCarEntity() (v *base.CarEntity) {
 	if !p.IsSetCarEntity() {
 		return CreateCarResponse_CarEntity_DEFAULT
 	}
@@ -1580,7 +281,7 @@ func (p *CreateCarResponse) GetCarEntity() (v *CarEntity) {
 func (p *CreateCarResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *CreateCarResponse) SetCarEntity(val *CarEntity) {
+func (p *CreateCarResponse) SetCarEntity(val *base.CarEntity) {
 	p.CarEntity = val
 }
 
@@ -1690,7 +391,7 @@ func (p *CreateCarResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *CreateCarResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.CarEntity = NewCarEntity()
+	p.CarEntity = base.NewCarEntity()
 	if err := p.CarEntity.Read(iprot); err != nil {
 		return err
 	}
@@ -1793,7 +494,7 @@ func (p *CreateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *CreateCarResponse) Field2DeepEqual(src *CarEntity) bool {
+func (p *CreateCarResponse) Field2DeepEqual(src *base.CarEntity) bool {
 
 	if !p.CarEntity.DeepEqual(src) {
 		return false
@@ -2041,7 +742,7 @@ func (p *GetCarRequest) Field2DeepEqual(src string) bool {
 
 type GetCarResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Car      *Car               `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
+	Car      *base.Car          `thrift:"car,2,required" frugal:"2,required,base.Car" json:"car"`
 }
 
 func NewGetCarResponse() *GetCarResponse {
@@ -2061,9 +762,9 @@ func (p *GetCarResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-var GetCarResponse_Car_DEFAULT *Car
+var GetCarResponse_Car_DEFAULT *base.Car
 
-func (p *GetCarResponse) GetCar() (v *Car) {
+func (p *GetCarResponse) GetCar() (v *base.Car) {
 	if !p.IsSetCar() {
 		return GetCarResponse_Car_DEFAULT
 	}
@@ -2072,7 +773,7 @@ func (p *GetCarResponse) GetCar() (v *Car) {
 func (p *GetCarResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetCarResponse) SetCar(val *Car) {
+func (p *GetCarResponse) SetCar(val *base.Car) {
 	p.Car = val
 }
 
@@ -2182,7 +883,7 @@ func (p *GetCarResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *GetCarResponse) ReadField2(iprot thrift.TProtocol) error {
-	p.Car = NewCar()
+	p.Car = base.NewCar()
 	if err := p.Car.Read(iprot); err != nil {
 		return err
 	}
@@ -2285,7 +986,7 @@ func (p *GetCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetCarResponse) Field2DeepEqual(src *Car) bool {
+func (p *GetCarResponse) Field2DeepEqual(src *base.Car) bool {
 
 	if !p.Car.DeepEqual(src) {
 		return false
@@ -2467,7 +1168,7 @@ func (p *GetCarsRequest) Field1DeepEqual(src int64) bool {
 
 type GetCarsResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
+	Cars     []*base.CarEntity  `thrift:"cars,2,required" frugal:"2,required,list<base.CarEntity>" json:"cars"`
 }
 
 func NewGetCarsResponse() *GetCarsResponse {
@@ -2487,13 +1188,13 @@ func (p *GetCarsResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetCarsResponse) GetCars() (v []*CarEntity) {
+func (p *GetCarsResponse) GetCars() (v []*base.CarEntity) {
 	return p.Cars
 }
 func (p *GetCarsResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetCarsResponse) SetCars(val []*CarEntity) {
+func (p *GetCarsResponse) SetCars(val []*base.CarEntity) {
 	p.Cars = val
 }
 
@@ -2603,9 +1304,9 @@ func (p *GetCarsResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Cars = make([]*CarEntity, 0, size)
+	p.Cars = make([]*base.CarEntity, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewCarEntity()
+		_elem := base.NewCarEntity()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -2722,7 +1423,7 @@ func (p *GetCarsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
+func (p *GetCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 
 	if len(p.Cars) != len(src) {
 		return false
@@ -2910,7 +1611,7 @@ func (p *GetAllCarsRequest) Field1DeepEqual(src int64) bool {
 
 type GetAllCarsResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
+	Cars     []*base.CarEntity  `thrift:"cars,2,required" frugal:"2,required,list<base.CarEntity>" json:"cars"`
 }
 
 func NewGetAllCarsResponse() *GetAllCarsResponse {
@@ -2930,13 +1631,13 @@ func (p *GetAllCarsResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetAllCarsResponse) GetCars() (v []*CarEntity) {
+func (p *GetAllCarsResponse) GetCars() (v []*base.CarEntity) {
 	return p.Cars
 }
 func (p *GetAllCarsResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetAllCarsResponse) SetCars(val []*CarEntity) {
+func (p *GetAllCarsResponse) SetCars(val []*base.CarEntity) {
 	p.Cars = val
 }
 
@@ -3046,9 +1747,9 @@ func (p *GetAllCarsResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Cars = make([]*CarEntity, 0, size)
+	p.Cars = make([]*base.CarEntity, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewCarEntity()
+		_elem := base.NewCarEntity()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -3165,7 +1866,7 @@ func (p *GetAllCarsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetAllCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
+func (p *GetAllCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 
 	if len(p.Cars) != len(src) {
 		return false
@@ -3598,10 +2299,10 @@ func (p *LockCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type UnlockCarRequest struct {
-	Id        string  `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	AccountId int64   `thrift:"account_id,2,required" frugal:"2,required,i64" json:"account_id"`
-	Driver    *Driver `thrift:"driver,3,required" frugal:"3,required,Driver" json:"driver"`
-	TripId    string  `thrift:"trip_id,4,required" frugal:"4,required,string" json:"trip_id"`
+	Id        string       `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	AccountId int64        `thrift:"account_id,2,required" frugal:"2,required,i64" json:"account_id"`
+	Driver    *base.Driver `thrift:"driver,3,required" frugal:"3,required,base.Driver" json:"driver"`
+	TripId    string       `thrift:"trip_id,4,required" frugal:"4,required,string" json:"trip_id"`
 }
 
 func NewUnlockCarRequest() *UnlockCarRequest {
@@ -3620,9 +2321,9 @@ func (p *UnlockCarRequest) GetAccountId() (v int64) {
 	return p.AccountId
 }
 
-var UnlockCarRequest_Driver_DEFAULT *Driver
+var UnlockCarRequest_Driver_DEFAULT *base.Driver
 
-func (p *UnlockCarRequest) GetDriver() (v *Driver) {
+func (p *UnlockCarRequest) GetDriver() (v *base.Driver) {
 	if !p.IsSetDriver() {
 		return UnlockCarRequest_Driver_DEFAULT
 	}
@@ -3638,7 +2339,7 @@ func (p *UnlockCarRequest) SetId(val string) {
 func (p *UnlockCarRequest) SetAccountId(val int64) {
 	p.AccountId = val
 }
-func (p *UnlockCarRequest) SetDriver(val *Driver) {
+func (p *UnlockCarRequest) SetDriver(val *base.Driver) {
 	p.Driver = val
 }
 func (p *UnlockCarRequest) SetTripId(val string) {
@@ -3793,7 +2494,7 @@ func (p *UnlockCarRequest) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *UnlockCarRequest) ReadField3(iprot thrift.TProtocol) error {
-	p.Driver = NewDriver()
+	p.Driver = base.NewDriver()
 	if err := p.Driver.Read(iprot); err != nil {
 		return err
 	}
@@ -3960,7 +2661,7 @@ func (p *UnlockCarRequest) Field2DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *UnlockCarRequest) Field3DeepEqual(src *Driver) bool {
+func (p *UnlockCarRequest) Field3DeepEqual(src *base.Driver) bool {
 
 	if !p.Driver.DeepEqual(src) {
 		return false
@@ -4156,11 +2857,11 @@ func (p *UnlockCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type UpdateCarRequest struct {
-	Id        string    `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	Status    CarStatus `thrift:"status,2,required" frugal:"2,required,CarStatus" json:"status"`
-	Position  *Location `thrift:"position,3,required" frugal:"3,required,Location" json:"position"`
-	AccountId int64     `thrift:"account_id,4,required" frugal:"4,required,i64" json:"account_id"`
-	Power     float64   `thrift:"power,5,required" frugal:"5,required,double" json:"power"`
+	Id        string         `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Status    base.CarStatus `thrift:"status,2,required" frugal:"2,required,CarStatus" json:"status"`
+	Position  *base.Position `thrift:"position,3,required" frugal:"3,required,base.Position" json:"position"`
+	AccountId int64          `thrift:"account_id,4,required" frugal:"4,required,i64" json:"account_id"`
+	Power     float64        `thrift:"power,5,required" frugal:"5,required,double" json:"power"`
 }
 
 func NewUpdateCarRequest() *UpdateCarRequest {
@@ -4175,13 +2876,13 @@ func (p *UpdateCarRequest) GetId() (v string) {
 	return p.Id
 }
 
-func (p *UpdateCarRequest) GetStatus() (v CarStatus) {
+func (p *UpdateCarRequest) GetStatus() (v base.CarStatus) {
 	return p.Status
 }
 
-var UpdateCarRequest_Position_DEFAULT *Location
+var UpdateCarRequest_Position_DEFAULT *base.Position
 
-func (p *UpdateCarRequest) GetPosition() (v *Location) {
+func (p *UpdateCarRequest) GetPosition() (v *base.Position) {
 	if !p.IsSetPosition() {
 		return UpdateCarRequest_Position_DEFAULT
 	}
@@ -4198,10 +2899,10 @@ func (p *UpdateCarRequest) GetPower() (v float64) {
 func (p *UpdateCarRequest) SetId(val string) {
 	p.Id = val
 }
-func (p *UpdateCarRequest) SetStatus(val CarStatus) {
+func (p *UpdateCarRequest) SetStatus(val base.CarStatus) {
 	p.Status = val
 }
-func (p *UpdateCarRequest) SetPosition(val *Location) {
+func (p *UpdateCarRequest) SetPosition(val *base.Position) {
 	p.Position = val
 }
 func (p *UpdateCarRequest) SetAccountId(val int64) {
@@ -4371,13 +3072,13 @@ func (p *UpdateCarRequest) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return err
 	} else {
-		p.Status = CarStatus(v)
+		p.Status = base.CarStatus(v)
 	}
 	return nil
 }
 
 func (p *UpdateCarRequest) ReadField3(iprot thrift.TProtocol) error {
-	p.Position = NewLocation()
+	p.Position = base.NewPosition()
 	if err := p.Position.Read(iprot); err != nil {
 		return err
 	}
@@ -4570,14 +3271,14 @@ func (p *UpdateCarRequest) Field1DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *UpdateCarRequest) Field2DeepEqual(src CarStatus) bool {
+func (p *UpdateCarRequest) Field2DeepEqual(src base.CarStatus) bool {
 
 	if p.Status != src {
 		return false
 	}
 	return true
 }
-func (p *UpdateCarRequest) Field3DeepEqual(src *Location) bool {
+func (p *UpdateCarRequest) Field3DeepEqual(src *base.Position) bool {
 
 	if !p.Position.DeepEqual(src) {
 		return false
@@ -4780,8 +3481,8 @@ func (p *UpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type AdminUpdateCarRequest struct {
-	Id  string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	Car *Car   `thrift:"car,2,required" frugal:"2,required,Car" json:"car"`
+	Id  string    `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Car *base.Car `thrift:"car,2,required" frugal:"2,required,base.Car" json:"car"`
 }
 
 func NewAdminUpdateCarRequest() *AdminUpdateCarRequest {
@@ -4796,9 +3497,9 @@ func (p *AdminUpdateCarRequest) GetId() (v string) {
 	return p.Id
 }
 
-var AdminUpdateCarRequest_Car_DEFAULT *Car
+var AdminUpdateCarRequest_Car_DEFAULT *base.Car
 
-func (p *AdminUpdateCarRequest) GetCar() (v *Car) {
+func (p *AdminUpdateCarRequest) GetCar() (v *base.Car) {
 	if !p.IsSetCar() {
 		return AdminUpdateCarRequest_Car_DEFAULT
 	}
@@ -4807,7 +3508,7 @@ func (p *AdminUpdateCarRequest) GetCar() (v *Car) {
 func (p *AdminUpdateCarRequest) SetId(val string) {
 	p.Id = val
 }
-func (p *AdminUpdateCarRequest) SetCar(val *Car) {
+func (p *AdminUpdateCarRequest) SetCar(val *base.Car) {
 	p.Car = val
 }
 
@@ -4914,7 +3615,7 @@ func (p *AdminUpdateCarRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *AdminUpdateCarRequest) ReadField2(iprot thrift.TProtocol) error {
-	p.Car = NewCar()
+	p.Car = base.NewCar()
 	if err := p.Car.Read(iprot); err != nil {
 		return err
 	}
@@ -5017,7 +3718,7 @@ func (p *AdminUpdateCarRequest) Field1DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *AdminUpdateCarRequest) Field2DeepEqual(src *Car) bool {
+func (p *AdminUpdateCarRequest) Field2DeepEqual(src *base.Car) bool {
 
 	if !p.Car.DeepEqual(src) {
 		return false
@@ -5379,7 +4080,7 @@ func (p *GetSomeCarsRequest) Field1DeepEqual(src int64) bool {
 
 type GetSomeCarsResponse struct {
 	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Cars     []*CarEntity       `thrift:"cars,2,required" frugal:"2,required,list<CarEntity>" json:"cars"`
+	Cars     []*base.CarEntity  `thrift:"cars,2,required" frugal:"2,required,list<base.CarEntity>" json:"cars"`
 }
 
 func NewGetSomeCarsResponse() *GetSomeCarsResponse {
@@ -5399,13 +4100,13 @@ func (p *GetSomeCarsResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *GetSomeCarsResponse) GetCars() (v []*CarEntity) {
+func (p *GetSomeCarsResponse) GetCars() (v []*base.CarEntity) {
 	return p.Cars
 }
 func (p *GetSomeCarsResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *GetSomeCarsResponse) SetCars(val []*CarEntity) {
+func (p *GetSomeCarsResponse) SetCars(val []*base.CarEntity) {
 	p.Cars = val
 }
 
@@ -5515,9 +4216,9 @@ func (p *GetSomeCarsResponse) ReadField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Cars = make([]*CarEntity, 0, size)
+	p.Cars = make([]*base.CarEntity, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := NewCarEntity()
+		_elem := base.NewCarEntity()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -5634,7 +4335,7 @@ func (p *GetSomeCarsResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *GetSomeCarsResponse) Field2DeepEqual(src []*CarEntity) bool {
+func (p *GetSomeCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 
 	if len(p.Cars) != len(src) {
 		return false

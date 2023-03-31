@@ -52,14 +52,9 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalCarClient.DeleteCar(ctx, &kcar.DeleteCarRequest{
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 		Id:        req.ID,
 	})
 	if err != nil {
@@ -109,13 +104,8 @@ func AdminGetSomeCars(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -137,13 +127,8 @@ func AdminGetAllCars(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -165,13 +150,8 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -193,14 +173,9 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalCarClient.GetCar(ctx, &kcar.GetCarRequest{
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 		Id:        req.ID,
 	})
 	if err != nil {

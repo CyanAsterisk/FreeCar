@@ -97,17 +97,12 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalTripClient.CreateTrip(ctx, &ktrip.CreateTripRequest{
 		Start:     pkg.ConvertTripLocation(req.Start),
 		CarId:     req.CarID,
 		AvatarUrl: req.AvatarURL,
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
@@ -130,15 +125,10 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalTripClient.GetTrip(ctx, &ktrip.GetTripRequest{
 		Id:        req.ID,
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
@@ -161,15 +151,10 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalTripClient.GetTrips(ctx, &ktrip.GetTripsRequest{
 		Status:    kbase.TripStatus(req.Status),
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
@@ -192,17 +177,12 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+
 	resp, err = config.GlobalTripClient.UpdateTrip(ctx, &ktrip.UpdateTripRequest{
 		Id:        req.ID,
 		Current:   (*kbase.Location)(req.Current),
 		EndTrip:   req.EndTrip,
-		AccountId: aid.(int64),
+		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)

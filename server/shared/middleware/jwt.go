@@ -3,6 +3,8 @@ package middleware
 import (
 	"context"
 	"errors"
+	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"net/http"
 	"strings"
 	"time"
@@ -33,11 +35,11 @@ func JWTAuth(signingKey string) app.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				c.JSON(http.StatusUnauthorized, nil)
+				c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.AuthorizeFail))
 				c.Abort()
 				return
 			}
-			c.JSON(http.StatusUnauthorized, nil)
+			c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.AuthorizeFail))
 			c.Abort()
 			return
 		}

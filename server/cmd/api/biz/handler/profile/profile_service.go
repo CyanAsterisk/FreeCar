@@ -28,13 +28,8 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -56,13 +51,8 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -153,13 +143,8 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -181,13 +166,8 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -209,13 +189,8 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -237,13 +212,8 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -265,13 +235,8 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -293,13 +258,8 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -321,13 +281,8 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	aid, flag := c.Get(consts.AccountID)
-	if !flag {
-		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-	resp, err = config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: aid.(int64)})
+
+	resp, err = config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)

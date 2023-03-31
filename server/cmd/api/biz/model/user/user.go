@@ -2599,8 +2599,8 @@ func (p *LoginRequest) String() string {
 }
 
 type LoginResponse struct {
-	BaseResp  *base.BaseResponse `thrift:"base_resp,1" form:"base_resp" json:"base_resp" query:"base_resp"`
-	AccountID int64              `thrift:"account_id,2" form:"account_id" json:"account_id" query:"account_id"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" form:"base_resp" json:"base_resp" query:"base_resp"`
+	Token    string             `thrift:"token,2" form:"token" json:"token" query:"token"`
 }
 
 func NewLoginResponse() *LoginResponse {
@@ -2616,13 +2616,13 @@ func (p *LoginResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *LoginResponse) GetAccountID() (v int64) {
-	return p.AccountID
+func (p *LoginResponse) GetToken() (v string) {
+	return p.Token
 }
 
 var fieldIDToName_LoginResponse = map[int16]string{
 	1: "base_resp",
-	2: "account_id",
+	2: "token",
 }
 
 func (p *LoginResponse) IsSetBaseResp() bool {
@@ -2659,7 +2659,7 @@ func (p *LoginResponse) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2707,10 +2707,10 @@ func (p *LoginResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *LoginResponse) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountID = v
+		p.Token = v
 	}
 	return nil
 }
@@ -2766,10 +2766,10 @@ WriteFieldEndError:
 }
 
 func (p *LoginResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("token", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.Token); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

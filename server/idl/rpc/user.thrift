@@ -9,7 +9,7 @@ struct LoginRequest {
 
 struct LoginResponse {
     1:  common.BaseResponse base_resp
-    2:  i64 account_id
+    2:  string token
 }
 
 struct AdminLoginRequest {
@@ -19,7 +19,7 @@ struct AdminLoginRequest {
 
 struct AdminLoginResponse {
     1:  common.BaseResponse base_resp
-    2:  i64 account_id
+    2:  string token
 }
 
 struct ChangeAdminPasswordRequest {

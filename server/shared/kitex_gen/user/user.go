@@ -175,8 +175,8 @@ func (p *LoginRequest) Field1DeepEqual(src string) bool {
 }
 
 type LoginResponse struct {
-	BaseResp  *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	AccountId int64              `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Token    string             `thrift:"token,2" frugal:"2,default,string" json:"token"`
 }
 
 func NewLoginResponse() *LoginResponse {
@@ -196,19 +196,19 @@ func (p *LoginResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *LoginResponse) GetAccountId() (v int64) {
-	return p.AccountId
+func (p *LoginResponse) GetToken() (v string) {
+	return p.Token
 }
 func (p *LoginResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *LoginResponse) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *LoginResponse) SetToken(val string) {
+	p.Token = val
 }
 
 var fieldIDToName_LoginResponse = map[int16]string{
 	1: "base_resp",
-	2: "account_id",
+	2: "token",
 }
 
 func (p *LoginResponse) IsSetBaseResp() bool {
@@ -245,7 +245,7 @@ func (p *LoginResponse) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -293,10 +293,10 @@ func (p *LoginResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *LoginResponse) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.Token = v
 	}
 	return nil
 }
@@ -352,10 +352,10 @@ WriteFieldEndError:
 }
 
 func (p *LoginResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("token", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.Token); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -384,7 +384,7 @@ func (p *LoginResponse) DeepEqual(ano *LoginResponse) bool {
 	if !p.Field1DeepEqual(ano.BaseResp) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.AccountId) {
+	if !p.Field2DeepEqual(ano.Token) {
 		return false
 	}
 	return true
@@ -397,9 +397,9 @@ func (p *LoginResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *LoginResponse) Field2DeepEqual(src int64) bool {
+func (p *LoginResponse) Field2DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.Token, src) != 0 {
 		return false
 	}
 	return true
@@ -629,8 +629,8 @@ func (p *AdminLoginRequest) Field2DeepEqual(src string) bool {
 }
 
 type AdminLoginResponse struct {
-	BaseResp  *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
-	AccountId int64              `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Token    string             `thrift:"token,2" frugal:"2,default,string" json:"token"`
 }
 
 func NewAdminLoginResponse() *AdminLoginResponse {
@@ -650,19 +650,19 @@ func (p *AdminLoginResponse) GetBaseResp() (v *base.BaseResponse) {
 	return p.BaseResp
 }
 
-func (p *AdminLoginResponse) GetAccountId() (v int64) {
-	return p.AccountId
+func (p *AdminLoginResponse) GetToken() (v string) {
+	return p.Token
 }
 func (p *AdminLoginResponse) SetBaseResp(val *base.BaseResponse) {
 	p.BaseResp = val
 }
-func (p *AdminLoginResponse) SetAccountId(val int64) {
-	p.AccountId = val
+func (p *AdminLoginResponse) SetToken(val string) {
+	p.Token = val
 }
 
 var fieldIDToName_AdminLoginResponse = map[int16]string{
 	1: "base_resp",
-	2: "account_id",
+	2: "token",
 }
 
 func (p *AdminLoginResponse) IsSetBaseResp() bool {
@@ -699,7 +699,7 @@ func (p *AdminLoginResponse) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -747,10 +747,10 @@ func (p *AdminLoginResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *AdminLoginResponse) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.AccountId = v
+		p.Token = v
 	}
 	return nil
 }
@@ -806,10 +806,10 @@ WriteFieldEndError:
 }
 
 func (p *AdminLoginResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("token", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.Token); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -838,7 +838,7 @@ func (p *AdminLoginResponse) DeepEqual(ano *AdminLoginResponse) bool {
 	if !p.Field1DeepEqual(ano.BaseResp) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.AccountId) {
+	if !p.Field2DeepEqual(ano.Token) {
 		return false
 	}
 	return true
@@ -851,9 +851,9 @@ func (p *AdminLoginResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 	}
 	return true
 }
-func (p *AdminLoginResponse) Field2DeepEqual(src int64) bool {
+func (p *AdminLoginResponse) Field2DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.Token, src) != 0 {
 		return false
 	}
 	return true

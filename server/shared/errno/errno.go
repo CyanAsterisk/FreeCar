@@ -36,6 +36,8 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 
 var (
 	Success            = NewErrNo(int64(errno.Err_Success), "success")
+	NoRoute            = NewErrNo(int64(errno.Err_NoRoute), "no route")
+	NoMethod           = NewErrNo(int64(errno.Err_NoMethod), "no method")
 	BadRequest         = NewErrNo(int64(errno.Err_BadRequest), "bad request")
 	ParamsErr          = NewErrNo(int64(errno.Err_ParamsErr), "params error")
 	AuthorizeFail      = NewErrNo(int64(errno.Err_AuthorizeFail), "authorize failed")

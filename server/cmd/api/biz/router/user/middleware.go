@@ -14,19 +14,8 @@ import (
 )
 
 func rootMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.Recovery(),
-		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
-		// use limiter mw
-		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
-		// use requestId mw & bind with traceId
-		requestid.New(
-			requestid.WithGenerator(func(ctx context.Context, c *app.RequestContext) string {
-				traceID := trace.SpanFromContext(ctx).SpanContext().TraceID().String()
-				return traceID
-			}),
-		),
-	}
+	// your code...
+	return nil
 }
 
 func _adminMw() []app.HandlerFunc {

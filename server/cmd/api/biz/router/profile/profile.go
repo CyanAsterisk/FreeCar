@@ -27,13 +27,11 @@ func Register(r *server.Hertz) {
 	root.DELETE("/profile", append(_clearprofileMw(), profile.ClearProfile)...)
 	{
 		_admin := root.Group("/admin", _adminMw()...)
-		{
-			_profile0 := _admin.Group("/profile", _profile0Mw()...)
-			_profile0.GET("/all", append(_get_llprofileMw(), profile.GetAllProfile)...)
-			_profile0.POST("/check", append(_checkprofileMw(), profile.CheckProfile)...)
-			_profile0.DELETE("/delete", append(_deleteprofileMw(), profile.DeleteProfile)...)
-			_profile0.GET("/pending", append(_getpendingprofileMw(), profile.GetPendingProfile)...)
-			_profile0.GET("/some", append(_getsomeprofileMw(), profile.GetSomeProfile)...)
-		}
+		_admin.DELETE("/profile", append(_profile0Mw(), profile.DeleteProfile)...)
+		_profile0 := _admin.Group("/profile", _profile0Mw()...)
+		_profile0.GET("/all", append(_get_llprofileMw(), profile.GetAllProfile)...)
+		_profile0.POST("/check", append(_checkprofileMw(), profile.CheckProfile)...)
+		_profile0.GET("/pending", append(_getpendingprofileMw(), profile.GetPendingProfile)...)
+		_profile0.GET("/some", append(_getsomeprofileMw(), profile.GetSomeProfile)...)
 	}
 }

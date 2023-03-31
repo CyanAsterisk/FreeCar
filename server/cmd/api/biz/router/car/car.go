@@ -26,6 +26,5 @@ func Register(r *server.Hertz) {
 		_car.GET("/all", append(__dminget_llcarsMw(), car.AdminGetAllCars)...)
 		_car.GET("/some", append(__dmingetsomecarsMw(), car.AdminGetSomeCars)...)
 		_admin.DELETE("/car", append(__dmindeletecarMw(), car.AdminDeleteCar)...)
-		_admin.PUT("/car", append(__dminupdatecarMw(), car.AdminUpdateCar)...)
 	}
 }

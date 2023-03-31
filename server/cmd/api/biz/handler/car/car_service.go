@@ -8,7 +8,6 @@ import (
 
 	hcar "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	kcar "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/car"
@@ -56,32 +55,6 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 	resp, err = config.GlobalCarClient.DeleteCar(ctx, &kcar.DeleteCarRequest{
 		AccountId: c.MustGet(consts.AccountID).(int64),
 		Id:        req.ID,
-	})
-	if err != nil {
-		hlog.Error("rpc car service err", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
-		c.JSON(http.StatusInternalServerError, resp)
-		return
-	}
-	c.JSON(http.StatusOK, resp)
-}
-
-// AdminUpdateCar .
-// @router /admin/car/car [POST]
-func AdminUpdateCar(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req hcar.AdminUpdateCarRequest
-	resp := new(kcar.AdminUpdateCarResponse)
-
-	if err = c.BindAndValidate(&req); err != nil {
-		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
-
-	resp, err = config.GlobalCarClient.AdminUpdateCar(ctx, &kcar.AdminUpdateCarRequest{
-		Id:  req.ID,
-		Car: pkg.ConvertCar(req.Car),
 	})
 	if err != nil {
 		hlog.Error("rpc car service err", err)

@@ -13,6 +13,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/hertz-contrib/cors"
 	cfg "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
@@ -28,6 +29,7 @@ func main() {
 	initialize.InitSentinel()
 	tracer, trcCfg := hertztracing.NewServerTracer()
 	tlsCfg := initialize.InitTLS()
+	corsCfg := initialize.InitCors()
 	rpc.Init()
 	// create a new server
 	h := server.New(
@@ -43,8 +45,9 @@ func main() {
 		cfg.WithReadTimeout(time.Minute),
 		cfg.WithDisableKeepAlive(false)))
 	tlsCfg.NextProtos = append(tlsCfg.NextProtos, "h2")
-	// use pprof & tracer & sentinel mw
+	// use pprof & tracer & sentinel & cors mw
 	pprof.Register(h)
+	h.Use(cors.New(corsCfg))
 	h.Use(hertztracing.ServerMiddleware(trcCfg))
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default

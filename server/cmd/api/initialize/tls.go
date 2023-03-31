@@ -6,9 +6,11 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
+// InitTLS
 func InitTLS() *tls.Config {
 	cfg := &tls.Config{
-		MinVersion: tls.VersionTLS13,
+		MinVersion:         tls.VersionTLS10,
+		InsecureSkipVerify: true,
 	}
 	cert, err := tls.LoadX509KeyPair("server/cmd/api/cert/server.crt",
 		"server/cmd/api/cert/server.key")

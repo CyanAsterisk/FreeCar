@@ -54,8 +54,14 @@ func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
 	resp, err = config.GlobalUserClient.ChangeAdminPassword(ctx, &kuser.ChangeAdminPasswordRequest{
-		AccountId:    c.MustGet(consts.AccountID).(int64),
+		AccountId:    aid.(int64),
 		OldPassword:  req.OldPassword,
 		NewPassword_: req.NewPassword,
 	})
@@ -225,8 +231,13 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-
-	resp, err = config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: c.MustGet(consts.AccountID).(int64)})
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+	resp, err = config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: aid.(int64)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -248,8 +259,13 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-
-	resp, err = config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: c.MustGet(consts.AccountID).(int64)})
+	aid, flag := c.Get(consts.AccountID)
+	if !flag {
+		resp.BaseResp = tools.BuildBaseResp(errno.AuthorizeFail)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+	resp, err = config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: aid.(int64)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)

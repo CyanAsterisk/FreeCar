@@ -4,100 +4,100 @@ include "../base/common.thrift"
 include "../base/car.thrift"
 
 struct CreateCarRequest {
-    1: required i64 account_id,
-    2: required string plate_num,
+    1:  i64 account_id,
+    2:  string plate_num,
 }
 
 struct CreateCarResponse {
-    1: required common.BaseResponse base_resp,
-    2: required car.CarEntity car_entity,
+    1:  common.BaseResponse base_resp,
+    2:  car.CarEntity car_entity,
 }
 
 struct GetCarRequest {
-    1: required i64 account_id,
-    2: required string id,
+    1:  i64 account_id,
+    2:  string id,
 }
 
 struct GetCarResponse {
-    1: required common.BaseResponse base_resp,
-    2: required car.Car car,
+    1:  common.BaseResponse base_resp,
+    2:  car.Car car,
 }
 
 struct GetCarsRequest {
-    1: required i64 account_id,
+    1:  i64 account_id,
 }
 
 struct GetCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct GetAllCarsRequest {
-    1: required i64 account_id,
+    1:  i64 account_id,
 }
 
 struct GetAllCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct LockCarRequest {
-    1: required i64 account_id,
-    2: required string id,
+    1:  i64 account_id,
+    2:  string id,
 }
 
 struct LockCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct UnlockCarRequest {
-    1: required string id,
-    2: required i64 account_id,
-    3: required car.Driver driver,
-    4: required string trip_id,
+    1:  string id,
+    2:  i64 account_id,
+    3:  car.Driver driver,
+    4:  string trip_id,
 }
 
 struct UnlockCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct UpdateCarRequest {
-    1: required string id,
-    2: required car.CarStatus status,
-    3: required car.Position position,
-    4: required i64 account_id,
-    5: required double power,
+    1:  string id,
+    2:  car.CarStatus status,
+    3:  car.Position position,
+    4:  i64 account_id,
+    5:  double power,
 }
 
 struct UpdateCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct AdminUpdateCarRequest {
-    1: required string id,
-    2: required car.Car car,
+    1:  string id,
+    2:  car.Car car,
 }
 
 struct AdminUpdateCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct GetSomeCarsRequest {
-    1: required i64 account_id,
+    1:  i64 account_id,
 }
 
 struct GetSomeCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct DeleteCarRequest {
-    1: required i64 account_id,
-    2: required string id,
+    1:  i64 account_id,
+    2:  string id,
 }
 
 struct DeleteCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 service CarService {

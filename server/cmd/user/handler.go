@@ -5,13 +5,16 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user"
+	"github.com/CyanAsterisk/FreeCar/server/shared/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/golang-jwt/jwt"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.
@@ -21,6 +24,12 @@ type UserServiceImpl struct {
 	AdminMysqlManager
 	UserMysqlManager
 	BlobManager
+	TokenGenerator
+}
+
+// TokenGenerator creates token.
+type TokenGenerator interface {
+	CreateToken(claims *model.CustomClaims) (token string, err error)
 }
 
 // OpenIDResolver resolves an authorization code
@@ -80,8 +89,25 @@ func (s *UserServiceImpl) Login(_ context.Context, req *user.LoginRequest) (resp
 			return resp, nil
 		}
 	}
+
+	now := time.Now().Unix()
+	resp.Token, err = s.TokenGenerator.CreateToken(&model.CustomClaims{
+		ID:      usr.ID,
+		IsAdmin: false,
+		StandardClaims: jwt.StandardClaims{
+			IssuedAt:  now,
+			NotBefore: now,
+			ExpiresAt: now + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
+		},
+	})
+	if err != nil {
+		klog.Error("create token error", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		return resp, nil
+	}
+
 	resp.BaseResp = tools.BuildBaseResp(nil)
-	resp.AccountId = usr.ID
 	return resp, nil
 }
 
@@ -101,8 +127,24 @@ func (s *UserServiceImpl) AdminLogin(_ context.Context, req *user.AdminLoginRequ
 		return resp, nil
 	}
 
+	now := time.Now().Unix()
+	resp.Token, err = s.TokenGenerator.CreateToken(&model.CustomClaims{
+		ID:      admin.ID,
+		IsAdmin: false,
+		StandardClaims: jwt.StandardClaims{
+			IssuedAt:  now,
+			NotBefore: now,
+			ExpiresAt: now + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
+		},
+	})
+	if err != nil {
+		klog.Error("create token error", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		return resp, nil
+	}
+
 	resp.BaseResp = tools.BuildBaseResp(nil)
-	resp.AccountId = admin.ID
 	return resp, nil
 }
 

@@ -4,67 +4,67 @@ include "../base/common.thrift"
 include "../base/trip.thrift"
 
 struct CreateTripRequest {
-    1: required trip.Location start (api.raw = "start"),
-    2: required string car_id (api.raw = "car_id"),
-    3: required string avatar_url (api.raw = "avatar_url"),
+    1:  trip.Location start (api.raw = "start"),
+    2:  string car_id (api.raw = "car_id"),
+    3:  string avatar_url (api.raw = "avatar_url"),
 }
 
 struct CreateTripResponse {
-    1: required common.BaseResponse base_resp,
-    2: required trip.TripEntity trip_entity,
+    1:  common.BaseResponse base_resp,
+    2:  trip.TripEntity trip_entity,
 }
 
 struct GetTripRequest {
-    1: required string id (api.raw = "id"),
+    1:  string id (api.raw = "id"),
 }
 
 struct GetTripResponse {
-    1: required common.BaseResponse base_resp,
-    2: required trip.Trip trip,
+    1:  common.BaseResponse base_resp,
+    2:  trip.Trip trip,
 }
 
 struct GetTripsRequest {
-    1: required trip.TripStatus status (api.raw = "status"),
+    1:  trip.TripStatus status (api.raw = "status"),
 }
 
 struct GetTripsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<trip.TripEntity> trips,
+    1:  common.BaseResponse base_resp,
+    2:  list<trip.TripEntity> trips,
 }
 
 struct UpdateTripRequest {
-    1: required string id (api.raw = "id"),
-    2: required trip.Location current (api.raw = "current"),
-    3: required bool end_trip (api.raw = "end_trip"),
+    1:  string id (api.raw = "id"),
+    2:  trip.Location current (api.raw = "current"),
+    3:  bool end_trip (api.raw = "end_trip"),
 }
 
 struct UpdateTripResponse {
-    1: required common.BaseResponse base_resp,
-    2: required trip.Trip trip,
+    1:  common.BaseResponse base_resp,
+    2:  trip.Trip trip,
 }
 
 struct DeleteTripRequest {
-    1: required string id (api.raw = "id"),
+    1:  string id (api.raw = "id"),
 }
 
 struct DeleteTripResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct GetAllTripsRequest {
 }
 
 struct GetAllTripsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<trip.TripEntity> trips,
+    1:  common.BaseResponse base_resp,
+    2:  list<trip.TripEntity> trips,
 }
 
 struct GetSomeTripsRequest {
 }
 
 struct GetSomeTripsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<trip.TripEntity> trips,
+    1:  common.BaseResponse base_resp,
+    2:  list<trip.TripEntity> trips,
 }
 
 service TripService {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/jwt"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/wechat"
@@ -46,6 +47,7 @@ func main() {
 		UserMysqlManager:  mysql.NewUserManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
 		AdminMysqlManager: mysql.NewAdminManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
 		BlobManager:       blobClient,
+		TokenGenerator:    jwt.NewTokenGenerator(config.GlobalServerConfig.JWTInfo.SigningKey),
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),

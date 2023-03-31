@@ -4,62 +4,62 @@ include "../base/common.thrift"
 include "../base/car.thrift"
 
 struct AdminCreateCarRequest {
-    1: required string plate_num (api.raw = "plate_num", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string plate_num (api.raw = "plate_num", api.vd = "len($) > 0 && len($) < 20>"),
 }
 
 struct AdminCreateCarResponse {
-    1: required common.BaseResponse base_resp,
-    2: required car.CarEntity car_entity,
+    1:  common.BaseResponse base_resp,
+    2:  car.CarEntity car_entity,
 }
 
 struct AdminDeleteCarRequest {
-    1: required string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
 }
 
 struct AdminDeleteCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct AdminUpdateCarRequest {
-    1: required string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
-    2: required car.Car car (api.raw = "car"),
+    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
+    2:  car.Car car (api.raw = "car"),
 }
 
 struct AdminUpdateCarResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct AdminGetSomeCarsRequest {
 }
 
 struct AdminGetSomeCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct AdminGetAllCarsRequest {
 }
 
 struct AdminGetAllCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct GetCarsRequest {
 }
 
 struct GetCarsResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<car.CarEntity> cars,
+    1:  common.BaseResponse base_resp,
+    2:  list<car.CarEntity> cars,
 }
 
 struct GetCarRequest {
-    1: required string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
 }
 
 struct GetCarResponse {
-    1: required common.BaseResponse base_resp,
-    2: required car.Car car,
+    1:  common.BaseResponse base_resp,
+    2:  car.Car car,
 }
 
 service CarService {

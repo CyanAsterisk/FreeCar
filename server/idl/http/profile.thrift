@@ -7,96 +7,96 @@ struct GetProfileRequest {
 }
 
 struct GetProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required profile.Profile profile,
+    1:  common.BaseResponse base_resp,
+    2:  profile.Profile profile,
 }
 
 struct GetAllProfileRequest {
 }
 
 struct GetAllProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<profile.ProfileRecord> profile,
+    1:  common.BaseResponse base_resp,
+    2:  list<profile.ProfileRecord> profile,
 }
 
 struct GetSomeProfileRequest {
 }
 
 struct GetSomeProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<profile.ProfileRecord> profile,
+    1:  common.BaseResponse base_resp,
+    2:  list<profile.ProfileRecord> profile,
 }
 
 struct GetPendingProfileRequest {
 }
 
 struct GetPendingProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<profile.ProfileRecord> profile,
+    1:  common.BaseResponse base_resp,
+    2:  list<profile.ProfileRecord> profile,
 }
 
 struct CheckProfileRequest {
-    1: required bool accept,
+    1:  bool accept,
 }
 
 struct CheckProfileResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct DeleteProfileRequest {
-    1: required i64 account_id (api.raw = "account_id"),
+    1:  i64 account_id (api.raw = "account_id"),
 }
 
 struct DeleteProfileResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct SubmitProfileRequest {
-    1: required profile.Identity identity (api.raw = "identity"),
+    1:  profile.Identity identity (api.raw = "identity"),
 }
 
 struct SubmitProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required profile.Profile profile,
+    1:  common.BaseResponse base_resp,
+    2:  profile.Profile profile,
 }
 
 struct ClearProfileRequest {
 }
 
 struct ClearProfileResponse {
-    1: required common.BaseResponse base_resp,
-    2: required profile.Profile profile,
+    1:  common.BaseResponse base_resp,
+    2:  profile.Profile profile,
 }
 
 struct GetProfilePhotoRequest {
 }
 
 struct GetProfilePhotoResponse {
-    1: required common.BaseResponse base_resp,
-    2: required string url,
+    1:  common.BaseResponse base_resp,
+    2:  string url,
 }
 
 struct CreateProfilePhotoRequest {
 }
 
 struct CreateProfilePhotoResponse {
-    1: required common.BaseResponse base_resp,
-    2: required string upload_url,
+    1:  common.BaseResponse base_resp,
+    2:  string upload_url,
 }
 
 struct CompleteProfilePhotoRequest {
 }
 
 struct CompleteProfilePhotoResponse {
-    1: required common.BaseResponse base_resp,
-    2: required profile.Identity identity,
+    1:  common.BaseResponse base_resp,
+    2:  profile.Identity identity,
 }
 
 struct ClearProfilePhotoRequest {
 }
 
 struct ClearProfilePhotoResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 service ProfileService {

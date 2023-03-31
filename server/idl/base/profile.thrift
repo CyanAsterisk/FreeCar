@@ -15,19 +15,19 @@ enum IdentityStatus {
 }
 
 struct ProfileRecord {
-    1: required i64 account_id,
-    2: required i64 photo_blob_id,
-    3: required Profile profile,
+    1:  i64 account_id,
+    2:  i64 photo_blob_id,
+    3:  Profile profile,
 }
 
 struct Profile {
-    1: required Identity identity,
-    2: required IdentityStatus identity_status,
+    1:  Identity identity,
+    2:  IdentityStatus identity_status,
 }
 
 struct Identity {
-    1: required string lic_number,
-    2: required string name,
-    3: required Gender gender,
-    4: required i64 birth_date_millis,
+    1:  string lic_number,
+    2:  string name,
+    3:  Gender gender,
+    4:  i64 birth_date_millis,
 }

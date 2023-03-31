@@ -4,15 +4,15 @@ include "../base/common.thrift"
 include "../base/car.thrift"
 
 struct AdminCreateCarRequest {
-    1:  string plate_num (api.raw = "plate_num", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string plate_num (api.raw = "plate_num", api.vd = "len($) > 0 && len($) < 25>"),
 }
 
 struct AdminDeleteCarRequest {
-    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 25>"),
 }
 
 struct AdminUpdateCarRequest {
-    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 20>"),
+    1:  string id (api.raw = "id", api.vd = "len($) > 0 && len($) < 25>"),
     2:  car.Car car (api.raw = "car"),
 }
 

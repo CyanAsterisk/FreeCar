@@ -10,7 +10,7 @@ import (
 )
 
 type AdminCreateCarRequest struct {
-	PlateNum string `thrift:"plate_num,1" form:"plate_num" json:"plate_num" query:"plate_num" vd:"len($) > 0 && len($) < 20>"`
+	PlateNum string `thrift:"plate_num,1" form:"plate_num" json:"plate_num" query:"plate_num" vd:"len($) > 0 && len($) < 25>"`
 }
 
 func NewAdminCreateCarRequest() *AdminCreateCarRequest {
@@ -147,7 +147,7 @@ func (p *AdminCreateCarRequest) String() string {
 }
 
 type AdminDeleteCarRequest struct {
-	ID string `thrift:"id,1" form:"id" json:"id" query:"id" vd:"len($) > 0 && len($) < 20>"`
+	ID string `thrift:"id,1" form:"id" json:"id" query:"id" vd:"len($) > 0 && len($) < 25>"`
 }
 
 func NewAdminDeleteCarRequest() *AdminDeleteCarRequest {
@@ -284,7 +284,7 @@ func (p *AdminDeleteCarRequest) String() string {
 }
 
 type AdminUpdateCarRequest struct {
-	ID  string    `thrift:"id,1" form:"id" json:"id" query:"id" vd:"len($) > 0 && len($) < 20>"`
+	ID  string    `thrift:"id,1" form:"id" json:"id" query:"id" vd:"len($) > 0 && len($) < 25>"`
 	Car *base.Car `thrift:"car,2" form:"car" json:"car" query:"car"`
 }
 

@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 
+	base "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/base"
 	hcar "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/pkg"

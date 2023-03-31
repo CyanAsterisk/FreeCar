@@ -71,7 +71,7 @@ func _getuserinfoMw() []app.HandlerFunc {
 }
 
 func _passwordMw() []app.HandlerFunc {
-	return middleware.CommonWithoutJWT()
+	return middleware.CommonMW()
 }
 
 func _user0Mw() []app.HandlerFunc {

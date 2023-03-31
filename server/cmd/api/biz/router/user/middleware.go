@@ -3,7 +3,7 @@
 package User
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -13,7 +13,7 @@ func rootMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	return router.CommentMW()
+	return middleware.CommentMW()
 }
 
 func _userMw() []app.HandlerFunc {
@@ -47,7 +47,7 @@ func __dminupdateuserMw() []app.HandlerFunc {
 }
 
 func _loginMw() []app.HandlerFunc {
-	return router.CommentWithoutJWT()
+	return middleware.CommentWithoutJWT()
 }
 
 func __dminloginMw() []app.HandlerFunc {
@@ -71,9 +71,9 @@ func _getuserinfoMw() []app.HandlerFunc {
 }
 
 func _passwordMw() []app.HandlerFunc {
-	return router.CommentWithoutJWT()
+	return middleware.CommentWithoutJWT()
 }
 
 func _user0Mw() []app.HandlerFunc {
-	return router.CommentMW()
+	return middleware.CommentMW()
 }

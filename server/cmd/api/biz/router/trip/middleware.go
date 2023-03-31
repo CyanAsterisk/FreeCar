@@ -3,12 +3,12 @@
 package Trip
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {
-	return router.CommentMW()
+	return middleware.CommentMW()
 }
 
 func _adminMw() []app.HandlerFunc {

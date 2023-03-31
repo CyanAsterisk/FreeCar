@@ -4,6 +4,7 @@ package profile
 
 import (
 	"context"
+	"net/http"
 
 	hprofile "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/profile"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
@@ -21,11 +22,10 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.DeleteProfileRequest
 	resp := new(kprofile.DeleteProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -33,7 +33,10 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // CheckProfile .
@@ -42,11 +45,10 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.CheckProfileRequest
 	resp := new(kprofile.CheckProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -54,7 +56,10 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetAllProfile .
@@ -63,11 +68,10 @@ func GetAllProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.GetAllProfileRequest
 	resp := new(kprofile.GetAllProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -75,7 +79,10 @@ func GetAllProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetSomeProfile .
@@ -84,11 +91,10 @@ func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.GetSomeProfileRequest
 	resp := new(kprofile.GetSomeProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -96,7 +102,10 @@ func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetPendingProfile .
@@ -105,11 +114,10 @@ func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.GetPendingProfileRequest
 	resp := new(kprofile.GetPendingProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -117,7 +125,10 @@ func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetProfile .
@@ -126,11 +137,10 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.GetProfileRequest
 	resp := new(kprofile.GetProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -138,7 +148,10 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // SubmitProfile .
@@ -147,11 +160,10 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.SubmitProfileRequest
 	resp := new(kprofile.SubmitProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -159,7 +171,10 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // ClearProfile .
@@ -168,11 +183,10 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.ClearProfileRequest
 	resp := new(kprofile.ClearProfileResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -180,7 +194,10 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // CreateProfilePhoto .
@@ -189,11 +206,10 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.CreateProfilePhotoRequest
 	resp := new(kprofile.CreateProfilePhotoResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -201,7 +217,10 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // ClearProfilePhoto .
@@ -210,11 +229,10 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.ClearProfilePhotoRequest
 	resp := new(kprofile.ClearProfilePhotoResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -222,7 +240,10 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetProfilePhoto .
@@ -231,11 +252,10 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.GetProfilePhotoRequest
 	resp := new(kprofile.GetProfilePhotoResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -243,7 +263,10 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // CompleteProfilePhoto .
@@ -252,11 +275,10 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hprofile.CompleteProfilePhotoRequest
 	resp := new(kprofile.CompleteProfilePhotoResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -264,6 +286,8 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
-
+	c.JSON(http.StatusOK, resp)
 }

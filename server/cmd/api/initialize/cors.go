@@ -8,7 +8,6 @@ func InitCors() cors.Config {
 		AllowAllOrigins:        true,
 		AllowMethods:           []string{"PUT", "GET", "POST", "DELETE"},
 		AllowHeaders:           []string{"Origin", "Content-Length", "Content-Type", "authorization"},
-		AllowCredentials:       true,
 		AllowBrowserExtensions: true,
 	}
 }

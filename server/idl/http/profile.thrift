@@ -40,8 +40,8 @@ struct ClearProfilePhotoResponse {
 
 service ProfileService {
     // for back-stage management
-    common.NilResponse DeleteProfile(1: DeleteProfileRequest req) (api.delete = "/admin/delete"),
-    common.NilResponse CheckProfile(1: CheckProfileRequest req) (api.post = "/admin/check"),
+    common.NilResponse DeleteProfile(1: DeleteProfileRequest req) (api.delete = "/admin/profile/delete"),
+    common.NilResponse CheckProfile(1: CheckProfileRequest req) (api.post = "/admin/profile/check"),
     common.NilResponse GetAllProfile(1: GetAllProfileRequest req) (api.get = "/admin/profile/all"),
     common.NilResponse GetSomeProfile(1: GetSomeProfileRequest req) (api.get = "/admin/profile/some"),
     common.NilResponse GetPendingProfile(1: GetPendingProfileRequest req) (api.get = "/admin/profile/pending"),

@@ -171,14 +171,26 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 // @router /trip [PUT]
 func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req trip.UpdateTripRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+	var req htrip.UpdateTripRequest
+	resp := new(ktrip.UpdateTripResponse)
+
+	if err = c.BindAndValidate(&req); err != nil {
+		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
-	resp := new(trip.UpdateTripResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp, err = config.GlobalTripClient.UpdateTrip(ctx, &ktrip.UpdateTripRequest{
+		Id:        req.ID,
+		Current:   (*kbase.Location)(req.Current),
+		EndTrip:   req.EndTrip,
+		AccountId: c.MustGet(consts.AccountID).(int64),
+	})
+	if err != nil {
+		hlog.Error("rpc trip service err", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
 }

@@ -69,12 +69,13 @@ struct GetSomeTripsResponse {
 
 service TripService {
     // for back-stage management
-    DeleteTripResponse DeleteTrip(1: DeleteTripRequest req) (api.delete = "/trip/admin/trip"),
-    GetAllTripsResponse GetAllTrips(1: GetAllTripsRequest req) (api.get = "/trip/admin/all"),
-    GetSomeTripsResponse GetSomeTrips(1: GetSomeTripsRequest req) (api.get = "/trip/admin/some"),
+    DeleteTripResponse DeleteTrip(1: DeleteTripRequest req) (api.delete = "/admin/trip"),
+    GetAllTripsResponse GetAllTrips(1: GetAllTripsRequest req) (api.get = "/admin/trip/all"),
+    GetSomeTripsResponse GetSomeTrips(1: GetSomeTripsRequest req) (api.get = "/admin/trip/some"),
+
     // for mini-program
-    CreateTripResponse CreateTrip(1: CreateTripRequest req) (api.post = "/trip/mini/trip"),
-    GetTripResponse GetTrip(1: GetTripRequest req) (api.get = "/trip/mini/trip"),
-    GetTripsResponse GetTrips(1: GetTripsRequest req) (api.get = "/trip/mini/trips"),
-    UpdateTripResponse UpdateTrip(1: UpdateTripRequest req) (api.push = "/trip/mini/trip"),
+    CreateTripResponse CreateTrip(1: CreateTripRequest req) (api.post = "/trip"),
+    GetTripResponse GetTrip(1: GetTripRequest req) (api.get = "/trip"),
+    GetTripsResponse GetTrips(1: GetTripsRequest req) (api.get = "/trips"),
+    UpdateTripResponse UpdateTrip(1: UpdateTripRequest req) (api.put = "/trip"),
 }

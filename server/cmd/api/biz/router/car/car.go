@@ -17,20 +17,15 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
+	root.GET("/car", append(_getcarMw(), car.GetCar)...)
+	root.GET("/cars", append(_getcarsMw(), car.GetCars)...)
 	{
-		_car := root.Group("/car", _carMw()...)
-		{
-			_admin := _car.Group("/admin", _adminMw()...)
-			_admin.GET("/all", append(__dminget_llcarsMw(), car.AdminGetAllCars)...)
-			_admin.PUT("/car", append(__dmincreatecarMw(), car.AdminCreateCar)...)
-			_admin.DELETE("/car", append(__dmindeletecarMw(), car.AdminDeleteCar)...)
-			_admin.POST("/car", append(__dminupdatecarMw(), car.AdminUpdateCar)...)
-			_admin.GET("/some", append(__dmingetsomecarsMw(), car.AdminGetSomeCars)...)
-		}
-		{
-			_mini := _car.Group("/mini", _miniMw()...)
-			_mini.GET("/car", append(_getcarMw(), car.GetCar)...)
-			_mini.GET("/cars", append(_getcarsMw(), car.GetCars)...)
-		}
+		_admin := root.Group("/admin", _adminMw()...)
+		_admin.POST("/car", append(_carMw(), car.AdminCreateCar)...)
+		_car := _admin.Group("/car", _carMw()...)
+		_car.GET("/all", append(__dminget_llcarsMw(), car.AdminGetAllCars)...)
+		_car.GET("/some", append(__dmingetsomecarsMw(), car.AdminGetSomeCars)...)
+		_admin.DELETE("/car", append(__dmindeletecarMw(), car.AdminDeleteCar)...)
+		_admin.PUT("/car", append(__dminupdatecarMw(), car.AdminUpdateCar)...)
 	}
 }

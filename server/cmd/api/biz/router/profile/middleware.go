@@ -3,40 +3,22 @@
 package Profile
 
 import (
-	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/gzip"
-	"github.com/hertz-contrib/limiter"
-	"github.com/hertz-contrib/requestid"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func rootMw() []app.HandlerFunc {
+	return router.CommentMW()
+}
+
+func _profileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
 
-func _profileMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		// use gzip mw
-		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
-		// use limiter mw
-		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
-		// use requestId mw & bind with traceId
-		requestid.New(
-			requestid.WithGenerator(func(ctx context.Context, c *app.RequestContext) string {
-				traceID := trace.SpanFromContext(ctx).SpanContext().TraceID().String()
-				return traceID
-			}),
-		),
-	}
-}
-
 func _adminMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
+	// your code...
+	return nil
 }
 
 func _get_llprofileMw() []app.HandlerFunc {
@@ -64,12 +46,6 @@ func _getsomeprofileMw() []app.HandlerFunc {
 	return nil
 }
 
-func _miniMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
-}
-
 func _completeprofilephotoMw() []app.HandlerFunc {
 	// your code...
 	return nil
@@ -90,17 +66,17 @@ func _createprofilephotoMw() []app.HandlerFunc {
 	return nil
 }
 
-func _getprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _submitprofileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
 
 func _clearprofileMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _profile0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

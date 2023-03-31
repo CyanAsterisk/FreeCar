@@ -3,40 +3,22 @@
 package Trip
 
 import (
-	"context"
-	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/gzip"
-	"github.com/hertz-contrib/limiter"
-	"github.com/hertz-contrib/requestid"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func rootMw() []app.HandlerFunc {
+	return router.CommentMW()
+}
+
+func _adminMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
 
 func _tripMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		// use gzip mw
-		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
-		// use limiter mw
-		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
-		// use requestId mw & bind with traceId
-		requestid.New(
-			requestid.WithGenerator(func(ctx context.Context, c *app.RequestContext) string {
-				traceID := trace.SpanFromContext(ctx).SpanContext().TraceID().String()
-				return traceID
-			}),
-		),
-	}
-}
-
-func _adminMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
+	// your code...
+	return nil
 }
 
 func _get_lltripsMw() []app.HandlerFunc {
@@ -47,17 +29,6 @@ func _get_lltripsMw() []app.HandlerFunc {
 func _getsometripsMw() []app.HandlerFunc {
 	// your code...
 	return nil
-}
-
-func _deletetripMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _miniMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
 }
 
 func _createtripMw() []app.HandlerFunc {
@@ -71,6 +42,11 @@ func _gettripMw() []app.HandlerFunc {
 }
 
 func _gettripsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatetripMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

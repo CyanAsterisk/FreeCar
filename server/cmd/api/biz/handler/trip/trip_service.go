@@ -166,3 +166,19 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 	}
 	c.JSON(http.StatusOK, resp)
 }
+
+// UpdateTrip .
+// @router /trip [PUT]
+func UpdateTrip(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req trip.UpdateTripRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(trip.UpdateTripResponse)
+
+	c.JSON(consts.StatusOK, resp)
+}

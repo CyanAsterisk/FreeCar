@@ -18,25 +18,26 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	{
-		_user := root.Group("/user", _userMw()...)
-		{
-			_admin := _user.Group("/admin", _adminMw()...)
-			_admin.GET("/all", append(__dminget_llusersMw(), user.AdminGetAllUsers)...)
-			_admin.POST("/password", append(__dminchangepasswordMw(), user.AdminChangePassword)...)
-			_admin.GET("/some", append(__dmingetsomeusersMw(), user.AdminGetSomeUsers)...)
-			_admin.POST("/user", append(__dmin_dduserMw(), user.AdminAddUser)...)
-			_admin.DELETE("/user", append(__dmindeleteuserMw(), user.AdminDeleteUser)...)
-			_admin.PUT("/user", append(__dminupdateuserMw(), user.AdminUpdateUser)...)
-		}
-		{
-			_login := _user.Group("/login", _loginMw()...)
-			_login.POST("/admin", append(__dminloginMw(), user.AdminLogin)...)
-			_login.POST("/mini", append(_login0Mw(), user.Login)...)
-		}
-		{
-			_mini := _user.Group("/mini", _miniMw()...)
-			_mini.POST("/avatar", append(_upload_vatarMw(), user.UploadAvatar)...)
-			_mini.GET("/info", append(_getuserinfoMw(), user.GetUserInfo)...)
-		}
+		_admin := root.Group("/admin", _adminMw()...)
+		_admin.POST("/user", append(_userMw(), user.AdminAddUser)...)
+		_user := _admin.Group("/user", _userMw()...)
+		_user.GET("/all", append(__dminget_llusersMw(), user.AdminGetAllUsers)...)
+		_user.GET("/some", append(__dmingetsomeusersMw(), user.AdminGetSomeUsers)...)
+		_admin.DELETE("/user", append(__dmindeleteuserMw(), user.AdminDeleteUser)...)
+		_admin.PUT("/user", append(__dminupdateuserMw(), user.AdminUpdateUser)...)
+	}
+	{
+		_login := root.Group("/login", _loginMw()...)
+		_login.POST("/admin", append(__dminloginMw(), user.AdminLogin)...)
+		_login.POST("/user", append(_login0Mw(), user.Login)...)
+	}
+	{
+		_password := root.Group("/password", _passwordMw()...)
+		_password.POST("/admin", append(__dminchangepasswordMw(), user.AdminChangePassword)...)
+	}
+	{
+		_user0 := root.Group("/user", _user0Mw()...)
+		_user0.POST("/avatar", append(_upload_vatarMw(), user.UploadAvatar)...)
+		_user0.GET("/info", append(_getuserinfoMw(), user.GetUserInfo)...)
 	}
 }

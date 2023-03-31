@@ -3,14 +3,8 @@
 package User
 
 import (
-	"context"
-
-	"github.com/CyanAsterisk/FreeCar/server/shared/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/gzip"
-	"github.com/hertz-contrib/limiter"
-	"github.com/hertz-contrib/requestid"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -19,25 +13,12 @@ func rootMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
+	return router.CommentMW()
 }
 
 func _userMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		// use gzip mw
-		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
-		// use limiter mw
-		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
-		// use requestId mw & bind with traceId
-		requestid.New(
-			requestid.WithGenerator(func(ctx context.Context, c *app.RequestContext) string {
-				traceID := trace.SpanFromContext(ctx).SpanContext().TraceID().String()
-				return traceID
-			}),
-		),
-	}
+	// your code...
+	return nil
 }
 
 func __dminget_llusersMw() []app.HandlerFunc {
@@ -55,11 +36,6 @@ func __dmingetsomeusersMw() []app.HandlerFunc {
 	return nil
 }
 
-func __dmin_dduserMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func __dmindeleteuserMw() []app.HandlerFunc {
 	// your code...
 	return nil
@@ -71,8 +47,7 @@ func __dminupdateuserMw() []app.HandlerFunc {
 }
 
 func _loginMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return router.CommentWithoutJWT()
 }
 
 func __dminloginMw() []app.HandlerFunc {
@@ -85,12 +60,6 @@ func _login0Mw() []app.HandlerFunc {
 	return nil
 }
 
-func _miniMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		middleware.JWTAuth(),
-	}
-}
-
 func _upload_vatarMw() []app.HandlerFunc {
 	// your code...
 	return nil
@@ -99,4 +68,12 @@ func _upload_vatarMw() []app.HandlerFunc {
 func _getuserinfoMw() []app.HandlerFunc {
 	// your code...
 	return nil
+}
+
+func _passwordMw() []app.HandlerFunc {
+	return router.CommentWithoutJWT()
+}
+
+func _user0Mw() []app.HandlerFunc {
+	return router.CommentMW()
 }

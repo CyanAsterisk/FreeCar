@@ -17,19 +17,15 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
+	root.POST("/trip", append(_createtripMw(), trip.CreateTrip)...)
+	root.GET("/trip", append(_gettripMw(), trip.GetTrip)...)
+	root.PUT("/trip", append(_updatetripMw(), trip.UpdateTrip)...)
+	root.GET("/trips", append(_gettripsMw(), trip.GetTrips)...)
 	{
-		_trip := root.Group("/trip", _tripMw()...)
-		{
-			_admin := _trip.Group("/admin", _adminMw()...)
-			_admin.GET("/all", append(_get_lltripsMw(), trip.GetAllTrips)...)
-			_admin.GET("/some", append(_getsometripsMw(), trip.GetSomeTrips)...)
-			_admin.DELETE("/trip", append(_deletetripMw(), trip.DeleteTrip)...)
-		}
-		{
-			_mini := _trip.Group("/mini", _miniMw()...)
-			_mini.POST("/trip", append(_createtripMw(), trip.CreateTrip)...)
-			_mini.GET("/trip", append(_gettripMw(), trip.GetTrip)...)
-			_mini.GET("/trips", append(_gettripsMw(), trip.GetTrips)...)
-		}
+		_admin := root.Group("/admin", _adminMw()...)
+		_admin.DELETE("/trip", append(_tripMw(), trip.DeleteTrip)...)
+		_trip := _admin.Group("/trip", _tripMw()...)
+		_trip.GET("/all", append(_get_lltripsMw(), trip.GetAllTrips)...)
+		_trip.GET("/some", append(_getsometripsMw(), trip.GetSomeTrips)...)
 	}
 }

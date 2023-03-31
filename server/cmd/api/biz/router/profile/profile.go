@@ -17,25 +17,23 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
+	root.GET("/profile", append(_profileMw(), profile.GetProfile)...)
+	_profile := root.Group("/profile", _profileMw()...)
+	_profile.GET("/complete", append(_completeprofilephotoMw(), profile.CompleteProfilePhoto)...)
+	_profile.POST("/photo", append(_createprofilephotoMw(), profile.CreateProfilePhoto)...)
+	_profile.DELETE("/photo", append(_clearprofilephotoMw(), profile.ClearProfilePhoto)...)
+	_profile.GET("/photo", append(_getprofilephotoMw(), profile.GetProfilePhoto)...)
+	root.POST("/profile", append(_submitprofileMw(), profile.SubmitProfile)...)
+	root.DELETE("/profile", append(_clearprofileMw(), profile.ClearProfile)...)
 	{
-		_profile := root.Group("/profile", _profileMw()...)
+		_admin := root.Group("/admin", _adminMw()...)
+		_admin.POST("/check", append(_checkprofileMw(), profile.CheckProfile)...)
+		_admin.DELETE("/delete", append(_deleteprofileMw(), profile.DeleteProfile)...)
 		{
-			_admin := _profile.Group("/admin", _adminMw()...)
-			_admin.GET("/all", append(_get_llprofileMw(), profile.GetAllProfile)...)
-			_admin.POST("/check", append(_checkprofileMw(), profile.CheckProfile)...)
-			_admin.DELETE("/delete", append(_deleteprofileMw(), profile.DeleteProfile)...)
-			_admin.GET("/pending", append(_getpendingprofileMw(), profile.GetPendingProfile)...)
-			_admin.GET("/some", append(_getsomeprofileMw(), profile.GetSomeProfile)...)
-		}
-		{
-			_mini := _profile.Group("/mini", _miniMw()...)
-			_mini.GET("/complete", append(_completeprofilephotoMw(), profile.CompleteProfilePhoto)...)
-			_mini.DELETE("/photo", append(_clearprofilephotoMw(), profile.ClearProfilePhoto)...)
-			_mini.GET("/photo", append(_getprofilephotoMw(), profile.GetProfilePhoto)...)
-			_mini.POST("/photo", append(_createprofilephotoMw(), profile.CreateProfilePhoto)...)
-			_mini.GET("/profile", append(_getprofileMw(), profile.GetProfile)...)
-			_mini.POST("/profile", append(_submitprofileMw(), profile.SubmitProfile)...)
-			_mini.DELETE("/profile", append(_clearprofileMw(), profile.ClearProfile)...)
+			_profile0 := _admin.Group("/profile", _profile0Mw()...)
+			_profile0.GET("/all", append(_get_llprofileMw(), profile.GetAllProfile)...)
+			_profile0.GET("/pending", append(_getpendingprofileMw(), profile.GetPendingProfile)...)
+			_profile0.GET("/some", append(_getsomeprofileMw(), profile.GetSomeProfile)...)
 		}
 	}
 }

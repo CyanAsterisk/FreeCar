@@ -101,17 +101,18 @@ struct ClearProfilePhotoResponse {
 
 service ProfileService {
     // for back-stage management
-    DeleteProfileResponse DeleteProfile(1: DeleteProfileRequest req) (api.delete = "/profile/admin/delete"),
-    CheckProfileResponse CheckProfile(1: CheckProfileRequest req) (api.post = "/profile/admin/check"),
-    GetAllProfileResponse GetAllProfile(1: GetAllProfileRequest req) (api.get = "/profile/admin/all"),
-    GetSomeProfileResponse GetSomeProfile(1: GetSomeProfileRequest req) (api.get = "/profile/admin/some"),
-    GetPendingProfileResponse GetPendingProfile(1: GetPendingProfileRequest req) (api.get = "/profile/admin/pending"),
+    DeleteProfileResponse DeleteProfile(1: DeleteProfileRequest req) (api.delete = "/admin/delete"),
+    CheckProfileResponse CheckProfile(1: CheckProfileRequest req) (api.post = "/admin/check"),
+    GetAllProfileResponse GetAllProfile(1: GetAllProfileRequest req) (api.get = "/admin/profile/all"),
+    GetSomeProfileResponse GetSomeProfile(1: GetSomeProfileRequest req) (api.get = "/admin/profile/some"),
+    GetPendingProfileResponse GetPendingProfile(1: GetPendingProfileRequest req) (api.get = "/admin/profile/pending"),
+
     // for mini-program
-    GetProfileResponse GetProfile(1: GetProfileRequest req) (api.get = "/profile/mini/profile"),
-    SubmitProfileResponse SubmitProfile(1: SubmitProfileRequest req) (api.post = "/profile/mini/profile"),
-    ClearProfileResponse ClearProfile(1: ClearProfileRequest req) (api.delete = "/profile/mini/profile"),
-    CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req) (api.post = "/profile/mini/photo"),
-    ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req) (api.delete = "/profile/mini/photo"),
-    GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req) (api.get = "/profile/mini/photo"),
-    CompleteProfilePhotoResponse CompleteProfilePhoto(1: CompleteProfilePhotoRequest req) (api.get = "/profile/mini/complete"),
+    GetProfileResponse GetProfile(1: GetProfileRequest req) (api.get = "/profile"),
+    SubmitProfileResponse SubmitProfile(1: SubmitProfileRequest req) (api.post = "/profile"),
+    ClearProfileResponse ClearProfile(1: ClearProfileRequest req) (api.delete = "/profile"),
+    CreateProfilePhotoResponse CreateProfilePhoto(1: CreateProfilePhotoRequest req) (api.post = "/profile/photo"),
+    ClearProfilePhotoResponse ClearProfilePhoto(1: ClearProfilePhotoRequest req) (api.delete = "/profile/photo"),
+    GetProfilePhotoResponse GetProfilePhoto(1: GetProfilePhotoRequest req) (api.get = "/profile/photo"),
+    CompleteProfilePhotoResponse CompleteProfilePhoto(1: CompleteProfilePhotoRequest req) (api.get = "/profile/complete"),
 }

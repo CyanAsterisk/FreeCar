@@ -95,16 +95,18 @@ struct GetUserInfoResponse {
 }
 
 service UserService {
+    LoginResponse Login(1: LoginRequest req) (api.post = "/login/user"),
+    AdminLoginResponse AdminLogin(1: AdminLoginRequest req) (api.post = "/login/admin"),
+    AdminChangePasswordResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/password/admin"),
+
     // for back-stage management
-    AdminLoginResponse AdminLogin(1: AdminLoginRequest req) (api.post = "/user/login/admin"),
-    AdminChangePasswordResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/user/admin/password"),
-    AddUserResponse AdminAddUser(1: AddUserRequest req) (api.post = "/user/admin/user"),
-    DeleteUserResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/user/admin/user"),
-    UpdateUserResponse AdminUpdateUser(1: UpdateUserRequest req) (api.put = "/user/admin/user"),
-    GetSomeUsersResponse AdminGetSomeUsers(1: GetSomeUsersRequest req) (api.get = "/user/admin/some"),
-    GetAllUsersResponse AdminGetAllUsers(1: GetAllUsersRequest req) (api.get = "/user/admin/all"),
+    AddUserResponse AdminAddUser(1: AddUserRequest req) (api.post = "/admin/user"),
+    DeleteUserResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/admin/user"),
+    UpdateUserResponse AdminUpdateUser(1: UpdateUserRequest req) (api.put = "/admin/user"),
+    GetSomeUsersResponse AdminGetSomeUsers(1: GetSomeUsersRequest req) (api.get = "/admin/user/some"),
+    GetAllUsersResponse AdminGetAllUsers(1: GetAllUsersRequest req) (api.get = "/admin/user/all"),
+
     // for mini-program
-    LoginResponse Login(1: LoginRequest req) (api.post = "/user/login/mini"),
-    UploadAvatarResponse UploadAvatar(1: UploadAvatarRequest req) (api.post = "/user/mini/avatar"),
-    GetUserInfoResponse GetUserInfo(1: GetUserInfoRequest req) (api.get = "/user/mini/info"),
+    UploadAvatarResponse UploadAvatar(1: UploadAvatarRequest req) (api.post = "/user/avatar"),
+    GetUserInfoResponse GetUserInfo(1: GetUserInfoRequest req) (api.get = "/user/info"),
 }

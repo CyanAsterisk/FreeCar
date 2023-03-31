@@ -64,12 +64,13 @@ struct GetCarResponse {
 
 service CarService {
     // for back-stage management
-    AdminCreateCarResponse AdminCreateCar(1: AdminCreateCarRequest req) (api.put = "/car/admin/car"),
-    AdminDeleteCarResponse AdminDeleteCar(1: AdminDeleteCarRequest req) (api.delete = "/car/admin/car"),
-    AdminUpdateCarResponse AdminUpdateCar(1: AdminUpdateCarRequest req) (api.post = "/car/admin/car"),
-    AdminGetSomeCarsResponse AdminGetSomeCars(1: AdminGetSomeCarsRequest req) (api.get = "/car/admin/some"),
-    AdminGetAllCarsResponse AdminGetAllCars(1: AdminGetAllCarsRequest req) (api.get = "/car/admin/all"),
+    AdminCreateCarResponse AdminCreateCar(1: AdminCreateCarRequest req) (api.post = "/admin/car"),
+    AdminDeleteCarResponse AdminDeleteCar(1: AdminDeleteCarRequest req) (api.delete = "/admin/car"),
+    AdminUpdateCarResponse AdminUpdateCar(1: AdminUpdateCarRequest req) (api.put = "/admin/car"),
+    AdminGetSomeCarsResponse AdminGetSomeCars(1: AdminGetSomeCarsRequest req) (api.get = "/admin/car/some"),
+    AdminGetAllCarsResponse AdminGetAllCars(1: AdminGetAllCarsRequest req) (api.get = "/admin/car/all"),
+
     // for mini-program
-    GetCarsResponse GetCars(1: GetCarsRequest req) (api.get = "/car/mini/cars"),
-    GetCarResponse GetCar(1: GetCarRequest req) (api.get = "/car/mini/car"),
+    GetCarsResponse GetCars(1: GetCarsRequest req) (api.get = "/cars"),
+    GetCarResponse GetCar(1: GetCarRequest req) (api.get = "/car"),
 }

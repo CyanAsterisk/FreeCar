@@ -18,7 +18,7 @@ func Recovery() app.HandlerFunc {
 			hlog.SystemLogger().CtxErrorf(ctx, "[Recovery] err=%v\nstack=%s", err, stack)
 			c.JSON(consts.StatusInternalServerError, utils.H{
 				"code":    errno.BadRequest,
-				"message": fmt.Sprintf("[Recovery] err=%v\nstack=%s", err, stack),
+				"message": fmt.Sprintf("[Recovery] Panic"),
 			})
 		},
 	))

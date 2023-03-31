@@ -17,6 +17,8 @@ func CommonMW() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		// use jwt mw
 		middleware.JWTAuth(config.GlobalServerConfig.JWTInfo.SigningKey),
+		// use recovery mw
+		middleware.Recovery(),
 		// use gzip mw
 		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
 		// use limiter mw
@@ -33,6 +35,8 @@ func CommonMW() []app.HandlerFunc {
 
 func CommonWithoutJWT() []app.HandlerFunc {
 	return []app.HandlerFunc{
+		// use recovery mw
+		middleware.Recovery(),
 		// use gzip mw
 		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
 		// use limiter mw

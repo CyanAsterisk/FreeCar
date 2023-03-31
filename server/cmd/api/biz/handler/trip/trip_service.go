@@ -18,8 +18,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
-// DeleteTrip .
-// @router /trip/admin/trip [DELETE]
 func DeleteTrip(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req htrip.DeleteTripRequest

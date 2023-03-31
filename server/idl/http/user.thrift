@@ -8,18 +8,9 @@ struct AdminLoginRequest {
     2:  string password (api.raw = "password" api.vd = "len($) > 0 && len($) < 33>")
 }
 
-struct AdminLoginResponse {
-    1:  common.BaseResponse base_resp
-    2:  string token
-}
-
 struct AdminChangePasswordRequest {
     1:  string old_password (api.raw = "old_password" api.vd = "len($) > 0 && len($) < 33>")
     2:  string new_password (api.raw = "new_password" api.vd = "len($) > 0 && len($) < 33>")
-}
-
-struct AdminChangePasswordResponse {
-    1:  common.BaseResponse base_resp
 }
 
 struct AddUserRequest {
@@ -30,16 +21,8 @@ struct AddUserRequest {
     5:  string open_id (api.raw = "open_id")
 }
 
-struct AddUserResponse {
-    1:  common.BaseResponse base_resp
-}
-
 struct DeleteUserRequest {
     1:  i64 account_id (api.raw = "account_id")
-}
-
-struct DeleteUserResponse {
-    1:  common.BaseResponse base_resp
 }
 
 struct UpdateUserRequest {
@@ -49,64 +32,34 @@ struct UpdateUserRequest {
     4:  string avatar_url (api.raw = "avatar_url")
 }
 
-struct UpdateUserResponse {
-    1:  common.BaseResponse base_resp
-}
-
 struct GetSomeUsersRequest {
 }
 
-struct GetSomeUsersResponse {
-    1:  common.BaseResponse base_resp
-    2:  list<user.User> users
-}
-
 struct GetAllUsersRequest {
-}
-
-struct GetAllUsersResponse {
-    1:  common.BaseResponse base_resp
-    2:  list<user.User> users
 }
 
 struct LoginRequest {
     1:  string code (api.raw = "code")
 }
 
-struct LoginResponse {
-    1:  common.BaseResponse base_resp
-    2:  string token
-}
-
-struct UploadAvatarRequest {
-}
-
-struct UploadAvatarResponse {
-    1:  common.BaseResponse base_resp
-    2:  string upload_url
-}
+struct UploadAvatarRequest {}
 
 struct GetUserInfoRequest {
 }
 
-struct GetUserInfoResponse {
-    1:  common.BaseResponse base_resp
-    2:  user.UserInfo user_info
-}
-
 service UserService {
-    LoginResponse Login(1: LoginRequest req) (api.post = "/login/user")
-    AdminLoginResponse AdminLogin(1: AdminLoginRequest req) (api.post = "/login/admin")
-    AdminChangePasswordResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/password/admin")
+    common.NilResponse Login(1: LoginRequest req) (api.post = "/login/user")
+    common.NilResponse AdminLogin(1: AdminLoginRequest req) (api.post = "/login/admin")
+    common.NilResponse AdminChangePassword(1: AdminChangePasswordRequest req) (api.post = "/password/admin")
 
     // for back-stage management
-    AddUserResponse AdminAddUser(1: AddUserRequest req) (api.post = "/admin/user")
-    DeleteUserResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/admin/user")
-    UpdateUserResponse AdminUpdateUser(1: UpdateUserRequest req) (api.put = "/admin/user")
-    GetSomeUsersResponse AdminGetSomeUsers(1: GetSomeUsersRequest req) (api.get = "/admin/user/some")
-    GetAllUsersResponse AdminGetAllUsers(1: GetAllUsersRequest req) (api.get = "/admin/user/all")
+    common.NilResponse AdminAddUser(1: AddUserRequest req) (api.post = "/admin/user")
+    common.NilResponse AdminDeleteUser(1: DeleteUserRequest req) (api.delete = "/admin/user")
+    common.NilResponse AdminUpdateUser(1: UpdateUserRequest req) (api.put = "/admin/user")
+    common.NilResponse AdminGetSomeUsers(1: GetSomeUsersRequest req) (api.get = "/admin/user/some")
+    common.NilResponse AdminGetAllUsers(1: GetAllUsersRequest req) (api.get = "/admin/user/all")
 
     // for mini-program
-    UploadAvatarResponse UploadAvatar(1: UploadAvatarRequest req) (api.post = "/user/avatar")
-    GetUserInfoResponse GetUserInfo(1: GetUserInfoRequest req) (api.get = "/user/info")
+    common.NilResponse UploadAvatar(1: UploadAvatarRequest req) (api.post = "/user/avatar")
+    common.NilResponse GetUserInfo(1: GetUserInfoRequest req) (api.get = "/user/info")
 }

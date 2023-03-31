@@ -3,11 +3,11 @@ package middleware
 import (
 	"context"
 	"errors"
+	"net/http"
 	"strings"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
-	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/golang-jwt/jwt"
 )
@@ -28,7 +28,7 @@ func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		token := c.Request.Header.Get("authorization")
 		if token == "" {
-			errno.SendResponse1(c, errno.AuthorizeFail, nil)
+			c.JSON(http.StatusUnauthorized, nil)
 			c.Abort()
 			return
 		}
@@ -38,11 +38,11 @@ func JWTAuth() app.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				errno.SendResponse1(c, errno.AuthorizeFail, nil)
+				c.JSON(http.StatusUnauthorized, nil)
 				c.Abort()
 				return
 			}
-			errno.SendResponse1(c, errno.AuthorizeFail, nil)
+			c.JSON(http.StatusUnauthorized, nil)
 			c.Abort()
 			return
 		}

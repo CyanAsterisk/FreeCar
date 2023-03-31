@@ -5,12 +5,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
-	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/hertz-contrib/cors"
@@ -52,7 +52,7 @@ func main() {
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default
 		hertzSentinel.WithServerBlockFallback(func(c context.Context, ctx *app.RequestContext) {
-			errno.SendResponse1(ctx, errno.TooManyReqeust, nil)
+			ctx.JSON(http.StatusTooManyRequests, nil)
 			ctx.Abort()
 		}),
 	))

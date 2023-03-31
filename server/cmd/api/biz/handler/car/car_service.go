@@ -4,6 +4,7 @@ package car
 
 import (
 	"context"
+	"net/http"
 
 	hcar "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
@@ -22,11 +23,10 @@ func AdminCreateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.AdminCreateCarRequest
 	resp := new(kcar.CreateCarResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -34,7 +34,10 @@ func AdminCreateCar(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // AdminDeleteCar .
@@ -43,11 +46,10 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.AdminDeleteCarRequest
 	resp := new(kcar.DeleteCarResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -58,7 +60,10 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // AdminUpdateCar .
@@ -67,11 +72,10 @@ func AdminUpdateCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.AdminUpdateCarRequest
 	resp := new(kcar.AdminUpdateCarResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -82,7 +86,10 @@ func AdminUpdateCar(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // AdminGetSomeCars .
@@ -91,11 +98,10 @@ func AdminGetSomeCars(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.AdminGetSomeCarsRequest
 	resp := new(kcar.GetSomeCarsResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -103,7 +109,10 @@ func AdminGetSomeCars(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // AdminGetAllCars .
@@ -112,11 +121,10 @@ func AdminGetAllCars(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.AdminGetAllCarsRequest
 	resp := new(kcar.GetAllCarsResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -124,7 +132,10 @@ func AdminGetAllCars(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetCars .
@@ -133,11 +144,10 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.GetCarsRequest
 	resp := new(kcar.GetCarsResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -145,7 +155,10 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }
 
 // GetCar .
@@ -154,11 +167,10 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req hcar.GetCarRequest
 	resp := new(kcar.GetCarResponse)
-	defer errno.NewSendResponse(c, resp)
 
-	err = c.BindAndValidate(&req)
-	if err != nil {
+	if err = c.BindAndValidate(&req); err != nil {
 		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -169,5 +181,8 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
+	c.JSON(http.StatusOK, resp)
 }

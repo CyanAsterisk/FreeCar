@@ -4,9 +4,9 @@ package main
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/handler"
-	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
@@ -17,9 +17,9 @@ func customizedRegister(r *server.Hertz) {
 
 	// your code ...
 	r.NoRoute(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 404
-		errno.SendResponse1(c, errno.BadRequest, nil)
+		c.JSON(http.StatusNotFound, nil)
 	})
 	r.NoMethod(func(ctx context.Context, c *app.RequestContext) { // used for HTTP 405
-		errno.SendResponse1(c, errno.BadRequest, nil)
+		c.JSON(http.StatusMethodNotAllowed, nil)
 	})
 }

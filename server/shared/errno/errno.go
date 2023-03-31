@@ -4,8 +4,6 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/errno"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 type ErrNo struct {
@@ -57,16 +55,3 @@ var (
 	RecordAlreadyExist = NewErrNo(int64(errno.Err_RecordAlreadyExist), "record already exist")
 	DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
 )
-
-// SendResponse1 pack response
-func SendResponse1(c *app.RequestContext, err ErrNo, data interface{}) {
-	c.JSON(consts.StatusOK, Response{
-		Code:    err.ErrCode,
-		Message: err.ErrMsg,
-		Data:    data,
-	})
-}
-
-func NewSendResponse(c *app.RequestContext, data interface{}) {
-	c.JSON(consts.StatusOK, data)
-}

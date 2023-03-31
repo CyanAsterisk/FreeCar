@@ -11,10 +11,10 @@ import (
 )
 
 type CreateTripRequest struct {
-	Start     *base.Location `thrift:"start,1,required" frugal:"1,required,base.Location" json:"start"`
-	CarId     string         `thrift:"car_id,2,required" frugal:"2,required,string" json:"car_id"`
-	AvatarUrl string         `thrift:"avatar_url,3,required" frugal:"3,required,string" json:"avatar_url"`
-	AccountId int64          `thrift:"account_id,4,required" frugal:"4,required,i64" json:"account_id"`
+	Start     *base.Location `thrift:"start,1" frugal:"1,default,base.Location" json:"start"`
+	CarId     string         `thrift:"car_id,2" frugal:"2,default,string" json:"car_id"`
+	AvatarUrl string         `thrift:"avatar_url,3" frugal:"3,default,string" json:"avatar_url"`
+	AccountId int64          `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
 }
 
 func NewCreateTripRequest() *CreateTripRequest {
@@ -73,10 +73,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetStart bool = false
-	var issetCarId bool = false
-	var issetAvatarUrl bool = false
-	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -97,7 +93,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetStart = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -108,7 +103,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetCarId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -119,7 +113,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAvatarUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -130,7 +123,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -150,25 +142,6 @@ func (p *CreateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetStart {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetCarId {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAvatarUrl {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAccountId {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -183,8 +156,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateTripRequest[fieldId]))
 }
 
 func (p *CreateTripRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -389,8 +360,8 @@ func (p *CreateTripRequest) Field4DeepEqual(src int64) bool {
 }
 
 type CreateTripResponse struct {
-	BaseResp   *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	TripEntity *base.TripEntity   `thrift:"trip_entity,2,required" frugal:"2,required,base.TripEntity" json:"trip_entity"`
+	BaseResp   *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	TripEntity *base.TripEntity   `thrift:"trip_entity,2" frugal:"2,default,base.TripEntity" json:"trip_entity"`
 }
 
 func NewCreateTripResponse() *CreateTripResponse {
@@ -442,8 +413,6 @@ func (p *CreateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTripEntity bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -464,7 +433,6 @@ func (p *CreateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -475,7 +443,6 @@ func (p *CreateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTripEntity = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -495,15 +462,6 @@ func (p *CreateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTripEntity {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -518,8 +476,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_CreateTripResponse[fieldId]))
 }
 
 func (p *CreateTripResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -643,8 +599,8 @@ func (p *CreateTripResponse) Field2DeepEqual(src *base.TripEntity) bool {
 }
 
 type GetTripRequest struct {
-	Id        string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	AccountId int64  `thrift:"account_id,2,required" frugal:"2,required,i64" json:"account_id"`
+	Id        string `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	AccountId int64  `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
 }
 
 func NewGetTripRequest() *GetTripRequest {
@@ -678,8 +634,6 @@ func (p *GetTripRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetId bool = false
-	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -700,7 +654,6 @@ func (p *GetTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -711,7 +664,6 @@ func (p *GetTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -731,15 +683,6 @@ func (p *GetTripRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAccountId {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -754,8 +697,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetTripRequest[fieldId]))
 }
 
 func (p *GetTripRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -881,8 +822,8 @@ func (p *GetTripRequest) Field2DeepEqual(src int64) bool {
 }
 
 type GetTripResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Trip     *base.Trip         `thrift:"trip,2,required" frugal:"2,required,base.Trip" json:"trip"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trip     *base.Trip         `thrift:"trip,2" frugal:"2,default,base.Trip" json:"trip"`
 }
 
 func NewGetTripResponse() *GetTripResponse {
@@ -934,8 +875,6 @@ func (p *GetTripResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTrip bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -956,7 +895,6 @@ func (p *GetTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -967,7 +905,6 @@ func (p *GetTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTrip = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -987,15 +924,6 @@ func (p *GetTripResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTrip {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1010,8 +938,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetTripResponse[fieldId]))
 }
 
 func (p *GetTripResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -1135,8 +1061,8 @@ func (p *GetTripResponse) Field2DeepEqual(src *base.Trip) bool {
 }
 
 type GetTripsRequest struct {
-	Status    base.TripStatus `thrift:"status,1,required" frugal:"1,required,TripStatus" json:"status"`
-	AccountId int64           `thrift:"account_id,2,required" frugal:"2,required,i64" json:"account_id"`
+	Status    base.TripStatus `thrift:"status,1" frugal:"1,default,TripStatus" json:"status"`
+	AccountId int64           `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
 }
 
 func NewGetTripsRequest() *GetTripsRequest {
@@ -1170,8 +1096,6 @@ func (p *GetTripsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetStatus bool = false
-	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1192,7 +1116,6 @@ func (p *GetTripsRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetStatus = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1203,7 +1126,6 @@ func (p *GetTripsRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1223,15 +1145,6 @@ func (p *GetTripsRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetStatus {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAccountId {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1246,8 +1159,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetTripsRequest[fieldId]))
 }
 
 func (p *GetTripsRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -1373,8 +1284,8 @@ func (p *GetTripsRequest) Field2DeepEqual(src int64) bool {
 }
 
 type GetTripsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Trips    []*base.TripEntity `thrift:"trips,2,required" frugal:"2,required,list<base.TripEntity>" json:"trips"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trips    []*base.TripEntity `thrift:"trips,2" frugal:"2,default,list<base.TripEntity>" json:"trips"`
 }
 
 func NewGetTripsResponse() *GetTripsResponse {
@@ -1417,8 +1328,6 @@ func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTrips bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1439,7 +1348,6 @@ func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1450,7 +1358,6 @@ func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTrips = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1470,15 +1377,6 @@ func (p *GetTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTrips {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1493,8 +1391,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetTripsResponse[fieldId]))
 }
 
 func (p *GetTripsResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -1644,10 +1540,10 @@ func (p *GetTripsResponse) Field2DeepEqual(src []*base.TripEntity) bool {
 }
 
 type UpdateTripRequest struct {
-	Id        string         `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
-	Current   *base.Location `thrift:"current,2,required" frugal:"2,required,base.Location" json:"current"`
-	EndTrip   bool           `thrift:"end_trip,3,required" frugal:"3,required,bool" json:"end_trip"`
-	AccountId int64          `thrift:"account_id,4,required" frugal:"4,required,i64" json:"account_id"`
+	Id        string         `thrift:"id,1" frugal:"1,default,string" json:"id"`
+	Current   *base.Location `thrift:"current,2" frugal:"2,default,base.Location" json:"current"`
+	EndTrip   bool           `thrift:"end_trip,3" frugal:"3,default,bool" json:"end_trip"`
+	AccountId int64          `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
 }
 
 func NewUpdateTripRequest() *UpdateTripRequest {
@@ -1706,10 +1602,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetId bool = false
-	var issetCurrent bool = false
-	var issetEndTrip bool = false
-	var issetAccountId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1730,7 +1622,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1741,7 +1632,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetCurrent = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1752,7 +1642,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetEndTrip = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1763,7 +1652,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAccountId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1783,25 +1671,6 @@ func (p *UpdateTripRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetCurrent {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetEndTrip {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetAccountId {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -1816,8 +1685,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UpdateTripRequest[fieldId]))
 }
 
 func (p *UpdateTripRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -2022,8 +1889,8 @@ func (p *UpdateTripRequest) Field4DeepEqual(src int64) bool {
 }
 
 type UpdateTripResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Trip     *base.Trip         `thrift:"trip,2,required" frugal:"2,required,base.Trip" json:"trip"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trip     *base.Trip         `thrift:"trip,2" frugal:"2,default,base.Trip" json:"trip"`
 }
 
 func NewUpdateTripResponse() *UpdateTripResponse {
@@ -2075,8 +1942,6 @@ func (p *UpdateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTrip bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2097,7 +1962,6 @@ func (p *UpdateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2108,7 +1972,6 @@ func (p *UpdateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTrip = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2128,15 +1991,6 @@ func (p *UpdateTripResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTrip {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2151,8 +2005,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UpdateTripResponse[fieldId]))
 }
 
 func (p *UpdateTripResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -2276,7 +2128,7 @@ func (p *UpdateTripResponse) Field2DeepEqual(src *base.Trip) bool {
 }
 
 type DeleteTripRequest struct {
-	Id string `thrift:"id,1,required" frugal:"1,required,string" json:"id"`
+	Id string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 }
 
 func NewDeleteTripRequest() *DeleteTripRequest {
@@ -2302,7 +2154,6 @@ func (p *DeleteTripRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2323,7 +2174,6 @@ func (p *DeleteTripRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2343,10 +2193,6 @@ func (p *DeleteTripRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2361,8 +2207,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_DeleteTripRequest[fieldId]))
 }
 
 func (p *DeleteTripRequest) ReadField1(iprot thrift.TProtocol) error {
@@ -2448,7 +2292,7 @@ func (p *DeleteTripRequest) Field1DeepEqual(src string) bool {
 }
 
 type DeleteTripResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
 }
 
 func NewDeleteTripResponse() *DeleteTripResponse {
@@ -2483,7 +2327,6 @@ func (p *DeleteTripResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2504,7 +2347,6 @@ func (p *DeleteTripResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2524,10 +2366,6 @@ func (p *DeleteTripResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2542,8 +2380,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_DeleteTripResponse[fieldId]))
 }
 
 func (p *DeleteTripResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -2722,8 +2558,8 @@ func (p *GetAllTripsRequest) DeepEqual(ano *GetAllTripsRequest) bool {
 }
 
 type GetAllTripsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Trips    []*base.TripEntity `thrift:"trips,2,required" frugal:"2,required,list<base.TripEntity>" json:"trips"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trips    []*base.TripEntity `thrift:"trips,2" frugal:"2,default,list<base.TripEntity>" json:"trips"`
 }
 
 func NewGetAllTripsResponse() *GetAllTripsResponse {
@@ -2766,8 +2602,6 @@ func (p *GetAllTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTrips bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -2788,7 +2622,6 @@ func (p *GetAllTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2799,7 +2632,6 @@ func (p *GetAllTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTrips = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -2819,15 +2651,6 @@ func (p *GetAllTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTrips {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -2842,8 +2665,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetAllTripsResponse[fieldId]))
 }
 
 func (p *GetAllTripsResponse) ReadField1(iprot thrift.TProtocol) error {
@@ -3087,8 +2908,8 @@ func (p *GetSomeTripsRequest) DeepEqual(ano *GetSomeTripsRequest) bool {
 }
 
 type GetSomeTripsResponse struct {
-	BaseResp *base.BaseResponse `thrift:"base_resp,1,required" frugal:"1,required,base.BaseResponse" json:"base_resp"`
-	Trips    []*base.TripEntity `thrift:"trips,2,required" frugal:"2,required,list<base.TripEntity>" json:"trips"`
+	BaseResp *base.BaseResponse `thrift:"base_resp,1" frugal:"1,default,base.BaseResponse" json:"base_resp"`
+	Trips    []*base.TripEntity `thrift:"trips,2" frugal:"2,default,list<base.TripEntity>" json:"trips"`
 }
 
 func NewGetSomeTripsResponse() *GetSomeTripsResponse {
@@ -3131,8 +2952,6 @@ func (p *GetSomeTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetBaseResp bool = false
-	var issetTrips bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -3153,7 +2972,6 @@ func (p *GetSomeTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBaseResp = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3164,7 +2982,6 @@ func (p *GetSomeTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTrips = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -3184,15 +3001,6 @@ func (p *GetSomeTripsResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetBaseResp {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetTrips {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
@@ -3207,8 +3015,6 @@ ReadFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_GetSomeTripsResponse[fieldId]))
 }
 
 func (p *GetSomeTripsResponse) ReadField1(iprot thrift.TProtocol) error {

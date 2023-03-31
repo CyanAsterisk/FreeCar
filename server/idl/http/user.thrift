@@ -4,94 +4,94 @@ include "../base/common.thrift"
 include "../base/user.thrift"
 
 struct AdminLoginRequest {
-    1: required string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
-    2: required string password (api.raw = "password" api.vd = "len($) > 0 && len($) < 33>"),
+    1:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
+    2:  string password (api.raw = "password" api.vd = "len($) > 0 && len($) < 33>"),
 }
 
 struct AdminLoginResponse {
-    1: required common.BaseResponse base_resp,
-    2: required string token,
+    1:  common.BaseResponse base_resp,
+    2:  string token,
 }
 
 struct AdminChangePasswordRequest {
-    1: required string old_password (api.raw = "old_password" api.vd = "len($) > 0 && len($) < 33>"),
-    2: required string new_password (api.raw = "new_password" api.vd = "len($) > 0 && len($) < 33>"),
+    1:  string old_password (api.raw = "old_password" api.vd = "len($) > 0 && len($) < 33>"),
+    2:  string new_password (api.raw = "new_password" api.vd = "len($) > 0 && len($) < 33>"),
 }
 
 struct AdminChangePasswordResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct AddUserRequest {
-    1: required i64 account_id (api.raw = "account_id"),
-    2: required string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
-    3: required i64 phone_number (api.raw = "phone_number"),
-    4: required i64 avatar_blob_id (api.raw = "avatar_blob_id"),
-    5: required string open_id (api.raw = "open_id"),
+    1:  i64 account_id (api.raw = "account_id"),
+    2:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
+    3:  i64 phone_number (api.raw = "phone_number"),
+    4:  i64 avatar_blob_id (api.raw = "avatar_blob_id"),
+    5:  string open_id (api.raw = "open_id"),
 }
 
 struct AddUserResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct DeleteUserRequest {
-    1: required i64 account_id (api.raw = "account_id"),
+    1:  i64 account_id (api.raw = "account_id"),
 }
 
 struct DeleteUserResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct UpdateUserRequest {
-    1: required i64 account_id (api.raw = "account_id"),
-    2: required string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
-    3: required i64 phone_number (api.raw = "phone_number"),
-    4: required string avatar_url (api.raw = "avatar_url"),
+    1:  i64 account_id (api.raw = "account_id"),
+    2:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>"),
+    3:  i64 phone_number (api.raw = "phone_number"),
+    4:  string avatar_url (api.raw = "avatar_url"),
 }
 
 struct UpdateUserResponse {
-    1: required common.BaseResponse base_resp,
+    1:  common.BaseResponse base_resp,
 }
 
 struct GetSomeUsersRequest {
 }
 
 struct GetSomeUsersResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<user.User> users,
+    1:  common.BaseResponse base_resp,
+    2:  list<user.User> users,
 }
 
 struct GetAllUsersRequest {
 }
 
 struct GetAllUsersResponse {
-    1: required common.BaseResponse base_resp,
-    2: required list<user.User> users,
+    1:  common.BaseResponse base_resp,
+    2:  list<user.User> users,
 }
 
 struct LoginRequest {
-    1: required string code (api.raw = "code"),
+    1:  string code (api.raw = "code"),
 }
 
 struct LoginResponse {
-    1: required common.BaseResponse base_resp,
-    2: required i64 account_id,
+    1:  common.BaseResponse base_resp,
+    2:  i64 account_id,
 }
 
 struct UploadAvatarRequest {
 }
 
 struct UploadAvatarResponse {
-    1: required common.BaseResponse base_resp,
-    2: required string upload_url,
+    1:  common.BaseResponse base_resp,
+    2:  string upload_url,
 }
 
 struct GetUserInfoRequest {
 }
 
 struct GetUserInfoResponse {
-    1: required common.BaseResponse base_resp,
-    2: required user.UserInfo user_info,
+    1:  common.BaseResponse base_resp,
+    2:  user.UserInfo user_info,
 }
 
 service UserService {

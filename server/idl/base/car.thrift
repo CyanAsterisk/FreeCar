@@ -1,8 +1,8 @@
 namespace go base
 
 struct CarEntity {
-    1: required string id,
-    2: required Car car,
+    1:  string id,
+    2:  Car car,
 }
 
 enum CarStatus {
@@ -14,20 +14,20 @@ enum CarStatus {
 }
 
 struct Driver {
-    1: required i64 id,
-    2: required string avatar_url,
+    1:  i64 id,
+    2:  string avatar_url,
 }
 
 struct Position {
-    1: required double latitude,
-    2: required double longitude,
+    1:  double latitude,
+    2:  double longitude,
 }
 
 struct Car {
-    1: required CarStatus status,
-    2: required Driver driver,
-    3: required Position position,
-    4: required string trip_id,
-    5: required double power,
-    6: required string plate_num,
+    1:  CarStatus status,
+    2:  Driver driver,
+    3:  Position position,
+    4:  string trip_id,
+    5:  double power,
+    6:  string plate_num,
 }

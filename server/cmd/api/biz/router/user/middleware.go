@@ -13,7 +13,7 @@ func rootMw() []app.HandlerFunc {
 }
 
 func _adminMw() []app.HandlerFunc {
-	return middleware.CommentMW()
+	return middleware.CommonMW()
 }
 
 func _userMw() []app.HandlerFunc {
@@ -47,7 +47,7 @@ func __dminupdateuserMw() []app.HandlerFunc {
 }
 
 func _loginMw() []app.HandlerFunc {
-	return middleware.CommentWithoutJWT()
+	return middleware.CommonWithoutJWT()
 }
 
 func __dminloginMw() []app.HandlerFunc {
@@ -71,9 +71,9 @@ func _getuserinfoMw() []app.HandlerFunc {
 }
 
 func _passwordMw() []app.HandlerFunc {
-	return middleware.CommentWithoutJWT()
+	return middleware.CommonWithoutJWT()
 }
 
 func _user0Mw() []app.HandlerFunc {
-	return middleware.CommentMW()
+	return middleware.CommonMW()
 }

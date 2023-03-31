@@ -8,7 +8,7 @@ import (
 )
 
 func rootMw() []app.HandlerFunc {
-	return middleware.CommentMW()
+	return middleware.CommonMW()
 }
 
 func _profileMw() []app.HandlerFunc {

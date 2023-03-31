@@ -12,8 +12,8 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-// CommentMW
-func CommentMW() []app.HandlerFunc {
+// CommonMW
+func CommonMW() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		// use jwt mw
 		middleware.JWTAuth(config.GlobalServerConfig.JWTInfo.SigningKey),
@@ -31,7 +31,7 @@ func CommentMW() []app.HandlerFunc {
 	}
 }
 
-func CommentWithoutJWT() []app.HandlerFunc {
+func CommonWithoutJWT() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		// use gzip mw
 		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),

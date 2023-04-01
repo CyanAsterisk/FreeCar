@@ -9,7 +9,7 @@ require (
 	github.com/bytedance/sonic v1.8.3
 	github.com/cloudwego/hertz v0.6.0
 	github.com/cloudwego/kitex v0.4.4
-	github.com/docker/docker v20.10.23+incompatible
+	github.com/docker/docker v23.0.2+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hashicorp/consul/api v1.18.0

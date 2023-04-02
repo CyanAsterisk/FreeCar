@@ -25,7 +25,7 @@ func JWTAuth(signingKey string) app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		token := c.Request.Header.Get("authorization")
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, nil)
+			c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.AuthorizeFail))
 			c.Abort()
 			return
 		}

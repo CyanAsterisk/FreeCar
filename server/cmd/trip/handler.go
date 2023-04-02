@@ -63,10 +63,10 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 
 	tr, err := s.MongoManager.CreateTrip(ctx, &base.Trip{
 		AccountId: aid.Int64(),
-
-		Status:  base.TripStatus_IN_PROGRESS,
-		Start:   ls,
-		Current: ls,
+		CarId:     req.CarId,
+		Status:    base.TripStatus_IN_PROGRESS,
+		Start:     ls,
+		Current:   ls,
 	})
 	if err != nil {
 		klog.Error("cannot create trip", err)

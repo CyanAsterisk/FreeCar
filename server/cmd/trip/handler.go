@@ -11,6 +11,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trip"
+	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/pkg/klog"
 )
@@ -56,23 +57,48 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	resp = new(trip.CreateTripResponse)
 	aid := id.AccountID(req.AccountId)
 
+	// Verify driver's identity.
+	iID, err := s.ProfileManager.Verify(ctx, aid)
+	if err != nil {
+		klog.Error("verify profile err", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage(err.Error()))
+		return resp, nil
+	}
+
+	// Check vehicle status.
+	carID := id.CarID(req.CarId)
+	if err = s.CarManager.Verify(ctx, carID, aid); err != nil {
+		klog.Error("verify car err", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage(err.Error()))
+		return resp, nil
+	}
+
 	ls := s.calcCurrentStatus(&base.LocationStatus{
 		Location:     req.Start,
 		TimestampSec: nowFunc(),
 	}, req.Start)
 
 	tr, err := s.MongoManager.CreateTrip(ctx, &base.Trip{
-		AccountId: aid.Int64(),
-
-		Status:  base.TripStatus_IN_PROGRESS,
-		Start:   ls,
-		Current: ls,
+		AccountId:  aid.Int64(),
+		CarId:      req.CarId,
+		Status:     base.TripStatus_IN_PROGRESS,
+		Start:      ls,
+		Current:    ls,
+		IdentityId: iID.String(),
 	})
 	if err != nil {
 		klog.Error("cannot create trip", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("create trip error"))
 		return resp, nil
 	}
+
+	// vehicle unlock
+	go func() {
+		err := s.CarManager.Unlock(context.Background(), id.CarID(req.CarId), aid, objid.ToTripID(tr.ID), req.AvatarUrl)
+		if err != nil {
+			klog.Error("cannot unlock car", err)
+		}
+	}()
 
 	resp.TripEntity = &base.TripEntity{
 		Id:   tr.ID.Hex(),

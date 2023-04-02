@@ -29,14 +29,14 @@ func AdminCreateCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.CreateCar(ctx, &kcar.CreateCarRequest{PlateNum: req.PlateNum})
+	res, err := config.GlobalCarClient.CreateCar(ctx, &kcar.CreateCarRequest{PlateNum: req.PlateNum})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminDeleteCar .
@@ -52,7 +52,7 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.DeleteCar(ctx, &kcar.DeleteCarRequest{
+	res, err := config.GlobalCarClient.DeleteCar(ctx, &kcar.DeleteCarRequest{
 		AccountId: c.MustGet(consts.AccountID).(int64),
 		Id:        req.ID,
 	})
@@ -62,7 +62,7 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminGetSomeCars .
@@ -78,14 +78,14 @@ func AdminGetSomeCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminGetAllCars .
@@ -101,14 +101,14 @@ func AdminGetAllCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetCars .
@@ -124,14 +124,14 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetCar .
@@ -147,7 +147,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalCarClient.GetCar(ctx, &kcar.GetCarRequest{
+	res, err := config.GlobalCarClient.GetCar(ctx, &kcar.GetCarRequest{
 		AccountId: c.MustGet(consts.AccountID).(int64),
 		Id:        req.ID,
 	})
@@ -157,5 +157,5 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }

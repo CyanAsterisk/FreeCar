@@ -25,3 +25,10 @@ func baseResp(err errno.ErrNo) *base.BaseResponse {
 		StatusMsg:  err.ErrMsg,
 	}
 }
+
+func ParseBaseResp(resp *base.BaseResponse) error {
+	if resp.StatusCode == errno.Success.ErrCode {
+		return nil
+	}
+	return errno.NewErrNo(resp.StatusCode, resp.StatusMsg)
+}

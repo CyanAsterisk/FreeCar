@@ -29,14 +29,14 @@ func DeleteTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.DeleteTrip(ctx, &ktrip.DeleteTripRequest{Id: req.ID})
+	res, err := config.GlobalTripClient.DeleteTrip(ctx, &ktrip.DeleteTripRequest{Id: req.ID})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetAllTrips .
@@ -52,14 +52,14 @@ func GetAllTrips(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.GetAllTrips(ctx, &ktrip.GetAllTripsRequest{})
+	res, err := config.GlobalTripClient.GetAllTrips(ctx, &ktrip.GetAllTripsRequest{})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetSomeTrips .
@@ -75,14 +75,14 @@ func GetSomeTrips(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.GetSomeTrips(ctx, &ktrip.GetSomeTripsRequest{})
+	res, err := config.GlobalTripClient.GetSomeTrips(ctx, &ktrip.GetSomeTripsRequest{})
 	if err != nil {
 		hlog.Error("rpc trip service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // CreateTrip .
@@ -98,7 +98,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.CreateTrip(ctx, &ktrip.CreateTripRequest{
+	res, err := config.GlobalTripClient.CreateTrip(ctx, &ktrip.CreateTripRequest{
 		Start:     pkg.ConvertTripLocation(req.Start),
 		CarId:     req.CarID,
 		AvatarUrl: req.AvatarURL,
@@ -110,7 +110,7 @@ func CreateTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetTrip .
@@ -126,7 +126,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.GetTrip(ctx, &ktrip.GetTripRequest{
+	res, err := config.GlobalTripClient.GetTrip(ctx, &ktrip.GetTripRequest{
 		Id:        req.ID,
 		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
@@ -136,7 +136,7 @@ func GetTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetTrips .
@@ -152,7 +152,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.GetTrips(ctx, &ktrip.GetTripsRequest{
+	res, err := config.GlobalTripClient.GetTrips(ctx, &ktrip.GetTripsRequest{
 		Status:    kbase.TripStatus(req.Status),
 		AccountId: c.MustGet(consts.AccountID).(int64),
 	})
@@ -162,7 +162,7 @@ func GetTrips(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // UpdateTrip .
@@ -178,7 +178,7 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalTripClient.UpdateTrip(ctx, &ktrip.UpdateTripRequest{
+	res, err := config.GlobalTripClient.UpdateTrip(ctx, &ktrip.UpdateTripRequest{
 		Id:        req.ID,
 		Current:   (*kbase.Location)(req.Current),
 		EndTrip:   req.EndTrip,
@@ -190,5 +190,5 @@ func UpdateTrip(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }

@@ -29,14 +29,14 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // CheckProfile .
@@ -52,14 +52,14 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetAllProfile .
@@ -75,14 +75,14 @@ func GetAllProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.GetAllProfile(ctx, &kprofile.GetAllProfileRequest{})
+	res, err := config.GlobalProfileClient.GetAllProfile(ctx, &kprofile.GetAllProfileRequest{})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetSomeProfile .
@@ -98,14 +98,14 @@ func GetSomeProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.GetSomeProfile(ctx, &kprofile.GetSomeProfileRequest{})
+	res, err := config.GlobalProfileClient.GetSomeProfile(ctx, &kprofile.GetSomeProfileRequest{})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetPendingProfile .
@@ -121,14 +121,14 @@ func GetPendingProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.GetPendingProfile(ctx, &kprofile.GetPendingProfileRequest{})
+	res, err := config.GlobalProfileClient.GetPendingProfile(ctx, &kprofile.GetPendingProfileRequest{})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetProfile .
@@ -144,14 +144,14 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // SubmitProfile .
@@ -167,14 +167,14 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // ClearProfile .
@@ -190,14 +190,14 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // CreateProfilePhoto .
@@ -213,14 +213,14 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // ClearProfilePhoto .
@@ -236,14 +236,14 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetProfilePhoto .
@@ -259,14 +259,14 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // CompleteProfilePhoto .
@@ -282,12 +282,12 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }

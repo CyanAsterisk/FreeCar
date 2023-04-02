@@ -29,7 +29,7 @@ func AdminLogin(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalUserClient.AdminLogin(ctx, &kuser.AdminLoginRequest{
+	res, err := config.GlobalUserClient.AdminLogin(ctx, &kuser.AdminLoginRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
@@ -39,7 +39,7 @@ func AdminLogin(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminChangePassword .
@@ -54,7 +54,7 @@ func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	resp, err = config.GlobalUserClient.ChangeAdminPassword(ctx, &kuser.ChangeAdminPasswordRequest{
+	res, err := config.GlobalUserClient.ChangeAdminPassword(ctx, &kuser.ChangeAdminPasswordRequest{
 		AccountId:    c.MustGet(consts.AccountID).(int64),
 		OldPassword:  req.OldPassword,
 		NewPassword_: req.NewPassword,
@@ -65,7 +65,7 @@ func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminAddUser .
@@ -81,7 +81,7 @@ func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalUserClient.AddUser(ctx, &kuser.AddUserRequest{
+	res, err := config.GlobalUserClient.AddUser(ctx, &kuser.AddUserRequest{
 		AccountId:    req.AccountID,
 		Username:     req.Username,
 		PhoneNumber:  req.PhoneNumber,
@@ -94,7 +94,7 @@ func AdminAddUser(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminDeleteUser .
@@ -109,14 +109,14 @@ func AdminDeleteUser(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	resp, err = config.GlobalUserClient.DeleteUser(ctx, &kuser.DeleteUserRequest{AccountId: req.AccountID})
+	res, err := config.GlobalUserClient.DeleteUser(ctx, &kuser.DeleteUserRequest{AccountId: req.AccountID})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminUpdateUser .
@@ -131,7 +131,7 @@ func AdminUpdateUser(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	resp, err = config.GlobalUserClient.UpdateUser(ctx, &kuser.UpdateUserRequest{
+	res, err := config.GlobalUserClient.UpdateUser(ctx, &kuser.UpdateUserRequest{
 		AccountId:   req.AccountID,
 		Username:    req.Username,
 		PhoneNumber: req.PhoneNumber,
@@ -143,7 +143,7 @@ func AdminUpdateUser(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminGetSomeUsers .
@@ -158,14 +158,14 @@ func AdminGetSomeUsers(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	resp, err = config.GlobalUserClient.GetSomeUsers(ctx, &kuser.GetSomeUsersRequest{})
+	res, err := config.GlobalUserClient.GetSomeUsers(ctx, &kuser.GetSomeUsersRequest{})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // AdminGetAllUsers .
@@ -181,14 +181,14 @@ func AdminGetAllUsers(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalUserClient.GetAllUsers(ctx, &kuser.GetAllUsersRequest{})
+	res, err := config.GlobalUserClient.GetAllUsers(ctx, &kuser.GetAllUsersRequest{})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // Login .
@@ -203,14 +203,14 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	resp, err = config.GlobalUserClient.Login(ctx, &kuser.LoginRequest{Code: req.Code})
+	res, err := config.GlobalUserClient.Login(ctx, &kuser.LoginRequest{Code: req.Code})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // UploadAvatar .
@@ -226,14 +226,14 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }
 
 // GetUserInfo .
@@ -249,12 +249,12 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err = config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: c.MustGet(consts.AccountID).(int64)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, res)
 }

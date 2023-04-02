@@ -128,6 +128,7 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 
 // UnlockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarRequest) (resp *car.UnlockCarResponse, err error) {
+	resp = new(car.UnlockCarResponse)
 	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
 		klog.Error("remove cache error")
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("remove cache error"))

@@ -13,7 +13,6 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hashicorp/consul/api v1.18.0
-	github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/http2 v0.1.5
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386

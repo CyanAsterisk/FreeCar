@@ -87,7 +87,7 @@ func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (re
 // GetCars implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (resp *car.GetCarsResponse, err error) {
 	resp = new(car.GetCarsResponse)
-	cars, err := s.MongoManager.GetCars(ctx, -1)
+	cars, err := s.MongoManager.GetCars(ctx, math.MaxInt64)
 	if err != nil {
 		klog.Errorf("cannot get cars: %s", err.Error())
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get cars err"))

@@ -13,7 +13,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/hertz-contrib/cors"
 	cfg "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
@@ -46,7 +45,6 @@ func main() {
 	tlsCfg.NextProtos = append(tlsCfg.NextProtos, "h2")
 	// use pprof & tracer & sentinel
 	pprof.Register(h)
-	h.Use(cors.Default())
 	h.Use(hertztracing.ServerMiddleware(trcCfg))
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default

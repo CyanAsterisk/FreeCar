@@ -11,6 +11,8 @@ import (
 // CommonMW
 func CommonMW() []app.HandlerFunc {
 	return []app.HandlerFunc{
+		// use cors mw
+		middleware.Cors(),
 		// use jwt mw
 		middleware.JWTAuth(config.GlobalServerConfig.JWTInfo.SigningKey),
 		// use recovery mw
@@ -24,6 +26,8 @@ func CommonMW() []app.HandlerFunc {
 
 func CommonWithoutJWT() []app.HandlerFunc {
 	return []app.HandlerFunc{
+		// use cors mw
+		middleware.Cors(),
 		// use recovery mw
 		middleware.Recovery(),
 		// use gzip mw

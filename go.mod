@@ -13,6 +13,7 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hashicorp/consul/api v1.18.0
+	github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/http2 v0.1.5
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
@@ -21,7 +22,6 @@ require (
 	github.com/hertz-contrib/opensergo v0.0.1
 	github.com/hertz-contrib/pprof v0.1.0
 	github.com/hertz-contrib/registry/consul v0.0.0-20230310022437-e0024eacdbb7
-	github.com/hertz-contrib/requestid v1.1.0
 	github.com/hertz-contrib/websocket v0.0.1
 	github.com/kitex-contrib/obs-opentelemetry v0.1.0
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20221109071748-a433b0b57972
@@ -31,7 +31,6 @@ require (
 	github.com/spf13/viper v1.15.0
 	github.com/streadway/amqp v1.0.0
 	go.mongodb.org/mongo-driver v1.11.1
-	go.opentelemetry.io/otel/trace v1.9.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.6
@@ -69,6 +68,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.21.6 // indirect
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	github.com/tklauser/numcpus v0.2.2 // indirect
+	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

@@ -30,7 +30,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.49
 	github.com/spf13/viper v1.15.0
 	github.com/streadway/amqp v1.0.0
-	go.mongodb.org/mongo-driver v1.11.1
+	go.mongodb.org/mongo-driver v1.11.3
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.6

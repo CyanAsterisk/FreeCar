@@ -31,6 +31,7 @@ const (
 	TCP = "tcp"
 
 	FreePortAddress = "localhost:0"
+	CorsAddress     = "http://localhost:3000"
 
 	ConsulCheckInterval                       = "7s"
 	ConsulCheckTimeout                        = "5s"

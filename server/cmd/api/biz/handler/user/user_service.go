@@ -258,3 +258,32 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 	}
 	c.JSON(http.StatusOK, res)
 }
+
+// UpdateUserInfo .
+// @router /user/info [PUT]
+func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req huser.UpdateUserRequest
+	resp := new(kuser.UpdateUserResponse)
+
+	if err = c.BindAndValidate(&req); err != nil {
+		resp.BaseResp = tools.BuildBaseResp(errno.ParamsErr)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	res, err := config.GlobalUserClient.UpdateUser(ctx, &kuser.UpdateUserRequest{
+		AccountId:   c.MustGet(consts.AccountID).(int64),
+		Username:    req.Username,
+		PhoneNumber: req.PhoneNumber,
+		AvatarUrl:   req.AvatarURL,
+	})
+	if err != nil {
+		hlog.Error("rpc user service err", err)
+		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
+		c.JSON(http.StatusInternalServerError, resp)
+		return
+	}
+	c.JSON(http.StatusOK, res)
+
+}

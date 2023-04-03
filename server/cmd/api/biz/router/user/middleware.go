@@ -77,3 +77,8 @@ func _passwordMw() []app.HandlerFunc {
 func _user0Mw() []app.HandlerFunc {
 	return middleware.CommonMW()
 }
+
+func _updateuserinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

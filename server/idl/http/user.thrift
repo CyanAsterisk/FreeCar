@@ -44,8 +44,7 @@ struct LoginRequest {
 
 struct UploadAvatarRequest {}
 
-struct GetUserInfoRequest {
-}
+struct GetUserInfoRequest {}
 
 service UserService {
     common.NilResponse Login(1: LoginRequest req) (api.post = "/login/user")
@@ -62,4 +61,5 @@ service UserService {
     // for mini-program
     common.NilResponse UploadAvatar(1: UploadAvatarRequest req) (api.post = "/user/avatar")
     common.NilResponse GetUserInfo(1: GetUserInfoRequest req) (api.get = "/user/info")
+    common.NilResponse UpdateUserInfo(1: UpdateUserRequest req) (api.put = "/user/info")
 }

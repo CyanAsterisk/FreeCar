@@ -59,7 +59,7 @@ func TestCarLifecycle(t *testing.T) {
 				resp, err := manager.GetCar(ctx, "10000000")
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = CarEntity({Id:10000000 Car:Car({Status:LOCKED Driver:Driver({Id:2000000 AvatarUrl:avatarURL-of-driver0}) Position:Location({Latitude:69 Longitude:120}) TripId:tripId of car0 Power:70 PlateNum:plate num of car0})})]",
+			want: `[err = <nil>][resp = CarEntity({Id:10000000 Car:Car({Status:LOCKED Driver:Driver({Id:2000000 AvatarUrl:avatarURL-of-driver0}) Position:Position({Latitude:69 Longitude:120}) TripId:tripId of car0 Power:70 PlateNum:plate num of car0})})]`,
 		},
 		{
 			name: "remove car",

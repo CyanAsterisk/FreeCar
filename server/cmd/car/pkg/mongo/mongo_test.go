@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"math"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -43,14 +44,14 @@ func TestCarLifeCycle(t *testing.T) {
 		{
 			name: "get cars",
 			op: func() string {
-				resp, err := manager.GetCars(ctx, -1)
+				resp, err := manager.GetCars(ctx, math.MaxInt64)
 				var cars []CarRecord
 				for _, c := range resp {
 					cars = append(cars, *c)
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, cars)
 			},
-			want: "[err = <nil>][resp = [{IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf10\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-0})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf11\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-1})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf12\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-2})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf13\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-3})} {IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf14\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-4})}]]",
+			want: `[err = <nil>][resp = [{IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf10")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-0})} {IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf11")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-1})} {IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf12")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-2})} {IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf13")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-3})} {IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf14")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-4})}]]`,
 		},
 		{
 			name: "get car",
@@ -58,7 +59,7 @@ func TestCarLifeCycle(t *testing.T) {
 				resp, err := manager.GetCar(ctx, "640dc5f80dfe5ce3e4d8cf10")
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf10\")} Car:Car({Status:LOCKED Driver:<nil> Position:Location({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-0})}]",
+			want: `[err = <nil>][resp = &{IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf10")} Car:Car({Status:LOCKED Driver:<nil> Position:Position({Latitude:29.5 Longitude:106.6}) TripId: Power:100 PlateNum:plate-num-0})}]`,
 		},
 		{
 			name: "update car",
@@ -79,7 +80,7 @@ func TestCarLifeCycle(t *testing.T) {
 				})
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{IDField:{ID:ObjectID(\"640dc5f80dfe5ce3e4d8cf10\")} Car:Car({Status:LOCKING Driver:Driver({Id:1024 AvatarUrl:test-avatar-url}) Position:Location({Latitude:29 Longitude:120}) TripId:test-trip-id Power:99 PlateNum:plate-num-0})}]",
+			want: `[err = <nil>][resp = &{IDField:{ID:ObjectID("640dc5f80dfe5ce3e4d8cf10")} Car:Car({Status:LOCKING Driver:Driver({Id:1024 AvatarUrl:test-avatar-url}) Position:Position({Latitude:29 Longitude:120}) TripId:test-trip-id Power:99 PlateNum:plate-num-0})}]`,
 		},
 	}
 

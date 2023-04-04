@@ -10,6 +10,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	kprofile "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -167,7 +168,15 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{
+		AccountId: c.MustGet(consts.AccountID).(int64),
+		Identity: &base.Identity{
+			LicNumber:       req.Identity.LicNumber,
+			Name:            req.Identity.Name,
+			Gender:          base.Gender(req.Identity.Gender),
+			BirthDateMillis: req.Identity.BirthDateMillis,
+		},
+	})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)

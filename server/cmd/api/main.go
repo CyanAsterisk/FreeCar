@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/hertz-contrib/cors"
 	"net/http"
 	"time"
 
@@ -28,6 +29,7 @@ func main() {
 	initialize.InitSentinel()
 	tracer, trcCfg := hertztracing.NewServerTracer()
 	tlsCfg := initialize.InitTLS()
+	corsCfg := initialize.InitCors()
 	rpc.Init()
 	// create a new server
 	h := server.New(
@@ -45,6 +47,7 @@ func main() {
 	tlsCfg.NextProtos = append(tlsCfg.NextProtos, "h2")
 	// use pprof & tracer & sentinel
 	pprof.Register(h)
+	h.Use(cors.New(corsCfg))
 	h.Use(hertztracing.ServerMiddleware(trcCfg))
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default

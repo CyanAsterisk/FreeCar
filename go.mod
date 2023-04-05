@@ -3,13 +3,14 @@ module github.com/CyanAsterisk/FreeCar
 go 1.18
 
 require (
+	aidanwoods.dev/go-paseto v1.3.0
 	github.com/alibaba/sentinel-golang v1.0.4
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.8.3
 	github.com/cloudwego/hertz v0.6.0
 	github.com/cloudwego/kitex v0.4.4
-	github.com/docker/docker v20.10.23+incompatible
+	github.com/docker/docker v23.0.3+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.18.0
 	github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a
@@ -38,7 +39,6 @@ require (
 )
 
 require (
-	aidanwoods.dev/go-paseto v1.3.0 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

@@ -285,5 +285,4 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	c.JSON(http.StatusOK, res)
-
 }

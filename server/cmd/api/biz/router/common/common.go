@@ -28,6 +28,7 @@ func CommonMW() []app.HandlerFunc {
 		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
 	}
 }
+
 func PasetoAuth(audience string) app.HandlerFunc {
 	pi := config.GlobalServerConfig.PasetoInfo
 	pf, err := paseto.NewV4PublicParseFunc(pi.PubKey, []byte(pi.Implicit), paseto.WithAudience(audience), paseto.WithNotBefore())

@@ -3,17 +3,19 @@
 package Car
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/common"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {
-	return middleware.CommonMW()
+	return common.CommonMW()
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.Admin),
+	}
 }
 
 func _carMw() []app.HandlerFunc {
@@ -31,22 +33,19 @@ func __dmindeletecarMw() []app.HandlerFunc {
 	return nil
 }
 
-func __dminupdatecarMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func __dmingetsomecarsMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
 
 func _getcarMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }
 
 func _getcarsMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }

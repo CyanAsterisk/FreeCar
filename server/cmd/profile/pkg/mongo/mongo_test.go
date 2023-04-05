@@ -3,13 +3,13 @@ package mongo
 import (
 	"context"
 	"fmt"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
-	"github.com/bytedance/sonic"
 	"testing"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/test"
+	"github.com/bytedance/sonic"
 )
 
 func TestProfileLifeCycle(t *testing.T) {
@@ -116,7 +116,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "delete profile",
 			op: func() string {
-				//err := manager.DeleteProfile(ctx, id.AccountID(1001))
+				// err := manager.DeleteProfile(ctx, id.AccountID(1001))
 				prs, err := manager.GetProfiles(ctx, -1)
 				resp, _ := sonic.MarshalString(prs)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)

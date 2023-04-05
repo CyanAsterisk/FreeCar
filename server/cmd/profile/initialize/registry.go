@@ -16,9 +16,14 @@ import (
 
 // InitRegistry to init consul
 func InitRegistry(Port int) (registry.Registry, *registry.Info) {
-	r, err := consul.NewConsulRegisterWithConfig(&api.Config{Address: net.JoinHostPort(
+	r, err := consul.NewConsulRegister(net.JoinHostPort(
 		config.GlobalConsulConfig.Host,
-		strconv.Itoa(config.GlobalConsulConfig.Port))})
+		strconv.Itoa(config.GlobalConsulConfig.Port)),
+		consul.WithCheck(&api.AgentServiceCheck{
+			Interval:                       consts.ConsulCheckInterval,
+			Timeout:                        consts.ConsulCheckTimeout,
+			DeregisterCriticalServiceAfter: consts.ConsulCheckDeregisterCriticalServiceAfter,
+		}))
 	if err != nil {
 		klog.Fatalf("new consul register failed: %s", err.Error())
 	}

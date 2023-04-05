@@ -3,22 +3,25 @@
 package Profile
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/middleware"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/common"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {
-	return middleware.CommonMW()
+	return common.CommonMW()
 }
 
 func _profileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }
 
 func _adminMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.Admin),
+	}
 }
 
 func _get_llprofileMw() []app.HandlerFunc {
@@ -27,11 +30,6 @@ func _get_llprofileMw() []app.HandlerFunc {
 }
 
 func _checkprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
-func _deleteprofileMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
@@ -67,13 +65,15 @@ func _createprofilephotoMw() []app.HandlerFunc {
 }
 
 func _submitprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }
 
 func _clearprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }
 
 func _profile0Mw() []app.HandlerFunc {

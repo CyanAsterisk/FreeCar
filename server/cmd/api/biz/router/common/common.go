@@ -51,5 +51,9 @@ func PasetoAuth(audience string) app.HandlerFunc {
 		c.Set(consts.AccountID, aid)
 	}
 
-	return paseto.New(paseto.WithTokenPrefix("Bearer "), paseto.WithParseFunc(pf), paseto.WithSuccessHandler(sh))
+	eh := func(ctx context.Context, c *app.RequestContext) {
+		c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.BadRequest.WithMessage("invalid token")))
+		c.Abort()
+	}
+	return paseto.New(paseto.WithTokenPrefix("Bearer "), paseto.WithParseFunc(pf), paseto.WithSuccessHandler(sh), paseto.WithErrorFunc(eh))
 }

@@ -129,7 +129,7 @@ func (s *UserServiceImpl) AdminLogin(_ context.Context, req *user.AdminLoginRequ
 	resp.Token, err = s.TokenGenerator.CreateToken(&paseto.StandardClaims{
 		ID:        strconv.FormatInt(admin.ID, 10),
 		Issuer:    consts.Issuer,
-		Subject:   consts.Admin,
+		Audience:  consts.Admin,
 		IssuedAt:  now,
 		NotBefore: now,
 		ExpiredAt: now.Add(consts.ThirtyDays),

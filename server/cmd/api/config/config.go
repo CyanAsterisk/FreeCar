@@ -1,8 +1,7 @@
 package config
 
-type PasetoConfig struct {
-	PubKey   string `mapstructure:"pub_key" json:"pub_key"`
-	Implicit string `mapstructure:"implicit" json:"implicit"`
+type JWTConfig struct {
+	SigningKey string `mapstructure:"key" json:"key"`
 }
 
 type ConsulConfig struct {
@@ -19,7 +18,7 @@ type ServerConfig struct {
 	Name           string       `mapstructure:"name" json:"name"`
 	Host           string       `mapstructure:"host" json:"host"`
 	Port           int          `mapstructure:"port" json:"port"`
-	PasetoInfo     PasetoConfig `mapstructure:"paseto" json:"paseto"`
+	JWTInfo        JWTConfig    `mapstructure:"jwt" json:"jwt"`
 	OtelInfo       OtelConfig   `mapstructure:"otel" json:"otel"`
 	UserSrvInfo    RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 	CarSrvInfo     RPCSrvConfig `mapstructure:"car_srv" json:"car_srv"`

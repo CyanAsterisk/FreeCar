@@ -3,19 +3,17 @@
 package User
 
 import (
-	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/common"
-	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/router/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {
-	return common.CommonMW()
+	// your code...
+	return nil
 }
 
 func _adminMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		common.PasetoAuth(consts.Admin),
-	}
+	return middleware.CommonMW()
 }
 
 func _userMw() []app.HandlerFunc {
@@ -29,9 +27,8 @@ func __dminget_llusersMw() []app.HandlerFunc {
 }
 
 func __dminchangepasswordMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		common.PasetoAuth(consts.Admin),
-	}
+	// your code...
+	return nil
 }
 
 func __dmingetsomeusersMw() []app.HandlerFunc {
@@ -50,8 +47,7 @@ func __dminupdateuserMw() []app.HandlerFunc {
 }
 
 func _loginMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return middleware.CommonWithoutJWT()
 }
 
 func __dminloginMw() []app.HandlerFunc {
@@ -75,15 +71,11 @@ func _getuserinfoMw() []app.HandlerFunc {
 }
 
 func _passwordMw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		common.PasetoAuth(consts.Admin),
-	}
+	return middleware.CommonMW()
 }
 
 func _user0Mw() []app.HandlerFunc {
-	return []app.HandlerFunc{
-		common.PasetoAuth(consts.User),
-	}
+	return middleware.CommonMW()
 }
 
 func _updateuserinfoMw() []app.HandlerFunc {

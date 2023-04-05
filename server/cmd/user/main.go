@@ -7,9 +7,9 @@ import (
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/initialize"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/jwt"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/paseto"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/wechat"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user/userservice"
@@ -37,13 +37,6 @@ func main() {
 	defer p.Shutdown(context.Background())
 	blobClient := initialize.InitBlob()
 
-	tg, err := paseto.NewTokenGenerator(
-		config.GlobalServerConfig.PasetoInfo.SecretKey,
-		[]byte(config.GlobalServerConfig.PasetoInfo.Implicit))
-	if err != nil {
-		klog.Fatal(err)
-	}
-
 	// Create new server.
 	srv := userservice.NewServer(&UserServiceImpl{
 		OpenIDResolver: &wechat.AuthServiceImpl{
@@ -54,7 +47,7 @@ func main() {
 		UserMysqlManager:  mysql.NewUserManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
 		AdminMysqlManager: mysql.NewAdminManager(db, config.GlobalServerConfig.MysqlInfo.Salt),
 		BlobManager:       blobClient,
-		TokenGenerator:    tg,
+		TokenGenerator:    jwt.NewTokenGenerator(config.GlobalServerConfig.JWTInfo.SigningKey),
 	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
@@ -64,7 +57,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
-	err = srv.Run()
+	err := srv.Run()
 	if err != nil {
 		klog.Fatal(err)
 	}

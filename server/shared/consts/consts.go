@@ -1,13 +1,9 @@
 package consts
 
-import "time"
-
 const (
 	FreeCar    = "FreeCar"
-	Issuer     = "FreeCar"
-	Admin      = "Admin"
-	User       = "User"
-	ThirtyDays = time.Hour * 24 * 30
+	JWTIssuer  = "FreeCar"
+	ThirtyDays = 60 * 60 * 24 * 30
 	AccountID  = "accountID"
 	ID         = "id"
 
@@ -40,6 +36,11 @@ const (
 	ConsulCheckInterval                       = "7s"
 	ConsulCheckTimeout                        = "5s"
 	ConsulCheckDeregisterCriticalServiceAfter = "15s"
+
+	DefaultLicNumber = "100000000001"
+	DefaultName      = "FreeCar"
+	DefaultGender    = 1
+	DefaultBirth     = 631152000000
 
 	RedisImage         = "redis:latest"
 	RedisContainerPort = "6379/tcp"

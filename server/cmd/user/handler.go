@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
@@ -11,10 +10,11 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/user"
+	"github.com/CyanAsterisk/FreeCar/server/shared/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/hertz-contrib/paseto"
+	"github.com/golang-jwt/jwt"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.
@@ -29,7 +29,7 @@ type UserServiceImpl struct {
 
 // TokenGenerator creates token.
 type TokenGenerator interface {
-	CreateToken(claims *paseto.StandardClaims) (token string, err error)
+	CreateToken(claims *model.CustomClaims) (token string, err error)
 }
 
 // OpenIDResolver resolves an authorization code
@@ -90,14 +90,16 @@ func (s *UserServiceImpl) Login(_ context.Context, req *user.LoginRequest) (resp
 		}
 	}
 
-	now := time.Now()
-	resp.Token, err = s.TokenGenerator.CreateToken(&paseto.StandardClaims{
-		ID:        strconv.FormatInt(usr.ID, 10),
-		Issuer:    consts.Issuer,
-		Audience:  consts.User,
-		IssuedAt:  now,
-		NotBefore: now,
-		ExpiredAt: now.Add(consts.ThirtyDays),
+	now := time.Now().Unix()
+	resp.Token, err = s.TokenGenerator.CreateToken(&model.CustomClaims{
+		ID:      usr.ID,
+		IsAdmin: false,
+		StandardClaims: jwt.StandardClaims{
+			IssuedAt:  now,
+			NotBefore: now,
+			ExpiresAt: now + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
+		},
 	})
 	if err != nil {
 		klog.Error("create token error", err)
@@ -125,14 +127,16 @@ func (s *UserServiceImpl) AdminLogin(_ context.Context, req *user.AdminLoginRequ
 		return resp, nil
 	}
 
-	now := time.Now()
-	resp.Token, err = s.TokenGenerator.CreateToken(&paseto.StandardClaims{
-		ID:        strconv.FormatInt(admin.ID, 10),
-		Issuer:    consts.Issuer,
-		Audience:  consts.Admin,
-		IssuedAt:  now,
-		NotBefore: now,
-		ExpiredAt: now.Add(consts.ThirtyDays),
+	now := time.Now().Unix()
+	resp.Token, err = s.TokenGenerator.CreateToken(&model.CustomClaims{
+		ID:      admin.ID,
+		IsAdmin: false,
+		StandardClaims: jwt.StandardClaims{
+			IssuedAt:  now,
+			NotBefore: now,
+			ExpiresAt: now + consts.ThirtyDays,
+			Issuer:    consts.JWTIssuer,
+		},
 	})
 	if err != nil {
 		klog.Error("create token error", err)

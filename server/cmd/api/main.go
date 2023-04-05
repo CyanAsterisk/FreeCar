@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/hertz-contrib/cors"
 	"net/http"
 	"time"
 
@@ -13,7 +14,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/hertz-contrib/cors"
 	cfg "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"

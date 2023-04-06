@@ -89,10 +89,10 @@ make api
 
 ```shell
 make user
-make blobs
-make a car
+make blob
+make car
 make profile
-make a trip
+make trip
 ```
 
 ### Jaeger

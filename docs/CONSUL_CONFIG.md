@@ -1,105 +1,115 @@
-## Nacos Config
+## Consul Config
 
-_api => API_GROUP_
+_freecar/api_srv_
 
 ```json
 {
   "name": "api",
-  "host": "your host",
-  "port": 9900,
-  "jwt": {
-    "key": "km!RU#a*43BsTsBVLQPpmuXI&$BJD%Sz"
+  "port": 8080,
+  "paseto": {
+    "pub_key": "YOUR_KEY",
+    "implicit": "YOUR-IMPLICIT"
   },
   "otel": {
     "endpoint": ":4317"
   },
-  "user_srv": {
+  "user_srv":{
     "name": "user_srv"
   },
-  "car_srv": {
+  "car_srv":{
     "name": "car_srv"
   },
-  "profile_srv": {
+  "profile_srv":{
     "name": "profile_srv"
   },
-  "trip_srv": {
+  "trip_srv":{
     "name": "trip_srv"
   }
 }
 ```
 
-_user_srv => AUTH_GROUP_
+_freecar/user_srv_
 
 ```json
 {
   "name": "user_srv",
-  "host": "your host",
+  "paseto": {
+    "pub_key": "YOUR_KEY",
+    "implicit": "YOUR-IMPLICIT"
+  },
   "mysql": {
     "host": "127.0.0.1",
     "port": 3306,
-    "user": "root",
-    "password": "123456",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "db": "FreeCar",
-    "salt": "FreeCar"
+    "salt": "YOUR_SALT"
   },
   "otel": {
     "endpoint": ":4317"
   },
-  "wx_config": {
-    "app_id": "your app id",
-    "app_secret": "your app secret"
+  "wx_config":{
+    "app_id": "YOUR_ID",
+    "app_secret": "YOUR_SECRET"
   },
-  "blob_srv": {
-    "name": "blob_srv"
+  "blob_srv":{
+    "name":"blob_srv"
   }
 }
 ```
 
-_blob_srv => BLOB_GROUP_
+_freecar/blob_srv_
 
 ```json
 {
   "name": "blob_srv",
-  "host": "your host",
   "mysql": {
     "host": "127.0.0.1",
     "port": 3306,
-    "user": "root",
-    "password": "123456",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "db": "FreeCar",
-    "salt": "FreeCar"
+    "salt": "YOUR_SALT"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "minio": {
+    "endpoint": "127.0.0.1:9000",
+    "access_key_id": "YOUR_KEY",
+    "secret_access_key": "YOUR_SECRET",
+    "bucket":"freecar"
   },
   "otel": {
     "endpoint": ":4317"
-  },
-  "cos_config": {
-    "addr": "your cos addr",
-    "sec_id": "your sec id",
-    "sec_key": "your sec key"
   }
 }
 ```
 
-_car_srv => CAR_GROUP_
+_freecar/car_srv_
 
 ```json
 {
   "name": "car_srv",
-  "host": "your host",
-  "wsAddr": ":9090",
+  "wsAddr":":9992",
   "mongodb": {
     "host": "127.0.0.1",
     "port": 27017,
-    "user": "admin",
-    "password": "123456",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "db": "FreeCar",
     "collection": "car"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
   },
   "rabbitmq": {
     "host": "127.0.0.1",
     "port": 5672,
-    "user": "guest",
-    "password": "guest",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "exchange": "FreeCar"
   },
   "otel": {
@@ -111,19 +121,25 @@ _car_srv => CAR_GROUP_
 }
 ```
 
-_profile_srv => RENTAL_GROUP_
+_freecar/profile_srv_
 
 ```json
 {
   "name": "profile_srv",
-  "host": "your host",
   "mongodb": {
     "host": "127.0.0.1",
     "port": 27017,
-    "user": "admin",
-    "password": "123456",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "db": "FreeCar",
-    "collection": "profile"
+    "collection": "car"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "ocr": {
+    "access_token": "YOUR_TOKEN"
   },
   "otel": {
     "endpoint": ":4317"
@@ -134,19 +150,18 @@ _profile_srv => RENTAL_GROUP_
 }
 ```
 
-_trip_srv => RENTAL_GROUP_
+_freecar/trip_srv_
 
 ```json
 {
   "name": "trip_srv",
-  "host": "your host",
   "mongodb": {
     "host": "127.0.0.1",
     "port": 27017,
-    "user": "admin",
-    "password": "123456",
+    "user": "YOUR_USER",
+    "password": "YOUR_PASSWORD",
     "db": "FreeCar",
-    "collection": "trip"
+    "collection": "car"
   },
   "otel": {
     "endpoint": ":4317"

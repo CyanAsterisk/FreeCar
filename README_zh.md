@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
+FreeCar 是一个基于 Hertz 与 Kitex 的云原生分时汽车租赁系统套件。
 
 ## 项目架构
 
@@ -18,28 +18,48 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 
 ![service_relations.png](img/service_relations.png)
 
+## 技术栈
+
+| 功能        | 实现                  |
+|-----------|---------------------|
+| HTTP 框架   | Hertz               |
+| RPC 框架    | Kitex               |
+| 数据库       | MongoDB、MySQL、Redis |
+| 身份鉴权      | Paseto              |
+| 服务发现与配置中心 | Consul              |
+| 消息队列      | RabbitMQ            |
+| 服务治理      | OpenTelemetry       |
+| 限流熔断      | Sentinel            |
+| 对象存储      | Minio               |
+| 图像识别      | 百度 OCR              |
+| CI        | GitHub Actions      |
+
 ## 页面展示
+
+小程序端地址 [FreeCar-MP](https://github.com/CyanAsterisk/FreeCar-MP)
+
+后台管理端地址 TODO
 
 ![display.png](img/display.png)
 
 ## 目录介绍
 
-| 目录     | 介绍      |
-|--------|---------|
-| Server | 项目核心部分  |
-| Shared | 可复用代码   |
-| Static | 微信小程序代码 |
+| 目录     | 介绍             |
+|--------|----------------|
+| Cmd    | 项目核心部分         |
+| Idl    | 项目所有服务的 IDL 文件 |
+| Shared | 可复用代码          |
 
 ## 服务介绍
 
-| 目录      | 介绍                    |
-|---------|-----------------------|
-| API     | 基于 Hertz 的网关服务        |
-| User    | 用户认证服务                |
-| Blob    | 与图片和 Minio 对象存储 相关的服务 |
-| Car     | 汽车服务                  |
-| Profile | 主页与图片识别服务             |
-| Trip    | 行程服务                  |
+| 目录      | 介绍                   |
+|---------|----------------------|
+| API     | 基于 Hertz 的网关服务       |
+| User    | 用户认证服务               |
+| Blob    | 与图片和 Minio 对象存储相关的服务 |
+| Car     | 汽车服务                 |
+| Profile | 主页与图片识别服务            |
+| Trip    | 行程服务                 |
 
 ## 快速开始
 
@@ -49,23 +69,15 @@ FreeCar 是一个基于 Hertz 与 Kitex 的全栈项目。
 make start
 ```
 
-### 配置 Nacos
+### 配置 Consul
 
-> 在浏览器上访问 `http://127.0.0.1:8848/nacos/index.html#/login` 进行登录。
->
-> 默认命名空间以及配置组等请参考各个 `config.yaml` 配置文件。
+> 默认 Consul 地址与 KV 配置等请参考各个 `config.yaml` 配置文件。
 
-![nacos.png](img/nacos.png)
+![consul_service.png](img/consul_service.png)
 
-![nacos_registry.png](img/nacos_registry.png)
+![consul_kv.png](img/consul_kv.png)
 
-关于配置中心的详细配置，[详见](docs/NACOS_CONFIG.md)。
-
-### 生成数据表
-
-```shell
-make migrate
-```
+关于 KV 键值对的详细配置，[详见](docs/CONSUL_CONFIG.md)。
 
 ### 启动 HTTP 服务
 
@@ -73,7 +85,7 @@ make migrate
 make api
 ```
 
-### 启动微服务
+### 启动 RPC 服务
 
 ```shell
 make user
@@ -87,17 +99,13 @@ make trip
 
 > 在浏览器上访问 `http://127.0.0.1:16686/`
 
-![jaeger.jpg](img/jaeger.jpg)
+![jaeger.jpg](img/jaeger.png)
 
 ### Prometheus
 
 > 在浏览器上访问 `http://127.0.0.1:3000/`
 
 ![prometheus.jpg](img/prometheus.png)
-
-## API 请求
-
-项目的 API 请求示例[详见](docs/API_REQUEST.md)。
 
 ## 开发指南
 
@@ -134,24 +142,17 @@ service UserService {
 
 #### Kitex
 
-在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
-
-##### 服务端
+首先在 `shared` 文件夹下生成 `kitex_gen`，再在相对应服务文件夹下依赖 `kitex_gen` 进行生成。在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
 
 ```shell
-kitex -service user -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
-```
-
-##### 客户端
-
-```shell
-kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
+kitex -module github.com/CyanAsterisk/FreeCar ./../idl/rpc/user.thrift
+kitex -service user -module github.com/CyanAsterisk/FreeCar -use github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen  ./../../idl/rpc/user.thrift
 ```
 
 注意项：
 
 - 用 `-module github.com/CyanAsterisk/FreeCar` 该参数用于指定生成代码所属的 Go 模块，避免路径问题。
-- 当前服务需要调用其他服务时需生成客户端文件。
+- 当前服务需要调用其他服务时需依赖 `kitex_gen`。
 
 #### Hertz
 
@@ -159,12 +160,6 @@ kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
 
 ```shell
 hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
-```
-
-##### 更新
-
-```shell
-hz update -I -idl ./../../idl/api.proto
 ```
 
 注意项：
@@ -180,17 +175,13 @@ hz update -I -idl ./../../idl/api.proto
 
 参考 `server/cmd/user/config`，为微服务的配置结构体。
 
-#### Global
-
-参考 `server/cmd/user/global`，为微服务提供可全局调用的方法。
-
 #### Initialize
 
-参考 `server/cmd/user/initialize`，提供必要组件的初始化功能，其中 `nacos.go` `flag.go` `logger.go` 为必须项。
+参考 `server/cmd/user/initialize`，提供必要组件的初始化功能，其中 `config.go` `registry.go` `flag.go` `logger.go` 为必须项。
 
-#### Tool
+#### Pkg
 
-参考 `server/cmd/user/tool`，提供微服务的工具函数，其中 `port.go` 为必须项。
+参考 `server/cmd/user/pkg`，提供微服务的调用函数，主要用于实现 `handler.go` 中定义的接口。
 
 #### API
 

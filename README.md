@@ -2,11 +2,11 @@
 
 English | [中文](README_zh.md)
 
-FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
+FreeCar is a cloud-native time-sharing car rental system suite based on Hertz and Kitex.
 
-## Architecture
+## Project Architecture
 
-### Call Relations
+### Call Relationship
 
 ![call_relations.png](img/call_relation.png)
 
@@ -18,30 +18,50 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 
 ![service_relations.png](img/service_relations.png)
 
+## Technology Stack
+
+| Function                                   | Implementation        |
+|--------------------------------------------|-----------------------|
+| HTTP Framework                             | Hertz                 |
+| RPC Framework                              | Kitex                 |
+| Database                                   | MongoDB, MySQL, Redis |
+| Authentication                             | Paseto                |
+| Service Discovery and Configuration Center | Consul                |
+| Message Queue                              | RabbitMQ              |
+| Service Governance                         | OpenTelemetry         |
+| Current Limiting Fuse                      | Sentinel              |
+| Object Storage                             | Minio                 |
+| Image Recognition                          | Baidu OCR             |
+| CI                                         | GitHub Actions        |
+
 ## Display
+
+Small program terminal address [FreeCar-MP](https://github.com/CyanAsterisk/FreeCar-MP)
+
+Background management terminal address TODO
 
 ![display.png](img/display.png)
 
 ## Catalog Introduce
 
-| Catalog | Introduce                    |
-|---------|------------------------------|
-| Server  | Core services of the project |
-| Shared  | Reusable code                |
-| Static  | WeChat applet code           |
+| Catalog | Introduction                             |
+|---------|------------------------------------------|
+| Cmd     | Project Core                             |
+| Idl     | IDL file for all services of the project |
+| Shared  | Reusable Code                            |
 
 ## Service Introduce
 
-| Catalog | Introduce                                          |
+| Catalog | Introduction                                       |
 |---------|----------------------------------------------------|
-| API     | Hertz-based Gateway Service                        |
+| API     | Hertz-based gateway service                        |
 | User    | User Authentication Service                        |
-| Blob    | Services Related to Pictures and Tencent Cloud COS |
+| Blob    | Services related to image and Minio object storage |
 | Car     | Car Service                                        |
-| Profile | Profile and Picture Recognition Services           |
-| Trip    | Trip Service                                       |
+| Profile | Home Page and Image Recognition Service            |
+| Trip    | Itinerary Services                                 |
 
-## Quick Start
+## Quick start
 
 ### Start the Dependence
 
@@ -49,60 +69,47 @@ FreeCar is a full-stack WeChat applet based on Kitex and Hertz.
 make start
 ```
 
-### Nacos
+### Consul
 
-> Visit `http://127.0.0.1:8848/nacos/index.html#/login` on browser.
->
-> For the default namespace and configuration groups, please refer to each `config.yaml` configuration file.
+> For the default Consul address and KV configuration, please refer to each `config.yaml` configuration file.
 
-![nacos.png](img/nacos.png)
+![consul_service.png](img/consul_service.png)
 
-![nacos_registry.png](img/nacos_registry.png)
+![consul_kv.png](img/consul_kv.png)
 
-For details on the configuration of the configuration center, see [more](docs/NACOS_CONFIG.md).
+For detailed configuration of KV key-value pairs, [see](docs/CONSUL_CONFIG.md).
 
-### Create Data Table
-
-```shell
-make migrate
-```
-
-### Start HTTP Service
+### Start HTTP
 
 ```shell
 make api
 ```
 
-### Start Microservices
+### Start RPC
 
 ```shell
 make user
-make blob
-make car
+make blobs
+make a car
 make profile
-make trip
+make a trip
 ```
 
 ### Jaeger
 
-> Visit `http://127.0.0.1:16686/` on browser.
+> Visit `http://127.0.0.1:16686/` on your browser
 
-![jaeger.jpg](img/jaeger.jpg)
+![jaeger.jpg](img/jaeger.png)
 
 ### Prometheus
 
-> Visit `http://127.0.0.1:3000/` on browser.
+> Visit `http://127.0.0.1:3000/` on your browser
 
 ![prometheus.jpg](img/prometheus.png)
 
-## API Requests
+## Development Guide
 
-Sample API request for the project, see [more](docs/API_REQUEST.md).
-
-## CookBook
-
-It is very difficult to understand this project by directly reading the source code. Here is a development guide for
-developers to quickly understand and get started with this project, including frameworks such as Kitex and Hertz.
+It is very difficult to understand this project by directly reading the source code. Here is a development guide for developers to quickly understand and get started with this project, including frameworks such as Kitex and Hertz.
 
 ### Preparation
 
@@ -136,25 +143,17 @@ service UserService {
 
 #### Kitex
 
-Execute under the new service directory, only need to change the service name and IDL path each time.
-
-##### Server
+First generate `kitex_gen` in the `shared` folder, and then rely on `kitex_gen` in the corresponding service folder to generate. Execute under the new service directory, only need to change the service name and IDL path each time.
 
 ```shell
-kitex -service user -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
-```
-
-##### Client
-
-```shell
-kitex -module github.com/CyanAsterisk/FreeCar ./../../idl/user.thrift
+kitex -module github.com/CyanAsterisk/FreeCar ./../idl/rpc/user.thrift
+kitex -service user -module github.com/CyanAsterisk/FreeCar -use github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen ./../../idl/rpc/user.thrift
 ```
 
 Note:
 
-- Use `-module github.com/CyanAsterisk/FreeCar` This parameter is used to specify the Go module to which the generated
-  code belongs to avoid path problems.
-- When the current service needs to call other services, a client file needs to be generated.
+- Use `-module github.com/CyanAsterisk/FreeCar` This parameter is used to specify the Go module to which the generated code belongs to avoid path problems.
+- When the current service needs to call other services, it needs to rely on `kitex_gen`.
 
 #### Hertz
 
@@ -164,12 +163,6 @@ Note:
 hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
 ```
 
-##### Update
-
-```shell
-hz update -I -idl ./../../idl/api.proto
-```
-
 Note:
 
 - Use `-module github.com/CyanAsterisk/FreeCar/server/cmd/api` This parameter is used to specify the Go module to which
@@ -177,38 +170,29 @@ Note:
 
 ### Business Development
 
-After the code is generated, some necessary components need to be added to the project. Since the api layer does not
-need to be added again, the following mainly explains the part about Kitex-Server, and the code is located
-under `server/cmd`.
+After the code is generated, some necessary components need to be added to the project. Since the api layer does not need to be added again, the following mainly explains about Kitex-Server
+section, the code is located under `server/cmd`.
 
 #### Config
 
 Refer to `server/cmd/user/config` for the configuration structure of microservices.
 
-#### Global
-
-Refer to `server/cmd/user/global` to provide globally callable methods for microservices.
-
 #### Initialize
 
-Refer to `server/cmd/user/initialize` to provide the initialization function of the necessary components, among
-which `nacos.go` `flag.go` `logger.go` are required.
+Refer to `server/cmd/user/initialize` to provide the initialization function of the necessary components, among which `config.go` `registry.go` `flag.go` `logger.go` are required.
 
-#### Tool
+#### Pkg
 
-Refer to `server/cmd/user/tool` to provide tool functions for microservices, where `port.go` is required.
+Refer to `server/cmd/user/pkg` to provide calling functions of microservices, which are mainly used to implement the interfaces defined in `handler.go`.
 
 #### API
 
-When writing the business logic of the gateway layer, you only need to update the IDL and the new microservice client
-code each time. If you need to add new components, you can add them directly. The project is highly pluggable, and the
-architecture is similar to the microservice layer.
+When writing the business logic of the gateway layer, you only need to update the IDL and the new microservice client code each time. If you need to add new components, you can add them directly. The project is highly pluggable, and the architecture is similar to the microservice layer.
 
-The business logic of the gateway layer is under `server/cmd/api/biz`, and most of the code will be automatically
-generated. If you need to add a new route separately, you need to go to `server/cmd/api/router.go`.
+The business logic of the gateway layer is under `server/cmd/api/biz`, and most of the code will be automatically generated. If you need to add a new route separately, you need to go to `server/cmd/api/router.go`.
 
 Regarding the use of middleware, you only need to add middleware logic in `server/cmd/api/biz/router/api/middleware.go`.
 
 ## License
 
-FreeCar is distributed under the GNU General Public License, version 3.0.
+FreeCar is open source under the GNU General Public License version 3.0.

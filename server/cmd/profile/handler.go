@@ -320,9 +320,7 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 	} else {
 		pf.IdentityStatus = base.IdentityStatus_AUDITFAILED
 	}
-	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), base.IdentityStatus_PENDING, &base.Profile{
-		IdentityStatus: base.IdentityStatus_AUDITFAILED,
-	})
+	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), base.IdentityStatus_PENDING, pf)
 	if err != nil {
 		klog.Error("update profile err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr)

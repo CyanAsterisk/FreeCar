@@ -376,10 +376,10 @@ func (p *AdminChangePasswordRequest) String() string {
 }
 
 type AddUserRequest struct {
-	AccountID    int64  `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
+	AccountID    string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
 	Username     string `thrift:"username,2" form:"username" json:"username" query:"username" vd:"len($) > 0 && len($) < 33>"`
-	PhoneNumber  int64  `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
-	AvatarBlobID int64  `thrift:"avatar_blob_id,4" form:"avatar_blob_id" json:"avatar_blob_id" query:"avatar_blob_id"`
+	PhoneNumber  string `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
+	AvatarBlobID string `thrift:"avatar_blob_id,4" form:"avatar_blob_id" json:"avatar_blob_id" query:"avatar_blob_id"`
 	OpenID       string `thrift:"open_id,5" form:"open_id" json:"open_id" query:"open_id"`
 }
 
@@ -387,7 +387,7 @@ func NewAddUserRequest() *AddUserRequest {
 	return &AddUserRequest{}
 }
 
-func (p *AddUserRequest) GetAccountID() (v int64) {
+func (p *AddUserRequest) GetAccountID() (v string) {
 	return p.AccountID
 }
 
@@ -395,11 +395,11 @@ func (p *AddUserRequest) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *AddUserRequest) GetPhoneNumber() (v int64) {
+func (p *AddUserRequest) GetPhoneNumber() (v string) {
 	return p.PhoneNumber
 }
 
-func (p *AddUserRequest) GetAvatarBlobID() (v int64) {
+func (p *AddUserRequest) GetAvatarBlobID() (v string) {
 	return p.AvatarBlobID
 }
 
@@ -435,7 +435,7 @@ func (p *AddUserRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -455,7 +455,7 @@ func (p *AddUserRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -465,7 +465,7 @@ func (p *AddUserRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -515,7 +515,7 @@ ReadStructEndError:
 }
 
 func (p *AddUserRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountID = v
@@ -533,7 +533,7 @@ func (p *AddUserRequest) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *AddUserRequest) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.PhoneNumber = v
@@ -542,7 +542,7 @@ func (p *AddUserRequest) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *AddUserRequest) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AvatarBlobID = v
@@ -605,10 +605,10 @@ WriteStructEndError:
 }
 
 func (p *AddUserRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -639,10 +639,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.PhoneNumber); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -656,10 +656,10 @@ WriteFieldEndError:
 }
 
 func (p *AddUserRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AvatarBlobID); err != nil {
+	if err := oprot.WriteString(p.AvatarBlobID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -697,14 +697,14 @@ func (p *AddUserRequest) String() string {
 }
 
 type DeleteUserRequest struct {
-	AccountID int64 `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
+	AccountID string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
 }
 
 func NewDeleteUserRequest() *DeleteUserRequest {
 	return &DeleteUserRequest{}
 }
 
-func (p *DeleteUserRequest) GetAccountID() (v int64) {
+func (p *DeleteUserRequest) GetAccountID() (v string) {
 	return p.AccountID
 }
 
@@ -732,7 +732,7 @@ func (p *DeleteUserRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -772,7 +772,7 @@ ReadStructEndError:
 }
 
 func (p *DeleteUserRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountID = v
@@ -810,10 +810,10 @@ WriteStructEndError:
 }
 
 func (p *DeleteUserRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -834,9 +834,9 @@ func (p *DeleteUserRequest) String() string {
 }
 
 type UpdateUserRequest struct {
-	AccountID   int64  `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
+	AccountID   string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
 	Username    string `thrift:"username,2" form:"username" json:"username" query:"username" vd:"len($) > 0 && len($) < 33>"`
-	PhoneNumber int64  `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
+	PhoneNumber string `thrift:"phone_number,3" form:"phone_number" json:"phone_number" query:"phone_number"`
 	AvatarURL   string `thrift:"avatar_url,4" form:"avatar_url" json:"avatar_url" query:"avatar_url"`
 }
 
@@ -844,7 +844,7 @@ func NewUpdateUserRequest() *UpdateUserRequest {
 	return &UpdateUserRequest{}
 }
 
-func (p *UpdateUserRequest) GetAccountID() (v int64) {
+func (p *UpdateUserRequest) GetAccountID() (v string) {
 	return p.AccountID
 }
 
@@ -852,7 +852,7 @@ func (p *UpdateUserRequest) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *UpdateUserRequest) GetPhoneNumber() (v int64) {
+func (p *UpdateUserRequest) GetPhoneNumber() (v string) {
 	return p.PhoneNumber
 }
 
@@ -887,7 +887,7 @@ func (p *UpdateUserRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -907,7 +907,7 @@ func (p *UpdateUserRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -957,7 +957,7 @@ ReadStructEndError:
 }
 
 func (p *UpdateUserRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountID = v
@@ -975,7 +975,7 @@ func (p *UpdateUserRequest) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *UpdateUserRequest) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.PhoneNumber = v
@@ -1034,10 +1034,10 @@ WriteStructEndError:
 }
 
 func (p *UpdateUserRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountID); err != nil {
+	if err := oprot.WriteString(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1068,10 +1068,10 @@ WriteFieldEndError:
 }
 
 func (p *UpdateUserRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.PhoneNumber); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

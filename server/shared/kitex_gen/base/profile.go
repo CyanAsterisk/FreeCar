@@ -110,8 +110,8 @@ func (p *IdentityStatus) Value() (driver.Value, error) {
 }
 
 type ProfileRecord struct {
-	AccountId   int64    `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
-	PhotoBlobId int64    `thrift:"photo_blob_id,2" frugal:"2,default,i64" json:"photo_blob_id"`
+	AccountId   string   `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
+	PhotoBlobId string   `thrift:"photo_blob_id,2" frugal:"2,default,string" json:"photo_blob_id"`
 	Profile     *Profile `thrift:"profile,3" frugal:"3,default,Profile" json:"profile"`
 }
 
@@ -123,11 +123,11 @@ func (p *ProfileRecord) InitDefault() {
 	*p = ProfileRecord{}
 }
 
-func (p *ProfileRecord) GetAccountId() (v int64) {
+func (p *ProfileRecord) GetAccountId() (v string) {
 	return p.AccountId
 }
 
-func (p *ProfileRecord) GetPhotoBlobId() (v int64) {
+func (p *ProfileRecord) GetPhotoBlobId() (v string) {
 	return p.PhotoBlobId
 }
 
@@ -139,10 +139,10 @@ func (p *ProfileRecord) GetProfile() (v *Profile) {
 	}
 	return p.Profile
 }
-func (p *ProfileRecord) SetAccountId(val int64) {
+func (p *ProfileRecord) SetAccountId(val string) {
 	p.AccountId = val
 }
-func (p *ProfileRecord) SetPhotoBlobId(val int64) {
+func (p *ProfileRecord) SetPhotoBlobId(val string) {
 	p.PhotoBlobId = val
 }
 func (p *ProfileRecord) SetProfile(val *Profile) {
@@ -179,7 +179,7 @@ func (p *ProfileRecord) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -189,7 +189,7 @@ func (p *ProfileRecord) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -239,7 +239,7 @@ ReadStructEndError:
 }
 
 func (p *ProfileRecord) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -248,7 +248,7 @@ func (p *ProfileRecord) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *ProfileRecord) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.PhotoBlobId = v
@@ -302,10 +302,10 @@ WriteStructEndError:
 }
 
 func (p *ProfileRecord) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -319,10 +319,10 @@ WriteFieldEndError:
 }
 
 func (p *ProfileRecord) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("photo_blob_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("photo_blob_id", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PhotoBlobId); err != nil {
+	if err := oprot.WriteString(p.PhotoBlobId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -377,16 +377,16 @@ func (p *ProfileRecord) DeepEqual(ano *ProfileRecord) bool {
 	return true
 }
 
-func (p *ProfileRecord) Field1DeepEqual(src int64) bool {
+func (p *ProfileRecord) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
 }
-func (p *ProfileRecord) Field2DeepEqual(src int64) bool {
+func (p *ProfileRecord) Field2DeepEqual(src string) bool {
 
-	if p.PhotoBlobId != src {
+	if strings.Compare(p.PhotoBlobId, src) != 0 {
 		return false
 	}
 	return true

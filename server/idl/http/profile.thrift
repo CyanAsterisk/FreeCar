@@ -17,7 +17,7 @@ struct CheckProfileRequest {
 }
 
 struct DeleteProfileRequest {
-    1:  i64 account_id (api.raw = "account_id"),
+    1:  string account_id (api.raw = "account_id"),
 }
 
 struct SubmitProfileRequest {

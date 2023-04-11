@@ -3,7 +3,6 @@ package common
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	pt "aidanwoods.dev/go-paseto"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/config"
@@ -33,15 +32,9 @@ func PasetoAuth(audience string) app.HandlerFunc {
 		hlog.Fatal(err)
 	}
 	sh := func(ctx context.Context, c *app.RequestContext, token *pt.Token) {
-		aidString, err := token.GetString("id")
+		aid, err := token.GetString("id")
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.BadRequest.WithMessage("missing accountID in token")))
-			c.Abort()
-			return
-		}
-		aid, err := strconv.ParseInt(aidString, 10, 64)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, tools.BuildBaseResp(errno.BadRequest.WithMessage("bad accountID")))
 			c.Abort()
 			return
 		}

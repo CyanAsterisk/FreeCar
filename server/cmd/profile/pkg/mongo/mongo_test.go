@@ -20,7 +20,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	aid := id.AccountID(1024)
+	aid := id.AccountID("1024")
 	pf := &base.Profile{
 		Identity: &base.Identity{
 			LicNumber:       "10000000001",
@@ -53,14 +53,14 @@ func TestProfileLifeCycle(t *testing.T) {
 		{
 			name: "update profile photo",
 			op: func() string {
-				err := manager.UpdateProfilePhoto(ctx, aid, id.BlobID(200000002))
+				err := manager.UpdateProfilePhoto(ctx, aid, "200000002")
 				if err != nil {
 					return fmt.Sprintf("[err = %+v]", err)
 				}
 				resp, err := manager.GetProfile(ctx, aid)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{AccountID:1024 Profile:<nil> PhotoBlobID:200000002}]",
+			want: `[err = <nil>][resp = &{AccountID:1024 Profile:<nil> PhotoBlobID:200000002}]`,
 		},
 		{
 			name: "submit profile",
@@ -111,7 +111,7 @@ func TestProfileLifeCycle(t *testing.T) {
 				resp, _ := sonic.MarshalString(prs)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: `[err = <nil>][resp = [{"AccountID":1024,"Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":200000002}]]`,
+			want: `[err = <nil>][resp = [{"AccountID":"1024","Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":"200000002"}]]`,
 		},
 		{
 			name: "delete profile",
@@ -121,7 +121,7 @@ func TestProfileLifeCycle(t *testing.T) {
 				resp, _ := sonic.MarshalString(prs)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: `[err = <nil>][resp = [{"AccountID":1024,"Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":200000002}]]`,
+			want: `[err = <nil>][resp = [{"AccountID":"1024","Profile":{"identity":{"lic_number":"10000000001","name":"FreeCar","gender":1,"birth_date_millis":1676323213},"identity_status":2},"PhotoBlobID":"200000002"}]]`,
 		},
 	}
 

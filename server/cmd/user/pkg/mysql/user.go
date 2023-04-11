@@ -10,9 +10,9 @@ import (
 )
 
 type User struct {
-	ID           int64 `gorm:"primarykey"`
-	PhoneNumber  int64
-	AvatarBlobId int64
+	ID           string `gorm:"primarykey"`
+	PhoneNumber  string
+	AvatarBlobId string
 	Username     string `gorm:"type:varchar(40)"`
 	OpenID       string `gorm:"column:openid;type:varchar(100);uniqueIndex"`
 	Deleted      gorm.DeletedAt
@@ -21,14 +21,14 @@ type User struct {
 // BeforeCreate uses snowflake to generate an ID.
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	// skip if the accountID already set.
-	if u.ID != 0 {
+	if u.ID != "" {
 		return nil
 	}
 	sf, err := snowflake.NewNode(consts.UserSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}
-	u.ID = sf.Generate().Int64()
+	u.ID = sf.Generate().String()
 	return nil
 }
 
@@ -82,7 +82,7 @@ func (m *UserManager) GetUserByOpenId(openID string) (*User, error) {
 	return &user, nil
 }
 
-func (m *UserManager) GetUserByAccountId(aid int64) (*User, error) {
+func (m *UserManager) GetUserByAccountId(aid string) (*User, error) {
 	var user User
 	err := m.db.Where(&User{ID: aid}).First(&user).Error
 	if err != nil {
@@ -96,13 +96,13 @@ func (m *UserManager) GetUserByAccountId(aid int64) (*User, error) {
 
 func (m *UserManager) UpdateUser(user *User) error {
 	u := map[string]interface{}{}
-	if user.PhoneNumber != 0 {
+	if user.PhoneNumber != "" {
 		u["phone_number"] = user.PhoneNumber
 	}
 	if user.Username != "" {
 		u["username"] = user.Username
 	}
-	if user.AvatarBlobId != 0 {
+	if user.AvatarBlobId != "" {
 		u["avatar_blob_id"] = user.AvatarBlobId
 	}
 	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
@@ -112,7 +112,7 @@ func (m *UserManager) UpdateUser(user *User) error {
 	return err
 }
 
-func (m *UserManager) DeleteUser(aid int64) error {
+func (m *UserManager) DeleteUser(aid string) error {
 	var user User
 	err := m.db.Where(&User{ID: aid}).Delete(&user).Error
 	if err != nil {

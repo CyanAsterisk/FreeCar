@@ -11,7 +11,7 @@ import (
 )
 
 type CreateCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	PlateNum  string `thrift:"plate_num,2" frugal:"2,default,string" json:"plate_num"`
 }
 
@@ -23,14 +23,14 @@ func (p *CreateCarRequest) InitDefault() {
 	*p = CreateCarRequest{}
 }
 
-func (p *CreateCarRequest) GetAccountId() (v int64) {
+func (p *CreateCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
 func (p *CreateCarRequest) GetPlateNum() (v string) {
 	return p.PlateNum
 }
-func (p *CreateCarRequest) SetAccountId(val int64) {
+func (p *CreateCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *CreateCarRequest) SetPlateNum(val string) {
@@ -62,7 +62,7 @@ func (p *CreateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -112,7 +112,7 @@ ReadStructEndError:
 }
 
 func (p *CreateCarRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -163,10 +163,10 @@ WriteStructEndError:
 }
 
 func (p *CreateCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -218,9 +218,9 @@ func (p *CreateCarRequest) DeepEqual(ano *CreateCarRequest) bool {
 	return true
 }
 
-func (p *CreateCarRequest) Field1DeepEqual(src int64) bool {
+func (p *CreateCarRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -473,7 +473,7 @@ func (p *CreateCarResponse) Field2DeepEqual(src *base.CarEntity) bool {
 }
 
 type GetCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
 }
 
@@ -485,14 +485,14 @@ func (p *GetCarRequest) InitDefault() {
 	*p = GetCarRequest{}
 }
 
-func (p *GetCarRequest) GetAccountId() (v int64) {
+func (p *GetCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
 func (p *GetCarRequest) GetId() (v string) {
 	return p.Id
 }
-func (p *GetCarRequest) SetAccountId(val int64) {
+func (p *GetCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *GetCarRequest) SetId(val string) {
@@ -524,7 +524,7 @@ func (p *GetCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -574,7 +574,7 @@ ReadStructEndError:
 }
 
 func (p *GetCarRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -625,10 +625,10 @@ WriteStructEndError:
 }
 
 func (p *GetCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -680,9 +680,9 @@ func (p *GetCarRequest) DeepEqual(ano *GetCarRequest) bool {
 	return true
 }
 
-func (p *GetCarRequest) Field1DeepEqual(src int64) bool {
+func (p *GetCarRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -935,7 +935,7 @@ func (p *GetCarResponse) Field2DeepEqual(src *base.Car) bool {
 }
 
 type GetCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 }
 
 func NewGetCarsRequest() *GetCarsRequest {
@@ -946,10 +946,10 @@ func (p *GetCarsRequest) InitDefault() {
 	*p = GetCarsRequest{}
 }
 
-func (p *GetCarsRequest) GetAccountId() (v int64) {
+func (p *GetCarsRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
-func (p *GetCarsRequest) SetAccountId(val int64) {
+func (p *GetCarsRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 
@@ -977,7 +977,7 @@ func (p *GetCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1017,7 +1017,7 @@ ReadStructEndError:
 }
 
 func (p *GetCarsRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1055,10 +1055,10 @@ WriteStructEndError:
 }
 
 func (p *GetCarsRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1090,9 +1090,9 @@ func (p *GetCarsRequest) DeepEqual(ano *GetCarsRequest) bool {
 	return true
 }
 
-func (p *GetCarsRequest) Field1DeepEqual(src int64) bool {
+func (p *GetCarsRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -1355,7 +1355,7 @@ func (p *GetCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 }
 
 type GetAllCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 }
 
 func NewGetAllCarsRequest() *GetAllCarsRequest {
@@ -1366,10 +1366,10 @@ func (p *GetAllCarsRequest) InitDefault() {
 	*p = GetAllCarsRequest{}
 }
 
-func (p *GetAllCarsRequest) GetAccountId() (v int64) {
+func (p *GetAllCarsRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
-func (p *GetAllCarsRequest) SetAccountId(val int64) {
+func (p *GetAllCarsRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 
@@ -1397,7 +1397,7 @@ func (p *GetAllCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1437,7 +1437,7 @@ ReadStructEndError:
 }
 
 func (p *GetAllCarsRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1475,10 +1475,10 @@ WriteStructEndError:
 }
 
 func (p *GetAllCarsRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1510,9 +1510,9 @@ func (p *GetAllCarsRequest) DeepEqual(ano *GetAllCarsRequest) bool {
 	return true
 }
 
-func (p *GetAllCarsRequest) Field1DeepEqual(src int64) bool {
+func (p *GetAllCarsRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -1775,7 +1775,7 @@ func (p *GetAllCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 }
 
 type LockCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
 }
 
@@ -1787,14 +1787,14 @@ func (p *LockCarRequest) InitDefault() {
 	*p = LockCarRequest{}
 }
 
-func (p *LockCarRequest) GetAccountId() (v int64) {
+func (p *LockCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
 func (p *LockCarRequest) GetId() (v string) {
 	return p.Id
 }
-func (p *LockCarRequest) SetAccountId(val int64) {
+func (p *LockCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *LockCarRequest) SetId(val string) {
@@ -1826,7 +1826,7 @@ func (p *LockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1876,7 +1876,7 @@ ReadStructEndError:
 }
 
 func (p *LockCarRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1927,10 +1927,10 @@ WriteStructEndError:
 }
 
 func (p *LockCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1982,9 +1982,9 @@ func (p *LockCarRequest) DeepEqual(ano *LockCarRequest) bool {
 	return true
 }
 
-func (p *LockCarRequest) Field1DeepEqual(src int64) bool {
+func (p *LockCarRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -2171,7 +2171,7 @@ func (p *LockCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 
 type UnlockCarRequest struct {
 	Id        string       `thrift:"id,1" frugal:"1,default,string" json:"id"`
-	AccountId int64        `thrift:"account_id,2" frugal:"2,default,i64" json:"account_id"`
+	AccountId string       `thrift:"account_id,2" frugal:"2,default,string" json:"account_id"`
 	Driver    *base.Driver `thrift:"driver,3" frugal:"3,default,base.Driver" json:"driver"`
 	TripId    string       `thrift:"trip_id,4" frugal:"4,default,string" json:"trip_id"`
 }
@@ -2188,7 +2188,7 @@ func (p *UnlockCarRequest) GetId() (v string) {
 	return p.Id
 }
 
-func (p *UnlockCarRequest) GetAccountId() (v int64) {
+func (p *UnlockCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
@@ -2207,7 +2207,7 @@ func (p *UnlockCarRequest) GetTripId() (v string) {
 func (p *UnlockCarRequest) SetId(val string) {
 	p.Id = val
 }
-func (p *UnlockCarRequest) SetAccountId(val int64) {
+func (p *UnlockCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *UnlockCarRequest) SetDriver(val *base.Driver) {
@@ -2258,7 +2258,7 @@ func (p *UnlockCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2327,7 +2327,7 @@ func (p *UnlockCarRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *UnlockCarRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -2411,10 +2411,10 @@ WriteFieldEndError:
 }
 
 func (p *UnlockCarRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2496,9 +2496,9 @@ func (p *UnlockCarRequest) Field1DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *UnlockCarRequest) Field2DeepEqual(src int64) bool {
+func (p *UnlockCarRequest) Field2DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -2694,7 +2694,7 @@ type UpdateCarRequest struct {
 	Id        string         `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	Status    base.CarStatus `thrift:"status,2" frugal:"2,default,CarStatus" json:"status"`
 	Position  *base.Position `thrift:"position,3" frugal:"3,default,base.Position" json:"position"`
-	AccountId int64          `thrift:"account_id,4" frugal:"4,default,i64" json:"account_id"`
+	AccountId string         `thrift:"account_id,4" frugal:"4,default,string" json:"account_id"`
 	Power     float64        `thrift:"power,5" frugal:"5,default,double" json:"power"`
 }
 
@@ -2723,7 +2723,7 @@ func (p *UpdateCarRequest) GetPosition() (v *base.Position) {
 	return p.Position
 }
 
-func (p *UpdateCarRequest) GetAccountId() (v int64) {
+func (p *UpdateCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
@@ -2739,7 +2739,7 @@ func (p *UpdateCarRequest) SetStatus(val base.CarStatus) {
 func (p *UpdateCarRequest) SetPosition(val *base.Position) {
 	p.Position = val
 }
-func (p *UpdateCarRequest) SetAccountId(val int64) {
+func (p *UpdateCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *UpdateCarRequest) SetPower(val float64) {
@@ -2808,7 +2808,7 @@ func (p *UpdateCarRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2884,7 +2884,7 @@ func (p *UpdateCarRequest) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *UpdateCarRequest) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -2998,10 +2998,10 @@ WriteFieldEndError:
 }
 
 func (p *UpdateCarRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3083,9 +3083,9 @@ func (p *UpdateCarRequest) Field3DeepEqual(src *base.Position) bool {
 	}
 	return true
 }
-func (p *UpdateCarRequest) Field4DeepEqual(src int64) bool {
+func (p *UpdateCarRequest) Field4DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -3674,7 +3674,7 @@ func (p *AdminUpdateCarResponse) Field1DeepEqual(src *base.BaseResponse) bool {
 }
 
 type GetSomeCarsRequest struct {
-	AccountId int64 `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 }
 
 func NewGetSomeCarsRequest() *GetSomeCarsRequest {
@@ -3685,10 +3685,10 @@ func (p *GetSomeCarsRequest) InitDefault() {
 	*p = GetSomeCarsRequest{}
 }
 
-func (p *GetSomeCarsRequest) GetAccountId() (v int64) {
+func (p *GetSomeCarsRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
-func (p *GetSomeCarsRequest) SetAccountId(val int64) {
+func (p *GetSomeCarsRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 
@@ -3716,7 +3716,7 @@ func (p *GetSomeCarsRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -3756,7 +3756,7 @@ ReadStructEndError:
 }
 
 func (p *GetSomeCarsRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -3794,10 +3794,10 @@ WriteStructEndError:
 }
 
 func (p *GetSomeCarsRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3829,9 +3829,9 @@ func (p *GetSomeCarsRequest) DeepEqual(ano *GetSomeCarsRequest) bool {
 	return true
 }
 
-func (p *GetSomeCarsRequest) Field1DeepEqual(src int64) bool {
+func (p *GetSomeCarsRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -4094,7 +4094,7 @@ func (p *GetSomeCarsResponse) Field2DeepEqual(src []*base.CarEntity) bool {
 }
 
 type DeleteCarRequest struct {
-	AccountId int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Id        string `thrift:"id,2" frugal:"2,default,string" json:"id"`
 }
 
@@ -4106,14 +4106,14 @@ func (p *DeleteCarRequest) InitDefault() {
 	*p = DeleteCarRequest{}
 }
 
-func (p *DeleteCarRequest) GetAccountId() (v int64) {
+func (p *DeleteCarRequest) GetAccountId() (v string) {
 	return p.AccountId
 }
 
 func (p *DeleteCarRequest) GetId() (v string) {
 	return p.Id
 }
-func (p *DeleteCarRequest) SetAccountId(val int64) {
+func (p *DeleteCarRequest) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *DeleteCarRequest) SetId(val string) {
@@ -4145,7 +4145,7 @@ func (p *DeleteCarRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -4195,7 +4195,7 @@ ReadStructEndError:
 }
 
 func (p *DeleteCarRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -4246,10 +4246,10 @@ WriteStructEndError:
 }
 
 func (p *DeleteCarRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -4301,9 +4301,9 @@ func (p *DeleteCarRequest) DeepEqual(ano *DeleteCarRequest) bool {
 	return true
 }
 
-func (p *DeleteCarRequest) Field1DeepEqual(src int64) bool {
+func (p *DeleteCarRequest) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true

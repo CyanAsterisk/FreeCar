@@ -55,7 +55,7 @@ func AdminChangePassword(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	res, err := config.GlobalUserClient.ChangeAdminPassword(ctx, &kuser.ChangeAdminPasswordRequest{
-		AccountId:    c.MustGet(consts.AccountID).(int64),
+		AccountId:    c.MustGet(consts.AccountID).(string),
 		OldPassword:  req.OldPassword,
 		NewPassword_: req.NewPassword,
 	})
@@ -226,7 +226,7 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalUserClient.UploadAvatar(ctx, &kuser.UploadAvatarRequset{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -249,7 +249,7 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalUserClient.GetUser(ctx, &kuser.GetUserRequest{AccontId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc user service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -273,7 +273,7 @@ func UpdateUserInfo(ctx context.Context, c *app.RequestContext) {
 	}
 
 	res, err := config.GlobalUserClient.UpdateUser(ctx, &kuser.UpdateUserRequest{
-		AccountId:   c.MustGet(consts.AccountID).(int64),
+		AccountId:   c.MustGet(consts.AccountID).(string),
 		Username:    req.Username,
 		PhoneNumber: req.PhoneNumber,
 		AvatarUrl:   req.AvatarURL,

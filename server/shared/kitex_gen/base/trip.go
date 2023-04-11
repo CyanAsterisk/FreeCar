@@ -920,7 +920,7 @@ func (p *TripEntity) Field2DeepEqual(src *Trip) bool {
 }
 
 type Trip struct {
-	AccountId  int64           `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId  string          `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	CarId      string          `thrift:"car_id,2" frugal:"2,default,string" json:"car_id"`
 	Start      *LocationStatus `thrift:"start,3" frugal:"3,default,LocationStatus" json:"start"`
 	Current    *LocationStatus `thrift:"current,4" frugal:"4,default,LocationStatus" json:"current"`
@@ -937,7 +937,7 @@ func (p *Trip) InitDefault() {
 	*p = Trip{}
 }
 
-func (p *Trip) GetAccountId() (v int64) {
+func (p *Trip) GetAccountId() (v string) {
 	return p.AccountId
 }
 
@@ -979,7 +979,7 @@ func (p *Trip) GetStatus() (v TripStatus) {
 func (p *Trip) GetIdentityId() (v string) {
 	return p.IdentityId
 }
-func (p *Trip) SetAccountId(val int64) {
+func (p *Trip) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *Trip) SetCarId(val string) {
@@ -1043,7 +1043,7 @@ func (p *Trip) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1143,7 +1143,7 @@ ReadStructEndError:
 }
 
 func (p *Trip) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -1256,10 +1256,10 @@ WriteStructEndError:
 }
 
 func (p *Trip) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1411,9 +1411,9 @@ func (p *Trip) DeepEqual(ano *Trip) bool {
 	return true
 }
 
-func (p *Trip) Field1DeepEqual(src int64) bool {
+func (p *Trip) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true

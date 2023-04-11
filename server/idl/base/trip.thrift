@@ -26,7 +26,7 @@ struct TripEntity {
 }
 
 struct Trip {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  string car_id,
     3:  LocationStatus start,
     4:  LocationStatus current,

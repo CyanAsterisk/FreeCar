@@ -299,7 +299,7 @@ func (p *CarEntity) Field2DeepEqual(src *Car) bool {
 }
 
 type Driver struct {
-	Id        int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	Id        string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	AvatarUrl string `thrift:"avatar_url,2" frugal:"2,default,string" json:"avatar_url"`
 }
 
@@ -311,14 +311,14 @@ func (p *Driver) InitDefault() {
 	*p = Driver{}
 }
 
-func (p *Driver) GetId() (v int64) {
+func (p *Driver) GetId() (v string) {
 	return p.Id
 }
 
 func (p *Driver) GetAvatarUrl() (v string) {
 	return p.AvatarUrl
 }
-func (p *Driver) SetId(val int64) {
+func (p *Driver) SetId(val string) {
 	p.Id = val
 }
 func (p *Driver) SetAvatarUrl(val string) {
@@ -350,7 +350,7 @@ func (p *Driver) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -400,7 +400,7 @@ ReadStructEndError:
 }
 
 func (p *Driver) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.Id = v
@@ -451,10 +451,10 @@ WriteStructEndError:
 }
 
 func (p *Driver) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteString(p.Id); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -506,9 +506,9 @@ func (p *Driver) DeepEqual(ano *Driver) bool {
 	return true
 }
 
-func (p *Driver) Field1DeepEqual(src int64) bool {
+func (p *Driver) Field1DeepEqual(src string) bool {
 
-	if p.Id != src {
+	if strings.Compare(p.Id, src) != 0 {
 		return false
 	}
 	return true

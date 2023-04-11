@@ -53,7 +53,7 @@ func AdminDeleteCar(ctx context.Context, c *app.RequestContext) {
 	}
 
 	res, err := config.GlobalCarClient.DeleteCar(ctx, &kcar.DeleteCarRequest{
-		AccountId: c.MustGet(consts.AccountID).(int64),
+		AccountId: c.MustGet(consts.AccountID).(string),
 		Id:        req.ID,
 	})
 	if err != nil {
@@ -78,7 +78,7 @@ func AdminGetSomeCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetSomeCars(ctx, &kcar.GetSomeCarsRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -101,7 +101,7 @@ func AdminGetAllCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetAllCars(ctx, &kcar.GetAllCarsRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -124,7 +124,7 @@ func GetCars(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalCarClient.GetCars(ctx, &kcar.GetCarsRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc car service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -148,7 +148,7 @@ func GetCar(ctx context.Context, c *app.RequestContext) {
 	}
 
 	res, err := config.GlobalCarClient.GetCar(ctx, &kcar.GetCarRequest{
-		AccountId: c.MustGet(consts.AccountID).(int64),
+		AccountId: c.MustGet(consts.AccountID).(string),
 		Id:        req.ID,
 	})
 	if err != nil {

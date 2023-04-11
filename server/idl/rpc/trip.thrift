@@ -7,7 +7,7 @@ struct CreateTripRequest {
     1:  trip.Location start,
     2:  string car_id,
     3:  string avatar_url,
-    4:  i64 account_id,
+    4:  string account_id,
 }
 
 struct CreateTripResponse {
@@ -17,7 +17,7 @@ struct CreateTripResponse {
 
 struct GetTripRequest {
     1:  string id,
-    2:  i64 account_id,
+    2:  string account_id,
 }
 
 struct GetTripResponse {
@@ -27,7 +27,7 @@ struct GetTripResponse {
 
 struct GetTripsRequest {
     1:  trip.TripStatus status,
-    2:  i64 account_id,
+    2:  string account_id,
 }
 
 struct GetTripsResponse {
@@ -39,7 +39,7 @@ struct UpdateTripRequest {
     1:  string id,
     2:  trip.Location current,
     3:  bool end_trip,
-    4:  i64 account_id,
+    4:  string account_id,
 }
 
 struct UpdateTripResponse {

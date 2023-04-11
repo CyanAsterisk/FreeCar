@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
@@ -79,7 +80,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	}, req.Start)
 
 	tr, err := s.MongoManager.CreateTrip(ctx, &base.Trip{
-		AccountId:  aid.Int64(),
+		AccountId:  aid.String(),
 		CarId:      req.CarId,
 		Status:     base.TripStatus_IN_PROGRESS,
 		Start:      ls,
@@ -229,7 +230,7 @@ func (s *TripServiceImpl) GetAllTrips(ctx context.Context, req *trip.GetAllTrips
 // GetSomeTrips implements the TripServiceImpl interface.
 func (s *TripServiceImpl) GetSomeTrips(ctx context.Context, req *trip.GetSomeTripsRequest) (resp *trip.GetSomeTripsResponse, err error) {
 	resp = new(trip.GetSomeTripsResponse)
-	trips, err := s.MongoManager.GetTripsByLimit(ctx, 20)
+	trips, err := s.MongoManager.GetTripsByLimit(ctx, consts.LimitOfSomeTrips)
 	if err != nil {
 		klog.Error("cannot get trips", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.TripSrvErr.WithMessage("get trips err"))

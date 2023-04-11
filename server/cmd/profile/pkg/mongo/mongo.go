@@ -27,9 +27,9 @@ const (
 
 // ProfileRecord defines the profile record in db.
 type ProfileRecord struct {
-	AccountID   int64         `bson:"accountid"`
+	AccountID   string        `bson:"accountid"`
 	Profile     *base.Profile `bson:"profile"`
-	PhotoBlobID int64         `bson:"photoblobid"`
+	PhotoBlobID string        `bson:"photoblobid"`
 }
 
 // NewManager creates a mongo manager.
@@ -104,9 +104,9 @@ func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState b
 	if prevState == base.IdentityStatus_UNSUBMITTED {
 		filter = mgutil.ZeroOrDoesNotExist(identityStatusField, prevState)
 	}
-	filter[accountIDField] = aid.Int64()
+	filter[accountIDField] = aid
 	_, err := m.col.UpdateOne(c, filter, mgutil.Set(bson.M{
-		accountIDField: aid.Int64(),
+		accountIDField: aid,
 		profileField:   p,
 	}), options.Update().SetUpsert(true))
 	if mongo.IsDuplicateKeyError(err) {
@@ -118,10 +118,10 @@ func (m *Manager) UpdateProfile(c context.Context, aid id.AccountID, prevState b
 // UpdateProfilePhoto updates profile photo blob id.
 func (m *Manager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
 	_, err := m.col.UpdateOne(c, bson.M{
-		accountIDField: aid.Int64(),
+		accountIDField: aid,
 	}, mgutil.Set(bson.M{
-		accountIDField:   aid.Int64(),
-		photoBlobIDField: bid.Int64(),
+		accountIDField:   aid,
+		photoBlobIDField: bid,
 	}), options.Update().SetUpsert(true))
 	return err
 }
@@ -147,6 +147,6 @@ func (m *Manager) DeleteProfile(c context.Context, aid id.AccountID) error {
 
 func byAccountID(aid id.AccountID) bson.M {
 	return bson.M{
-		accountIDField: aid.Int64(),
+		accountIDField: aid,
 	}
 }

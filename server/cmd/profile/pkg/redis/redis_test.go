@@ -19,7 +19,7 @@ func TestProfileLifeCycle(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	aid := id.AccountID(1024)
+	aid := id.AccountID("1024")
 	pf := &base.Profile{
 		Identity: &base.Identity{
 			LicNumber:       "10000000001",

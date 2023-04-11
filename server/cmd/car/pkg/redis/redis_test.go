@@ -34,7 +34,7 @@ func TestCarLifecycle(t *testing.T) {
 					err := manager.InsertCar(ctx, id.CarID(strconv.Itoa(10000000+i)), &car.Car{
 						Status: 1,
 						Driver: &car.Driver{
-							Id:        int64(2000000 + i),
+							Id:        strconv.Itoa(2000000 + i),
 							AvatarUrl: fmt.Sprintf("avatarURL-of-driver%d", i),
 						},
 						Position: &car.Position{

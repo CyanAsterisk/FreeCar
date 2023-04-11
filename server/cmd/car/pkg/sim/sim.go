@@ -15,7 +15,7 @@ import (
 
 const (
 	minCarNum      = 10
-	AccountId      = 1024
+	AccountId      = "1024"
 	CQUPTLatitude  = 29.53832
 	CQUPTLongitude = 106.613922
 )

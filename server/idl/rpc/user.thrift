@@ -23,7 +23,7 @@ struct AdminLoginResponse {
 }
 
 struct ChangeAdminPasswordRequest {
-    1:  i64 account_id
+    1:  string account_id
     2:  string old_password
     3:  string new_password
 }
@@ -38,11 +38,11 @@ struct GetUserInfoResponse {
 }
 
 struct GetUserRequest {
-    1:  i64 accont_id
+    1:  string accont_id
 }
 
 struct UploadAvatarRequset {
-    1:  i64 account_id
+    1:  string account_id
 }
 
 struct UploadAvatarResponse {
@@ -51,10 +51,10 @@ struct UploadAvatarResponse {
 }
 
 struct AddUserRequest {
-    1:  i64 account_id
+    1:  string account_id
     2:  string username
-    3:  i64 phone_number
-    4:  i64 avatar_blob_id
+    3:  string phone_number
+    4:  string avatar_blob_id
     5:  string open_id
 }
 
@@ -63,7 +63,7 @@ struct AddUserResponse {
 }
 
 struct DeleteUserRequest {
-    1:  i64 account_id
+    1:  string account_id
 }
 
 struct DeleteUserResponse {
@@ -71,9 +71,9 @@ struct DeleteUserResponse {
 }
 
 struct UpdateUserRequest {
-    1:  i64 account_id
+    1:  string account_id
     2:  string username
-    3:  i64 phone_number
+    3:  string phone_number
     4:  string avatar_url
 }
 

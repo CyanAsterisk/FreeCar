@@ -17,9 +17,9 @@ func TestUserLifecycle(t *testing.T) {
 	salt := "test-salt"
 
 	user := User{
-		ID:           1234,
-		PhoneNumber:  10086,
-		AvatarBlobId: 1001,
+		ID:           "1234",
+		PhoneNumber:  "10086",
+		AvatarBlobId: "1001",
 		Username:     "username1",
 		OpenID:       "openID-1",
 	}
@@ -67,9 +67,9 @@ func TestUserLifecycle(t *testing.T) {
 			name: "update user info",
 			op: func() string {
 				newUserInfo := User{
-					ID:           1234,
-					PhoneNumber:  8888888888,
-					AvatarBlobId: 10100101001,
+					ID:           "1234",
+					PhoneNumber:  "8888888888",
+					AvatarBlobId: "10100101001",
 					Username:     "new-username",
 				}
 				err = manager.UpdateUser(&newUserInfo)
@@ -85,16 +85,16 @@ func TestUserLifecycle(t *testing.T) {
 			name: "get some users",
 			op: func() string {
 				manager.CreateUser(&User{
-					ID:           1235,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1235",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username2",
 					OpenID:       "openID-2",
 				})
 				manager.CreateUser(&User{
-					ID:           1236,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1236",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username3",
 					OpenID:       "openID-3",
 				})
@@ -105,7 +105,7 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1235,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":1236,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
 		},
 		{
 			name: "get all users",
@@ -117,26 +117,26 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1235,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":1236,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
 		},
 		{
 			name: "delete user",
 			op: func() string {
 				manager.CreateUser(&User{
-					ID:           1235,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1235",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username2",
 					OpenID:       "openID-2",
 				})
 				manager.CreateUser(&User{
-					ID:           1236,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1236",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username3",
 					OpenID:       "openID-3",
 				})
-				err = manager.DeleteUser(1235)
+				err = manager.DeleteUser("1235")
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)
 				}
@@ -147,7 +147,7 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":1234,"PhoneNumber":8888888888,"AvatarBlobId":10100101001,"Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":1236,"PhoneNumber":10086,"AvatarBlobId":1001,"Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
 		},
 	}
 

@@ -4,7 +4,7 @@ include "../base/common.thrift"
 include "../base/car.thrift"
 
 struct CreateCarRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  string plate_num,
 }
 
@@ -14,7 +14,7 @@ struct CreateCarResponse {
 }
 
 struct GetCarRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  string id,
 }
 
@@ -24,7 +24,7 @@ struct GetCarResponse {
 }
 
 struct GetCarsRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct GetCarsResponse {
@@ -33,7 +33,7 @@ struct GetCarsResponse {
 }
 
 struct GetAllCarsRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct GetAllCarsResponse {
@@ -42,7 +42,7 @@ struct GetAllCarsResponse {
 }
 
 struct LockCarRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  string id,
 }
 
@@ -52,7 +52,7 @@ struct LockCarResponse {
 
 struct UnlockCarRequest {
     1:  string id,
-    2:  i64 account_id,
+    2:  string account_id,
     3:  car.Driver driver,
     4:  string trip_id,
 }
@@ -65,7 +65,7 @@ struct UpdateCarRequest {
     1:  string id,
     2:  car.CarStatus status,
     3:  car.Position position,
-    4:  i64 account_id,
+    4:  string account_id,
     5:  double power,
 }
 
@@ -83,7 +83,7 @@ struct AdminUpdateCarResponse {
 }
 
 struct GetSomeCarsRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct GetSomeCarsResponse {
@@ -92,7 +92,7 @@ struct GetSomeCarsResponse {
 }
 
 struct DeleteCarRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  string id,
 }
 

@@ -71,7 +71,7 @@ func TestCarLifeCycle(t *testing.T) {
 						Longitude: 120,
 					},
 					Driver: &car.Driver{
-						Id:        1024,
+						Id:        "1024",
 						AvatarUrl: "test-avatar-url",
 					},
 					Power:        99,

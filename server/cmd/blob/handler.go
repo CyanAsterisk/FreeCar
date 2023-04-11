@@ -32,7 +32,7 @@ func (s *BlobServiceImpl) CreateBlob(ctx context.Context, req *blob.CreateBlobRe
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}
-	br.Path = fmt.Sprintf("%d/%d", req.AccountId, sf.Generate().Int64())
+	br.Path = fmt.Sprintf("%s/%s", req.AccountId, sf.Generate().String())
 
 	err = s.mysqlManager.CreateBlobRecord(&br)
 	if err != nil {

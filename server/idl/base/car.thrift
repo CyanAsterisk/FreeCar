@@ -14,7 +14,7 @@ enum CarStatus {
 }
 
 struct Driver {
-    1:  i64 id,
+    1:  string id,
     2:  string avatar_url,
 }
 

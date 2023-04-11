@@ -88,7 +88,7 @@ func (m *Manager) GetTrip(c context.Context, id id.TripID, accountID id.AccountI
 // If status is not specified, gets all trips for the account.
 func (m *Manager) GetTrips(c context.Context, accountID id.AccountID, status base.TripStatus) ([]*TripRecord, error) {
 	filter := bson.M{
-		accountIDField: accountID.Int64(),
+		accountIDField: accountID.String(),
 	}
 	if status != base.TripStatus_TS_NOT_SPECIFIED {
 		filter[statusField] = status
@@ -160,7 +160,7 @@ func (m *Manager) UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID,
 	newUpdatedAt := mgutil.UpdatedAt()
 	res, err := m.col.UpdateOne(c, bson.M{
 		mgutil.IDFieldName:        objID,
-		accountIDField:            aid.Int64(),
+		accountIDField:            aid.String(),
 		mgutil.UpdatedAtFieldName: updatedAt,
 	}, mgutil.Set(bson.M{
 		tripField:                 trip,

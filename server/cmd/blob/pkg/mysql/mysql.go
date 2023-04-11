@@ -9,8 +9,8 @@ import (
 )
 
 type BlobRecord struct {
-	ID        int64  `gorm:"primarykey"`
-	AccountId int64  `gorm:"column:account_id"`
+	ID        string `gorm:"primarykey"`
+	AccountId string `gorm:"column:account_id"`
 	Path      string `gorm:"column:path;type:varchar(100);not null"`
 }
 
@@ -20,7 +20,7 @@ func (b *BlobRecord) BeforeCreate(_ *gorm.DB) (err error) {
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}
-	b.ID = sf.Generate().Int64()
+	b.ID = sf.Generate().String()
 	return nil
 }
 
@@ -43,7 +43,7 @@ func (m *Manager) CreateBlobRecord(br *BlobRecord) error {
 	return m.db.Model(&BlobRecord{}).Create(br).Error
 }
 
-func (m *Manager) DeleteBlobRecord(bid int64) error {
+func (m *Manager) DeleteBlobRecord(bid string) error {
 	err := m.db.Model(&BlobRecord{}).
 		Where(&BlobRecord{ID: bid}).First(&BlobRecord{}).Error
 	if err != nil {
@@ -56,7 +56,7 @@ func (m *Manager) DeleteBlobRecord(bid int64) error {
 	return m.db.Model(&BlobRecord{}).Delete(&BlobRecord{ID: bid}).Error
 }
 
-func (m *Manager) GetBlobRecord(bid int64) (*BlobRecord, error) {
+func (m *Manager) GetBlobRecord(bid string) (*BlobRecord, error) {
 	var br BlobRecord
 	err := m.db.Model(&BlobRecord{}).
 		Where(&BlobRecord{ID: bid}).First(&br).Error

@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
@@ -26,7 +25,7 @@ func (m *Manager) Insert(c context.Context, br *mysql.BlobRecord) error {
 	if err != nil {
 		return err
 	}
-	return m.client.Set(c, strconv.FormatInt(br.ID, 10), bj, 168*time.Hour).Err()
+	return m.client.Set(c, br.ID, bj, 168*time.Hour).Err()
 }
 
 func (m *Manager) Remove(c context.Context, bid id.BlobID) error {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
@@ -45,17 +44,17 @@ type EncryptManager interface {
 type UserMysqlManager interface {
 	CreateUser(user *mysql.User) (*mysql.User, error)
 	GetUserByOpenId(openId string) (*mysql.User, error)
-	GetUserByAccountId(aid int64) (*mysql.User, error)
+	GetUserByAccountId(aid string) (*mysql.User, error)
 	GetSomeUsers() ([]*mysql.User, error)
 	GetAllUsers() ([]*mysql.User, error)
 	UpdateUser(user *mysql.User) error
-	DeleteUser(aid int64) error
+	DeleteUser(aid string) error
 }
 
 type AdminMysqlManager interface {
-	GetAdminByAccountId(aid int64) (*mysql.Admin, error)
+	GetAdminByAccountId(aid string) (*mysql.Admin, error)
 	GetAdminByName(name string) (*mysql.Admin, error)
-	UpdateAdminPassword(aid int64, password string) error
+	UpdateAdminPassword(aid string, password string) error
 }
 
 // BlobManager defines the Anti Corruption Layer
@@ -92,7 +91,7 @@ func (s *UserServiceImpl) Login(_ context.Context, req *user.LoginRequest) (resp
 
 	now := time.Now()
 	resp.Token, err = s.TokenGenerator.CreateToken(&paseto.StandardClaims{
-		ID:        strconv.FormatInt(usr.ID, 10),
+		ID:        usr.ID,
 		Issuer:    consts.Issuer,
 		Audience:  consts.User,
 		IssuedAt:  now,
@@ -127,7 +126,7 @@ func (s *UserServiceImpl) AdminLogin(_ context.Context, req *user.AdminLoginRequ
 
 	now := time.Now()
 	resp.Token, err = s.TokenGenerator.CreateToken(&paseto.StandardClaims{
-		ID:        strconv.FormatInt(admin.ID, 10),
+		ID:        admin.ID,
 		Issuer:    consts.Issuer,
 		Audience:  consts.Admin,
 		IssuedAt:  now,
@@ -241,7 +240,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 		PhoneNumber: u.PhoneNumber,
 		AvatarUrl:   "",
 	}
-	if u.AvatarBlobId != 0 {
+	if u.AvatarBlobId != "" {
 		res, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
 			Id:         u.AvatarBlobId,
 			TimeoutSec: int32(5 * time.Second.Seconds()),

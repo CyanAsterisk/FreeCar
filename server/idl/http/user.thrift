@@ -14,21 +14,21 @@ struct AdminChangePasswordRequest {
 }
 
 struct AddUserRequest {
-    1:  i64 account_id (api.raw = "account_id")
+    1:  string account_id (api.raw = "account_id")
     2:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>")
-    3:  i64 phone_number (api.raw = "phone_number")
-    4:  i64 avatar_blob_id (api.raw = "avatar_blob_id")
+    3:  string phone_number (api.raw = "phone_number")
+    4:  string avatar_blob_id (api.raw = "avatar_blob_id")
     5:  string open_id (api.raw = "open_id")
 }
 
 struct DeleteUserRequest {
-    1:  i64 account_id (api.raw = "account_id")
+    1:  string account_id (api.raw = "account_id")
 }
 
 struct UpdateUserRequest {
-    1:  i64 account_id (api.raw = "account_id")
+    1:  string account_id (api.raw = "account_id")
     2:  string username (api.raw = "username" api.vd = "len($) > 0 && len($) < 33>")
-    3:  i64 phone_number (api.raw = "phone_number")
+    3:  string phone_number (api.raw = "phone_number")
     4:  string avatar_url (api.raw = "avatar_url")
 }
 

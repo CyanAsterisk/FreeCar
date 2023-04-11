@@ -15,8 +15,8 @@ enum IdentityStatus {
 }
 
 struct ProfileRecord {
-    1:  i64 account_id,
-    2:  i64 photo_blob_id,
+    1:  string account_id,
+    2:  string photo_blob_id,
     3:  Profile profile,
 }
 

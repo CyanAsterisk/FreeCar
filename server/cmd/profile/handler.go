@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
@@ -151,7 +152,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 		return resp, nil
 	}
 
-	if pr.PhotoBlobID == 0 {
+	if pr.PhotoBlobID == "" {
 		klog.Warn("photo blob id = 0")
 		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
 		return resp, nil
@@ -211,7 +212,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return resp, nil
 	}
 
-	if pr.PhotoBlobID == 0 {
+	if pr.PhotoBlobID == "" {
 		klog.Warn("photo blob id = 0")
 		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
 		return resp, nil
@@ -247,7 +248,7 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
 		return resp, nil
 	}
-	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, 0)
+	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, "")
 	if err != nil {
 		klog.Error("cannot clear profile photo", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile photo error"))
@@ -284,7 +285,7 @@ func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.Get
 // GetSomeProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest) (resp *profile.GetSomeProfileResponse, err error) {
 	resp = new(profile.GetSomeProfileResponse)
-	prs, err := s.MongoManager.GetProfiles(ctx, 20)
+	prs, err := s.MongoManager.GetProfiles(ctx, consts.LimitOfSomeProfiles)
 	if err != nil {
 		if err == errno.RecordNotFound {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)

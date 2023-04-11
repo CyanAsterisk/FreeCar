@@ -13,7 +13,8 @@ struct GetPendingProfileRequest {}
 
 
 struct CheckProfileRequest {
-    1:  bool accept,
+    1:  string account_id (api.raw = "account_id"),
+    2:  bool accept,
 }
 
 struct DeleteProfileRequest {

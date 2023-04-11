@@ -30,7 +30,7 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
+	res, err := config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: req.AccountID})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -53,7 +53,10 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
+	res, err := config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{
+		AccountId: req.AccountID,
+		Accept:    req.Accept,
+	})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)

@@ -33,6 +33,7 @@ type MongoManager interface {
 	DeleteProfile(context.Context, id.AccountID) error
 	UpdateProfile(c context.Context, aid id.AccountID, prevState base.IdentityStatus, p *base.Profile) error
 	UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error
+	UpdateProfileStatus(c context.Context, aid id.AccountID, status base.IdentityStatus) error
 }
 
 // RedisManager defines the redis server
@@ -315,13 +316,11 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
 		return resp, nil
 	}
-	pf := new(base.Profile)
 	if req.Accept {
-		pf.IdentityStatus = base.IdentityStatus_VERIFIED
+		err = s.MongoManager.UpdateProfileStatus(ctx, id.AccountID(req.AccountId), base.IdentityStatus_VERIFIED)
 	} else {
-		pf.IdentityStatus = base.IdentityStatus_AUDITFAILED
+		err = s.MongoManager.UpdateProfileStatus(ctx, id.AccountID(req.AccountId), base.IdentityStatus_AUDITFAILED)
 	}
-	err = s.MongoManager.UpdateProfile(ctx, id.AccountID(req.AccountId), base.IdentityStatus_PENDING, pf)
 	if err != nil {
 		klog.Error("update profile err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr)
@@ -336,7 +335,7 @@ func (s *ProfileServiceImpl) DeleteProfile(ctx context.Context, req *profile.Del
 	resp = new(profile.DeleteProfileResponse)
 	err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId))
 	if err != nil {
-		klog.Error("remove cache err")
+		klog.Error("remove cache err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("remove cache err"))
 		return resp, nil
 	}

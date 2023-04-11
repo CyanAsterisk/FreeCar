@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -60,7 +61,11 @@ func (l *LicenseManager) GetLicenseInfo(url string) (*base.Identity, error) {
 	} else {
 		gender = 0
 	}
-	birthDateMillis, err := strconv.ParseInt(res.WordsResult.BirthDay.Words, 10, 64)
+	sBirth := res.WordsResult.BirthDay.Words
+	year, _ := strconv.Atoi(sBirth[0:4])
+	month, _ := strconv.Atoi(sBirth[4:6])
+	day, _ := strconv.Atoi(sBirth[6:])
+	birthDateMillis := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local).Unix()
 	identity := &base.Identity{
 		LicNumber:       res.WordsResult.LicenseNum.Words,
 		Name:            res.WordsResult.Name.Words,

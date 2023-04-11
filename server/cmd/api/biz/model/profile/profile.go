@@ -334,11 +334,16 @@ func (p *GetPendingProfileRequest) String() string {
 }
 
 type CheckProfileRequest struct {
-	Accept bool `thrift:"accept,1" form:"accept" json:"accept" query:"accept"`
+	AccountID string `thrift:"account_id,1" form:"account_id" json:"account_id" query:"account_id"`
+	Accept    bool   `thrift:"accept,2" form:"accept" json:"accept" query:"accept"`
 }
 
 func NewCheckProfileRequest() *CheckProfileRequest {
 	return &CheckProfileRequest{}
+}
+
+func (p *CheckProfileRequest) GetAccountID() (v string) {
+	return p.AccountID
 }
 
 func (p *CheckProfileRequest) GetAccept() (v bool) {
@@ -346,7 +351,8 @@ func (p *CheckProfileRequest) GetAccept() (v bool) {
 }
 
 var fieldIDToName_CheckProfileRequest = map[int16]string{
-	1: "accept",
+	1: "account_id",
+	2: "accept",
 }
 
 func (p *CheckProfileRequest) Read(iprot thrift.TProtocol) (err error) {
@@ -369,8 +375,18 @@ func (p *CheckProfileRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.BOOL {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -409,6 +425,15 @@ ReadStructEndError:
 }
 
 func (p *CheckProfileRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.AccountID = v
+	}
+	return nil
+}
+
+func (p *CheckProfileRequest) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
 	} else {
@@ -425,6 +450,10 @@ func (p *CheckProfileRequest) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 
@@ -447,10 +476,10 @@ WriteStructEndError:
 }
 
 func (p *CheckProfileRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("accept", thrift.BOOL, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteBool(p.Accept); err != nil {
+	if err := oprot.WriteString(p.AccountID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -461,6 +490,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CheckProfileRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("accept", thrift.BOOL, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.Accept); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *CheckProfileRequest) String() string {

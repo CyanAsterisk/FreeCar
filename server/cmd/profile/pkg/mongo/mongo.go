@@ -8,7 +8,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	mgutil "github.com/CyanAsterisk/FreeCar/server/shared/mongo"
-	"github.com/CyanAsterisk/FreeCar/server/shared/mongo/objid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -126,14 +125,21 @@ func (m *Manager) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id
 	return err
 }
 
+// UpdateProfileStatus updates profile status.
+func (m *Manager) UpdateProfileStatus(c context.Context, aid id.AccountID, status base.IdentityStatus) error {
+	_, err := m.col.UpdateOne(c, bson.M{
+		accountIDField: aid.String(),
+	}, mgutil.Set(bson.M{
+		accountIDField:      aid.String(),
+		identityStatusField: status,
+	}), options.Update().SetUpsert(true))
+	return err
+}
+
 // DeleteProfile delete profile
 func (m *Manager) DeleteProfile(c context.Context, aid id.AccountID) error {
-	objID, err := objid.FromID(aid)
-	if err != nil {
-		return err
-	}
 	filter := bson.M{
-		mgutil.IDFieldName: objID,
+		accountIDField: aid.String(),
 	}
 	result, err := m.col.DeleteOne(c, filter)
 	if err != nil {

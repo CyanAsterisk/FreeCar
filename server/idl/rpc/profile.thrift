@@ -4,7 +4,7 @@ include "../base/common.thrift"
 include "../base/profile.thrift"
 
 struct GetProfileRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct GetProfileResponse {
@@ -37,7 +37,7 @@ struct GetPendingProfileResponse {
 }
 
 struct CheckProfileRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  bool accept,
 }
 
@@ -46,7 +46,7 @@ struct CheckProfileResponse {
 }
 
 struct DeleteProfileRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct DeleteProfileResponse {
@@ -54,7 +54,7 @@ struct DeleteProfileResponse {
 }
 
 struct SubmitProfileRequest {
-    1:  i64 account_id,
+    1:  string account_id,
     2:  profile.Identity identity,
 }
 
@@ -64,7 +64,7 @@ struct SubmitProfileResponse {
 }
 
 struct ClearProfileRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct ClearProfileResponse {
@@ -73,7 +73,7 @@ struct ClearProfileResponse {
 }
 
 struct GetProfilePhotoRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct GetProfilePhotoResponse {
@@ -82,7 +82,7 @@ struct GetProfilePhotoResponse {
 }
 
 struct CreateProfilePhotoRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct CreateProfilePhotoResponse {
@@ -91,7 +91,7 @@ struct CreateProfilePhotoResponse {
 }
 
 struct CompleteProfilePhotoRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct CompleteProfilePhotoResponse {
@@ -100,7 +100,7 @@ struct CompleteProfilePhotoResponse {
 }
 
 struct ClearProfilePhotoRequest {
-    1:  i64 account_id,
+    1:  string account_id,
 }
 
 struct ClearProfilePhotoResponse {

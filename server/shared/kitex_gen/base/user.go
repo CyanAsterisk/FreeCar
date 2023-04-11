@@ -9,10 +9,10 @@ import (
 )
 
 type User struct {
-	AccountId    int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId    string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Username     string `thrift:"username,2" frugal:"2,default,string" json:"username"`
-	PhoneNumber  int64  `thrift:"phone_number,3" frugal:"3,default,i64" json:"phone_number"`
-	AvatarBlobId int64  `thrift:"avatar_blob_id,4" frugal:"4,default,i64" json:"avatar_blob_id"`
+	PhoneNumber  string `thrift:"phone_number,3" frugal:"3,default,string" json:"phone_number"`
+	AvatarBlobId string `thrift:"avatar_blob_id,4" frugal:"4,default,string" json:"avatar_blob_id"`
 	OpenId       string `thrift:"open_id,5" frugal:"5,default,string" json:"open_id"`
 }
 
@@ -24,7 +24,7 @@ func (p *User) InitDefault() {
 	*p = User{}
 }
 
-func (p *User) GetAccountId() (v int64) {
+func (p *User) GetAccountId() (v string) {
 	return p.AccountId
 }
 
@@ -32,27 +32,27 @@ func (p *User) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *User) GetPhoneNumber() (v int64) {
+func (p *User) GetPhoneNumber() (v string) {
 	return p.PhoneNumber
 }
 
-func (p *User) GetAvatarBlobId() (v int64) {
+func (p *User) GetAvatarBlobId() (v string) {
 	return p.AvatarBlobId
 }
 
 func (p *User) GetOpenId() (v string) {
 	return p.OpenId
 }
-func (p *User) SetAccountId(val int64) {
+func (p *User) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *User) SetUsername(val string) {
 	p.Username = val
 }
-func (p *User) SetPhoneNumber(val int64) {
+func (p *User) SetPhoneNumber(val string) {
 	p.PhoneNumber = val
 }
-func (p *User) SetAvatarBlobId(val int64) {
+func (p *User) SetAvatarBlobId(val string) {
 	p.AvatarBlobId = val
 }
 func (p *User) SetOpenId(val string) {
@@ -87,7 +87,7 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -107,7 +107,7 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -117,7 +117,7 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -167,7 +167,7 @@ ReadStructEndError:
 }
 
 func (p *User) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -185,7 +185,7 @@ func (p *User) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *User) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.PhoneNumber = v
@@ -194,7 +194,7 @@ func (p *User) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *User) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AvatarBlobId = v
@@ -257,10 +257,10 @@ WriteStructEndError:
 }
 
 func (p *User) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -291,10 +291,10 @@ WriteFieldEndError:
 }
 
 func (p *User) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.PhoneNumber); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -308,10 +308,10 @@ WriteFieldEndError:
 }
 
 func (p *User) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("avatar_blob_id", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AvatarBlobId); err != nil {
+	if err := oprot.WriteString(p.AvatarBlobId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -372,9 +372,9 @@ func (p *User) DeepEqual(ano *User) bool {
 	return true
 }
 
-func (p *User) Field1DeepEqual(src int64) bool {
+func (p *User) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -386,16 +386,16 @@ func (p *User) Field2DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *User) Field3DeepEqual(src int64) bool {
+func (p *User) Field3DeepEqual(src string) bool {
 
-	if p.PhoneNumber != src {
+	if strings.Compare(p.PhoneNumber, src) != 0 {
 		return false
 	}
 	return true
 }
-func (p *User) Field4DeepEqual(src int64) bool {
+func (p *User) Field4DeepEqual(src string) bool {
 
-	if p.AvatarBlobId != src {
+	if strings.Compare(p.AvatarBlobId, src) != 0 {
 		return false
 	}
 	return true
@@ -409,9 +409,9 @@ func (p *User) Field5DeepEqual(src string) bool {
 }
 
 type UserInfo struct {
-	AccountId   int64  `thrift:"account_id,1" frugal:"1,default,i64" json:"account_id"`
+	AccountId   string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Username    string `thrift:"username,2" frugal:"2,default,string" json:"username"`
-	PhoneNumber int64  `thrift:"phone_number,3" frugal:"3,default,i64" json:"phone_number"`
+	PhoneNumber string `thrift:"phone_number,3" frugal:"3,default,string" json:"phone_number"`
 	AvatarUrl   string `thrift:"avatar_url,4" frugal:"4,default,string" json:"avatar_url"`
 }
 
@@ -423,7 +423,7 @@ func (p *UserInfo) InitDefault() {
 	*p = UserInfo{}
 }
 
-func (p *UserInfo) GetAccountId() (v int64) {
+func (p *UserInfo) GetAccountId() (v string) {
 	return p.AccountId
 }
 
@@ -431,20 +431,20 @@ func (p *UserInfo) GetUsername() (v string) {
 	return p.Username
 }
 
-func (p *UserInfo) GetPhoneNumber() (v int64) {
+func (p *UserInfo) GetPhoneNumber() (v string) {
 	return p.PhoneNumber
 }
 
 func (p *UserInfo) GetAvatarUrl() (v string) {
 	return p.AvatarUrl
 }
-func (p *UserInfo) SetAccountId(val int64) {
+func (p *UserInfo) SetAccountId(val string) {
 	p.AccountId = val
 }
 func (p *UserInfo) SetUsername(val string) {
 	p.Username = val
 }
-func (p *UserInfo) SetPhoneNumber(val int64) {
+func (p *UserInfo) SetPhoneNumber(val string) {
 	p.PhoneNumber = val
 }
 func (p *UserInfo) SetAvatarUrl(val string) {
@@ -478,7 +478,7 @@ func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -498,7 +498,7 @@ func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -548,7 +548,7 @@ ReadStructEndError:
 }
 
 func (p *UserInfo) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.AccountId = v
@@ -566,7 +566,7 @@ func (p *UserInfo) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *UserInfo) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.PhoneNumber = v
@@ -625,10 +625,10 @@ WriteStructEndError:
 }
 
 func (p *UserInfo) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("account_id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AccountId); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -659,10 +659,10 @@ WriteFieldEndError:
 }
 
 func (p *UserInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone_number", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("phone_number", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PhoneNumber); err != nil {
+	if err := oprot.WriteString(p.PhoneNumber); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -720,9 +720,9 @@ func (p *UserInfo) DeepEqual(ano *UserInfo) bool {
 	return true
 }
 
-func (p *UserInfo) Field1DeepEqual(src int64) bool {
+func (p *UserInfo) Field1DeepEqual(src string) bool {
 
-	if p.AccountId != src {
+	if strings.Compare(p.AccountId, src) != 0 {
 		return false
 	}
 	return true
@@ -734,9 +734,9 @@ func (p *UserInfo) Field2DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *UserInfo) Field3DeepEqual(src int64) bool {
+func (p *UserInfo) Field3DeepEqual(src string) bool {
 
-	if p.PhoneNumber != src {
+	if strings.Compare(p.PhoneNumber, src) != 0 {
 		return false
 	}
 	return true

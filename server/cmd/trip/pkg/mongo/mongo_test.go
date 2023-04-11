@@ -23,7 +23,7 @@ func TestTripLifeCycle(t *testing.T) {
 		t.Fatal("set index err")
 	}
 
-	aid := id.AccountID(1024)
+	aid := id.AccountID("1024")
 	tid := id.TripID("5f8132eb22714bf629489056")
 
 	manager := NewManager(db)
@@ -46,7 +46,7 @@ func TestTripLifeCycle(t *testing.T) {
 				mgutil.NewObjIDWithValue(tid)
 				mgutil.SetNextUpdateAt(1678795599000)
 				resp, err := manager.CreateTrip(ctx, &base.Trip{
-					AccountId:  1024,
+					AccountId:  "1024",
 					CarId:      "car1-id",
 					Start:      &base.LocationStatus{},
 					Status:     1,
@@ -77,7 +77,7 @@ func TestTripLifeCycle(t *testing.T) {
 			name: "update trip",
 			op: func() string {
 				err := manager.UpdateTrip(ctx, tid, aid, 1678795599000, &base.Trip{
-					AccountId: aid.Int64(),
+					AccountId: aid.String(),
 					Current: &base.LocationStatus{
 						Location: &base.Location{
 							Latitude:  30,

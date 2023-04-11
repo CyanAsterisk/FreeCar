@@ -1,16 +1,10 @@
 package id
 
-import "strconv"
-
 // AccountID defines account id object.
-type AccountID int64
-
-func (a AccountID) Int64() int64 {
-	return int64(a)
-}
+type AccountID string
 
 func (a AccountID) String() string {
-	return strconv.FormatInt(int64(a), 10)
+	return string(a)
 }
 
 // TripID defines trip id object.
@@ -35,12 +29,8 @@ func (i CarID) String() string {
 }
 
 // BlobID defines blob id object.
-type BlobID int64
-
-func (i BlobID) Int64() int64 {
-	return int64(i)
-}
+type BlobID string
 
 func (i BlobID) String() string {
-	return strconv.FormatInt(int64(i), 10)
+	return string(i)
 }

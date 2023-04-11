@@ -10,7 +10,7 @@ import (
 )
 
 type Admin struct {
-	ID       int64  `gorm:"primarykey"`
+	ID       string `gorm:"primarykey"`
 	Username string `gorm:"type:varchar(40);uniqueIndex"`
 	Password string `gorm:"type:varchar(40)"`
 }
@@ -18,14 +18,14 @@ type Admin struct {
 // BeforeCreate uses snowflake to generate an ID.
 func (u *Admin) BeforeCreate(_ *gorm.DB) (err error) {
 	// skip if the accountID already set.
-	if u.ID != 0 {
+	if u.ID != "" {
 		return nil
 	}
 	sf, err := snowflake.NewNode(consts.AdminSnowflakeNode)
 	if err != nil {
 		klog.Fatalf("generate id failed: %s", err.Error())
 	}
-	u.ID = sf.Generate().Int64()
+	u.ID = sf.Generate().String()
 	return nil
 }
 
@@ -49,7 +49,7 @@ func NewAdminManager(db *gorm.DB, salt string) *AdminManager {
 }
 
 // GetAdminByAccountId get admin by account id.
-func (m *AdminManager) GetAdminByAccountId(aid int64) (*Admin, error) {
+func (m *AdminManager) GetAdminByAccountId(aid string) (*Admin, error) {
 	var admin Admin
 	err := m.db.Where(&Admin{ID: aid}).First(&admin).Error
 	if err != nil {
@@ -76,7 +76,7 @@ func (m *AdminManager) GetAdminByName(name string) (*Admin, error) {
 }
 
 // UpdateAdminPassword updates admin password.
-func (m *AdminManager) UpdateAdminPassword(aid int64, password string) error {
+func (m *AdminManager) UpdateAdminPassword(aid string, password string) error {
 	cryPassword := md5.Md5Crypt(password, m.salt)
 	if err := m.db.Model(&Admin{}).Where(&Admin{ID: aid}).Update("password", cryPassword).Error; err != nil {
 		return err

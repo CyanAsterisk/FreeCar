@@ -30,7 +30,7 @@ func DeleteProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.DeleteProfile(ctx, &kprofile.DeleteProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -53,7 +53,7 @@ func CheckProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CheckProfile(ctx, &kprofile.CheckProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -145,7 +145,7 @@ func GetProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.GetProfile(ctx, &kprofile.GetProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -169,7 +169,7 @@ func SubmitProfile(ctx context.Context, c *app.RequestContext) {
 	}
 
 	res, err := config.GlobalProfileClient.SubmitProfile(ctx, &kprofile.SubmitProfileRequest{
-		AccountId: c.MustGet(consts.AccountID).(int64),
+		AccountId: c.MustGet(consts.AccountID).(string),
 		Identity: &base.Identity{
 			LicNumber:       req.Identity.LicNumber,
 			Name:            req.Identity.Name,
@@ -199,7 +199,7 @@ func ClearProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.ClearProfile(ctx, &kprofile.ClearProfileRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -222,7 +222,7 @@ func CreateProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CreateProfilePhoto(ctx, &kprofile.CreateProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -245,7 +245,7 @@ func ClearProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.ClearProfilePhoto(ctx, &kprofile.ClearProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -268,7 +268,7 @@ func GetProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.GetProfilePhoto(ctx, &kprofile.GetProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)
@@ -291,7 +291,7 @@ func CompleteProfilePhoto(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	res, err := config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(int64)})
+	res, err := config.GlobalProfileClient.CompleteProfilePhoto(ctx, &kprofile.CompleteProfilePhotoRequest{AccountId: c.MustGet(consts.AccountID).(string)})
 	if err != nil {
 		hlog.Error("rpc profile service err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr)

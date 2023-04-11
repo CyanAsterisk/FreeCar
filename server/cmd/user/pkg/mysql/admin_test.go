@@ -16,7 +16,7 @@ func TestUserLifeCycle(t *testing.T) {
 	salt := "test-salt"
 
 	admin := Admin{
-		ID:       1234,
+		ID:       "1234",
 		Username: "username1",
 		Password: "password-1",
 	}

@@ -46,7 +46,7 @@ func (p *ProfileRecord) FastRead(buf []byte) (int, error) {
 		}
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				l, err = p.FastReadField1(buf[offset:])
 				offset += l
 				if err != nil {
@@ -60,7 +60,7 @@ func (p *ProfileRecord) FastRead(buf []byte) (int, error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				l, err = p.FastReadField2(buf[offset:])
 				offset += l
 				if err != nil {
@@ -125,7 +125,7 @@ ReadStructEndError:
 func (p *ProfileRecord) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
@@ -139,7 +139,7 @@ func (p *ProfileRecord) FastReadField1(buf []byte) (int, error) {
 func (p *ProfileRecord) FastReadField2(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
@@ -196,8 +196,8 @@ func (p *ProfileRecord) BLength() int {
 
 func (p *ProfileRecord) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "account_id", thrift.I64, 1)
-	offset += bthrift.Binary.WriteI64(buf[offset:], p.AccountId)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "account_id", thrift.STRING, 1)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.AccountId)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -205,8 +205,8 @@ func (p *ProfileRecord) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryW
 
 func (p *ProfileRecord) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "photo_blob_id", thrift.I64, 2)
-	offset += bthrift.Binary.WriteI64(buf[offset:], p.PhotoBlobId)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "photo_blob_id", thrift.STRING, 2)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.PhotoBlobId)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -222,8 +222,8 @@ func (p *ProfileRecord) fastWriteField3(buf []byte, binaryWriter bthrift.BinaryW
 
 func (p *ProfileRecord) field1Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("account_id", thrift.I64, 1)
-	l += bthrift.Binary.I64Length(p.AccountId)
+	l += bthrift.Binary.FieldBeginLength("account_id", thrift.STRING, 1)
+	l += bthrift.Binary.StringLengthNocopy(p.AccountId)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l
@@ -231,8 +231,8 @@ func (p *ProfileRecord) field1Length() int {
 
 func (p *ProfileRecord) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("photo_blob_id", thrift.I64, 2)
-	l += bthrift.Binary.I64Length(p.PhotoBlobId)
+	l += bthrift.Binary.FieldBeginLength("photo_blob_id", thrift.STRING, 2)
+	l += bthrift.Binary.StringLengthNocopy(p.PhotoBlobId)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

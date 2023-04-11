@@ -17,9 +17,9 @@ func TestUserLifecycle(t *testing.T) {
 	salt := "test-salt"
 
 	user := User{
-		ID:           1234,
-		PhoneNumber:  10086,
-		AvatarBlobId: 1001,
+		ID:           "1234",
+		PhoneNumber:  "10086",
+		AvatarBlobId: "1001",
 		Username:     "username1",
 		OpenID:       "openID-1",
 	}
@@ -67,9 +67,9 @@ func TestUserLifecycle(t *testing.T) {
 			name: "update user info",
 			op: func() string {
 				newUserInfo := User{
-					ID:           1234,
-					PhoneNumber:  8888888888,
-					AvatarBlobId: 10100101001,
+					ID:           "1234",
+					PhoneNumber:  "8888888888",
+					AvatarBlobId: "10100101001",
 					Username:     "new-username",
 				}
 				err = manager.UpdateUser(&newUserInfo)
@@ -85,16 +85,16 @@ func TestUserLifecycle(t *testing.T) {
 			name: "get some users",
 			op: func() string {
 				manager.CreateUser(&User{
-					ID:           1235,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1235",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username2",
 					OpenID:       "openID-2",
 				})
 				manager.CreateUser(&User{
-					ID:           1236,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1236",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username3",
 					OpenID:       "openID-3",
 				})
@@ -123,20 +123,20 @@ func TestUserLifecycle(t *testing.T) {
 			name: "delete user",
 			op: func() string {
 				manager.CreateUser(&User{
-					ID:           1235,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1235",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username2",
 					OpenID:       "openID-2",
 				})
 				manager.CreateUser(&User{
-					ID:           1236,
-					PhoneNumber:  10086,
-					AvatarBlobId: 1001,
+					ID:           "1236",
+					PhoneNumber:  "10086",
+					AvatarBlobId: "1001",
 					Username:     "username3",
 					OpenID:       "openID-3",
 				})
-				err = manager.DeleteUser(1235)
+				err = manager.DeleteUser("1235")
 				if err != nil {
 					return fmt.Sprintf("[err=%+v]", err)
 				}

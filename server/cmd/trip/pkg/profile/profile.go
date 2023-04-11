@@ -20,7 +20,7 @@ type Manager struct {
 // Verify verifies account identity.
 func (m *Manager) Verify(c context.Context, aid id.AccountID) (id.IdentityID, error) {
 	nilID := id.IdentityID("")
-	resp, err := m.ProfileService.GetProfile(c, &profile.GetProfileRequest{AccountId: int64(aid)})
+	resp, err := m.ProfileService.GetProfile(c, &profile.GetProfileRequest{AccountId: aid.String()})
 	if err != nil {
 		return nilID, fmt.Errorf("cannot get profile: %v", err)
 	}

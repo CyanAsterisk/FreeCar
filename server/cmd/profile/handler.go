@@ -151,7 +151,7 @@ func (s *ProfileServiceImpl) GetProfilePhoto(ctx context.Context, req *profile.G
 		return resp, nil
 	}
 
-	if pr.PhotoBlobID == 0 {
+	if pr.PhotoBlobID == "" {
 		klog.Warn("photo blob id = 0")
 		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
 		return resp, nil
@@ -211,7 +211,7 @@ func (s *ProfileServiceImpl) CompleteProfilePhoto(ctx context.Context, req *prof
 		return resp, nil
 	}
 
-	if pr.PhotoBlobID == 0 {
+	if pr.PhotoBlobID == "" {
 		klog.Warn("photo blob id = 0")
 		resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound.WithMessage("no profile photo"))
 		return resp, nil
@@ -247,7 +247,7 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
 		return resp, nil
 	}
-	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, 0)
+	err = s.MongoManager.UpdateProfilePhoto(ctx, aid, "")
 	if err != nil {
 		klog.Error("cannot clear profile photo", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile photo error"))

@@ -79,7 +79,7 @@ func (s *TripServiceImpl) CreateTrip(ctx context.Context, req *trip.CreateTripRe
 	}, req.Start)
 
 	tr, err := s.MongoManager.CreateTrip(ctx, &base.Trip{
-		AccountId:  aid.Int64(),
+		AccountId:  aid.String(),
 		CarId:      req.CarId,
 		Status:     base.TripStatus_IN_PROGRESS,
 		Start:      ls,

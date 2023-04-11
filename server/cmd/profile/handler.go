@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
@@ -284,7 +285,7 @@ func (s *ProfileServiceImpl) GetAllProfile(ctx context.Context, req *profile.Get
 // GetSomeProfile implements the ProfileServiceImpl interface.
 func (s *ProfileServiceImpl) GetSomeProfile(ctx context.Context, req *profile.GetSomeProfileRequest) (resp *profile.GetSomeProfileResponse, err error) {
 	resp = new(profile.GetSomeProfileResponse)
-	prs, err := s.MongoManager.GetProfiles(ctx, 20)
+	prs, err := s.MongoManager.GetProfiles(ctx, consts.LimitOfSomeProfiles)
 	if err != nil {
 		if err == errno.RecordNotFound {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)

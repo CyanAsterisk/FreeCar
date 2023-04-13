@@ -13,6 +13,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/gzip"
+	"github.com/hertz-contrib/limiter"
 	"github.com/hertz-contrib/paseto"
 )
 
@@ -22,6 +23,8 @@ func CommonMW() []app.HandlerFunc {
 		middleware.Recovery(),
 		// use gzip mw
 		gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".jpg", ".mp4", ".png"})),
+		// use limiter mw
+		limiter.AdaptiveLimit(limiter.WithCPUThreshold(900)),
 	}
 }
 

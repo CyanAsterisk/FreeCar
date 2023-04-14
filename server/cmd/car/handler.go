@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"math"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -174,6 +175,12 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car err"))
 		return resp, nil
 	}
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
+			klog.Error("remove cache error")
+		}
+	}()
 	s.publish(ctx, cr)
 	return resp, nil
 }

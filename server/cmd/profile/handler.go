@@ -112,6 +112,12 @@ func (s *ProfileServiceImpl) SubmitProfile(ctx context.Context, req *profile.Sub
 		}
 		return resp, nil
 	}
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
+			klog.Error("cannot remove profile in redis", err)
+		}
+	}()
 	resp.Profile = p
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
@@ -134,6 +140,12 @@ func (s *ProfileServiceImpl) ClearProfile(ctx context.Context, req *profile.Clea
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile error"))
 		return resp, nil
 	}
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
+			klog.Error("cannot remove profile in redis", err)
+		}
+	}()
 	resp.Profile = p
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
@@ -196,7 +208,12 @@ func (s *ProfileServiceImpl) CreateProfilePhoto(ctx context.Context, req *profil
 		klog.Error("cannot update profile photo", err)
 		return nil, errno.ProfileSrvErr.WithMessage("create profile photo error")
 	}
-
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveProfile(ctx, id.AccountID(aid)); err != nil {
+			klog.Error("cannot remove profile in redis", err)
+		}
+	}()
 	return &profile.CreateProfilePhotoResponse{
 		UploadUrl: br.UploadUrl,
 	}, nil
@@ -255,6 +272,12 @@ func (s *ProfileServiceImpl) ClearProfilePhoto(ctx context.Context, req *profile
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr.WithMessage("clear profile photo error"))
 		return resp, nil
 	}
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveProfile(ctx, aid); err != nil {
+			klog.Error("cannot remove profile in redis", err)
+		}
+	}()
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }
@@ -326,6 +349,12 @@ func (s *ProfileServiceImpl) CheckProfile(ctx context.Context, req *profile.Chec
 		resp.BaseResp = tools.BuildBaseResp(errno.ProfileSrvErr)
 		return resp, nil
 	}
+	go func() {
+		time.Sleep(2 * time.Second)
+		if err = s.RedisManager.RemoveProfile(ctx, id.AccountID(req.AccountId)); err != nil {
+			klog.Error("cannot remove profile in redis", err)
+		}
+	}()
 	resp.BaseResp = tools.BuildBaseResp(nil)
 	return resp, nil
 }

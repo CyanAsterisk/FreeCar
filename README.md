@@ -119,7 +119,7 @@ customization, please modify the contents of `docker-compose.yaml` and Nacos con
 ### IDL
 
 Before development, we need to define the IDL file, among which hz provides developers with many
-customized [api annotations](https://www.cloudwego.io/zh/docs/hertz/tutorials/toolkit/toolkit/#%E6%94%AF%E6%8C%81%E7%9A%84-api-%E6%B3%A8%E8%A7%A3).
+customized [api annotations](https://www.cloudwego.io/zh/docs/hertz/tutorials/toolkit/usage/annotation/#%E6%94%AF%E6%8C%81%E7%9A%84-api-%E6%B3%A8%E8%A7%A3).
 
 Sample code:
 

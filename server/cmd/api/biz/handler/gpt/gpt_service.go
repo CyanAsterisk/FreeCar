@@ -71,6 +71,7 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+	clt.SetProxy(protocol.ProxyURI(protocol.ParseURI(config.GlobalServerConfig.ProxyURL)))
 
 	reqRaw := &requestRaw{
 		Model: "gpt-3.5-turbo",

@@ -20,6 +20,7 @@ type ServerConfig struct {
 	Host           string       `mapstructure:"host" json:"host"`
 	Port           int          `mapstructure:"port" json:"port"`
 	GPTKey         string       `mapstructure:"gpt" json:"gpt"`
+	ProxyURL       string       `mapstructure:"proxy" json:"proxy"`
 	PasetoInfo     PasetoConfig `mapstructure:"paseto" json:"paseto"`
 	OtelInfo       OtelConfig   `mapstructure:"otel" json:"otel"`
 	UserSrvInfo    RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`

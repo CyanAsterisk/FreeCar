@@ -15,9 +15,12 @@ profile:
 	make service=profile generate
 trip:
 	make service=trip generate
+gpt:
+	make service=gpt generate
 
 all:
 	make user
 	make car
 	make profile
 	make trip
+	make gpt

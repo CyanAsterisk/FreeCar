@@ -76,4 +76,6 @@ const (
 	LimitOfSomeUsers    = 20
 
 	OCRUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/driving_license"
+
+	GPTUrl = "https://api.openai.com/v1/chat/completions"
 )

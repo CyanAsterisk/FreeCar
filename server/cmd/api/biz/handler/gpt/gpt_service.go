@@ -21,12 +21,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
-type request struct {
+type requestRaw struct {
 	Model       string     `json:"model"`
-	Messages    []Messages `json:"messages"`
+	Messages    []messages `json:"messages"`
 	Temperature float64    `json:"temperature"`
 }
-type Messages struct {
+type messages struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
@@ -71,9 +71,10 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	gReq := &request{
+
+	reqRaw := &requestRaw{
 		Model: "gpt-3.5-turbo",
-		Messages: []Messages{
+		Messages: []messages{
 			{
 				Role:    "user",
 				Content: req.Content,
@@ -87,7 +88,7 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 	hReq.Header.SetContentTypeBytes([]byte("application/json"))
 	hReq.SetRequestURI(sConst.GPTUrl)
 	hReq.SetHeader("Authorization", "Bearer "+config.GlobalServerConfig.GPTKey)
-	body, err := sonic.Marshal(gReq)
+	body, err := sonic.Marshal(reqRaw)
 	hReq.SetBody(body)
 	err = clt.Do(ctx, hReq, hRes)
 	if err != nil {
@@ -105,6 +106,7 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+
 	resp.BaseResp = (*base.BaseResponse)(tools.BuildBaseResp(errno.Success))
 	resp.Content = res.Choices[0].Message.Content
 	c.JSON(consts.StatusOK, resp)

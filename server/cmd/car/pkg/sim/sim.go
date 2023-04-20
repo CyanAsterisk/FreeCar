@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	minCarNum      = 10
+	minCarNum      = 12
 	AccountId      = "1024"
 	CQUPTLatitude  = 29.53832
 	CQUPTLongitude = 106.613922
@@ -64,14 +64,15 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 	}
 
 	for idx, _car := range cars {
+		_car.Car.Position = &base.Position{
+			Latitude:  CQUPTLatitude + (rand.Float64()-0.5)*0.1,
+			Longitude: CQUPTLongitude + (rand.Float64()-0.5)*0.1,
+		}
 		req := &car.UpdateCarRequest{
-			Id: _car.Id,
-			Position: &base.Position{
-				Latitude:  CQUPTLatitude + (rand.Float64()-0.5)*0.1,
-				Longitude: CQUPTLongitude + (rand.Float64()-0.5)*0.1,
-			},
+			Id:        _car.Id,
+			Position:  _car.Car.Position,
 			AccountId: AccountId,
-			Power:     99,
+			Power:     80 + rand.Float64()*20,
 		}
 		if idx < minCarNum-2 {
 			req.Status = base.CarStatus_UNLOCKED
@@ -99,58 +100,41 @@ func (c *Controller) RunSimulations(ctx context.Context) {
 }
 
 // SimulateCar simulates a single car.
-func (c *Controller) SimulateCar(ctx context.Context, initial *base.CarEntity, ch chan *base.Car) {
-	carID := initial.Id
-	klog.Infof("Simulating car: %s", carID)
+func (c *Controller) SimulateCar(ctx context.Context, carEntity *base.CarEntity, ch chan *base.Car) {
+	tk := time.NewTicker(time.Second * 5)
+	defer tk.Stop()
 
-	for update := range ch {
+	klog.Infof("Simulating car: %s", carEntity.Id)
+	for {
 		time.Sleep(time.Millisecond * 500)
-		if update.Status == base.CarStatus_UNLOCKING {
-			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-				Id:     carID,
-				Status: base.CarStatus_UNLOCKED,
-				Position: &base.Position{
-					Latitude:  CQUPTLatitude,
-					Longitude: CQUPTLongitude,
-				},
-			})
-			if err != nil {
-				klog.Errorf("cannot unlock car: %s", err.Error())
+		var req car.UpdateCarRequest
+		req.Id = carEntity.Id
+		select {
+		case update := <-ch:
+			switch update.Status {
+			case base.CarStatus_UNLOCKING:
+				req.Status = base.CarStatus_UNLOCKED
+			case base.CarStatus_LOCKING:
+				req.Status = base.CarStatus_LOCKED
+			case base.CarStatus_UNLOCKED:
+				carEntity.Car.Position.Longitude += (rand.Float64() - 0.5) * 0.001
+				carEntity.Car.Position.Latitude += (rand.Float64() - 0.5) * 0.001
+				if update.Driver != nil {
+					carEntity.Car.Power -= 0.02 * rand.Float64()
+				}
+				req.Position = carEntity.Car.Position
+				req.Power = carEntity.Car.Power
+			case base.CarStatus_LOCKED:
+				if carEntity.Car.Power < 99 {
+					carEntity.Car.Power += 0.01 * rand.Float64()
+				}
+				req.Power = carEntity.Car.Power
 			}
-		} else if update.Status == base.CarStatus_LOCKING {
-			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-				Id:     carID,
-				Status: base.CarStatus_LOCKED,
-			})
-			if err != nil {
-				klog.Errorf("cannot lock car: %s", err.Error())
-			}
-		} else if update.Status == base.CarStatus_UNLOCKED {
-			_, err := c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-				Id: carID,
-				Position: &base.Position{
-					Latitude:  update.Position.Latitude + (rand.Float64()-0.5)*0.001,
-					Longitude: update.Position.Longitude + (rand.Float64()-0.5)*0.001,
-				},
-				Power: update.Power - 0.02*rand.Float64(),
-			})
-			if err != nil {
-				klog.Errorf("cannot update car position: %s", err.Error())
-			}
-		} else if update.Status == base.CarStatus_LOCKED {
-			var err error
-			if update.Power >= 100 {
-				return
-			} else {
-				_, err = c.CarService.UpdateCar(ctx, &car.UpdateCarRequest{
-					Id:       carID,
-					Power:    update.Power + 0.01*rand.Float64(),
-					Position: update.Position,
-				})
-			}
-			if err != nil {
-				klog.Errorf("cannot update car position: %s", err.Error())
-			}
+			tk.Reset(time.Second * 5)
+		case <-tk.C:
+		}
+		if _, err := c.CarService.UpdateCar(ctx, &req); err != nil {
+			klog.Errorf("cannot update car: %s", err.Error())
 		}
 	}
 }

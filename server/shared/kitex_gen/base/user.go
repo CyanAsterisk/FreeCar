@@ -14,6 +14,7 @@ type User struct {
 	PhoneNumber  string `thrift:"phone_number,3" frugal:"3,default,string" json:"phone_number"`
 	AvatarBlobId string `thrift:"avatar_blob_id,4" frugal:"4,default,string" json:"avatar_blob_id"`
 	OpenId       string `thrift:"open_id,5" frugal:"5,default,string" json:"open_id"`
+	Balance      int32  `thrift:"balance,6" frugal:"6,default,i32" json:"balance"`
 }
 
 func NewUser() *User {
@@ -43,6 +44,10 @@ func (p *User) GetAvatarBlobId() (v string) {
 func (p *User) GetOpenId() (v string) {
 	return p.OpenId
 }
+
+func (p *User) GetBalance() (v int32) {
+	return p.Balance
+}
 func (p *User) SetAccountId(val string) {
 	p.AccountId = val
 }
@@ -58,6 +63,9 @@ func (p *User) SetAvatarBlobId(val string) {
 func (p *User) SetOpenId(val string) {
 	p.OpenId = val
 }
+func (p *User) SetBalance(val int32) {
+	p.Balance = val
+}
 
 var fieldIDToName_User = map[int16]string{
 	1: "account_id",
@@ -65,6 +73,7 @@ var fieldIDToName_User = map[int16]string{
 	3: "phone_number",
 	4: "avatar_blob_id",
 	5: "open_id",
+	6: "balance",
 }
 
 func (p *User) Read(iprot thrift.TProtocol) (err error) {
@@ -129,6 +138,16 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 6:
+			if fieldTypeId == thrift.I32 {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -211,6 +230,15 @@ func (p *User) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *User) ReadField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return err
+	} else {
+		p.Balance = v
+	}
+	return nil
+}
+
 func (p *User) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("User"); err != nil {
@@ -235,6 +263,10 @@ func (p *User) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 
@@ -341,6 +373,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
+func (p *User) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("balance", thrift.I32, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI32(p.Balance); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
 func (p *User) String() string {
 	if p == nil {
 		return "<nil>"
@@ -367,6 +416,9 @@ func (p *User) DeepEqual(ano *User) bool {
 		return false
 	}
 	if !p.Field5DeepEqual(ano.OpenId) {
+		return false
+	}
+	if !p.Field6DeepEqual(ano.Balance) {
 		return false
 	}
 	return true
@@ -407,12 +459,20 @@ func (p *User) Field5DeepEqual(src string) bool {
 	}
 	return true
 }
+func (p *User) Field6DeepEqual(src int32) bool {
+
+	if p.Balance != src {
+		return false
+	}
+	return true
+}
 
 type UserInfo struct {
 	AccountId   string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
 	Username    string `thrift:"username,2" frugal:"2,default,string" json:"username"`
 	PhoneNumber string `thrift:"phone_number,3" frugal:"3,default,string" json:"phone_number"`
 	AvatarUrl   string `thrift:"avatar_url,4" frugal:"4,default,string" json:"avatar_url"`
+	Balance     int32  `thrift:"balance,5" frugal:"5,default,i32" json:"balance"`
 }
 
 func NewUserInfo() *UserInfo {
@@ -438,6 +498,10 @@ func (p *UserInfo) GetPhoneNumber() (v string) {
 func (p *UserInfo) GetAvatarUrl() (v string) {
 	return p.AvatarUrl
 }
+
+func (p *UserInfo) GetBalance() (v int32) {
+	return p.Balance
+}
 func (p *UserInfo) SetAccountId(val string) {
 	p.AccountId = val
 }
@@ -450,12 +514,16 @@ func (p *UserInfo) SetPhoneNumber(val string) {
 func (p *UserInfo) SetAvatarUrl(val string) {
 	p.AvatarUrl = val
 }
+func (p *UserInfo) SetBalance(val int32) {
+	p.Balance = val
+}
 
 var fieldIDToName_UserInfo = map[int16]string{
 	1: "account_id",
 	2: "username",
 	3: "phone_number",
 	4: "avatar_url",
+	5: "balance",
 }
 
 func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
@@ -510,6 +578,16 @@ func (p *UserInfo) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 5:
+			if fieldTypeId == thrift.I32 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -583,6 +661,15 @@ func (p *UserInfo) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *UserInfo) ReadField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return err
+	} else {
+		p.Balance = v
+	}
+	return nil
+}
+
 func (p *UserInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("UserInfo"); err != nil {
@@ -603,6 +690,10 @@ func (p *UserInfo) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 
@@ -692,6 +783,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
+func (p *UserInfo) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("balance", thrift.I32, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI32(p.Balance); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *UserInfo) String() string {
 	if p == nil {
 		return "<nil>"
@@ -715,6 +823,9 @@ func (p *UserInfo) DeepEqual(ano *UserInfo) bool {
 		return false
 	}
 	if !p.Field4DeepEqual(ano.AvatarUrl) {
+		return false
+	}
+	if !p.Field5DeepEqual(ano.Balance) {
 		return false
 	}
 	return true
@@ -744,6 +855,13 @@ func (p *UserInfo) Field3DeepEqual(src string) bool {
 func (p *UserInfo) Field4DeepEqual(src string) bool {
 
 	if strings.Compare(p.AvatarUrl, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserInfo) Field5DeepEqual(src int32) bool {
+
+	if p.Balance != src {
 		return false
 	}
 	return true

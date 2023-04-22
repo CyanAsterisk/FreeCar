@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	huser "github.com/CyanAsterisk/FreeCar/server/cmd/api/biz/model/user"
@@ -256,6 +257,7 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
+	fmt.Println(res)
 	c.JSON(http.StatusOK, res)
 }
 

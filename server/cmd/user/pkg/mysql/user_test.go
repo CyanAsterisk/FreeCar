@@ -22,6 +22,7 @@ func TestUserLifecycle(t *testing.T) {
 		AvatarBlobId: "1001",
 		Username:     "username1",
 		OpenID:       "openID-1",
+		Balance:      1000,
 	}
 	manager := NewUserManager(db, salt)
 	cases := []struct {
@@ -36,7 +37,7 @@ func TestUserLifecycle(t *testing.T) {
 				resp, err := manager.CreateUser(&u)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
+			want: `[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Balance:1000 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]`,
 		},
 		{
 			name: "Duplicate create user",
@@ -53,7 +54,7 @@ func TestUserLifecycle(t *testing.T) {
 				resp, err := manager.GetUserByAccountId(user.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
+			want: `[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Balance:1000 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]`,
 		},
 		{
 			name: "get user by openId",
@@ -61,7 +62,7 @@ func TestUserLifecycle(t *testing.T) {
 				resp, err := manager.GetUserByOpenId(user.OpenID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
+			want: `[err = <nil>][resp = &{ID:1234 PhoneNumber:10086 AvatarBlobId:1001 Username:username1 OpenID:5cc2876d40c14dcabe891399c4a0422a Balance:1000 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]`,
 		},
 		{
 			name: "update user info",
@@ -71,6 +72,7 @@ func TestUserLifecycle(t *testing.T) {
 					PhoneNumber:  "8888888888",
 					AvatarBlobId: "10100101001",
 					Username:     "new-username",
+					Balance:      2000,
 				}
 				err = manager.UpdateUser(&newUserInfo)
 				if err != nil {
@@ -79,7 +81,7 @@ func TestUserLifecycle(t *testing.T) {
 				resp, err := manager.GetUserByAccountId(user.ID)
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, resp)
 			},
-			want: "[err = <nil>][resp = &{ID:1234 PhoneNumber:8888888888 AvatarBlobId:10100101001 Username:new-username OpenID:5cc2876d40c14dcabe891399c4a0422a Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]",
+			want: `[err = <nil>][resp = &{ID:1234 PhoneNumber:8888888888 AvatarBlobId:10100101001 Username:new-username OpenID:5cc2876d40c14dcabe891399c4a0422a Balance:2000 Deleted:{Time:0001-01-01 00:00:00 +0000 UTC Valid:false}}]`,
 		},
 		{
 			name: "get some users",
@@ -105,7 +107,7 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Balance":2000,"Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Balance":0,"Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Balance":0,"Deleted":null}]]`,
 		},
 		{
 			name: "get all users",
@@ -117,7 +119,7 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Balance":2000,"Deleted":null},{"ID":"1235","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username2","OpenID":"dcd63116db07e44a16e3f0015f965a53","Balance":0,"Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Balance":0,"Deleted":null}]]`,
 		},
 		{
 			name: "delete user",
@@ -147,7 +149,7 @@ func TestUserLifecycle(t *testing.T) {
 				}
 				return fmt.Sprintf("[err = %+v][resp = %+v]", err, string(resp))
 			},
-			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Deleted":null}]]`,
+			want: `[err = <nil>][resp = [{"ID":"1234","PhoneNumber":"8888888888","AvatarBlobId":"10100101001","Username":"new-username","OpenID":"5cc2876d40c14dcabe891399c4a0422a","Balance":2000,"Deleted":null},{"ID":"1236","PhoneNumber":"10086","AvatarBlobId":"1001","Username":"username3","OpenID":"72e38afb76dc1022c1c78b2429024d80","Balance":0,"Deleted":null}]]`,
 		},
 	}
 

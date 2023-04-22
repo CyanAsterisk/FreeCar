@@ -19,6 +19,7 @@ type Client interface {
 	AddUser(ctx context.Context, req *user.AddUserRequest, callOptions ...callopt.Option) (r *user.AddUserResponse, err error)
 	DeleteUser(ctx context.Context, req *user.DeleteUserRequest, callOptions ...callopt.Option) (r *user.DeleteUserResponse, err error)
 	UpdateUser(ctx context.Context, req *user.UpdateUserRequest, callOptions ...callopt.Option) (r *user.UpdateUserResponse, err error)
+	Pay(ctx context.Context, req *user.PayRequest, callOptions ...callopt.Option) (r *user.PayResponse, err error)
 	GetSomeUsers(ctx context.Context, req *user.GetSomeUsersRequest, callOptions ...callopt.Option) (r *user.GetSomeUsersResponse, err error)
 	GetAllUsers(ctx context.Context, req *user.GetAllUsersRequest, callOptions ...callopt.Option) (r *user.GetAllUsersResponse, err error)
 }
@@ -90,6 +91,11 @@ func (p *kUserServiceClient) DeleteUser(ctx context.Context, req *user.DeleteUse
 func (p *kUserServiceClient) UpdateUser(ctx context.Context, req *user.UpdateUserRequest, callOptions ...callopt.Option) (r *user.UpdateUserResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UpdateUser(ctx, req)
+}
+
+func (p *kUserServiceClient) Pay(ctx context.Context, req *user.PayRequest, callOptions ...callopt.Option) (r *user.PayResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Pay(ctx, req)
 }
 
 func (p *kUserServiceClient) GetSomeUsers(ctx context.Context, req *user.GetSomeUsersRequest, callOptions ...callopt.Option) (r *user.GetSomeUsersResponse, err error) {

@@ -27,6 +27,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"AddUser":             kitex.NewMethodInfo(addUserHandler, newUserServiceAddUserArgs, newUserServiceAddUserResult, false),
 		"DeleteUser":          kitex.NewMethodInfo(deleteUserHandler, newUserServiceDeleteUserArgs, newUserServiceDeleteUserResult, false),
 		"UpdateUser":          kitex.NewMethodInfo(updateUserHandler, newUserServiceUpdateUserArgs, newUserServiceUpdateUserResult, false),
+		"Pay":                 kitex.NewMethodInfo(payHandler, newUserServicePayArgs, newUserServicePayResult, false),
 		"GetSomeUsers":        kitex.NewMethodInfo(getSomeUsersHandler, newUserServiceGetSomeUsersArgs, newUserServiceGetSomeUsersResult, false),
 		"GetAllUsers":         kitex.NewMethodInfo(getAllUsersHandler, newUserServiceGetAllUsersArgs, newUserServiceGetAllUsersResult, false),
 	}
@@ -188,6 +189,24 @@ func newUserServiceUpdateUserResult() interface{} {
 	return user.NewUserServiceUpdateUserResult()
 }
 
+func payHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServicePayArgs)
+	realResult := result.(*user.UserServicePayResult)
+	success, err := handler.(user.UserService).Pay(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServicePayArgs() interface{} {
+	return user.NewUserServicePayArgs()
+}
+
+func newUserServicePayResult() interface{} {
+	return user.NewUserServicePayResult()
+}
+
 func getSomeUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceGetSomeUsersArgs)
 	realResult := result.(*user.UserServiceGetSomeUsersResult)
@@ -309,6 +328,16 @@ func (p *kClient) UpdateUser(ctx context.Context, req *user.UpdateUserRequest) (
 	_args.Req = req
 	var _result user.UserServiceUpdateUserResult
 	if err = p.c.Call(ctx, "UpdateUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) Pay(ctx context.Context, req *user.PayRequest) (r *user.PayResponse, err error) {
+	var _args user.UserServicePayArgs
+	_args.Req = req
+	var _result user.UserServicePayResult
+	if err = p.c.Call(ctx, "Pay", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

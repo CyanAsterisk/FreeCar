@@ -26,6 +26,7 @@ type ServerConfig struct {
 	OtelInfo       OtelConfig       `mapstructure:"otel" json:"otel"`
 	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`
+	UserSrvInfo    UserSrvConfig    `mapstructure:"user_srv" json:"user_srv"`
 }
 
 type CarSrvConfig struct {
@@ -33,5 +34,9 @@ type CarSrvConfig struct {
 }
 
 type ProfileSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
+}
+
+type UserSrvConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }

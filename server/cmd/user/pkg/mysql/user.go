@@ -15,6 +15,7 @@ type User struct {
 	AvatarBlobId string
 	Username     string `gorm:"type:varchar(40)"`
 	OpenID       string `gorm:"column:openid;type:varchar(100);uniqueIndex"`
+	Balance      int32  `gorm:"column:balance"`
 	Deleted      gorm.DeletedAt
 }
 
@@ -104,6 +105,9 @@ func (m *UserManager) UpdateUser(user *User) error {
 	}
 	if user.AvatarBlobId != "" {
 		u["avatar_blob_id"] = user.AvatarBlobId
+	}
+	if user.Balance != 0 {
+		u["balance"] = user.Balance
 	}
 	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
 	if err == gorm.ErrRecordNotFound {

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: quay.io/minio/minio:latest
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - minio server /data --console-address :9090
+          ports:
+            - containerPort: 9000
+            - containerPort: 9090
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: minio
+            - name: MINIO_SECRET_KEY
+              value: password
+            - name: MINIO_BROWSER
+              value: "on"
+            - name: MINIO_CONSOLE_UI
+              value: "on"
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: minio-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+spec:
+  type: NodePort
+  selector:
+    app: minio
+  ports:
+    - name: minio
+      port: 9000
+      targetPort: 9000
+    - name: minio-ui
+      port: 9090
+      targetPort: 9090
+      nodePort: 30087

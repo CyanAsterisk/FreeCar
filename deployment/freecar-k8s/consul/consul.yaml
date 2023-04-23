@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+        - name: consul
+          image: consul:latest
+          ports:
+            - containerPort: 8500
+              name: http
+          volumeMounts:
+            - name: consul-data
+              mountPath: /consul/data
+          env:
+            - name: CONSUL_BIND_INTERFACE
+              value: eth0
+            - name: CONSUL_LOCAL_CONFIG
+              value: |
+                {
+                  "datacenter": "dc1",
+                  "server": true,
+                  "ui": true,
+                  "bootstrap_expect": 1,
+                  "retry_join": ["provider=k8s label_selector=\"app=consul\""]
+                }
+      volumes:
+        - name: consul-data
+          persistentVolumeClaim:
+            claimName: consul-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+spec:
+  selector:
+    app: consul
+  ports:
+    - port: 8500
+      targetPort: 8500
+      protocol: TCP
+      nodePort: 30088
+  type: NodePort
+

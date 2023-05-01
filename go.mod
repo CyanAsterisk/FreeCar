@@ -12,7 +12,7 @@ require (
 	github.com/cloudwego/kitex v0.5.1
 	github.com/docker/docker v20.10.23+incompatible
 	github.com/docker/go-connections v0.4.0
-	github.com/hashicorp/consul/api v1.18.0
+	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/http2 v0.1.5

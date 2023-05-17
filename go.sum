@@ -103,8 +103,9 @@ github.com/bytedance/gopkg v0.0.0-20220509134931-d1878f638986/go.mod h1:2ZlV9BaU
 github.com/bytedance/gopkg v0.0.0-20220531084716-665b4f21126f/go.mod h1:2ZlV9BaUH4+NXIBF0aMdKKAnHTzqH+iMU4KUjAbL23Q=
 github.com/bytedance/gopkg v0.0.0-20220817015305-b879a72dc90f h1:U3Bk6S9UyqFM5tU3bZ3pwqx5xyypHP7Bm2QCbOUwxSc=
 github.com/bytedance/gopkg v0.0.0-20220817015305-b879a72dc90f/go.mod h1:2ZlV9BaUH4+NXIBF0aMdKKAnHTzqH+iMU4KUjAbL23Q=
-github.com/bytedance/mockey v1.2.0 h1:847+X2fBSM4s/AIN4loO5d16PCgEj53j7Q8YVB+8P6c=
 github.com/bytedance/mockey v1.2.0/go.mod h1:+Jm/fzWZAuhEDrPXVjDf/jLM2BlLXJkwk94zf2JZ3X4=
+github.com/bytedance/mockey v1.2.1 h1:g84ngI88hz1DR4wZTL3yOuqlEcq67MretBfQUdXwrmw=
+github.com/bytedance/mockey v1.2.1/go.mod h1:+Jm/fzWZAuhEDrPXVjDf/jLM2BlLXJkwk94zf2JZ3X4=
 github.com/bytedance/sonic v1.3.0/go.mod h1:V973WhNhGmvHxW6nQmsHEfHaoU9F3zTF+93rH03hcUQ=
 github.com/bytedance/sonic v1.3.5/go.mod h1:V973WhNhGmvHxW6nQmsHEfHaoU9F3zTF+93rH03hcUQ=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
@@ -153,8 +154,9 @@ github.com/cloudwego/hertz v0.2.1/go.mod h1:prTyExvsH/UmDkvfU3dp3EHsZFQISfT8R7Bi
 github.com/cloudwego/hertz v0.3.0/go.mod h1:GWWYlAVkq1gDu6vJd/XNciWsP6q0d4TrEKk5fpJYF04=
 github.com/cloudwego/hertz v0.3.1/go.mod h1:hnv3B7eZ6kMv7CKFHT2OC4LU0mA4s5XPyu/SbixLcrU=
 github.com/cloudwego/hertz v0.3.2/go.mod h1:hnv3B7eZ6kMv7CKFHT2OC4LU0mA4s5XPyu/SbixLcrU=
-github.com/cloudwego/hertz v0.6.0 h1:yxRfc1BbuVilhV73VKvB80jkqKzfedj/LLXH1fQWDIg=
 github.com/cloudwego/hertz v0.6.0/go.mod h1:83EedHQvCXpveYh2r9us8YlQ1C28vPg93wPdB/QpJiA=
+github.com/cloudwego/hertz v0.6.2 h1:8NM0yHbyv8B4dNYgICirk733S7monTNB+uR9as1It1Y=
+github.com/cloudwego/hertz v0.6.2/go.mod h1:2em2hGREvCBawsTQcQxyWBGVlCeo+N1pp2q0HkkbwR0=
 github.com/cloudwego/kitex v0.0.4/go.mod h1:EIjPJ4Dom2ornk7xDCdKpUpOnf4Tulevimh4Tn05OGc=
 github.com/cloudwego/kitex v0.1.4/go.mod h1:qxxpIUl5zvbcvcQeKrlm2t2f1BBxt4EPMksBUFwr6QA=
 github.com/cloudwego/kitex v0.2.0/go.mod h1:1p4rtGIIiFZMOePYbSPgLkIhdhdfhEtVOJSti/k9vK4=

@@ -8,14 +8,14 @@ require (
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.8.3
-	github.com/cloudwego/hertz v0.6.2
+	github.com/cloudwego/hertz v0.6.3
 	github.com/cloudwego/kitex v0.5.2
 	github.com/docker/docker v20.10.23+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a
 	github.com/hertz-contrib/gzip v0.0.1
-	github.com/hertz-contrib/http2 v0.1.5
+	github.com/hertz-contrib/http2 v0.1.7
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1

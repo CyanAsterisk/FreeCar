@@ -155,8 +155,8 @@ github.com/cloudwego/hertz v0.3.0/go.mod h1:GWWYlAVkq1gDu6vJd/XNciWsP6q0d4TrEKk5
 github.com/cloudwego/hertz v0.3.1/go.mod h1:hnv3B7eZ6kMv7CKFHT2OC4LU0mA4s5XPyu/SbixLcrU=
 github.com/cloudwego/hertz v0.3.2/go.mod h1:hnv3B7eZ6kMv7CKFHT2OC4LU0mA4s5XPyu/SbixLcrU=
 github.com/cloudwego/hertz v0.6.0/go.mod h1:83EedHQvCXpveYh2r9us8YlQ1C28vPg93wPdB/QpJiA=
-github.com/cloudwego/hertz v0.6.2 h1:8NM0yHbyv8B4dNYgICirk733S7monTNB+uR9as1It1Y=
-github.com/cloudwego/hertz v0.6.2/go.mod h1:2em2hGREvCBawsTQcQxyWBGVlCeo+N1pp2q0HkkbwR0=
+github.com/cloudwego/hertz v0.6.3 h1:zbus6GEYcTBH8UbgA+ay52u9oV9Kg6EvHp92GF9eTwo=
+github.com/cloudwego/hertz v0.6.3/go.mod h1:KhztQcZtMQ46gOjZcmCy557AKD29cbumGEV0BzwevwA=
 github.com/cloudwego/kitex v0.0.4/go.mod h1:EIjPJ4Dom2ornk7xDCdKpUpOnf4Tulevimh4Tn05OGc=
 github.com/cloudwego/kitex v0.1.4/go.mod h1:qxxpIUl5zvbcvcQeKrlm2t2f1BBxt4EPMksBUFwr6QA=
 github.com/cloudwego/kitex v0.2.0/go.mod h1:1p4rtGIIiFZMOePYbSPgLkIhdhdfhEtVOJSti/k9vK4=
@@ -445,8 +445,8 @@ github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a h1:1Ql4WCmhHO3D
 github.com/hertz-contrib/cors v0.0.0-20230307061136-1fe747ea6a2a/go.mod h1:jp/NUmgFN/BYGPfkLrFMxIhwX1Tevm7P37P8PsoM9u8=
 github.com/hertz-contrib/gzip v0.0.1 h1:fPCnSZIDT4Gd8ZTuoCCJXek0opUsN89T2djdEW7Awr4=
 github.com/hertz-contrib/gzip v0.0.1/go.mod h1:Fom/vnPMLA3UJ/P8fsZO8izjWG82m53BGO48lW1U1l8=
-github.com/hertz-contrib/http2 v0.1.5 h1:4AwrEXyeXA0dOvQ2GEX4ASpV+uuwIaeVdZAokDcRvJA=
-github.com/hertz-contrib/http2 v0.1.5/go.mod h1:wjsm9+u4yvjJy4mjsp4SfE6gjvCHKkkUq2Sc/f4LITM=
+github.com/hertz-contrib/http2 v0.1.7 h1:ao5esLuQxiLMDNTRkqdlWMiCniC/EJRtSK/0SUrXbzo=
+github.com/hertz-contrib/http2 v0.1.7/go.mod h1:m42hrl8fiTwE4p8c7JdRUZpkePEthvV89q3elL2GeD0=
 github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386 h1:2eA9mfuQXp5Q3iw/6eRHSauGXdgwoieo1M+n/Prr3sw=
 github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386/go.mod h1:AbbWS9XwvXFwC7f9O9sH6Z78Pw508D5YPXgII+SCEHc=
 github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1 h1:4KR/JoIc8PSbVucOzsLSJOtVgDowwNG6/C/GkrpPXHI=

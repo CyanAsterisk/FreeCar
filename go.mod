@@ -10,7 +10,7 @@ require (
 	github.com/bytedance/sonic v1.8.3
 	github.com/cloudwego/hertz v0.6.4
 	github.com/cloudwego/kitex v0.5.2
-	github.com/docker/docker v20.10.23+incompatible
+	github.com/docker/docker v24.0.2+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/gzip v0.0.1

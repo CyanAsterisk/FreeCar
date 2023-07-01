@@ -3,7 +3,7 @@ module github.com/CyanAsterisk/FreeCar
 go 1.18
 
 require (
-	aidanwoods.dev/go-paseto v1.3.0
+	aidanwoods.dev/go-paseto v1.4.0
 	github.com/alibaba/sentinel-golang v1.0.4
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
@@ -37,6 +37,7 @@ require (
 )
 
 require (
+	aidanwoods.dev/go-result v0.0.0-20230617093509-2c57d7732f54 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

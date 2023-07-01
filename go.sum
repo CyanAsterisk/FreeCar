@@ -1,5 +1,7 @@
-aidanwoods.dev/go-paseto v1.3.0 h1:s2pNpY+2PqCoYVcjirSH1afp94MXNw22fLfbtraXoyI=
-aidanwoods.dev/go-paseto v1.3.0/go.mod h1:VgTqIf7uRQXGDN0SnlEWI+9gQKGsaIH5if9eX6qzZjU=
+aidanwoods.dev/go-paseto v1.4.0 h1:UuX9GcdFCGGYrg6qpZmQSHvyTv8YxEvXTpz1GqRoaKU=
+aidanwoods.dev/go-paseto v1.4.0/go.mod h1:nvAsWRDOKyTCNuKhVZprtb3lkVzZECUZ4LAuN/rkkmQ=
+aidanwoods.dev/go-result v0.0.0-20230617093509-2c57d7732f54 h1:D4xKM5zeP8OHMy8il4nwMssVBr9k3fM3iKeGH0lNIgw=
+aidanwoods.dev/go-result v0.0.0-20230617093509-2c57d7732f54/go.mod h1:yridkWghM7AXSFA6wzx0IbsurIm1Lhuro3rYef8FBHM=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=

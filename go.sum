@@ -443,8 +443,10 @@ github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8 h1:yE9ULgp02BhY
 github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8/go.mod h1:Nhe/DM3671a5udlv2AdV2ni/MZzgfv2qrPL5nIi3EGQ=
 github.com/hertz-contrib/gzip v0.0.1 h1:fPCnSZIDT4Gd8ZTuoCCJXek0opUsN89T2djdEW7Awr4=
 github.com/hertz-contrib/gzip v0.0.1/go.mod h1:Fom/vnPMLA3UJ/P8fsZO8izjWG82m53BGO48lW1U1l8=
-github.com/hertz-contrib/http2 v0.1.5 h1:4AwrEXyeXA0dOvQ2GEX4ASpV+uuwIaeVdZAokDcRvJA=
-github.com/hertz-contrib/http2 v0.1.5/go.mod h1:wjsm9+u4yvjJy4mjsp4SfE6gjvCHKkkUq2Sc/f4LITM=
+github.com/hertz-contrib/http2 v0.1.7 h1:ao5esLuQxiLMDNTRkqdlWMiCniC/EJRtSK/0SUrXbzo=
+github.com/hertz-contrib/http2 v0.1.7/go.mod h1:m42hrl8fiTwE4p8c7JdRUZpkePEthvV89q3elL2GeD0=
+github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386 h1:2eA9mfuQXp5Q3iw/6eRHSauGXdgwoieo1M+n/Prr3sw=
+github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386/go.mod h1:AbbWS9XwvXFwC7f9O9sH6Z78Pw508D5YPXgII+SCEHc=
 github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1 h1:4KR/JoIc8PSbVucOzsLSJOtVgDowwNG6/C/GkrpPXHI=
 github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1/go.mod h1:dLQsSFKUVF4pya7kLlF6l1T69+mOPObotXGJO8ptbho=
 github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1 h1:Ua/ImpcbYt8ohRolat3Ua7BEmeI7V4INRIbFKZJUndc=

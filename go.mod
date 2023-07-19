@@ -14,7 +14,8 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/gzip v0.0.1
-	github.com/hertz-contrib/http2 v0.1.5
+	github.com/hertz-contrib/http2 v0.1.7
+	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
 	github.com/hertz-contrib/opensergo v0.0.1

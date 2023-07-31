@@ -20,27 +20,38 @@ FreeCar 是一个基于 Hertz 与 Kitex 的云原生分时汽车租赁系统套�
 
 ## 技术栈
 
-| 功能        | 实现                  |
-|-----------|---------------------|
-| HTTP 框架   | Hertz               |
-| RPC 框架    | Kitex               |
-| 数据库       | MongoDB、MySQL、Redis |
-| 身份鉴权      | Paseto              |
-| 服务发现与配置中心 | Consul              |
-| 消息队列      | RabbitMQ            |
-| 服务治理      | OpenTelemetry       |
-| 限流熔断      | Sentinel            |
-| 对象存储      | Minio               |
-| 图像识别      | 百度 OCR              |
-| CI        | GitHub Actions      |
+| 功能      | 实现                  |
+|---------|---------------------|
+| HTTP 框架 | Hertz               |
+| RPC 框架  | Kitex               |
+| 数据库     | MongoDB、MySQL、Redis |
+| 身份鉴权    | Paseto              |
+| 服务与配置中心 | Consul              |
+| 消息队列    | RabbitMQ            |
+| 服务治理    | OpenTelemetry       |
+| 指标监控    | Prometheus          |
+| 链路追踪    | Jaeger              |
+| 限流熔断    | Sentinel            |
+| 对象存储    | MinIO               |
+| 图像识别    | 百度 OCR              |
+| CI      | GitHub Actions      |
 
 ## 页面展示
 
+### 小程序端
+
 小程序端地址 [FreeCar-MP](https://github.com/CyanAsterisk/FreeCar-MP)
 
-后台管理端地址 TODO
-
 ![display.png](img/display.png)
+
+### 后台管理系统
+
+后台管理系统地址 [FreeCar-Admin](https://github.com/CyanAsterisk/FreeCar-Admin)
+
+![data-analize.png](img/data-analize.png)
+
+![back.png](img/back.png)
+
 
 ## 目录介绍
 
@@ -56,7 +67,7 @@ FreeCar 是一个基于 Hertz 与 Kitex 的云原生分时汽车租赁系统套�
 |---------|----------------------|
 | API     | 基于 Hertz 的网关服务       |
 | User    | 用户认证服务               |
-| Blob    | 与图片和 Minio 对象存储相关的服务 |
+| Blob    | 与图片和 MinIO 对象存储相关的服务 |
 | Car     | 汽车服务                 |
 | Profile | 主页与图片识别服务            |
 | Trip    | 行程服务                 |
@@ -101,11 +112,39 @@ make trip
 
 ![jaeger.jpg](img/jaeger.png)
 
+![jaeger2.png](img/jaeger2.png)
+
 ### Prometheus
 
 > 在浏览器上访问 `http://127.0.0.1:3000/`
 
 ![prometheus.jpg](img/prometheus.png)
+
+### MinIO
+
+> 在浏览器上访问 `http://127.0.0.1:9000/`
+
+![minio.jpg](img/minio.png)
+
+## 通过 K8s 部署基础环境
+
+```shell
+cd deployment/freecar-k8s
+make all
+```
+
+### Pod
+
+![pod.png](img/pod.png)
+
+### PVC
+
+![pvc.png](img/pvc.png)
+
+### Service
+
+![service.png](img/service.png)
+
 
 ## 开发指南
 
@@ -142,7 +181,8 @@ service UserService {
 
 #### Kitex
 
-首先在 `shared` 文件夹下生成 `kitex_gen`，再在相对应服务文件夹下依赖 `kitex_gen` 进行生成。在新增服务目录下执行，每次仅需更改服务名与 IDL 路径。
+首先在 `shared` 文件夹下生成 `kitex_gen`，再在相对应服务文件夹下依赖 `kitex_gen` 进行生成。在新增服务目录下执行，每次仅需更改服务名与
+IDL 路径。
 
 ```shell
 kitex -module github.com/CyanAsterisk/FreeCar ./../idl/rpc/user.thrift

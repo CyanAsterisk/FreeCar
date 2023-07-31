@@ -125,7 +125,7 @@ make trip
 
 ![minio.jpg](img/minio.png)
 
-## Deploy the Basic Environment Through K8s
+## K8s Deployment
 
 ```shell
 cd deployment/freecar-k8s

@@ -15,7 +15,6 @@ require (
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/http2 v0.1.7
-	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
 	github.com/hertz-contrib/opensergo v0.0.1
@@ -29,7 +28,7 @@ require (
 	github.com/medivhzhan/weapp/v2 v2.5.0
 	github.com/minio/minio-go/v7 v7.0.59
 	github.com/spf13/viper v1.16.0
-	github.com/streadway/amqp v1.0.0
+	github.com/streadway/amqp v1.1.0
 	go.mongodb.org/mongo-driver v1.11.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.5.0

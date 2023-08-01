@@ -7,15 +7,14 @@ require (
 	github.com/alibaba/sentinel-golang v1.0.4
 	github.com/apache/thrift v0.13.0
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/bytedance/sonic v1.8.3
+	github.com/bytedance/sonic v1.8.8
 	github.com/cloudwego/hertz v0.6.4
-	github.com/cloudwego/kitex v0.5.2
+	github.com/cloudwego/kitex v0.6.2
 	github.com/docker/docker v20.10.23+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/http2 v0.1.7
-	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/obs-opentelemetry/logging/logrus v0.1.1
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.1.1
 	github.com/hertz-contrib/opensergo v0.0.1
@@ -43,6 +42,7 @@ require (
 	github.com/armon/go-metrics v0.4.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/cloudwego/configmanager v0.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
@@ -76,15 +76,15 @@ require (
 require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
-	github.com/bytedance/gopkg v0.0.0-20220817015305-b879a72dc90f // indirect
+	github.com/bytedance/gopkg v0.0.0-20230531144706-a12972768317 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/chenzhuoyu/iasm v0.0.0-20230222070914-0b1b64b0e762 // indirect
 	github.com/choleraehyq/pid v0.0.16 // indirect
 	github.com/cloudwego/fastpb v0.0.4 // indirect
 	github.com/cloudwego/frugal v0.1.6 // indirect
-	github.com/cloudwego/netpoll v0.3.2 // indirect
-	github.com/cloudwego/thriftgo v0.2.9 // indirect
+	github.com/cloudwego/netpoll v0.4.0 // indirect
+	github.com/cloudwego/thriftgo v0.2.11 // indirect
 	github.com/docker/distribution v2.8.1+incompatible // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect

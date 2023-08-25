@@ -1,22 +1,16 @@
-init:
-	hz new -idl ./../../idl/api.proto -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
-	rm go.mod .gitignore
-	git checkout router.go .hz main.go
+update:
+	hz update -idl ./../../idl/http/$(service).thrift
 
-generate:
-	hz new -idl ./../../idl/http/$(service).thrift -mod github.com/CyanAsterisk/FreeCar/server/cmd/api
-	rm go.mod .gitignore
-	git checkout router.go .hz main.go
 user:
-	make service=user generate
+	make service=user update
 car:
-	make service=car generate
+	make service=car update
 profile:
-	make service=profile generate
+	make service=profile update
 trip:
-	make service=trip generate
+	make service=trip update
 gpt:
-	make service=gpt generate
+	make service=gpt update
 
 all:
 	make user

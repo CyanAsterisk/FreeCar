@@ -2,7 +2,7 @@
 
 English | [中文](README_zh.md)
 
-FreeCar is a cloud-native time-sharing car rental system suite based on Hertz and Kitex.
+FreeCar is a cloud-native time-sharing car rental system suite based on [Hertz](https://github.com/cloudwego/hertz) and [Kitex](https://github.com/cloudwego/kitex).
 
 ## Project Architecture
 

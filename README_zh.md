@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-FreeCar 是一个基于 Hertz 与 Kitex 的云原生分时汽车租赁系统套件。
+FreeCar 是一个基于 [Hertz](https://github.com/cloudwego/hertz) 与 [Kitex](https://github.com/cloudwego/kitex) 的云原生分时汽车租赁系统套件。
 
 ## 项目架构
 

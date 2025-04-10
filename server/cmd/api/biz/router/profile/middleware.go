@@ -77,8 +77,9 @@ func _profile0Mw() []app.HandlerFunc {
 }
 
 func _getprofileMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		common.PasetoAuth(consts.User),
+	}
 }
 
 func _deleteprofileMw() []app.HandlerFunc {

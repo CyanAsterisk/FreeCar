@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/mysql"
@@ -349,7 +350,7 @@ func (s *UserServiceImpl) Pay(ctx context.Context, req *user.PayRequest) (resp *
 	resp = new(user.PayResponse)
 	var u *mysql.User
 	if u, err = s.UserMysqlManager.GetUserByAccountId(req.AccountId); err != nil {
-		if err == errno.RecordNotFound {
+		if errors.Is(err, errno.RecordNotFound) {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
 		} else {
 			klog.Error("get user error", err)

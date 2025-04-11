@@ -1,7 +1,8 @@
 package org.lanlance.freecartrade.service;
 
-import org.lanlance.freecartrade.model.req.RechargeRequest;
+
+import java.math.BigDecimal;
 
 public interface RechargeServiceIface {
-    void recharge(RechargeRequest request);
+    void recharge(String userId, BigDecimal amount);
 }

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: freecar-trade
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        enabled: true
+        format: YAML
+        prefix: freecar
+        default-context: java
+        data-key: trade_srv
+        watch:
+          enabled: true

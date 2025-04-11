@@ -23,21 +23,20 @@ public class TradeController {
     private RechargeServiceIface rechargeService;
 
     @PostMapping("/recharge")
-    public Result<Void> recharge(HttpServletRequest request, @RequestBody BigDecimal amount) {
-        String userId = (String) request.getAttribute(PasetoAuthInterceptor.ACCOUNT_ID);
-        if (userId == null || userId.isEmpty()) {
-            log.error("recharge# UserID is null or empty");
-            return ResultUtil.error(ResultUtil.UNAUTHORIZED, "unauthorized");
-        }
+    public Result<Void> recharge(HttpServletRequest httpReq, @RequestBody RechargeRequest req) {
+        BigDecimal amount = req.getAmount();
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             log.error("recharge# Invalid amount: {}", amount);
             return ResultUtil.error("Invalid amount");
         }
-
-        RechargeRequest rechargeRequest = new RechargeRequest(userId, amount);
+        String userId = (String) httpReq.getAttribute(PasetoAuthInterceptor.ACCOUNT_ID);
+        if (userId == null || userId.isEmpty()) {
+            log.error("recharge# UserID is null or empty");
+            return ResultUtil.error(ResultUtil.UNAUTHORIZED, "unauthorized");
+        }
 
         try {
-            rechargeService.recharge(rechargeRequest);
+            rechargeService.recharge(userId, amount);
             return ResultUtil.success();
         } catch (Exception e) {
             log.error("recharge# Recharge failed: ", e);

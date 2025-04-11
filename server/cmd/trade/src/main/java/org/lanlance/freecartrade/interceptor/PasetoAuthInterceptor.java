@@ -27,7 +27,9 @@ import java.util.Base64;
 @Component
 @RequiredArgsConstructor
 public class PasetoAuthInterceptor implements HandlerInterceptor {
+
     private final PasetoConfig pasetoConfig;
+
     private static final String AUTHORIZATION_HEADER = "authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
     public static final String ACCOUNT_ID = "accountId";

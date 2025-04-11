@@ -3,7 +3,6 @@ package org.lanlance.freecartrade.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lanlance.freecartrade.mapper.UserMapper;
-import org.lanlance.freecartrade.model.req.RechargeRequest;
 import org.lanlance.freecartrade.service.RechargeServiceIface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,7 @@ public class RechargeServiceImpl implements RechargeServiceIface {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void recharge(RechargeRequest request) {
-        String userId = request.getUserId();
-        BigDecimal amount = request.getAmount();
+    public void recharge(String userId, BigDecimal amount) {
         // Check if userId is existing
         boolean userExists = userMapper.existsById(userId);
         if (!userExists) {

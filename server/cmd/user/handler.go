@@ -15,6 +15,7 @@ import (
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/paseto"
+	"github.com/shopspring/decimal"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.
@@ -227,7 +228,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 	resp = new(user.GetUserInfoResponse)
 	u, err := s.UserMysqlManager.GetUserByAccountId(req.AccontId)
 	if err != nil {
-		if err == errno.RecordNotFound {
+		if errors.Is(err, errno.RecordNotFound) {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
 			return resp, nil
 		}
@@ -240,7 +241,7 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 		Username:    u.Username,
 		PhoneNumber: u.PhoneNumber,
 		AvatarUrl:   "",
-		Balance:     u.Balance,
+		Balance:     int32(u.Balance.IntPart()),
 	}
 	if u.AvatarBlobId != "" {
 		res, err := s.BlobManager.GetBlobURL(ctx, &blob.GetBlobURLRequest{
@@ -358,7 +359,8 @@ func (s *UserServiceImpl) Pay(ctx context.Context, req *user.PayRequest) (resp *
 		}
 		return resp, nil
 	}
-	u.Balance -= req.FeeCent
+
+	u.Balance = u.Balance.Sub(decimal.NewFromInt32(req.FeeCent))
 	if err = s.UserMysqlManager.UpdateUser(u); err != nil {
 		klog.Error("update user error", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr.WithMessage("update user error"))

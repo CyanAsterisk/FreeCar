@@ -50,12 +50,12 @@ services:
       - "9001:9001"
     restart: always
 
-  # Consul
   consul:
     image: consul:1.15
     command: agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui
     volumes:
       - ./data/consul:/consul/data
+      - ./deployment/config/consul-config.json:/consul/config/config.json  # 新增配置文件挂载
     ports:
       - "8500:8500"
       - "8300:8300"

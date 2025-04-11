@@ -1,0 +1,6 @@
+{
+  "server_rejoin_age_max": "7200h",
+  "performance": {
+    "leave_drain_time": "5m"
+  }
+}

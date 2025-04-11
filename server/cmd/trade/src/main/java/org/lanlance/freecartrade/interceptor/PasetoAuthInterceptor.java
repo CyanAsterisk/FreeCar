@@ -12,7 +12,6 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.lanlance.freecartrade.config.PasetoConfig;
 import org.lanlance.freecartrade.util.CalcUtil;
-import org.lanlance.freecartrade.util.ResultUtil;
 
 import org.paseto4j.version4.PasetoPublic;
 import org.springframework.stereotype.Component;
@@ -38,8 +37,8 @@ public class PasetoAuthInterceptor implements HandlerInterceptor {
         try {
             // Get Authorization header
             String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-            if (!authHeader.startsWith(TOKEN_PREFIX)) {
-                ResultUtil.error(ResultUtil.UNAUTHORIZED, "缺少或无效的认证头");
+            if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
             }
             String token = authHeader.substring(TOKEN_PREFIX.length());

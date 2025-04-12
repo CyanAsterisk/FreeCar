@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -20,7 +18,7 @@ public class RechargeServiceImpl implements RechargeServiceIface {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void recharge(String userId, BigDecimal amount) {
+    public void recharge(String userId, Integer amount) {
         // Check if userId is existing
         boolean userExists = userMapper.existsById(userId);
         if (!userExists) {

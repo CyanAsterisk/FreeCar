@@ -1,14 +1,11 @@
 package mysql
 
 import (
-	"errors"
-
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/pkg/md5"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -16,9 +13,9 @@ type User struct {
 	ID           string `gorm:"primarykey"`
 	PhoneNumber  string
 	AvatarBlobId string
-	Username     string          `gorm:"type:varchar(40)"`
-	OpenID       string          `gorm:"column:openid;type:varchar(100);uniqueIndex"`
-	Balance      decimal.Decimal `gorm:"column:balance;type:decimal(19,2)"`
+	Username     string `gorm:"type:varchar(40)"`
+	OpenID       string `gorm:"column:openid;type:varchar(100);uniqueIndex"`
+	Balance      int32  `gorm:"column:balance"`
 	Deleted      gorm.DeletedAt
 }
 
@@ -109,11 +106,11 @@ func (m *UserManager) UpdateUser(user *User) error {
 	if user.AvatarBlobId != "" {
 		u["avatar_blob_id"] = user.AvatarBlobId
 	}
-	if val, _ := user.Balance.Value(); val != 0 {
+	if user.Balance != 0 {
 		u["balance"] = user.Balance
 	}
 	err := m.db.Model(&User{ID: user.ID}).Updates(u).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if err == gorm.ErrRecordNotFound {
 		return errno.RecordNotFound
 	}
 	return err

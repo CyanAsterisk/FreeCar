@@ -8,6 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Configure Docker daemon
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{ "experimental": true, "features": { "buildkit": true } }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker || sudo service docker restart
+
       - uses: docker-practice/actions-setup-docker@master
         timeout-minutes: 12
       - run: |

@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.math.BigDecimal;
-
 @Mapper
 public interface UserMapper {
 
@@ -14,5 +12,5 @@ public interface UserMapper {
     boolean existsById(@Param("userId") String userId);
 
     @Update("UPDATE user SET balance = balance + #{amount} WHERE id = #{userId}")
-    int updateBalance(@Param("userId") String userId, @Param("amount") BigDecimal amount);
+    int updateBalance(@Param("userId") String userId, @Param("amount") Integer amount);
 }

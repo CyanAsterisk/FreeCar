@@ -24,8 +24,8 @@ public class TradeController {
 
     @PostMapping("/recharge")
     public Result<Void> recharge(HttpServletRequest httpReq, @RequestBody RechargeRequest req) {
-        BigDecimal amount = req.getAmount();
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+        Integer amount = req.getAmount();
+        if (amount == null || amount <= 0) {
             log.error("recharge# Invalid amount: {}", amount);
             return ResultUtil.error("Invalid amount");
         }

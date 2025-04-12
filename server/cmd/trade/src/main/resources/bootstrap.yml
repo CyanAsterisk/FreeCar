@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: freecar-trade
   cloud:
     consul:
       host: localhost
@@ -13,3 +11,8 @@ spring:
         data-key: trade_srv
         watch:
           enabled: true
+      discovery:
+        enabled: true
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        health-check-path: /actuator/health

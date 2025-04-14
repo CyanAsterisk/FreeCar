@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trade/tradeservice"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"

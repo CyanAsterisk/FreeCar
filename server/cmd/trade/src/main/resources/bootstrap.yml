@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: trade-srv
   cloud:
     consul:
       host: localhost
@@ -16,3 +18,12 @@ spring:
         service-name: ${spring.application.name}
         port: ${server.port}
         health-check-path: /actuator/health
+        health-check-interval: 10s
+        health-check-timeout: 5s
+        metadata:
+          thrift-ports: ${thrift.trade.port}
+          api-port: ${server.port}
+          service-type: both
+        tags:
+          - rpc-service
+          - api-service

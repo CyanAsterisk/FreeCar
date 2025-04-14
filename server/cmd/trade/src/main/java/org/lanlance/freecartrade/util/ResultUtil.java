@@ -1,6 +1,7 @@
 package org.lanlance.freecartrade.util;
 
 import org.lanlance.freecartrade.model.resp.Result;
+import org.lanlance.freecartrade.rpc.thrift_gen.trade.BaseResponse;
 
 public class ResultUtil {
 
@@ -33,5 +34,26 @@ public class ResultUtil {
     // 失败，自定义错误码和错误信息
     public static <T> Result<T> error(Integer code, String msg) {
         return new Result<>(code, msg, null);
+    }
+
+    public static BaseResponse successThrift() {
+        BaseResponse response = new BaseResponse();
+        response.setStatus_code(SUCCESS);
+        response.setStatus_msg("ok");
+        return response;
+    }
+
+    public static BaseResponse successThrift(String msg) {
+        BaseResponse response = new BaseResponse();
+        response.setStatus_code(SUCCESS);
+        response.setStatus_msg(msg);
+        return response;
+    }
+
+    public static BaseResponse errorThrift(String msg) {
+        BaseResponse response = new BaseResponse();
+        response.setStatus_code(SERVER_INTERNAL_ERROR);
+        response.setStatus_msg(msg);
+        return response;
     }
 }

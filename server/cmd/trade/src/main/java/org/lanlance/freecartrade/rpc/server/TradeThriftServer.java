@@ -7,6 +7,7 @@ import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.transport.TNonblockingServerSocket;
 import org.apache.thrift.transport.TTransportException;
+import org.lanlance.freecartrade.rpc.server.impl.TradeServiceImpl;
 import org.lanlance.freecartrade.rpc.thrift_gen.TradeService;
 import org.springframework.beans.factory.DisposableBean;
 

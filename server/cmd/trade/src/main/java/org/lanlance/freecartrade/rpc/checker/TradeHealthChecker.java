@@ -1,4 +1,4 @@
-package org.lanlance.freecartrade.rpc.server;
+package org.lanlance.freecartrade.rpc.checker;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

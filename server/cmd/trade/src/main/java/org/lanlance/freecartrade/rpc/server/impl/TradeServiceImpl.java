@@ -1,4 +1,4 @@
-package org.lanlance.freecartrade.rpc.server;
+package org.lanlance.freecartrade.rpc.server.impl;
 
 import org.lanlance.freecartrade.rpc.thrift_gen.PayRequest;
 import org.lanlance.freecartrade.rpc.thrift_gen.PayResponse;

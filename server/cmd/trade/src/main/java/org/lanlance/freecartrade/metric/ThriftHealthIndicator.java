@@ -1,6 +1,6 @@
 package org.lanlance.freecartrade.metric;
 
-import org.lanlance.freecartrade.rpc.server.TradeHealthChecker;
+import org.lanlance.freecartrade.rpc.checker.TradeHealthChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;

@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/apache/thrift/lib/go/thrift"
+	"strings"
 )
 
 type PayRequest struct {
-	FeeCent int32 `thrift:"fee_cent,1" frugal:"1,default,i32" json:"fee_cent"`
+	AccountId string `thrift:"account_id,1" frugal:"1,default,string" json:"account_id"`
+	FeeCent   int32  `thrift:"fee_cent,2" frugal:"2,default,i32" json:"fee_cent"`
 }
 
 func NewPayRequest() *PayRequest {
@@ -20,15 +22,23 @@ func NewPayRequest() *PayRequest {
 func (p *PayRequest) InitDefault() {
 }
 
+func (p *PayRequest) GetAccountId() (v string) {
+	return p.AccountId
+}
+
 func (p *PayRequest) GetFeeCent() (v int32) {
 	return p.FeeCent
+}
+func (p *PayRequest) SetAccountId(val string) {
+	p.AccountId = val
 }
 func (p *PayRequest) SetFeeCent(val int32) {
 	p.FeeCent = val
 }
 
 var fieldIDToName_PayRequest = map[int16]string{
-	1: "fee_cent",
+	1: "account_id",
+	2: "fee_cent",
 }
 
 func (p *PayRequest) Read(iprot thrift.TProtocol) (err error) {
@@ -50,8 +60,16 @@ func (p *PayRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I32 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.I32 {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -88,6 +106,17 @@ ReadStructEndError:
 
 func (p *PayRequest) ReadField1(iprot thrift.TProtocol) error {
 
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccountId = _field
+	return nil
+}
+func (p *PayRequest) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int32
 	if v, err := iprot.ReadI32(); err != nil {
 		return err
@@ -106,6 +135,10 @@ func (p *PayRequest) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -127,10 +160,10 @@ WriteStructEndError:
 }
 
 func (p *PayRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("fee_cent", thrift.I32, 1); err != nil {
+	if err = oprot.WriteFieldBegin("account_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI32(p.FeeCent); err != nil {
+	if err := oprot.WriteString(p.AccountId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -141,6 +174,22 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+func (p *PayRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("fee_cent", thrift.I32, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI32(p.FeeCent); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *PayRequest) String() string {
@@ -157,13 +206,23 @@ func (p *PayRequest) DeepEqual(ano *PayRequest) bool {
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.FeeCent) {
+	if !p.Field1DeepEqual(ano.AccountId) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.FeeCent) {
 		return false
 	}
 	return true
 }
 
-func (p *PayRequest) Field1DeepEqual(src int32) bool {
+func (p *PayRequest) Field1DeepEqual(src string) bool {
+
+	if strings.Compare(p.AccountId, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *PayRequest) Field2DeepEqual(src int32) bool {
 
 	if p.FeeCent != src {
 		return false

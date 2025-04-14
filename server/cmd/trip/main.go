@@ -41,7 +41,7 @@ func main() {
 	initialize.InitUser()
 
 	impl := new(TripServiceImpl)
-	impl.PayManager = pay.NewManager(config.UserClient)
+	impl.PayManager = pay.NewManager(config.TradeClient)
 
 	impl.CarManager = &car.Manager{
 		CarService: config.CarClient,

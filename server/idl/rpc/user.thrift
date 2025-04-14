@@ -97,15 +97,6 @@ struct GetAllUsersResponse {
     2:  list<user.User> users
 }
 
-struct PayRequest{
-    1: string account_id
-    2: i32  fee_cent
-}
-
-struct PayResponse{
-    1: common.BaseResponse base_resp
-}
-
 service UserService {
     LoginResponse Login(1: LoginRequest req)
     AdminLoginResponse AdminLogin(1: AdminLoginRequest req)
@@ -115,7 +106,6 @@ service UserService {
     AddUserResponse AddUser(1: AddUserRequest req)
     DeleteUserResponse DeleteUser(1: DeleteUserRequest req)
     UpdateUserResponse UpdateUser(1: UpdateUserRequest req)
-    PayResponse Pay(1: PayRequest req)
     GetSomeUsersResponse GetSomeUsers(1: GetSomeUsersRequest req)
     GetAllUsersResponse GetAllUsers(1: GetAllUsersRequest req)
 }

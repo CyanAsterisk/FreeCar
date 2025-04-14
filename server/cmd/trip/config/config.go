@@ -27,6 +27,7 @@ type ServerConfig struct {
 	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`
 	UserSrvInfo    UserSrvConfig    `mapstructure:"user_srv" json:"user_srv"`
+	TradeSrvInfo   TradeSrvConfig   `mapstructure:"trade_srv" json:"trade_srv"`
 }
 
 type CarSrvConfig struct {
@@ -38,5 +39,9 @@ type ProfileSrvConfig struct {
 }
 
 type UserSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
+}
+
+type TradeSrvConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }

@@ -344,26 +344,3 @@ func (s *UserServiceImpl) GetAllUsers(ctx context.Context, req *user.GetAllUsers
 	resp.Users = uInfos
 	return resp, nil
 }
-
-// Pay implements the UserServiceImpl interface.
-func (s *UserServiceImpl) Pay(ctx context.Context, req *user.PayRequest) (resp *user.PayResponse, err error) {
-	resp = new(user.PayResponse)
-	var u *mysql.User
-	if u, err = s.UserMysqlManager.GetUserByAccountId(req.AccountId); err != nil {
-		if errors.Is(err, errno.RecordNotFound) {
-			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
-		} else {
-			klog.Error("get user error", err)
-			resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr.WithMessage("get user error"))
-		}
-		return resp, nil
-	}
-	u.Balance -= req.FeeCent
-	if err = s.UserMysqlManager.UpdateUser(u); err != nil {
-		klog.Error("update user error", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.UserSrvErr.WithMessage("update user error"))
-		return resp, nil
-	}
-	resp.BaseResp = tools.BuildBaseResp(nil)
-	return resp, nil
-}

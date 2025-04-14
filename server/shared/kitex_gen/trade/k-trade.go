@@ -48,8 +48,22 @@ func (p *PayRequest) FastRead(buf []byte) (int, error) {
 		}
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I32 {
+			if fieldTypeId == thrift.STRING {
 				l, err = p.FastReadField1(buf[offset:])
+				offset += l
+				if err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
+				offset += l
+				if err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.I32 {
+				l, err = p.FastReadField2(buf[offset:])
 				offset += l
 				if err != nil {
 					goto ReadFieldError
@@ -99,6 +113,20 @@ ReadStructEndError:
 func (p *PayRequest) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
+		return offset, err
+	} else {
+		offset += l
+
+		p.AccountId = v
+
+	}
+	return offset, nil
+}
+
+func (p *PayRequest) FastReadField2(buf []byte) (int, error) {
+	offset := 0
+
 	if v, l, err := bthrift.Binary.ReadI32(buf[offset:]); err != nil {
 		return offset, err
 	} else {
@@ -119,6 +147,7 @@ func (p *PayRequest) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWrit
 	offset := 0
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "PayRequest")
 	if p != nil {
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
@@ -131,6 +160,7 @@ func (p *PayRequest) BLength() int {
 	l += bthrift.Binary.StructBeginLength("PayRequest")
 	if p != nil {
 		l += p.field1Length()
+		l += p.field2Length()
 	}
 	l += bthrift.Binary.FieldStopLength()
 	l += bthrift.Binary.StructEndLength()
@@ -139,7 +169,16 @@ func (p *PayRequest) BLength() int {
 
 func (p *PayRequest) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "fee_cent", thrift.I32, 1)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "account_id", thrift.STRING, 1)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.AccountId)
+
+	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
+	return offset
+}
+
+func (p *PayRequest) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+	offset := 0
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "fee_cent", thrift.I32, 2)
 	offset += bthrift.Binary.WriteI32(buf[offset:], p.FeeCent)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
@@ -148,7 +187,16 @@ func (p *PayRequest) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWrit
 
 func (p *PayRequest) field1Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("fee_cent", thrift.I32, 1)
+	l += bthrift.Binary.FieldBeginLength("account_id", thrift.STRING, 1)
+	l += bthrift.Binary.StringLengthNocopy(p.AccountId)
+
+	l += bthrift.Binary.FieldEndLength()
+	return l
+}
+
+func (p *PayRequest) field2Length() int {
+	l := 0
+	l += bthrift.Binary.FieldBeginLength("fee_cent", thrift.I32, 2)
 	l += bthrift.Binary.I32Length(p.FeeCent)
 
 	l += bthrift.Binary.FieldEndLength()

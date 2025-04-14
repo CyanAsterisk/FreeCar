@@ -56,4 +56,5 @@ var (
 	RecordNotFound     = NewErrNo(int64(errno.Err_RecordNotFound), "record not found")
 	RecordAlreadyExist = NewErrNo(int64(errno.Err_RecordAlreadyExist), "record already exist")
 	DirtyData          = NewErrNo(int64(errno.Err_DirtyData), "dirty data")
+	TradeSrcErr        = NewErrNo(int64(errno.Err_TradeSrvErr), "rpc trade service error")
 )

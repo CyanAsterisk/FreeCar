@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/user/config"
-	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trade/tradeservice"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -16,7 +16,7 @@ import (
 )
 
 // InitTrade to init blob service
-func InitTrade() blobservice.Client {
+func InitTrade() tradeservice.Client {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		config.GlobalConsulConfig.Host,
@@ -31,7 +31,7 @@ func InitTrade() blobservice.Client {
 	)
 
 	// create a new client
-	c, err := blobservice.NewClient(
+	c, err := tradeservice.NewClient(
 		config.GlobalServerConfig.TradeSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance

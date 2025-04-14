@@ -22,4 +22,5 @@ enum Err {
     RecordNotFound     = 80000,
     RecordAlreadyExist = 80001,
     DirtyData          = 80003,
+    TradeSrvErr        = 90001,
 }

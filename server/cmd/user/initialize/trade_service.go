@@ -15,8 +15,8 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 )
 
-// InitBlob to init blob service
-func InitBlob() blobservice.Client {
+// InitTrade to init blob service
+func InitTrade() blobservice.Client {
 	// init resolver
 	r, err := consul.NewConsulResolver(fmt.Sprintf("%s:%d",
 		config.GlobalConsulConfig.Host,
@@ -25,19 +25,19 @@ func InitBlob() blobservice.Client {
 		hlog.Fatalf("new consul client failed: %s", err.Error())
 	}
 	provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(config.GlobalServerConfig.BlobSrvInfo.Name),
+		provider.WithServiceName(config.GlobalServerConfig.TradeSrvInfo.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
 		provider.WithInsecure(),
 	)
 
 	// create a new client
 	c, err := blobservice.NewClient(
-		config.GlobalServerConfig.BlobSrvInfo.Name,
+		config.GlobalServerConfig.TradeSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.BlobSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.TradeSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)

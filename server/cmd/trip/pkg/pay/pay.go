@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
+	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trade"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/trade/tradeservice"
 	"github.com/CyanAsterisk/FreeCar/server/shared/tools"
@@ -32,5 +33,5 @@ func (m *Manager) Pay(ctx context.Context, aid id.AccountID, feeCent int32) erro
 	if err != nil {
 		return errno.RPCUserSrvErr
 	}
-	return tools.ParseBaseResp(resp.BaseResp)
+	return tools.ParseBaseResp(&base.BaseResponse{StatusCode: resp.BaseResp.StatusCode, StatusMsg: resp.BaseResp.StatusMsg})
 }

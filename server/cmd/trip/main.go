@@ -38,7 +38,7 @@ func main() {
 	defer p.Shutdown(context.Background())
 	initialize.InitCar()
 	initialize.InitProfile()
-	initialize.InitUser()
+	initialize.InitTrade()
 
 	impl := new(TripServiceImpl)
 	impl.PayManager = pay.NewManager(config.TradeClient)

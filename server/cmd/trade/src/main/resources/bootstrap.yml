@@ -16,14 +16,11 @@ spring:
       discovery:
         enabled: true
         service-name: ${spring.application.name}
-        port: ${server.port}
+        port: ${thrift.trade.port}
         metadata:
           thrift-ports: ${thrift.trade.port}
-          api-port: ${server.port}
-          service-type: both
         tags:
           - rpc-service
-          - api-service
 management:
   endpoint:
     health:

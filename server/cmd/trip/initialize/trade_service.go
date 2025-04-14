@@ -35,7 +35,6 @@ func InitTrade() tradeservice.Client {
 		config.GlobalServerConfig.TradeSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
-		client.WithMuxConnection(1),                                // multiplexing
 		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.TradeSrvInfo.Name}),
 	)

@@ -17,6 +17,7 @@ public class PayServiceImpl implements PayServiceIface {
 
     @Override
     public void pay(String userId, Integer feeCent) {
+        log.info("PayServiceImpl pay userId: {}, feeCent: {}", userId, feeCent);
         userMapper.updateBalance(userId, feeCent);
     }
 }

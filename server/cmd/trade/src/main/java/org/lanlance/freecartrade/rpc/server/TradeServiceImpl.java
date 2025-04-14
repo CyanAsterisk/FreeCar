@@ -1,8 +1,8 @@
 package org.lanlance.freecartrade.rpc.server;
 
-import org.lanlance.freecartrade.rpc.thrift_gen.trade.PayRequest;
-import org.lanlance.freecartrade.rpc.thrift_gen.trade.PayResponse;
-import org.lanlance.freecartrade.rpc.thrift_gen.trade.TradeService;
+import org.lanlance.freecartrade.rpc.thrift_gen.PayRequest;
+import org.lanlance.freecartrade.rpc.thrift_gen.PayResponse;
+import org.lanlance.freecartrade.rpc.thrift_gen.TradeService;
 import org.lanlance.freecartrade.service.PayServiceIface;
 import org.lanlance.freecartrade.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;

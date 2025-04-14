@@ -17,7 +17,7 @@ spring:
         enabled: true
         service-name: ${spring.application.name}
         port: ${server.port}
-        health-check-path: /actuator/health
+        health-check-path: /health
         health-check-interval: 10s
         health-check-timeout: 5s
         metadata:

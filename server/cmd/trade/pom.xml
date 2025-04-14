@@ -135,26 +135,26 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.thrift.tools</groupId>
-                <artifactId>maven-thrift-plugin</artifactId>
-                <version>0.1.11</version>  <!-- 匹配Thrift版本 -->
-                <configuration>
-                    <thriftExecutable>/opt/homebrew/opt/thrift@0.13/bin/thrift</thriftExecutable>
-                    <thriftSourceRoot>../../idl/java</thriftSourceRoot>  <!-- IDL文件目录 -->
-                    <outputDirectory>src/main/java/org/lanlance/freecartrade/rpc/thrift_gen</outputDirectory>
-                    <generator>java</generator>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.thrift.tools</groupId>-->
+<!--                <artifactId>maven-thrift-plugin</artifactId>-->
+<!--                <version>0.1.11</version>  &lt;!&ndash; 匹配Thrift版本 &ndash;&gt;-->
+<!--                <configuration>-->
+<!--                    <thriftExecutable>/opt/homebrew/opt/thrift@0.13/bin/thrift</thriftExecutable>-->
+<!--                    <thriftSourceRoot>../../idl/java</thriftSourceRoot>  &lt;!&ndash; IDL文件目录 &ndash;&gt;-->
+<!--                    <outputDirectory>src/main/java/org/lanlance/freecartrade/rpc/thrift_gen</outputDirectory>-->
+<!--                    <generator>java</generator>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>generate-sources</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

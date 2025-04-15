@@ -35,25 +35,4 @@ public class ResultUtil {
     public static <T> Result<T> error(Integer code, String msg) {
         return new Result<>(code, msg, null);
     }
-
-    public static BaseResponse successThrift() {
-        BaseResponse response = new BaseResponse();
-        response.setStatus_code(SUCCESS);
-        response.setStatus_msg("ok");
-        return response;
-    }
-
-    public static BaseResponse successThrift(String msg) {
-        BaseResponse response = new BaseResponse();
-        response.setStatus_code(SUCCESS);
-        response.setStatus_msg(msg);
-        return response;
-    }
-
-    public static BaseResponse errorThrift(String msg) {
-        BaseResponse response = new BaseResponse();
-        response.setStatus_code(SERVER_INTERNAL_ERROR);
-        response.setStatus_msg(msg);
-        return response;
-    }
 }

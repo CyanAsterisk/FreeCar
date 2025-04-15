@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: trade_srv
   cloud:
     consul:
       host: localhost
@@ -14,14 +12,5 @@ spring:
         watch:
           enabled: true
       discovery:
-        enabled: true
+        port: ${server.port}
         service-name: ${spring.application.name}
-        port: ${thrift.trade.port}
-        metadata:
-          thrift-ports: ${thrift.trade.port}
-        tags:
-          - rpc-service
-management:
-  endpoint:
-    health:
-      show-details: always

@@ -1,7 +1,6 @@
 package org.lanlance.freecartrade.util;
 
 import org.lanlance.freecartrade.model.resp.Result;
-import org.lanlance.freecartrade.rpc.thrift_gen.BaseResponse;
 
 public class ResultUtil {
 

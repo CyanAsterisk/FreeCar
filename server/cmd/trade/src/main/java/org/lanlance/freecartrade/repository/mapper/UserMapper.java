@@ -1,4 +1,4 @@
-package org.lanlance.freecartrade.mapper;
+package org.lanlance.freecartrade.repository.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

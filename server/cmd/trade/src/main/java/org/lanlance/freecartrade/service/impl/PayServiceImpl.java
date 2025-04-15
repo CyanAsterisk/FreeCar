@@ -2,7 +2,7 @@ package org.lanlance.freecartrade.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.lanlance.freecartrade.mapper.UserMapper;
+import org.lanlance.freecartrade.repository.mapper.UserMapper;
 import org.lanlance.freecartrade.service.PayServiceIface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

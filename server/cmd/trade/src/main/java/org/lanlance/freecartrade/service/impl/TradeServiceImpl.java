@@ -30,7 +30,7 @@ public class TradeServiceImpl implements TradeServiceIface {
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void processTradeMessage(String content) {
         // parse message
         PayInfo payInfo;
@@ -44,8 +44,14 @@ public class TradeServiceImpl implements TradeServiceIface {
         }
         // Redis reduce balance
         try {
-            RedisDeductResult deductResult = redisService.deductBalance(payInfo.getAccountID(), payInfo.getFeeCent());
+            // MongoDB update status
+            boolean mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.PROCESSING);
+            if (!mongoResult) {
+                rabbitTemplate.convertAndSend("payment.retry", content);
+                return;
+            }
 
+            RedisDeductResult deductResult = redisService.deductBalance(payInfo.getAccountID(), payInfo.getFeeCent());
             if (!deductResult.isSuccess()) {
                 rabbitTemplate.convertAndSend("payment.retry", content);
                 return;
@@ -59,7 +65,7 @@ public class TradeServiceImpl implements TradeServiceIface {
                 }
 
                 // MongoDB update status
-                boolean mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.PAID);
+                mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.PAID);
                 if (!mongoResult) {
                     throw new RuntimeException("MongoDB update failed");
                 }
@@ -68,11 +74,19 @@ public class TradeServiceImpl implements TradeServiceIface {
 
             } catch (Exception e) {
                 // Anything failed, rollback Redis
-                redisService.rollbackDeduct(payInfo.getAccountID(), payInfo.getFeeCent());
-                rabbitTemplate.convertAndSend("payment.retry", content);
+                try {
+                    redisService.rollbackDeduct(payInfo.getAccountID(), payInfo.getFeeCent());
+                    rabbitTemplate.convertAndSend("payment.retry", content);
+                } catch (Exception rollbackEx) {
+                    log.error("[P0] CRITICAL: Failed to rollback Redis deduction", rollbackEx);
+                }
                 throw e;
             }
         } catch (Exception e) {
+            boolean mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.FAILED);
+            if (!mongoResult) {
+                log.error("[P0] CRITICAL: Failed to update MongoDB status to FAILED for trip: {}", payInfo.getTripID());
+            }
             log.error("Payment processing failed", e);
             throw new RuntimeException("Payment failed", e);
         }

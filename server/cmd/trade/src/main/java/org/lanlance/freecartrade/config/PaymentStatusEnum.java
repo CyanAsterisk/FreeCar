@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentStatusEnum {
-    UNPAID("Unpaid"),
+    PROCESSING("Processing"),
+    FAILED("Failed"),
     PAID("Paid");
 
     private final String description;

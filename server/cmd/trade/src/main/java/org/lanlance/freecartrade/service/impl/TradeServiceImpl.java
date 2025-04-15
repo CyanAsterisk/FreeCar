@@ -53,7 +53,7 @@ public class TradeServiceImpl implements TradeServiceIface {
 
             try {
                 // MySQL update amount
-                int mysqlResult = userMapper.updateBalance(payInfo.getAccountID(), payInfo.getFeeCent());
+                int mysqlResult = userMapper.updateBalance(payInfo.getAccountID(), -payInfo.getFeeCent());
                 if (mysqlResult <= 0) {
                     throw new RuntimeException("MySQL update failed");
                 }

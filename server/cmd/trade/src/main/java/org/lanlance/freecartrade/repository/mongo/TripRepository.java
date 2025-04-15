@@ -17,7 +17,7 @@ public class TripRepository {
         Query query = Query.query(Criteria.where("_id").is(tripId));
         Update update = new Update().set("trip.payment_status", status.name());
         
-        return mongoTemplate.updateFirst(query, update, "trips")
+        return mongoTemplate.updateFirst(query, update, "trip")
             .getModifiedCount() > 0;
     }
 }

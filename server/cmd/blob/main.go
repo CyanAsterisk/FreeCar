@@ -9,7 +9,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/minio"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/mysql"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/blob/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/blob/blobservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -29,7 +28,6 @@ func main() {
 	r, info := initialize.InitRegistry(Port)
 	db := initialize.InitDB()
 	minioClient := initialize.InitMinio()
-	redisClient := initialize.InitRedis()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -39,7 +37,6 @@ func main() {
 
 	// Create new server.
 	srv := blobservice.NewServer(&BlobServiceImpl{
-		redisManager: redis.NewManager(redisClient),
 		minioManager: minio.NewManager(minioClient, config.GlobalServerConfig.MinioInfo.Bucket),
 		mysqlManager: mysql.NewManager(db),
 	},

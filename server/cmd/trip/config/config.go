@@ -19,14 +19,22 @@ type OtelConfig struct {
 	EndPoint string `mapstructure:"endpoint" json:"endpoint"`
 }
 
+type RabbitMqConfig struct {
+	Host     string `mapstructure:"host" json:"host"`
+	Port     int    `mapstructure:"port" json:"port"`
+	Exchange string `mapstructure:"exchange" json:"exchange"`
+	User     string `mapstructure:"user" json:"user"`
+	Password string `mapstructure:"password" json:"password"`
+}
+
 type ServerConfig struct {
 	Name           string           `mapstructure:"name" json:"name"`
 	Host           string           `mapstructure:"host" json:"host"`
 	MongoDBInfo    MongoDBConfig    `mapstructure:"mongodb" json:"mongodb"`
 	OtelInfo       OtelConfig       `mapstructure:"otel" json:"otel"`
+	RabbitMqInfo   RabbitMqConfig   `mapstructure:"rabbitmq" json:"rabbitmq"`
 	CarSrvInfo     CarSrvConfig     `mapstructure:"car_srv" json:"car_srv"`
 	ProfileSrvInfo ProfileSrvConfig `mapstructure:"profile_srv" json:"profile_srv"`
-	UserSrvInfo    UserSrvConfig    `mapstructure:"user_srv" json:"user_srv"`
 }
 
 type CarSrvConfig struct {
@@ -34,9 +42,5 @@ type CarSrvConfig struct {
 }
 
 type ProfileSrvConfig struct {
-	Name string `mapstructure:"name" json:"name"`
-}
-
-type UserSrvConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }

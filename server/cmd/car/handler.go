@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
 	"math"
-	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/car/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -19,19 +19,11 @@ import (
 type CarServiceImpl struct {
 	MongoManager
 	Publisher
-	RedisManager
 }
 
 // Publisher defines the publishing interface.
 type Publisher interface {
 	Publish(context.Context, *base.CarEntity) error
-}
-
-// RedisManager defines the redis server.
-type RedisManager interface {
-	GetCar(c context.Context, cid id.CarID) (*base.CarEntity, error)
-	InsertCar(c context.Context, cid id.CarID, cr *base.Car) error
-	RemoveCar(c context.Context, cid id.CarID) error
 }
 
 // MongoManager defines the mongoDB server
@@ -63,22 +55,11 @@ func (s *CarServiceImpl) CreateCar(ctx context.Context, req *car.CreateCarReques
 // GetCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) GetCar(ctx context.Context, req *car.GetCarRequest) (resp *car.GetCarResponse, err error) {
 	resp = new(car.GetCarResponse)
-	en, err := s.RedisManager.GetCar(ctx, id.CarID(req.Id))
-	if err == nil {
-		resp.Car = en.Car
-		return resp, nil
-	}
-	if err != errno.RecordNotFound {
-		klog.Errorf("get car cache err", err)
-	}
 	cr, err := s.MongoManager.GetCar(ctx, id.CarID(req.Id))
 	if err != nil {
-		klog.Errorf("get car err", err)
+		klog.Error("get car err", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("get car error"))
 		return resp, nil
-	}
-	if err := s.RedisManager.InsertCar(context.Background(), id.CarID(cr.ID.Hex()), cr.Car); err != nil {
-		klog.Errorf("create cache record err", err)
 	}
 	resp.Car = cr.Car
 	resp.BaseResp = tools.BuildBaseResp(nil)
@@ -108,16 +89,11 @@ func (s *CarServiceImpl) GetCars(ctx context.Context, _ *car.GetCarsRequest) (re
 // LockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (resp *car.LockCarResponse, err error) {
 	resp = new(car.LockCarResponse)
-	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove car cache err", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("lock car err"))
-		return resp, nil
-	}
 	c, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_UNLOCKED, &mongo.CarUpdate{
 		Status: base.CarStatus_LOCKING,
 	})
 	if err != nil {
-		klog.Errorf("update car error", err)
+		klog.Error("update car error", err)
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car error"))
 		return resp, nil
 	}
@@ -130,11 +106,6 @@ func (s *CarServiceImpl) LockCar(ctx context.Context, req *car.LockCarRequest) (
 // UnlockCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarRequest) (resp *car.UnlockCarResponse, err error) {
 	resp = new(car.UnlockCarResponse)
-	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove cache error")
-		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("remove cache error"))
-		return resp, nil
-	}
 	cr, err := s.MongoManager.UpdateCar(ctx, id.CarID(req.Id), base.CarStatus_LOCKED, &mongo.CarUpdate{
 		Status:       base.CarStatus_UNLOCKING,
 		Driver:       req.Driver,
@@ -154,11 +125,6 @@ func (s *CarServiceImpl) UnlockCar(ctx context.Context, req *car.UnlockCarReques
 // UpdateCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarRequest) (resp *car.UpdateCarResponse, err error) {
 	resp = new(car.UpdateCarResponse)
-	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove cache error")
-		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
-		return resp, nil
-	}
 	update := &mongo.CarUpdate{
 		Status:   req.Status,
 		Position: req.Position,
@@ -175,12 +141,6 @@ func (s *CarServiceImpl) UpdateCar(ctx context.Context, req *car.UpdateCarReques
 		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("update car err"))
 		return resp, nil
 	}
-	go func() {
-		time.Sleep(2 * time.Second)
-		if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-			klog.Error("remove cache error")
-		}
-	}()
 	s.publish(ctx, cr)
 	return resp, nil
 }
@@ -198,17 +158,12 @@ func (s *CarServiceImpl) publish(c context.Context, cr *mongo.CarRecord) {
 // DeleteCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) DeleteCar(ctx context.Context, req *car.DeleteCarRequest) (resp *car.DeleteCarResponse, err error) {
 	resp = new(car.DeleteCarResponse)
-	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove cache error", err)
-		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
-		return resp, nil
-	}
 	err = s.MongoManager.DeleteCar(ctx, id.CarID(req.Id))
 	if err != nil {
-		if err == errno.RecordNotFound {
+		if errors.Is(err, errno.RecordNotFound) {
 			resp.BaseResp = tools.BuildBaseResp(errno.RecordNotFound)
 		} else {
-			klog.Errorf("delete car err", err)
+			klog.Error("delete car err", err)
 			resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr.WithMessage("delete car err"))
 		}
 		return resp, nil
@@ -220,11 +175,6 @@ func (s *CarServiceImpl) DeleteCar(ctx context.Context, req *car.DeleteCarReques
 // AdminUpdateCar implements the CarServiceImpl interface.
 func (s *CarServiceImpl) AdminUpdateCar(ctx context.Context, req *car.AdminUpdateCarRequest) (resp *car.AdminUpdateCarResponse, err error) {
 	resp = new(car.AdminUpdateCarResponse)
-	if err = s.RedisManager.RemoveCar(ctx, id.CarID(req.Id)); err != nil {
-		klog.Error("remove cache error")
-		resp.BaseResp = tools.BuildBaseResp(errno.CarSrvErr)
-		return resp, nil
-	}
 
 	update := &mongo.CarUpdate{
 		Status:   req.Car.Status,

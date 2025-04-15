@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mq/model"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/errno"
 	"github.com/CyanAsterisk/FreeCar/server/shared/id"
@@ -23,6 +24,7 @@ type TripServiceImpl struct {
 	CarManager     CarManager
 	POIManager     POIManager
 	MongoManager   MongoManager
+	Publisher      Publisher
 }
 
 // ProfileManager defines the ACL(Anti Corruption Layer)
@@ -51,6 +53,11 @@ type MongoManager interface {
 	GetTripsByLimit(c context.Context, limit int64) ([]*mongo.TripRecord, error)
 	DeleteTrip(c context.Context, id id.TripID) error
 	UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *base.Trip) error
+}
+
+// Publisher defines the publishing interface.
+type Publisher interface {
+	Publish(context.Context, *model.PayInfo) error
 }
 
 // CreateTrip implements the TripServiceImpl interface.
@@ -195,12 +202,17 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 			return resp, nil
 		}
 
-		// TODO: 发送MQ
-		//if err = s.PayManager.Pay(ctx, aid, tr.Trip.End.FeeCent); err != nil {
-		//	klog.Error("pay err", err)
-		//	resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr.WithMessage("pay err"))
-		//	return resp, nil
-		//}
+		// send MQ message
+		go func() {
+			err := s.Publisher.Publish(ctx, &model.PayInfo{
+				AccountId: aid,
+				TripId:    tid,
+				FeeCent:   tr.Trip.End.FeeCent,
+			})
+			if err != nil {
+				klog.Warn("cannot publish", err.Error())
+			}
+		}()
 	}
 	err = s.MongoManager.UpdateTrip(ctx, tid, aid, tr.UpdatedAt, tr.Trip)
 	if err != nil {

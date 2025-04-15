@@ -6,7 +6,7 @@ import (
 	car "github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/base"
 )
 
-// Publisher defines the publish interface.
+// Publisher defines the publishing interface.
 type Publisher interface {
 	Publish(context.Context, *car.CarEntity) error
 }

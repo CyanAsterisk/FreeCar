@@ -9,7 +9,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/mongo"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/ocr"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/pkg/redis"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
 	"github.com/CyanAsterisk/FreeCar/server/shared/kitex_gen/profile/profileservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -28,7 +27,6 @@ func main() {
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitRegistry(Port)
 	mongoDb := initialize.InitDB()
-	redisClient := initialize.InitRedis()
 	blobClient := initialize.InitBlob()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
@@ -40,7 +38,6 @@ func main() {
 	// Create new server.
 	srv := profileservice.NewServer(&ProfileServiceImpl{
 		MongoManager:   mongo.NewManager(mongoDb),
-		RedisManager:   redis.NewManager(redisClient),
 		BlobManager:    blobClient,
 		LicenseManager: &ocr.LicenseManager{},
 	},

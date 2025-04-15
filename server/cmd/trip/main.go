@@ -4,11 +4,13 @@ import (
 	"context"
 	"net"
 	"strconv"
+	"time"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/config"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
+	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mq/amqpclt"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -29,6 +31,7 @@ func main() {
 	IP, Port := initialize.InitFlag()
 	r, info := initialize.InitRegistry(Port)
 	db := initialize.InitDB()
+	amqpC := initialize.InitMq()
 	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.GlobalServerConfig.Name),
 		provider.WithExportEndpoint(config.GlobalServerConfig.OtelInfo.EndPoint),
@@ -38,19 +41,23 @@ func main() {
 	initialize.InitCar()
 	initialize.InitProfile()
 
-	impl := new(TripServiceImpl)
-
-	impl.CarManager = &car.Manager{
-		CarService: config.CarClient,
+	mqInfo := config.GlobalServerConfig.RabbitMqInfo
+	publisher, err := amqpclt.NewPublisher(amqpC, mqInfo.Exchange, amqpclt.PublisherConfig{
+		MaxRetries: 3,
+		RetryDelay: 500 * time.Millisecond,
+	})
+	if err != nil {
+		klog.Fatal("cannot create publisher")
 	}
-	impl.ProfileManager = &profile.Manager{
-		ProfileService: config.ProfileClient,
-	}
-	impl.POIManager = &poi.Manager{}
 
-	impl.MongoManager = mongo.NewManager(db)
 	// Create new server.
-	srv := tripservice.NewServer(impl,
+	srv := tripservice.NewServer(&TripServiceImpl{
+		ProfileManager: &profile.Manager{ProfileService: config.ProfileClient},
+		CarManager:     &car.Manager{CarService: config.CarClient},
+		POIManager:     &poi.Manager{},
+		MongoManager:   mongo.NewManager(db),
+		Publisher:      publisher,
+	},
 		server.WithServiceAddr(utils.NewNetAddr(consts.TCP, net.JoinHostPort(IP, strconv.Itoa(Port)))),
 		server.WithRegistry(r),
 		server.WithRegistryInfo(info),
@@ -59,7 +66,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.Name}),
 	)
 
-	err := srv.Run()
+	err = srv.Run()
 	if err != nil {
 		klog.Fatal(err)
 	}

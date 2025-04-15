@@ -23,12 +23,6 @@ type TripServiceImpl struct {
 	CarManager     CarManager
 	POIManager     POIManager
 	MongoManager   MongoManager
-	PayManager     PayManager
-}
-
-// PayManager defines the ACL for payment.
-type PayManager interface {
-	Pay(ctx context.Context, aid id.AccountID, feeCent int32) error
 }
 
 // ProfileManager defines the ACL(Anti Corruption Layer)
@@ -201,11 +195,12 @@ func (s *TripServiceImpl) UpdateTrip(ctx context.Context, req *trip.UpdateTripRe
 			return resp, nil
 		}
 
-		if err = s.PayManager.Pay(ctx, aid, tr.Trip.End.FeeCent); err != nil {
-			klog.Error("pay err", err)
-			resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr.WithMessage("pay err"))
-			return resp, nil
-		}
+		// TODO: 发送MQ
+		//if err = s.PayManager.Pay(ctx, aid, tr.Trip.End.FeeCent); err != nil {
+		//	klog.Error("pay err", err)
+		//	resp.BaseResp = tools.BuildBaseResp(errno.ServiceErr.WithMessage("pay err"))
+		//	return resp, nil
+		//}
 	}
 	err = s.MongoManager.UpdateTrip(ctx, tid, aid, tr.UpdatedAt, tr.Trip)
 	if err != nil {

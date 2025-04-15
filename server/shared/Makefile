@@ -12,8 +12,6 @@ profile:
 	make service=profile generate
 trip:
 	make service=trip generate
-trade:
-	make service=trade generate
 errno:
 	kitex -module github.com/CyanAsterisk/FreeCar ./../idl/base/errno.thrift
 
@@ -23,5 +21,4 @@ all:
 	make car
 	make profile
 	make trip
-	make trade
 	make errno

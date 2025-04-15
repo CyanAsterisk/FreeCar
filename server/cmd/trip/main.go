@@ -9,7 +9,6 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/initialize"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/car"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/mongo"
-	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/pay"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/poi"
 	"github.com/CyanAsterisk/FreeCar/server/cmd/trip/pkg/profile"
 	"github.com/CyanAsterisk/FreeCar/server/shared/consts"
@@ -38,10 +37,8 @@ func main() {
 	defer p.Shutdown(context.Background())
 	initialize.InitCar()
 	initialize.InitProfile()
-	initialize.InitTrade()
 
 	impl := new(TripServiceImpl)
-	impl.PayManager = pay.NewManager(config.TradeClient)
 
 	impl.CarManager = &car.Manager{
 		CarService: config.CarClient,

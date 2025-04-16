@@ -43,6 +43,13 @@ public class TradeServiceImpl implements TradeServiceIface {
             log.error("processTradeMessage# Invalid message: {}", content);
             return false;
         }
+
+        // Check
+        String status = tripRepository.findTripStatusById(payInfo.getTripID());
+        if (status.equals(PaymentStatusEnum.PAID.name())) {
+            return true;
+        }
+
         // Redis reduce balance
         try {
             // MongoDB update status

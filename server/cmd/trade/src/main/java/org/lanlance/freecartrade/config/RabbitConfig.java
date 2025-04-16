@@ -14,9 +14,18 @@ public class RabbitConfig {
     @Value("${spring.rabbitmq.queue-name}")
     private String queueName;
 
+    @Value("${spring.rabbitmq.dlq.exchange-name}")
+    private String dlxExchangeName;
+
+    @Value("${spring.rabbitmq.dlq.queue-name}")
+    private String dlqQueueName;
+
     @Bean
     public Queue tradeQueue() {
-        return QueueBuilder.durable(queueName).build();
+        return QueueBuilder.durable(queueName)
+                .withArgument("x-dead-letter-exchange", dlxExchangeName)
+                .withArgument("x-dead-letter-routing-key", dlqQueueName)
+                .build();
     }
 
     @Bean
@@ -27,5 +36,20 @@ public class RabbitConfig {
     @Bean
     public Binding binding() {
         return BindingBuilder.bind(tradeQueue()).to(paymentExchange());
+    }
+
+    @Bean
+    public Queue dlqQueue() {
+        return new Queue(dlqQueueName, true);
+    }
+
+    @Bean
+    public DirectExchange dlxExchange() {
+        return new DirectExchange(dlxExchangeName);
+    }
+
+    @Bean
+    public Binding dlqBinding() {
+        return BindingBuilder.bind(dlqQueue()).to(dlxExchange()).with(dlqQueueName);
     }
 }

@@ -28,4 +28,13 @@ public class TripRepository {
         Query query = new Query(Criteria.where("trip.payment_status").is(PaymentStatusEnum.FAILED.name()));
         return mongoTemplate.find(query, Document.class, "trip");
     }
+
+    public String findTripStatusById(String tripId) {
+        Query query = new Query(Criteria.where("_id").is(tripId));
+        Document trip = mongoTemplate.findOne(query, Document.class, "trip");
+        if (trip != null) {
+            return trip.getString("trip.payment_status");
+        }
+        return null;
+    }
 }

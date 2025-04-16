@@ -29,7 +29,7 @@ public class PaymentReconciliationTask {
     @Value("${spring.rabbitmq.exchange-name}")
     private String paymentExchange;
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void reconcileFailedPayments() {
         try {
             List<Document> failedPayments = tripRepository.findFailedPayments();
@@ -39,13 +39,8 @@ public class PaymentReconciliationTask {
                     Document tripDoc = (Document) trip.get("trip");
                     String tripId = trip.get("_id").toString();
                     String accountId = tripDoc.getString("accountid");
-                    Document end = (Document) tripDoc.get("end");
-                    Integer feeCent = end.getInteger("feecent");
-
-                    PayInfo payInfo = new PayInfo();
-                    payInfo.setTripID(tripId);
-                    payInfo.setAccountID(accountId);
-                    payInfo.setFeeCent(feeCent);
+                    Integer feeCent = ((Document) tripDoc.get("end")).getInteger("feecent");
+                    PayInfo payInfo = new PayInfo(accountId, tripId, feeCent);
 
                     String message = objectMapper.writeValueAsString(payInfo);
                     rabbitTemplate.convertAndSend(paymentExchange, "", message);

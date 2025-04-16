@@ -28,7 +28,7 @@ public class TradeServiceImpl implements TradeServiceIface {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean processTradeMessage(String content) {
+    public void processTradeMessage(String content) {
         // parse message
         PayInfo payInfo;
         try {
@@ -39,15 +39,16 @@ public class TradeServiceImpl implements TradeServiceIface {
             log.error("processTradeMessage# json failed {}", content, e);
             throw new RuntimeException("process message failed", e);
         }
+
         if (payInfo.getAccountID() == null || payInfo.getTripID() == null || payInfo.getFeeCent() == null) {
             log.error("processTradeMessage# Invalid message: {}", content);
-            return false;
+            throw new RuntimeException("process message failed");
         }
 
         // Check
         String status = tripRepository.findTripStatusById(payInfo.getTripID());
         if (status.equals(PaymentStatusEnum.PAID.name())) {
-            return true;
+            return;
         }
 
         // Redis reduce balance
@@ -55,12 +56,12 @@ public class TradeServiceImpl implements TradeServiceIface {
             // MongoDB update status
             boolean mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.PROCESSING);
             if (!mongoResult) {
-                return false;
+                throw new RuntimeException("update payment status failed");
             }
 
             RedisDeductResult deductResult = redisService.deductBalance(payInfo.getAccountID(), payInfo.getFeeCent());
             if (!deductResult.isSuccess()) {
-                return false;
+                throw new RuntimeException("update payment status failed");
             }
 
             try {
@@ -95,6 +96,5 @@ public class TradeServiceImpl implements TradeServiceIface {
             log.error("Payment processing failed", e);
             throw new RuntimeException("Payment failed", e);
         }
-        return true;
     }
 }

@@ -29,12 +29,13 @@ public class TripRepository {
         return mongoTemplate.find(query, Document.class, "trip");
     }
 
-    public String findTripStatusById(String tripId) {
-        Query query = new Query(Criteria.where("_id").is(tripId));
-        Document trip = mongoTemplate.findOne(query, Document.class, "trip");
-        if (trip != null) {
-            return trip.getString("trip.payment_status");
-        }
-        return null;
+public String findTripStatusById(String tripId) {
+    Query query = new Query(Criteria.where("_id").is(tripId));
+    Document trip = mongoTemplate.findOne(query, Document.class, "trip");
+    if (trip != null) {
+        Document tripDoc = (Document) trip.get("trip");
+        return tripDoc != null ? tripDoc.getString("payment_status") : null;
     }
+    return null;
+}
 }

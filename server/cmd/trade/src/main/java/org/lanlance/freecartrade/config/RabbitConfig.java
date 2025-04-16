@@ -28,9 +28,4 @@ public class RabbitConfig {
     public Binding binding() {
         return BindingBuilder.bind(tradeQueue()).to(paymentExchange());
     }
-
-    @Bean
-    public Queue paymentRetryQueue() {
-        return QueueBuilder.durable("payment.retry").build();
-    }
 }

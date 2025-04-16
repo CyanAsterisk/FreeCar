@@ -12,7 +12,6 @@ import org.lanlance.freecartrade.service.TradeServiceIface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 @Service
 @Slf4j
@@ -26,12 +25,10 @@ public class TradeServiceImpl implements TradeServiceIface {
     private UserMapper userMapper;
     @Autowired
     private TripRepository tripRepository;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void processTradeMessage(String content) {
+    public boolean processTradeMessage(String content) {
         // parse message
         PayInfo payInfo;
         try {
@@ -42,19 +39,21 @@ public class TradeServiceImpl implements TradeServiceIface {
             log.error("processTradeMessage# json failed {}", content, e);
             throw new RuntimeException("process message failed", e);
         }
+        if (payInfo.getAccountID() == null || payInfo.getTripID() == null || payInfo.getFeeCent() == null) {
+            log.error("processTradeMessage# Invalid message: {}", content);
+            return false;
+        }
         // Redis reduce balance
         try {
             // MongoDB update status
             boolean mongoResult = tripRepository.updatePaymentStatus(payInfo.getTripID(), PaymentStatusEnum.PROCESSING);
             if (!mongoResult) {
-                rabbitTemplate.convertAndSend("payment.retry", content);
-                return;
+                return false;
             }
 
             RedisDeductResult deductResult = redisService.deductBalance(payInfo.getAccountID(), payInfo.getFeeCent());
             if (!deductResult.isSuccess()) {
-                rabbitTemplate.convertAndSend("payment.retry", content);
-                return;
+                return false;
             }
 
             try {
@@ -76,7 +75,6 @@ public class TradeServiceImpl implements TradeServiceIface {
                 // Anything failed, rollback Redis
                 try {
                     redisService.rollbackDeduct(payInfo.getAccountID(), payInfo.getFeeCent());
-                    rabbitTemplate.convertAndSend("payment.retry", content);
                 } catch (Exception rollbackEx) {
                     log.error("[P0] CRITICAL: Failed to rollback Redis deduction", rollbackEx);
                 }
@@ -90,5 +88,6 @@ public class TradeServiceImpl implements TradeServiceIface {
             log.error("Payment processing failed", e);
             throw new RuntimeException("Payment failed", e);
         }
+        return true;
     }
 }

@@ -18,8 +18,6 @@ import (
 
 func CommonMW() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		// use cors mw
-		middleware.Cors(),
 		// use recovery mw
 		middleware.Recovery(),
 		// use gzip mw

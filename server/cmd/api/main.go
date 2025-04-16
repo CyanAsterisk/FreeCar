@@ -12,6 +12,7 @@ import (
 	"github.com/CyanAsterisk/FreeCar/server/cmd/api/initialize/rpc"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/hertz-contrib/cors"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
 	"github.com/hertz-contrib/pprof"
@@ -24,6 +25,7 @@ func main() {
 	r, info := initialize.InitRegistry()
 	initialize.InitSentinel()
 	tracer, trcCfg := hertztracing.NewServerTracer()
+	corsCfg := initialize.InitCors()
 	rpc.Init()
 	// create a new server
 	h := server.New(
@@ -36,6 +38,7 @@ func main() {
 
 	// use pprof & tracer & sentinel
 	pprof.Register(h)
+	h.Use(cors.New(corsCfg))
 	h.Use(hertztracing.ServerMiddleware(trcCfg))
 	h.Use(hertzSentinel.SentinelServerMiddleware(
 		// abort with status 429 by default

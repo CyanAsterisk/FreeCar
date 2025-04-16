@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/CyanAsterisk/FreeCar/server/cmd/profile/config"
@@ -39,7 +38,6 @@ func InitBlob() blobservice.Client {
 		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: config.GlobalServerConfig.BlobSrvInfo.Name}),
 	)
-	fmt.Println(r.Resolve(context.Background(), "trade_srv-rpc"))
 
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)

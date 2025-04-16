@@ -40,6 +40,9 @@ func (l *LicenseManager) GetLicenseInfo(url string) (*base.Identity, error) {
 		hlog.Error("new hertz client error", err)
 		return nil, err
 	}
+	if config.GlobalServerConfig.OCRConfig.MockEnable {
+		url = config.GlobalServerConfig.OCRConfig.MockUrl
+	}
 	ocrUrl := fmt.Sprintf("%s?access_token=%s&url=%s",
 		consts.OCRUrl, config.GlobalServerConfig.OCRConfig.AccessToken, url)
 	_, body, err := c.Post(context.Background(), nil, ocrUrl, nil)
@@ -65,7 +68,7 @@ func (l *LicenseManager) GetLicenseInfo(url string) (*base.Identity, error) {
 	year, _ := strconv.Atoi(sBirth[0:4])
 	month, _ := strconv.Atoi(sBirth[4:6])
 	day, _ := strconv.Atoi(sBirth[6:])
-	birthDateMillis := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local).Unix()
+	birthDateMillis := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local).UnixMilli()
 	identity := &base.Identity{
 		LicNumber:       res.WordsResult.LicenseNum.Words,
 		Name:            res.WordsResult.Name.Words,

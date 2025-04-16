@@ -21,6 +21,8 @@ type OtelConfig struct {
 
 type OCRConfig struct {
 	AccessToken string `mapstructure:"access_token" json:"access_token"`
+	MockEnable  bool   `mapstructure:"mock_enable" json:"mock_enable"`
+	MockUrl     string `mapstructure:"mock_url" json:"mock_url"`
 }
 
 type ServerConfig struct {

@@ -77,5 +77,5 @@ const (
 
 	OCRUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/driving_license"
 
-	GPTUrl = "https://api.openai.com/v1/chat/completions"
+	GPTUrl = "https://api.302.ai/v1/chat/completions"
 )

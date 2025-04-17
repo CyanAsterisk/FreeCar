@@ -71,7 +71,6 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	clt.SetProxy(protocol.ProxyURI(protocol.ParseURI(config.GlobalServerConfig.ProxyURL)))
 
 	reqRaw := &requestRaw{
 		Model: "gpt-3.5-turbo",
@@ -83,12 +82,13 @@ func Chat(ctx context.Context, c *app.RequestContext) {
 		},
 		Temperature: 0.7,
 	}
+
 	hReq := &protocol.Request{}
 	hRes := &protocol.Response{}
 	hReq.SetMethod(consts.MethodPost)
 	hReq.Header.SetContentTypeBytes([]byte("application/json"))
 	hReq.SetRequestURI(sConst.GPTUrl)
-	hReq.SetHeader("Authorization", "Bearer "+config.GlobalServerConfig.GPTKey)
+	hReq.SetHeader("Authorization", "Bearer "+config.GlobalServerConfig.ChatToken)
 	body, err := sonic.Marshal(reqRaw)
 	hReq.SetBody(body)
 	err = clt.Do(ctx, hReq, hRes)

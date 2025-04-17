@@ -19,7 +19,7 @@ type ServerConfig struct {
 	Name           string       `mapstructure:"name" json:"name"`
 	Host           string       `mapstructure:"host" json:"host"`
 	Port           int          `mapstructure:"port" json:"port"`
-	GPTKey         string       `mapstructure:"gpt" json:"gpt"`
+	ChatToken      string       `mapstructure:"chat_token" json:"chat_token"`
 	ProxyURL       string       `mapstructure:"proxy" json:"proxy"`
 	PasetoInfo     PasetoConfig `mapstructure:"paseto" json:"paseto"`
 	OtelInfo       OtelConfig   `mapstructure:"otel" json:"otel"`

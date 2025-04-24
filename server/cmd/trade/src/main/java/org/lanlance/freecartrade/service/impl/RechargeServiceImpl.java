@@ -2,6 +2,7 @@ package org.lanlance.freecartrade.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.lanlance.freecartrade.annotation.MonitorLog;
 import org.lanlance.freecartrade.repository.mapper.UserMapper;
 import org.lanlance.freecartrade.repository.redis.RedisRepository;
 import org.lanlance.freecartrade.service.RechargeServiceIface;
@@ -20,6 +21,7 @@ public class RechargeServiceImpl implements RechargeServiceIface {
     private RedisRepository redisRepository;
 
     @Override
+    @MonitorLog(description = "Execute recharge")
     @Transactional(rollbackFor = Exception.class)
     public void recharge(String userId, Integer amount) {
         // Check if userId is existing

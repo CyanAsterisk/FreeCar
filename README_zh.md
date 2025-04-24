@@ -22,7 +22,7 @@ FreeCar 是一个基于 [Hertz](https://github.com/cloudwego/hertz) 与 [Kitex](
 
 | 功能      | 实现                  |
 |---------|---------------------|
-| HTTP 框架 | Hertz               |
+| HTTP 框架 | Hertz/SpringBoot    |
 | RPC 框架  | Kitex               |
 | 数据库     | MongoDB、MySQL、Redis |
 | 身份鉴权    | Paseto              |
@@ -71,6 +71,7 @@ FreeCar 是一个基于 [Hertz](https://github.com/cloudwego/hertz) 与 [Kitex](
 | Car     | 汽车服务                 |
 | Profile | 主页与图片识别服务            |
 | Trip    | 行程服务                 |
+| Trade | 交易服务（Java）           |
 
 ## 快速开始
 
